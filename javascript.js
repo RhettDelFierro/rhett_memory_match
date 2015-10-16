@@ -21,7 +21,7 @@
              }
          } else {
              console.log('first_card_clicked != second_card_clicked');
-             $('.back').show(2000); //could put $(cardClicked).toggleClass('someclass that affects css') instead to flip it back.
+             $('.back').show(2000); //could put $('back').toggleClass('someclass that affects css') instead to flip it back.
              first_card_clicked = null;
              second_card_clicked = null;
              console.log('click handler functionality is complete - the second');
