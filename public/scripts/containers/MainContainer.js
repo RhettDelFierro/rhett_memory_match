@@ -1,5 +1,5 @@
 var React = require('react');
-var HomeContainer = require("./HomeContainer");
+var NavigationBarContainer = require("./NavigationBarContainer");
 
 var styles = {
   container: {
@@ -11,6 +11,7 @@ var MainContainer = React.createClass({
     render: function(){
         return (
         <div style={styles.container}>
+            <NavigationBarContainer />
             {this.props.children}
         </div>
         )

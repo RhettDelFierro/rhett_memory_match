@@ -6,11 +6,15 @@ var hashHistory = ReactRouter.hashHistory;
 var IndexRoute = ReactRouter.IndexRoute;
 var MainContainer = require('../containers/MainContainer');
 var HomeContainer = require('../containers/HomeContainer');
+var NoteMemoryContainer = require("../containers/NoteMemoryContainer");
 
 var routes = (
     <Router history={hashHistory}>
         <Route path="/" component={MainContainer}>
             <IndexRoute component={HomeContainer} />
+            <Route path="note_memory" component={NoteMemoryContainer}/>
+            <Route path="memory_match" component={NoteMemoryContainer}/>
+            <Route path="scoreboard" component={NoteMemoryContainer}/>
         </Route>
     </Router>
 );

@@ -8,7 +8,7 @@
 }
 
 .container-fluid:nth-child(2) {
-    background-image: url('public/scripts/images/crowd.jpg');
+    background-image: url('public/images/crowd.jpg');
     background-repeat: no-repeat;
     background-size: 100%;
     height: 72vh;

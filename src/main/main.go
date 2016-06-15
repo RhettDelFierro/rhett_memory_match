@@ -26,5 +26,7 @@ func init() {
 func main() {
 	//http.HandleFunc("/", inject)
 	controllers.Inject(tmpl)
+	fs := http.FileServer(http.Dir("public"))
+	http.Handle("/public/", http.StripPrefix("/public/", fs))
 	http.ListenAndServe(":8080", nil)
 }
