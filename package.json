@@ -1,0 +1,39 @@
+{
+  "name": "rhett_memory_match",
+  "version": "1.0.0",
+  "description": "## Overview",
+  "main": "webpack.config.js",
+  "scripts": {
+    "production": "webpack -p",
+    "start": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RhettDelFierro/rhett_memory_match.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RhettDelFierro/rhett_memory_match/issues"
+  },
+  "homepage": "https://github.com/RhettDelFierro/rhett_memory_match#readme",
+  "dependencies": {
+    "axios": "^0.12.0",
+    "css-loader": "^0.23.1",
+    "react": "^15.1.0",
+    "react-addons-transition-group": "^15.1.0",
+    "react-addons-update": "^15.1.0",
+    "react-bootstrap": "^0.29.4",
+    "react-dom": "^15.1.0",
+    "react-router": "^2.4.1",
+    "style-loader": "^0.13.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-react": "^6.5.0",
+    "html-webpack-plugin": "^2.21.0",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
