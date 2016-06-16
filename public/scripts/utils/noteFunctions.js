@@ -1,18 +1,50 @@
 var noteFunctions = {
-    playNote: function(note){
-        MakeNote(notes.note)
+    playTargetNote: function (note) {
+        //this can return back to this.setState: notePlayed array. This array can be the one that goes into keepCount as notesArray.
+        var targetNoteArray = [notes.inm.target["F#/Gb"], notes.inm.target["G"], notes.inm.target["G#/Ab"], notes.inm.target["A"]];
+        var rand = Math.floor(Math.random() * targetNoteArray.length);
+        MakeNote(targetNoteArray[rand]);
+        //maybe don't call it here, but after the state is set.
+        WhiteNoise();
+
+        //the note has been played. Now play the white noise, then the target note, then their selections.
+        //check their selection
+        // Now to keep the count on the target note played and the target note that was chosen
+
+        return KeepTrack(targetNoteArray[rand]);
+
     },
-    whiteNoise: function(){
+    playStartingNote: function (note) {
+        var startingNoteArray = [notes.inm.starting["D"], notes.inm.starting["D#/Eb"],
+                                 notes.inm.starting["E"], notes.inm.starting["F"],
+                                 notes.inm.starting["A#/Bb"], notes.inm.starting["B"],
+                                 notes.inm.starting["C"], notes.inm.starting["C#/Db"]];
+        var rand = Math.floor(Math.random() * startingNoteArray.length);
+        //make sure to give a prompt that they'll adjust after this note is finished:
+        MakeNote(startingNoteArray[rand]);
+
+        return KeepTrack(startingNoteArray[rand]);
+    },
+    whiteNoise: function () {
         WhiteNoise()
     },
-    checkerSelection: function(){
+    checkerSelection: function () {
         Checker()
     }
 
 };
 
+function KeepTrack(note) {
+    for (var name in notes.target) {
+        if (note === notes.target[name]) {
+            return name;
+        }
+    }
 
-function MakeNote(note){
+}
+
+//plays target note
+function MakeNote(note) {
     var context = new AudioContext;
     var oscillator = context.createOscillator();
     oscillator.frequency.value = note;
@@ -21,12 +53,13 @@ function MakeNote(note){
 
     oscillator.start(0);
 
-    setTimeout(function(){
+    setTimeout(function () {
         oscillator.stop(0)
     }, 250)
 }
 
-function WhiteNoise(){
+//plays masking note
+function WhiteNoise() {
     var context = new AudioContext;
     var node = context.createBufferSource()
         , buffer = context.createBuffer(1, 4096, context.sampleRate)
@@ -39,32 +72,37 @@ function WhiteNoise(){
     node.loop = true;
     node.connect(context.destination);
     node.start(0);
-    setTimeout(function(){
+    setTimeout(function () {
         node.stop(0)
     }, 1000)
 }
 
-function Checker(targetFrequency, startingFrequency, cents, targetNote, counter){
-
-    var notesArray = ["C","C#/Db", "D", "D#/Eb", "E", "F", "A#/Bb", "B"];
-
-    var reducer = function(tally, notesArray) {
-        if(!tally[notesArray]){
-            tally[notesArray] = 1
-        } else if (tally[notesArray] < 2){
-            tally[notesArray] = tally[notesArray] + 1
+//so far, just makes the object of notes to keep track of.
+function KeepCount(notesArray, combinations) {
+    //var notesArray = ["C","C#/Db", "D", "D#/Eb", "E", "F", "A#/Bb", "B"];
+    //notesArray will be an array coming in from the state, one note at a time?
+    var counter = {};
+    var reducer = function (tally, note) {
+        if (!tally[note]) {
+            tally[note] = 1;
+        } else if (tally[note] < 2) {
+            tally[note] = tally[note] + 1;
         }
+        return tally;
     };
 
-    //result will be the combination of notes played.
-    var result = votes.reduce(reducer, counter);
+    for (var x in combinations) {
+        combinations[x] = notesArray.reduce(reducer, counter);
+    }
+}
 
-    var outputFrequency = startingNote * 2^((cents/1000));
+//checks the answer.
+function Checker(targetFrequency, startingFrequency, cents, targetNote, counter) {
+
+    var outputFrequency = startingNote * 2 ^ ((cents / 1000));
 
     //numberator will give us a number in the 100's, to get the number of half-notes, divide by 100.
-    var accuracy = (1200*Math.log2(targetNote,outputFrequency))/100;
-
-
+    var accuracy = (1200 * Math.log2(targetNote, outputFrequency)) / 100;
 
     if (accuracy < 1) {
         return {
@@ -78,17 +116,15 @@ function Checker(targetFrequency, startingFrequency, cents, targetNote, counter)
 
 var notes = {
     inm: {
-        startingHigh: {
-            "A#/Bb":466.164,
-            "B": 493.883,
-            "C": 523.251,
-            "C#/Db": 554.365
-        },
-        startingLow: {
+        starting: {
             "D": 293.665,
             "D#/Eb": 311.127,
             "E": 329.628,
-            "F": 349.228
+            "F": 349.228,
+            "A#/Bb": 466.164,
+            "B": 493.883,
+            "C": 523.251,
+            "C#/Db": 554.365
         },
         target: {
             "F#/Gb": 369.994,
@@ -99,48 +135,5 @@ var notes = {
     }
 };
 
-//probably use reduce once again.
-var combinations = {
-    "F#/Gb": {
-      "A#/Bb": 2,
-      "B": 2,
-      "C": 2,
-      "C#/Db": 2,
-      "D": 2,
-      "D#/Eb": 2,
-      "E": 2,
-      "F": 2
-  },
-    "G": {
-        "A#/Bb": 2,
-        "B": 2,
-        "C": 2,
-        "C#/Db": 2,
-        "D": 2,
-        "D#/Eb": 2,
-        "E": 2,
-        "F": 2
-    },
-    "G#/Ab": {
-        "A#/Bb": 2,
-        "B": 2,
-        "C": 2,
-        "C#/Db": 2,
-        "D": 2,
-        "D#/Eb": 2,
-        "E": 2,
-        "F": 2
-    },
-    "A": {
-        "A#/Bb": 2,
-        "B": 2,
-        "C": 2,
-        "C#/Db": 2,
-        "D": 2,
-        "D#/Eb": 2,
-        "E": 2,
-        "F": 2
-    }
-};
 
 module.exports = noteFunctions;
