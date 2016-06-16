@@ -3,7 +3,7 @@ var React = require("react");
 var styles = {
     alignSelf: "center",
     display: "flex",
-    width: "50%",
+    width: "75%",
     height: "10%",
     marginTop: "0px",
     flexDirection: "column",
