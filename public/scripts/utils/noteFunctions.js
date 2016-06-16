@@ -28,6 +28,22 @@ var noteFunctions = {
     whiteNoise: function () {
         WhiteNoise()
     },
+    keepCount: function(targetNote, startingNote, counter){
+        if (!counter[targetNote]){
+            counter[targetNote] = {}
+        }
+
+        if (!counter[targetNote][startingNote]){
+            counter[targetNote][startingNote] = 1
+        } else if(counter[targetNote][startingNote] < 2){
+            counter[targetNote][startingNote]++
+        }
+        //no else statement for counter[targetNote][startingNote] === 2,
+        // just check for that in this.state.counter before playing the note.
+
+
+        return counter;
+    },
     checkerSelection: function () {
         Checker()
     }
@@ -77,25 +93,6 @@ function WhiteNoise() {
     }, 1000)
 }
 
-//so far, just makes the object of notes to keep track of.
-function KeepCount(notesArray, combinations) {
-    //var notesArray = ["C","C#/Db", "D", "D#/Eb", "E", "F", "A#/Bb", "B"];
-    //notesArray will be an array coming in from the state, one note at a time?
-    var counter = {};
-    var reducer = function (tally, note) {
-        if (!tally[note]) {
-            tally[note] = 1;
-        } else if (tally[note] < 2) {
-            tally[note] = tally[note] + 1;
-        }
-        return tally;
-    };
-
-    for (var x in combinations) {
-        combinations[x] = notesArray.reduce(reducer, counter);
-    }
-}
-
 //checks the answer.
 function Checker(targetFrequency, startingFrequency, cents, targetNote, counter) {
 
@@ -112,7 +109,6 @@ function Checker(targetFrequency, startingFrequency, cents, targetNote, counter)
         }
     }
 }
-
 
 var notes = {
     inm: {
