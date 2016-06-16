@@ -1,3 +1,16 @@
+var noteFunctions = {
+    playNote: function(note){
+        MakeNote(notes.note)
+    },
+    whiteNoise: function(){
+        WhiteNoise()
+    },
+    checkerSelection: function(){
+        Checker()
+    }
+
+};
+
 
 function MakeNote(note){
     var context = new AudioContext;
@@ -31,70 +44,103 @@ function WhiteNoise(){
     }, 1000)
 }
 
+function Checker(targetFrequency, startingFrequency, cents, targetNote, counter){
 
-var noteFunctions = {
+    var notesArray = ["C","C#/Db", "D", "D#/Eb", "E", "F", "A#/Bb", "B"];
+
+    var reducer = function(tally, notesArray) {
+        if(!tally[notesArray]){
+            tally[notesArray] = 1
+        } else if (tally[notesArray] < 2){
+            tally[notesArray] = tally[notesArray] + 1
+        }
+    };
+
+    //result will be the combination of notes played.
+    var result = votes.reduce(reducer, counter);
+
+    var outputFrequency = startingNote * 2^((cents/1000));
+
+    //numberator will give us a number in the 100's, to get the number of half-notes, divide by 100.
+    var accuracy = (1200*Math.log2(targetNote,outputFrequency))/100;
+
+
+
+    if (accuracy < 1) {
+        return {
+            outcome: true,
+            accuracy: accuracy,
+            combinationsUsed: result
+        }
+    }
+}
+
+
+var notes = {
     inm: {
         startingHigh: {
-            noteASharp:466.164,
-            noteB: 493.883,
-            noteC: 523.251,
-            noteCSharp: 554.365
+            "A#/Bb":466.164,
+            "B": 493.883,
+            "C": 523.251,
+            "C#/Db": 554.365
         },
         startingLow: {
-            noteD: 293.665,
-            noteDSharp: 311.127,
-            noteE: 329.628,
-            noteF: 349.228
+            "D": 293.665,
+            "D#/Eb": 311.127,
+            "E": 329.628,
+            "F": 349.228
         },
         target: {
-            noteFSharp: 369.994,
-            noteG: 391.995,
-            noteGSharp: 415.305,
-            noteA: 440.000
+            "F#/Gb": 369.994,
+            "G": 391.995,
+            "G#/Ab": 415.305,
+            "A": 440.000
         }
     }
 };
 
 //probably use reduce once again.
 var combinations = {
-  noteFSharp: {
-      noteASharp: 2,
-      noteB: 2,
-      noteC: 2,
-      noteCSharp: 2,
-      noteD: 2,
-      noteDSharp: 2,
-      noteE: 2,
-      noteF: 2
+    "F#/Gb": {
+      "A#/Bb": 2,
+      "B": 2,
+      "C": 2,
+      "C#/Db": 2,
+      "D": 2,
+      "D#/Eb": 2,
+      "E": 2,
+      "F": 2
   },
-    noteG: {
-        NoteASharp: 2,
-        noteB: 2,
-        noteC: 2,
-        noteCSharp: 2,
-        noteD: 2,
-        noteDSharp: 2,
-        noteE: 2,
-        noteF: 2
+    "G": {
+        "A#/Bb": 2,
+        "B": 2,
+        "C": 2,
+        "C#/Db": 2,
+        "D": 2,
+        "D#/Eb": 2,
+        "E": 2,
+        "F": 2
     },
-    noteGSharp: {
-        NoteASharp: 2,
-        noteB: 2,
-        noteC: 2,
-        noteCSharp: 2,
-        noteD: 2,
-        noteDSharp: 2,
-        noteE: 2,
-        noteF: 2
+    "G#/Ab": {
+        "A#/Bb": 2,
+        "B": 2,
+        "C": 2,
+        "C#/Db": 2,
+        "D": 2,
+        "D#/Eb": 2,
+        "E": 2,
+        "F": 2
     },
-    noteA: {
-        NoteASharp: 2,
-        noteB: 2,
-        noteC: 2,
-        noteCSharp: 2,
-        noteD: 2,
-        noteDSharp: 2,
-        noteE: 2,
-        noteF: 2
+    "A": {
+        "A#/Bb": 2,
+        "B": 2,
+        "C": 2,
+        "C#/Db": 2,
+        "D": 2,
+        "D#/Eb": 2,
+        "E": 2,
+        "F": 2
     }
 };
+
+module.exports = noteFunctions;
