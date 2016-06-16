@@ -11,7 +11,8 @@ var styles = {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100%',
-        width: '100%'
+        width: '100%',
+        marginTop: "-20px"
     },
     header: {
         fontSize: 45,

@@ -6,15 +6,17 @@ var hashHistory = ReactRouter.hashHistory;
 var IndexRoute = ReactRouter.IndexRoute;
 var MainContainer = require('../containers/MainContainer');
 var HomeContainer = require('../containers/HomeContainer');
-var NoteMemoryContainer = require("../containers/NoteMemoryContainer");
+var PerfectPitchContainer = require("../containers/PerfectPitchContainer");
+var MemoryMatchContainer = require("../containers/MemoryMatchContainer");
+var ScoreboardContainer = require("../containers/ScoreboardContainer");
 
 var routes = (
     <Router history={hashHistory}>
         <Route path="/" component={MainContainer}>
             <IndexRoute component={HomeContainer} />
-            <Route path="note_memory" component={NoteMemoryContainer}/>
-            <Route path="memory_match" component={NoteMemoryContainer}/>
-            <Route path="scoreboard" component={NoteMemoryContainer}/>
+            <Route path="perfect_pitch" component={PerfectPitchContainer}/>
+            <Route path="memory_match" component={MemoryMatchContainer}/>
+            <Route path="scoreboard" component={ScoreboardContainer}/>
         </Route>
     </Router>
 );
