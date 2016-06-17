@@ -1,9 +1,17 @@
 var noteFunctions = {
-    playTargetNote: function (note) {
+    playTargetNote: function (counter) {
         //this can return back to this.setState: notePlayed array. This array can be the one that goes into keepCount as notesArray.
         var targetNoteArray = [notes.inm.target["F#/Gb"], notes.inm.target["G"], notes.inm.target["G#/Ab"], notes.inm.target["A"]];
         var rand = Math.floor(Math.random() * targetNoteArray.length);
-        MakeNote(targetNoteArray[rand]);
+
+        var targetNoteName = KeepTrack(targetNoteArray[rand]);
+
+        var counterCheck = CutNote();
+
+        if (counter[targetNote][startingNote] != 2) {
+            MakeNote(targetNoteArray[rand]);
+        }
+
         //maybe don't call it here, but after the state is set.
         WhiteNoise();
 
@@ -14,28 +22,28 @@ var noteFunctions = {
         return KeepTrack(targetNoteArray[rand]);
 
     },
-    playStartingNote: function (note) {
+    playStartingNote: function (counter) {
         var startingNoteArray = [notes.inm.starting["D"], notes.inm.starting["D#/Eb"],
-                                 notes.inm.starting["E"], notes.inm.starting["F"],
-                                 notes.inm.starting["A#/Bb"], notes.inm.starting["B"],
-                                 notes.inm.starting["C"], notes.inm.starting["C#/Db"]];
+            notes.inm.starting["E"], notes.inm.starting["F"],
+            notes.inm.starting["A#/Bb"], notes.inm.starting["B"],
+            notes.inm.starting["C"], notes.inm.starting["C#/Db"]];
         var rand = Math.floor(Math.random() * startingNoteArray.length);
         //make sure to give a prompt that they'll adjust after this note is finished:
         MakeNote(startingNoteArray[rand]);
 
-        return KeepTrack(startingNoteArray[rand]);
+        return KeepTrackTarget(startingNoteArray[rand]);
     },
     whiteNoise: function () {
         WhiteNoise()
     },
-    keepCount: function(targetNote, startingNote, counter){
-        if (!counter[targetNote]){
+    keepCount: function (targetNote, startingNote, counter) {
+        if (!counter[targetNote]) {
             counter[targetNote] = {}
         }
 
-        if (!counter[targetNote][startingNote]){
+        if (!counter[targetNote][startingNote]) {
             counter[targetNote][startingNote] = 1
-        } else if(counter[targetNote][startingNote] < 2){
+        } else if (counter[targetNote][startingNote] < 2) {
             counter[targetNote][startingNote]++
         }
         //no else statement for counter[targetNote][startingNote] === 2,
@@ -44,19 +52,53 @@ var noteFunctions = {
 
         return counter;
     },
-    checkerSelection: function () {
-        Checker()
+    checkerSelection: function (targetNote, startingNote, cents) {
+        var startingFrequency = notes.starting[startingNote];
+        var targetFrequency = notes.target[targetNote];
+
+        var outputFrequency = startingFrequency * 2 ^ ((cents / 1000));
+
+        //numberator will give us a number in the 100's, to get the number of half-notes, divide by 100.
+        var accuracy = (1200 * Math.log2(targetFrequency, outputFrequency)) / 100;
+
+        if ((accuracy > -1) && (accuracy < 1)) {
+            return {
+                outcome: true,
+                accuracy: accuracy
+            }
+        } else {
+            return {
+                outcome: false,
+                accuracy: accuracy
+            }
+        }
     }
 
 };
 
-function KeepTrack(note) {
+function KeepTrackTarget(note) {
     for (var name in notes.target) {
         if (note === notes.target[name]) {
-            return name;
+            return name
         }
     }
 
+}
+
+function KeepTrackStarting(note) {
+    for (var name in notes.starting) {
+        if (note === notes.starting[name]) {
+            return name
+        }
+    }
+
+}
+
+function CutNote(counter, targetNote, startingNote) {
+    if (counter[KeepTrackTarget(targetNote)][KeepTrackStarting(startingNote)] === 2){
+        return false
+    }
+    return true
 }
 
 //plays target note
@@ -94,20 +136,7 @@ function WhiteNoise() {
 }
 
 //checks the answer.
-function Checker(targetFrequency, startingFrequency, cents, targetNote, counter) {
-
-    var outputFrequency = startingNote * 2 ^ ((cents / 1000));
-
-    //numberator will give us a number in the 100's, to get the number of half-notes, divide by 100.
-    var accuracy = (1200 * Math.log2(targetNote, outputFrequency)) / 100;
-
-    if (accuracy < 1) {
-        return {
-            outcome: true,
-            accuracy: accuracy,
-            combinationsUsed: result
-        }
-    }
+function Checker(targetNote, startingNote, cents) {
 }
 
 var notes = {
