@@ -1,37 +1,19 @@
 var noteFunctions = {
-    playTargetNote: function (counter) {
-        //this can return back to this.setState: notePlayed array. This array can be the one that goes into keepCount as notesArray.
-        var targetNoteArray = [notes.inm.target["F#/Gb"], notes.inm.target["G"], notes.inm.target["G#/Ab"], notes.inm.target["A"]];
-        var rand = Math.floor(Math.random() * targetNoteArray.length);
+    getNotes: function (counter) {
+        var randomNotes = RandomNotes(false, false);
 
-        var targetNoteName = KeepTrack(targetNoteArray[rand]);
+        //should be a loop that returns the targetNote and startingNote when true.
 
-        var counterCheck = CutNote();
-
-        if (counter[targetNote][startingNote] != 2) {
-            MakeNote(targetNoteArray[rand]);
+        //check if that combination has been used twice.
+        if (!CutNote(counter, randomNotes.targetNoteName, randomNotes.startingNoteName)) {
+            return {
+                targetNote: targetNoteName,
+                startingNote: startingNoteName
+            }
+        } else {
+                var newRandom = RandomNotes(randomNotes.targetIndex, randomNotes.startingIndex)
         }
 
-        //maybe don't call it here, but after the state is set.
-        WhiteNoise();
-
-        //the note has been played. Now play the white noise, then the target note, then their selections.
-        //check their selection
-        // Now to keep the count on the target note played and the target note that was chosen
-
-        return KeepTrack(targetNoteArray[rand]);
-
-    },
-    playStartingNote: function (counter) {
-        var startingNoteArray = [notes.inm.starting["D"], notes.inm.starting["D#/Eb"],
-            notes.inm.starting["E"], notes.inm.starting["F"],
-            notes.inm.starting["A#/Bb"], notes.inm.starting["B"],
-            notes.inm.starting["C"], notes.inm.starting["C#/Db"]];
-        var rand = Math.floor(Math.random() * startingNoteArray.length);
-        //make sure to give a prompt that they'll adjust after this note is finished:
-        MakeNote(startingNoteArray[rand]);
-
-        return KeepTrackTarget(startingNoteArray[rand]);
     },
     whiteNoise: function () {
         WhiteNoise()
@@ -76,29 +58,58 @@ var noteFunctions = {
 
 };
 
+function RandomNotes(targetIndex, startingIndex){
+
+    var targetNoteArray = [notes.inm.target["F#/Gb"], notes.inm.target["G"], notes.inm.target["G#/Ab"], notes.inm.target["A"]];
+    var randTarget = targetIndex || Math.floor(Math.random() * targetNoteArray.length);
+
+    //array of startingNotes and a random index.
+    var startingNoteArray = [notes.inm.starting["D"], notes.inm.starting["D#/Eb"],
+        notes.inm.starting["E"], notes.inm.starting["F"],
+        notes.inm.starting["A#/Bb"], notes.inm.starting["B"],
+        notes.inm.starting["C"], notes.inm.starting["C#/Db"]];
+    var randStarting = startingIndex || Math.floor(Math.random() * startingNoteArray.length);
+
+
+    //get the names of the two random notes.
+    var targetNoteName = KeepTracktarget(targetNoteArray[randTarget]);
+    var startingNoteName = KeepTrackStrating(startingNoteArray[randStarting]);
+
+    return {
+        targetNoteName: targetNoteName,
+        targetIndex: randTarget,
+        startingNoteName: startingNoteName,
+        startingIndex: randStarting
+    }
+}
+
+/**
+ * @return {string}
+ */
 function KeepTrackTarget(note) {
     for (var name in notes.target) {
         if (note === notes.target[name]) {
             return name
         }
     }
-
 }
 
+/**
+ * @return {string}
+ */
 function KeepTrackStarting(note) {
     for (var name in notes.starting) {
         if (note === notes.starting[name]) {
             return name
         }
     }
-
 }
 
+/**
+ * @return {boolean}
+ */
 function CutNote(counter, targetNote, startingNote) {
-    if (counter[KeepTrackTarget(targetNote)][KeepTrackStarting(startingNote)] === 2){
-        return false
-    }
-    return true
+    return (counter[targetNote][startingNote] === 2)
 }
 
 //plays target note
@@ -133,10 +144,6 @@ function WhiteNoise() {
     setTimeout(function () {
         node.stop(0)
     }, 1000)
-}
-
-//checks the answer.
-function Checker(targetNote, startingNote, cents) {
 }
 
 var notes = {
