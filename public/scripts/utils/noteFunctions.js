@@ -1,17 +1,26 @@
 var noteFunctions = {
     getNotes: function (counter) {
+        //pull a random note.
         var randomNotes = RandomNotes(false, false);
+        //check the random note
 
-        //should be a loop that returns the targetNote and startingNote when true.
+        switch (CheckNote(counter, randomNotes.targetNoteName, randomNotes.startingNoteName)) {
+            case false:
+                return {
+                    targetNote: targetNoteName,
+                    startingNote: startingNoteName
+                };
+            case true:
+                newTryNote = RandomNotes(false, false);
+        }
 
-        //check if that combination has been used twice.
-        if (!CutNote(counter, randomNotes.targetNoteName, randomNotes.startingNoteName)) {
+        if (!CheckNote(counter, randomNotes.targetNoteName, randomNotes.startingNoteName)) {
             return {
                 targetNote: targetNoteName,
                 startingNote: startingNoteName
             }
         } else {
-                var newRandom = RandomNotes(randomNotes.targetIndex, randomNotes.startingIndex)
+            var newRandom = RandomNotes(randomNotes.targetIndex, randomNotes.startingIndex)
         }
 
     },
@@ -58,30 +67,31 @@ var noteFunctions = {
 
 };
 
-function RandomNotes(targetIndex, startingIndex){
-
-    var targetNoteArray = [notes.inm.target["F#/Gb"], notes.inm.target["G"], notes.inm.target["G#/Ab"], notes.inm.target["A"]];
-    var randTarget = targetIndex || Math.floor(Math.random() * targetNoteArray.length);
-
-    //array of startingNotes and a random index.
-    var startingNoteArray = [notes.inm.starting["D"], notes.inm.starting["D#/Eb"],
-        notes.inm.starting["E"], notes.inm.starting["F"],
-        notes.inm.starting["A#/Bb"], notes.inm.starting["B"],
-        notes.inm.starting["C"], notes.inm.starting["C#/Db"]];
-    var randStarting = startingIndex || Math.floor(Math.random() * startingNoteArray.length);
-
-
-    //get the names of the two random notes.
-    var targetNoteName = KeepTracktarget(targetNoteArray[randTarget]);
-    var startingNoteName = KeepTrackStrating(startingNoteArray[randStarting]);
-
-    return {
-        targetNoteName: targetNoteName,
-        targetIndex: randTarget,
-        startingNoteName: startingNoteName,
-        startingIndex: randStarting
-    }
-}
+//give random notes.
+//function RandomNotes(targetIndex, startingIndex) {
+//
+//    var targetNoteArray = [notes.inm.target["F#/Gb"], notes.inm.target["G"], notes.inm.target["G#/Ab"], notes.inm.target["A"]];
+//    var randTarget = targetIndex || Math.floor(Math.random() * targetNoteArray.length);
+//
+//    //array of startingNotes and a random index.
+//    var startingNoteArray = [notes.inm.starting["D"], notes.inm.starting["D#/Eb"],
+//        notes.inm.starting["E"], notes.inm.starting["F"],
+//        notes.inm.starting["A#/Bb"], notes.inm.starting["B"],
+//        notes.inm.starting["C"], notes.inm.starting["C#/Db"]];
+//    var randStarting = startingIndex || Math.floor(Math.random() * startingNoteArray.length);
+//
+//
+//    //get the names of the two random notes.
+//    var targetNoteName = KeepTracktarget(targetNoteArray[randTarget]);
+//    var startingNoteName = KeepTrackStrating(startingNoteArray[randStarting]);
+//
+//    return {
+//        targetNoteName: targetNoteName,
+//        targetIndex: randTarget,
+//        startingNoteName: startingNoteName,
+//        startingIndex: randStarting
+//    }
+//}
 
 /**
  * @return {string}
@@ -105,10 +115,23 @@ function KeepTrackStarting(note) {
     }
 }
 
+function RandomNotes(counter){
+    for (var target in counter){
+        for (var starting in name){
+            if (starting < 2) {
+                return {
+                    targetNote: target,
+                    startingNote: starting
+                }
+            }
+        }
+    }
+}
+
 /**
  * @return {boolean}
  */
-function CutNote(counter, targetNote, startingNote) {
+function CheckNote(counter, targetNote, startingNote) {
     return (counter[targetNote][startingNote] === 2)
 }
 
