@@ -4,7 +4,7 @@ var Info = require("../components/Info");
 var InfoContainer = React.createClass({
     render: function(){
         return(
-            <Info />
+            <Info onPlayTarget={this.props.onPlayTarget}/>
         )
     }
 });

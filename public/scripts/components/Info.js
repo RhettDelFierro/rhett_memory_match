@@ -14,7 +14,7 @@ var styles = {
 
 function Info(props) {
     return (
-        <div style={styles}>
+        <div style={styles} onClick={props.onPlayTarget}>
             <p style={{alignSelf: "center"}}>Score!</p>
         </div>
     )
