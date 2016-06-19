@@ -12,67 +12,113 @@ var PerfectPitchContainer = React.createClass({
             targetNote: "",
             targetNotePlayed: false,
             cents: 0,
-            accuracy: 0,
-            counter: {},
-            guesses: 0,
             startingNote: "",
-            answer: false,
             guessesArray: [],
-            startingNotePlayed: false
+            startingNotePlayed: false,
+            convertedFrequency: 0,
+            targetNoteGb: [],
+            targetNoteG: [],
+            targetNoteAb: [],
+            targetNoteA: []
         }
     },
     handleControl: function (cents) {
         //increase/decrease cents from here.
         var totalCents = this.state.cents + (cents);
-        console.log("here's totalCents: ", this.state.cents, "here's the cents we're passing in:", cents);
-        noteFunctions.convertCents(totalCents, this.state.startingNote);
+        var convertedFrequency = noteFunctions.convertCents(totalCents, this.state.startingNote);
         this.setState({
+            convertedFrequency: convertedFrequency,
             cents: totalCents
         });
     },
     //when they press "Begin" (or "Submit"?)
     handlePlayTarget: function () {
-        var counter = noteFunctions.keepCount(this.state.targetNote, this.state.startingNote, this.state.counter);
+        this.keepCount();
+        //var counter = noteFunctions.keepCount(this.state.targetNote, this.state.startingNote, this.state.counter);
+        if (this.state.guessesArray.length === 64){
+            var initialValue = 0;
+            var reducer = function (accumulator, item) {
+                return accumulator + item
+            };
+            var total = this.state.guessesArray.reduce(reducer, initialValue);
+            var average = total / this.state.guessesArray.length;
+            alert("game finished", average);
+        }
+
+
         if (this.state.targetNotePlayed === false) {
             noteFunctions.playTargetNote(this.state.targetNote);
             this.setState({
-                targetNotePlayed: true
+                targetNotePlayed: true,
+                startingNotePlayed: false
             })
         }
     },
-    keepCount: function(){
-        var counter = noteFunctions.keepCount(this.state.targetNote, this.state.startingNote, this.counter);
-        this.setState({
-            counter: counter
-        })
+    handlePlayStarting: function () {
+        if (this.state.targetNotePlayed === true) {
+            noteFunctions.playStartingNote(this.state.startingNote);
+            this.setState({
+                targetNotePlayed: false,
+                startingNotePlayed: true
+            })
+        }
     },
-    handlePlayStarting: function(){
-        noteFunctions.playStartingNote(this.state.startingNote);
+    handleSubmitNote: function () {
+        var results = noteFunctions.checkerSelection(this.state.targetNote, this.state.startingNote, this.state.cents);
+        var newNotes = noteFunctions.getNotes(this.state.counter);
         this.setState({
-            targetNotePlayed: false,
-            startingNotePlayed: true
-        })
-    },
-    handleSubmit: function () {
-        var results = noteFunctions.checkerSelection(this.state.targetNote, this.state.startingNote);
-        var counter = noteFunctions.getNotes(this.state.counter);
-        this.setState({
+            targetNote: newNotes.targetNote,
+            startingNote: newNotes.startingNote,
             guessesArray: update(this.state.guessesArray, {$push: [results]})
         });
         //maybe on component did update: if this.state.guessesArray === 64
     },
+    handleSubmiteNew: function(){
+        var results = noteFunctions.checkerSelection(this.state.targetNote, this.state.startingNote, this.state.cents);
+        var newNotes = noteFunctions.getNotes(this.state.counter);
+    },
     componentDidMount: function () {
         //load the two notes to be used when this component is loaded:
         var notes = noteFunctions.initializeStartPoint();
-        this.setState({
-            targetNote: notes.targetNote,
-            startingNote: notes.startingNote
-        });
+        this.makenewCount(notes);
+    },
+    makeNewCount: function(notes){
+        switch (notes.targetNote) {
+            case "F#/Gb":
+                this.setState({
+                    targetNote: notes.targetNote,
+                    startingNote: notes.startingNote,
+                    targetNoteGb: update(this.state.targetNoteGb, {$push: [notes.startingNote]})
+                });
+                break;
+            case "G":
+                this.setState({
+                    targetNote: notes.targetNote,
+                    startingNote: notes.startingNote,
+                    targetNoteG: update(this.state.targetNoteG, {$push: [notes.startingNote]})
+                });
+                break;
+            case "G#/Ab":
+                this.setState({
+                    targetNote: notes.targetNote,
+                    startingNote: notes.startingNote,
+                    targetNoteAb: update(this.state.targetNoteAb, {$push: [notes.startingNote]})
+                });
+                break;
+            case "A":
+                this.setState({
+                    targetNote: notes.targetNote,
+                    startingNote: notes.startingNote,
+                    targetNoteA: update(this.state.targetNoteA, {$push: [notes.startingNote]})
+                });
+                break;
+        }
     },
     render: function () {
         //accuracy will give how many half-notes the user was off.
         return (
-            <PerfectPitch onControl={this.handleControl} onPlayStarting={this.handlePlayStarting} onPlayTarget={this.handlePlayTarget} accuracy={this.state.accuracy}/>
+            <PerfectPitch onControl={this.handleControl} onPlayStarting={this.handlePlayStarting}
+                          onPlayTarget={this.handlePlayTarget} onSubmitNote = {this.handleSubmitNote}/>
         )
     }
 });

@@ -65,7 +65,7 @@ var IncreaseCents = React.createClass({
 
 function SubmitSound(props) {
     return (
-        <button style={{alignSelf: "center", marginBottom: "7px"}} className="btn btn-lg btn-primary">Submit
+        <button onClick={props.onSubmitNote} style={{alignSelf: "center", marginBottom: "7px"}} className="btn btn-lg btn-primary">Submit
             Sound</button>
     )
 }
@@ -87,7 +87,7 @@ function PerfectPitch(props) {
             <PlaySound onPlayStarting={props.onPlayStarting}/>
             <DecreaseCents onControl={props.onControl}/>
             <DoubleDecreaseCents onControl={props.onControl}/>
-            <SubmitSound />
+            <SubmitSound onSubmitNote={props.onSubmitNote}/>
 
             <iframe src="https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k" width="300"
                     height="80" frameborder="0" allowtransparency="true"
