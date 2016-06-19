@@ -96,7 +96,7 @@ function MakeVotes(startingNotesArray){
     var reducer = function(tally, note) {
         if (!tally[note]) {
             tally[note] = 1;
-        } else {
+        } else if (tally[note] < 2){
             tally[note] = tally[note] + 1;
         }
         return tally;
@@ -105,17 +105,21 @@ function MakeVotes(startingNotesArray){
 }
 function NotesFromObject(counterObject){
     var notesArray = [];
+    console.log(counterObject);
     for (var target in counterObject){
-        for (var note in target){
+        for (var note in counterObject[target]){
+            console.log(note);
             if (counterObject[target][note] < 2){
                 //that means the counterObject should have all notes in it.
+                console.log("made it her?");
                 var targetNote = notes.inm.target[target];
                 var startingNote = notes.inm.starting[note];
                 notesArray.push({targetNote: targetNote, startingNote: startingNote})
             }
         }
     }
-    return notesArray[Math.floor(availableNotes.length * Math.random())];
+    console.log(notesArray);
+    return notesArray[Math.floor(notesArray.length * Math.random())];
 }
 
 
@@ -144,11 +148,12 @@ var notes = {
 var noteFunctions = {
     getNotes: function(targetNote, counter, startingNoteArray){
         //send the targetNote
-        var counter = MakeVotes(startingNoteArray);
+        counter[targetNote] = MakeVotes(startingNoteArray);
         var randomNote = NotesFromObject(counter);
         return {
             targetNote: randomNote.targetNote,
-            startingNote: randomNote.startingNote
+            startingNote: randomNote.startingNote,
+            counter: counter
         }
     },
     //on componentDidMount, initialize a random counter object:

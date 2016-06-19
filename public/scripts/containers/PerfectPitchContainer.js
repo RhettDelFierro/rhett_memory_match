@@ -19,7 +19,8 @@ var PerfectPitchContainer = React.createClass({
             targetNoteGb: [],
             targetNoteG: [],
             targetNoteAb: [],
-            targetNoteA: []
+            targetNoteA: [],
+            counter: {}
         }
     },
     handleControl: function (cents) {
@@ -33,9 +34,8 @@ var PerfectPitchContainer = React.createClass({
     },
     //when they press "Begin" (or "Submit"?)
     handlePlayTarget: function () {
-        this.keepCount();
         //var counter = noteFunctions.keepCount(this.state.targetNote, this.state.startingNote, this.state.counter);
-        if (this.state.guessesArray.length === 64){
+        if (this.state.guessesArray.length === 64) {
             var initialValue = 0;
             var reducer = function (accumulator, item) {
                 return accumulator + item
@@ -65,24 +65,37 @@ var PerfectPitchContainer = React.createClass({
     },
     handleSubmitNote: function () {
         var results = noteFunctions.checkerSelection(this.state.targetNote, this.state.startingNote, this.state.cents);
-        var newNotes = noteFunctions.getNotes(this.state.counter);
+        //switch statement to pass in the right array. The array will be based on this.state.targetNote.
+        var targetNoteArray = this.trackNotesArray();
+        var newNotes = noteFunctions.getNotes(this.state.targetNote, this.state.counter, targetNoteArray);
         this.setState({
             targetNote: newNotes.targetNote,
             startingNote: newNotes.startingNote,
             guessesArray: update(this.state.guessesArray, {$push: [results]})
         });
-        //maybe on component did update: if this.state.guessesArray === 64
     },
-    handleSubmiteNew: function(){
-        var results = noteFunctions.checkerSelection(this.state.targetNote, this.state.startingNote, this.state.cents);
-        var newNotes = noteFunctions.getNotes(this.state.counter);
+    trackNotesArray: function (targetNote) {
+        switch (this.state.targetNote) {
+            case "F#/Gb":
+                return this.state.targetNoteGb;
+                break;
+            case "G":
+                return this.state.targetNoteG;
+                break;
+            case "G#/Ab":
+                return this.state.targetNoteAb;
+                break;
+            case "A":
+                return this.state.targetNoteA;
+                break;
+        }
     },
     componentDidMount: function () {
         //load the two notes to be used when this component is loaded:
         var notes = noteFunctions.initializeStartPoint();
-        this.makenewCount(notes);
+        this.makeNewCount(notes);
     },
-    makeNewCount: function(notes){
+    makeNewCount: function (notes) {
         switch (notes.targetNote) {
             case "F#/Gb":
                 this.setState({
@@ -118,7 +131,7 @@ var PerfectPitchContainer = React.createClass({
         //accuracy will give how many half-notes the user was off.
         return (
             <PerfectPitch onControl={this.handleControl} onPlayStarting={this.handlePlayStarting}
-                          onPlayTarget={this.handlePlayTarget} onSubmitNote = {this.handleSubmitNote}/>
+                          onPlayTarget={this.handlePlayTarget} onSubmitNote={this.handleSubmitNote}/>
         )
     }
 });
