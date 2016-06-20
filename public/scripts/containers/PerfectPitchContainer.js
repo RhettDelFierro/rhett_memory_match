@@ -16,11 +16,7 @@ var PerfectPitchContainer = React.createClass({
             guessesArray: [],
             startingNotePlayed: false,
             convertedFrequency: 0,
-            targetNoteGb: [],
-            targetNoteG: [],
-            targetNoteAb: [],
-            targetNoteA: [],
-            counter: {}
+            counter: []
         }
     },
     handleControl: function (cents) {
@@ -66,29 +62,12 @@ var PerfectPitchContainer = React.createClass({
     handleSubmitNote: function () {
         var results = noteFunctions.checkerSelection(this.state.targetNote, this.state.startingNote, this.state.cents);
         //switch statement to pass in the right array. The array will be based on this.state.targetNote.
-        var targetNoteArray = this.trackNotesArray();
-        var newNotes = noteFunctions.getNotes(this.state.targetNote, this.state.counter, targetNoteArray);
+        var newNotes = noteFunctions.getNotes(this.state.targetNote, this.state.startingNote, this.state.counter);
         this.setState({
             targetNote: newNotes.targetNote,
             startingNote: newNotes.startingNote,
             guessesArray: update(this.state.guessesArray, {$push: [results]})
         });
-    },
-    trackNotesArray: function (targetNote) {
-        switch (this.state.targetNote) {
-            case "F#/Gb":
-                return this.state.targetNoteGb;
-                break;
-            case "G":
-                return this.state.targetNoteG;
-                break;
-            case "G#/Ab":
-                return this.state.targetNoteAb;
-                break;
-            case "A":
-                return this.state.targetNoteA;
-                break;
-        }
     },
     componentDidMount: function () {
         //load the two notes to be used when this component is loaded:
@@ -96,36 +75,11 @@ var PerfectPitchContainer = React.createClass({
         this.makeNewCount(notes);
     },
     makeNewCount: function (notes) {
-        switch (notes.targetNote) {
-            case "F#/Gb":
-                this.setState({
-                    targetNote: notes.targetNote,
-                    startingNote: notes.startingNote,
-                    targetNoteGb: update(this.state.targetNoteGb, {$push: [notes.startingNote]})
-                });
-                break;
-            case "G":
-                this.setState({
-                    targetNote: notes.targetNote,
-                    startingNote: notes.startingNote,
-                    targetNoteG: update(this.state.targetNoteG, {$push: [notes.startingNote]})
-                });
-                break;
-            case "G#/Ab":
-                this.setState({
-                    targetNote: notes.targetNote,
-                    startingNote: notes.startingNote,
-                    targetNoteAb: update(this.state.targetNoteAb, {$push: [notes.startingNote]})
-                });
-                break;
-            case "A":
-                this.setState({
-                    targetNote: notes.targetNote,
-                    startingNote: notes.startingNote,
-                    targetNoteA: update(this.state.targetNoteA, {$push: [notes.startingNote]})
-                });
-                break;
-        }
+        this.setState({
+            counter: update(this.state.counter, {$set: notes.counter}),
+            targetNote: notes.targetNote,
+            startingNote: notes.startingNote
+        })
     },
     render: function () {
         //accuracy will give how many half-notes the user was off.
