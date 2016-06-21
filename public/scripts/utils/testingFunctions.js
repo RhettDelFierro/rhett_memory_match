@@ -21,7 +21,7 @@ var testingFunctions = {
                 // the underscore prefix is a common naming convention
                 // to remind us that the variable is developer-supplied
                 request._soundName = notesArray[i];
-                request.open('GET', "../sounds/piano/" + request._soundName + '.mp3', true);
+                request.open('GET', "../../sounds/piano/" + request._soundName + '.mp3', true);
                 request.responseType = 'arraybuffer';
                 request.addEventListener('load', bufferSound, false);
                 request.send();
@@ -49,6 +49,8 @@ var testingFunctions = {
 
     }
 };
+
+module.exports = testingFunctions;
 
 //componentWillMount3
 

@@ -22,7 +22,7 @@ var TrainingContainer = React.createClass({
         var playNote = testingFunctions.loadNotes();
         //maybe depending which one they go to, render that.
         return (
-            <Training playNote={playNote} scoresTest={this.state.scoresTest} chosen={this.state.chosen}/>
+            <Training playNote={playNote} scores={this.state.scoresTest} onUpdateScores={this.handleUpdateScores} chosen={this.state.chosen}/>
         )
     }
 });
