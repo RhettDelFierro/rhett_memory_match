@@ -1,5 +1,5 @@
 function MakeNote(note) {
-    var context = new AudioContext;
+    var context = new AudioContext() || new webkitAudioContext();
     var oscillator = context.createOscillator();
     oscillator.frequency.value = note;
 
@@ -171,8 +171,6 @@ var noteFunctions = {
         var startingFrequency = notes.starting[startingNote];
         var cents = centsValue;
 
-        console.log(cents);
-
         var outputFrequency = startingFrequency * Math.pow(2, (cents / 1000));
 
         MakeNote(outputFrequency);
@@ -200,6 +198,17 @@ var noteFunctions = {
         return ({
             checkingFrequency: outputFrequency
         })
+    },
+    getAverage: function(guessesArray){
+        var absoluteValueArray = guessesArray.map(function(item){
+           return Math.abs(item);
+        });
+        var initialValue = 0;
+        var reducer = function(accumulator, item) {
+            return accumulator + item
+        };
+        var total = absoluteValueArray.reduce(reducer, initialValue);
+        return total/absoluteValueArray.length;
     }
 
 };

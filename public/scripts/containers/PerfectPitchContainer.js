@@ -16,8 +16,24 @@ var PerfectPitchContainer = React.createClass({
             guessesArray: [],
             startingNotePlayed: false,
             convertedFrequency: 0,
-            counter: []
+            counter: [],
+            average: 0,
+            testingComplete: false
         }
+    },
+    componentDidMount: function () {
+        //load the two notes to be used when this component is loaded:
+        var notes = noteFunctions.initializeStartPoint();
+        this.makeNewCount(notes);
+    },
+    makeNewCount: function (notes) {
+        this.setState({
+            counter: update(this.state.counter, {$set: notes.counter}),
+            targetNote: notes.targetNote,
+            startingNote: notes.startingNote,
+            guessesArray: [],
+            average: 0
+        })
     },
     handleControl: function (cents) {
         //increase/decrease cents from here.
@@ -28,38 +44,36 @@ var PerfectPitchContainer = React.createClass({
             cents: totalCents
         });
     },
+    componentWillUpdate: function () {
+    },
     //when they press "Begin" (or "Submit"?)
     handlePlayTarget: function () {
         //var counter = noteFunctions.keepCount(this.state.targetNote, this.state.startingNote, this.state.counter);
-        if (this.state.guessesArray.length === 64) {
-            var initialValue = 0;
-            var reducer = function (accumulator, item) {
-                return accumulator + item
-            };
-            var total = this.state.guessesArray.reduce(reducer, initialValue);
-            var average = total / this.state.guessesArray.length;
-            alert("game finished", average);
+        if (this.state.guessesArray.length === 5) {
+            var average = noteFunctions.getAverage(this.state.guessesArray);
+            this.setState({
+                average: average,
+                testingComplete: true
+            });
         }
-
+        console.log("number of guesses: ", this.state.guessesArray.length);
 
         if (this.state.targetNotePlayed === false) {
-            console.log("targetNote:", this.state.targetNote);
             noteFunctions.playTargetNote(this.state.targetNote);
             this.setState({
                 targetNotePlayed: true,
                 startingNotePlayed: false
-            })
+            });
         }
     },
     handlePlayStarting: function () {
         if (this.state.targetNotePlayed === true && this.state.startingNotePlayed === false) {
-            console.log("targetNote:", this.state.targetNote);
             noteFunctions.playStartingNote(this.state.startingNote);
             this.setState({
                 targetNotePlayed: false,
                 startingNotePlayed: true
             })
-        } else if (this.state.targetNotePlayed === false && this.state.startingNotePlayed === true){
+        } else if (this.state.targetNotePlayed === false && this.state.startingNotePlayed === true) {
             noteFunctions.playGuessNote(this.state.StartingNote, this.state.cents);
         }
     },
@@ -77,23 +91,13 @@ var PerfectPitchContainer = React.createClass({
             cents: 0
         });
     },
-    componentDidMount: function () {
-        //load the two notes to be used when this component is loaded:
-        var notes = noteFunctions.initializeStartPoint();
-        this.makeNewCount(notes);
-    },
-    makeNewCount: function (notes) {
-        this.setState({
-            counter: update(this.state.counter, {$set: notes.counter}),
-            targetNote: notes.targetNote,
-            startingNote: notes.startingNote
-        })
-    },
     render: function () {
         //accuracy will give how many half-notes the user was off.
         return (
             <PerfectPitch onControl={this.handleControl} onPlayStarting={this.handlePlayStarting}
-                          onPlayTarget={this.handlePlayTarget} onSubmitNote={this.handleSubmitNote}/>
+                          onPlayTarget={this.handlePlayTarget} onSubmitNote={this.handleSubmitNote}
+                          score={this.state.average}
+                          testingComplete={this.state.testingComplete}/>
         )
     }
 });

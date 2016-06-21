@@ -9,6 +9,7 @@ var HomeContainer = require('../containers/HomeContainer');
 var PerfectPitchContainer = require("../containers/PerfectPitchContainer");
 var MemoryMatchContainer = require("../containers/MemoryMatchContainer");
 var ScoreboardContainer = require("../containers/ScoreboardContainer");
+var TrainingContainer = require("../containers/trainingContainer");
 
 var routes = (
     <Router history={hashHistory}>
@@ -17,6 +18,7 @@ var routes = (
             <Route path="perfect_pitch" component={PerfectPitchContainer}/>
             <Route path="memory_match" component={MemoryMatchContainer}/>
             <Route path="scoreboard" component={ScoreboardContainer}/>
+            <Route path="perfect_pitch_training" component={TrainingContainer}/>
         </Route>
     </Router>
 );
