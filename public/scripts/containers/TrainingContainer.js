@@ -1,6 +1,6 @@
 var React = require("react");
 var Training = require("../components/Training");
-var testingFunctions = require("../utils/testingFunctions");
+var noteTestingFunctions = require("../utils/noteTestingFunctions");
 
 var TrainingContainer = React.createClass({
     getInitialState: function () {
@@ -19,10 +19,10 @@ var TrainingContainer = React.createClass({
         //set state may need react-addon-update.
     },
     render: function () {
-        var playNote = testingFunctions.loadNotes();
         //maybe depending which one they go to, render that.
+        var playNotes = noteTestingFunctions.loadNotes();
         return (
-            <Training playNote={playNote} scores={this.state.scoresTest} onUpdateScores={this.handleUpdateScores} chosen={this.state.chosen}/>
+            <Training playNotes={playNotes} scores={this.state.scoresTest}/>
         )
     }
 });

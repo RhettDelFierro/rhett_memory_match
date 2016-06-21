@@ -11,10 +11,10 @@ var NoteTrainingContainer = React.createClass({
         }
     },
     handlePlayNote: function(note){
-        this.props.playNote(note);
+        this.props.playNotes(note);
     },
     render: function(){
-        return <NoteTraining onPLayNote={this.handlePlayNote}/>
+        return <NoteTraining onPlayNote={this.handlePlayNote}/>
     }
 });
 

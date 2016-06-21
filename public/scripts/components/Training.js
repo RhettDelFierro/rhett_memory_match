@@ -5,7 +5,7 @@ var NoteTrainingContainer = require("../containers/NoteTrainingContainer");
 
 function Training(props){
     return(
-        <NoteTrainingContainer playNote={props.playNote} onUpdateScores={props.onUpdateScores}/>
+        <NoteTrainingContainer playNotes={props.playNotes}/>
     )
 }
 
