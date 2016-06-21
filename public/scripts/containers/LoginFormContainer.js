@@ -14,7 +14,6 @@ var LoginFormContainer = React.createClass({
             password: "",
             token: ""
         };
-
     },
     //tie state to inputs.
     handleUpdateUser: function (e) {

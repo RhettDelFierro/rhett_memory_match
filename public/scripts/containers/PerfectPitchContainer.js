@@ -43,6 +43,7 @@ var PerfectPitchContainer = React.createClass({
 
 
         if (this.state.targetNotePlayed === false) {
+            console.log("targetNote:", this.state.targetNote);
             noteFunctions.playTargetNote(this.state.targetNote);
             this.setState({
                 targetNotePlayed: true,
@@ -51,12 +52,15 @@ var PerfectPitchContainer = React.createClass({
         }
     },
     handlePlayStarting: function () {
-        if (this.state.targetNotePlayed === true) {
+        if (this.state.targetNotePlayed === true && this.state.startingNotePlayed === false) {
+            console.log("targetNote:", this.state.targetNote);
             noteFunctions.playStartingNote(this.state.startingNote);
             this.setState({
                 targetNotePlayed: false,
                 startingNotePlayed: true
             })
+        } else if (this.state.targetNotePlayed === false && this.state.startingNotePlayed === true){
+            noteFunctions.playGuessNote(this.state.StartingNote, this.state.cents);
         }
     },
     handleSubmitNote: function () {
@@ -66,7 +70,11 @@ var PerfectPitchContainer = React.createClass({
         this.setState({
             targetNote: newNotes.targetNote,
             startingNote: newNotes.startingNote,
-            guessesArray: update(this.state.guessesArray, {$push: [results]})
+            guessesArray: update(this.state.guessesArray, {$push: [results]}),
+            targetNotePlayed: false,
+            startingNotePlayed: false,
+            counter: update(this.state.counter, {$set: newNotes.counter}),
+            cents: 0
         });
     },
     componentDidMount: function () {

@@ -8,7 +8,8 @@ function MakeNote(note) {
     oscillator.start(0);
 
     setTimeout(function () {
-        oscillator.stop(0)
+        oscillator.stop(0);
+        context.close();
     }, 250)
 }
 
@@ -27,7 +28,8 @@ function WhiteNoise() {
     node.connect(context.destination);
     node.start(0);
     setTimeout(function () {
-        node.stop(0)
+        node.stop(0);
+        context.close();
     }, 1000)
 }
 
@@ -70,75 +72,6 @@ function StartingNameToFrequency(noteName) {
     }
 }
 
-
-function RandomNotes(counter) {
-    var availableNotes = [];
-    console.log("here's counter: ", counter);
-    var counter1 = counter;
-    for (var target in notes.target) {
-        for (var starting in notes.starting) {
-            if (counter[target][starting] < 2) {
-                availableNotes.push({targetNote: target, startingNote: starting})
-            }
-        }
-    }
-    return availableNotes[Math.floor(availableNotes.length * Math.random())]
-}
-
-//targetNoteName = target note.
-//note is the name of the starting note.
-//should take in the array of the notes played, will re-update, instead of startingNotesArray being set.
-//this should be a function for each target note nested object.
-//must figure out how to handle the notes array.
-function MakeVotes(startingNotesArray) {
-    var startingNoteCounts = {};
-    var reducer = function (tally, note) {
-        if (!tally[note]) {
-            tally[note] = 1;
-        } else if (tally[note] < 2) {
-            tally[note] = tally[note] + 1;
-        }
-        return tally;
-    };
-    return startingNotesArray.reduce(reducer, startingNoteCounts)
-}
-//function NotesFromObject(counterObject){
-//    var notesArray = [];
-//    console.log(counterObject);
-//    for (var target in counterObject){
-//        for (var note in counterObject[target]){
-//            console.log(note);
-//            if (counterObject[target][note] < 2){
-//                //that means the counterObject should have all notes in it.
-//                var targetNote = notes.inm.target[target];
-//                var startingNote = notes.inm.starting[note];
-//                notesArray.push({targetNote: targetNote, startingNote: startingNote})
-//            }
-//        }
-//    }
-//    console.log(notesArray);
-//    return notesArray[Math.floor(notesArray.length * Math.random())];
-//}
-
-function NotesFromObject(counterObject) {
-    var notesArray = [];
-    for (var target in counterObject) {
-        for (var note in counterObject[target]) {
-            console.log(note);
-            if (counterObject[target][note] < 2) {
-                //that means the counterObject should have all notes in it.
-                var targetNote = notes.target[target];
-                var startingNote = notes.starting[note];
-                notesArray.push({targetNote: targetNote, startingNote: startingNote})
-            } else if (counterObject[target][note] == 2) {
-
-            }
-        }
-    }
-    console.log(notesArray);
-    return notesArray[Math.floor(notesArray.length * Math.random())];
-}
-
 var notes = {
 
     starting: {
@@ -163,9 +96,9 @@ var notes = {
 function NotesTracker(targetNote, startingNote) {
     this.targetNote = targetNote,
         this.startingNote = startingNote,
-        this.counter = 0,
+        this.count = 0,
         this.increase = function () {
-            this.counter += 1;
+            this.count += 1;
         }
 }
 //called on handleSubmitNote > getNotes.
@@ -173,7 +106,7 @@ function NotesTracker(targetNote, startingNote) {
 function CountCombinations(targetNote, startingNote, counter) {
 
     for (i = 0; i <= counter.length - 1; i++) {
-        if ((counter[i].targetNote === targetNote) && (counter[i].startingNote === startingNote) && counter[i].counter < 2) {
+        if ((counter[i].targetNote === targetNote) && (counter[i].startingNote === startingNote) && counter[i].count < 2) {
             counter[i].increase();
             //stop the iteration, save memory and return the adjusted counter:
             return counter
@@ -187,7 +120,7 @@ function RandomNotes(counter) {
     var availableNotes = [];
     counter.map(function(item){
         if (item.count < 2){
-            availableNotes.push({targetNote: target, startingNote: starting})
+            availableNotes.push({targetNote: item.targetNote, startingNote: item.startingNote})
         }
     });
     return availableNotes[Math.floor(availableNotes.length * Math.random())]
@@ -234,6 +167,16 @@ var noteFunctions = {
         var starting = StartingNameToFrequency(startingNote);
         MakeNote(starting);
     },
+    playGuessNote: function(startingNote, centsValue){
+        var startingFrequency = notes.starting[startingNote];
+        var cents = centsValue;
+
+        console.log(cents);
+
+        var outputFrequency = startingFrequency * Math.pow(2, (cents / 1000));
+
+        MakeNote(outputFrequency);
+    },
     onSubmitSelection: function () {
 
     },
@@ -246,7 +189,7 @@ var noteFunctions = {
         var outputFrequency = startingFrequency * Math.pow(2, (cents / 1000));
 
         //numerator will give us a number in the 100's, to get the number of half-notes, divide by 100.
-        var accuracy = (1200 * Math.log2(targetFrequency, outputFrequency)) / 100;
+        var accuracy = (1200 * Math.log2(targetFrequency/outputFrequency)) / 100;
         console.log(accuracy);
         return accuracy;
     },
