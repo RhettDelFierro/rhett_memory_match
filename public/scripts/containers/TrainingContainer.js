@@ -7,12 +7,15 @@ var TrainingContainer = React.createClass({
         return {
             inm: 0,
             scoresTest: {},
-            chosen: ""
+            chosen: "",
+            counter: []
         }
     },
     componentDidMount: function () {
+        var counter = noteTestingFunctions.startTraining();
         this.setState({
-            inm: this.props.location.query.score
+            inm: this.props.location.query.score,
+            counter: counter
         })
     },
     handleUpdateScores: function(testScores){
@@ -22,7 +25,7 @@ var TrainingContainer = React.createClass({
         //maybe depending which one they go to, render that.
         var playNotes = noteTestingFunctions.loadNotes();
         return (
-            <Training playNotes={playNotes} scores={this.state.scoresTest}/>
+            <Training counter={this.state.counter} playNotes={playNotes} scores={this.state.scoresTest}/>
         )
     }
 });

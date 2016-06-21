@@ -1,45 +1,88 @@
+function makeNotesObject(){
+    var notes = {
+        A4: {
+            src: 'public/sounds/piano/A4'
+        },
+        Ab4: {
+            src: 'public/sounds/piano/Ab4'
+        },
+        B4: {
+            src: 'public/sounds/piano/B4'
+        },
+        Bb4: {
+            src: 'public/sounds/piano/Bb4'
+        },
+        C4: {
+            src: 'public/sounds/piano/C4'
+        },
+        D4: {
+            src: 'public/sounds/piano/D4'
+        },
+        Db4: {
+            src: 'public/sounds/piano/Db4'
+        },
+        E4: {
+            src: 'public/sounds/piano/E4'
+        },
+        Eb4: {
+            src: 'public/sounds/piano/Eb4'
+        },
+        F4: {
+            src: 'public/sounds/piano/F4'
+        },
+        G4: {
+            src: 'public/sounds/piano/G4'
+        },
+        Gb4: {
+            src: 'public/sounds/piano/Gb4'
+        }
+    };
+
+    return notes;
+}
+
+//constructor for notes.
+function NotesTracker(targetNote) {
+    this.targetNote = targetNote,
+        this.count = 0,
+        this.increase = function () {
+            this.count += 1;
+        }
+}
+
+//initialize the counter (objects with targetNote and count properties):
+function makeNotesArray(){
+    var notes = MakeNotesObject();
+
+    var notesArray = [];
+
+    for (var note in notes){
+        notesArray.push(new NotesTracker(note))
+    }
+
+    return notesArray;
+}
+
+//take counter array and return a random targetNote if it hasn't been played 5 times.
+function RandomNotes(counter) {
+    var availableNotes = [];
+
+    counter.map(function(item){
+        if (item.count < 5){
+            availableNotes.push(item.targetNote)
+        }
+    });
+
+    return availableNotes[Math.floor(availableNotes.length * Math.random())]
+}
+
+
 var noteTestingFunctions = {
+    //called on TrainingContainer Mount to use the closure in the child components.
     loadNotes: function () {
         var context = new AudioContext || new window.webkitAudioContext;
 
-        var notes = {
-            A4: {
-                src: 'public/sounds/piano/A4'
-            },
-            Ab4: {
-                src: 'public/sounds/piano/Ab4'
-            },
-            B4: {
-                src: 'public/sounds/piano/B4'
-            },
-            Bb4: {
-                src: 'public/sounds/piano/Bb4'
-            },
-            C4: {
-                src: 'public/sounds/piano/C4'
-            },
-            D4: {
-                src: 'public/sounds/piano/D4'
-            },
-            Db4: {
-                src: 'public/sounds/piano/Db4'
-            },
-            E4: {
-                src: 'public/sounds/piano/E4'
-            },
-            Eb4: {
-                src: 'public/sounds/piano/Eb4'
-            },
-            F4: {
-                src: 'public/sounds/piano/F4'
-            },
-            G4: {
-                src: 'public/sounds/piano/G4'
-            },
-            Gb4: {
-                src: 'public/sounds/piano/Gb4'
-            }
-        };
+        var notes = makeNotesObject();
 
         var loadSound = function (obj) {
             var request = new XMLHttpRequest();
@@ -72,14 +115,16 @@ var noteTestingFunctions = {
         loadSounds(notes);
 
         return function (note) {
-            console.log(notes[note]);
-            console.log(notes);
             var source = context.createBufferSource();
             source.buffer = notes[note].buffer;
             source.connect(context.destination);
             source.start(0,0,1);
         }
 
+    },
+    //should be called to start the chosen training game.
+    startTraining: function(){
+        return makeNotesArray();
     }
 };
 
