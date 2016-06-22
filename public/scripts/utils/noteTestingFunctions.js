@@ -125,6 +125,21 @@ var noteTestingFunctions = {
     //should be called to start the chosen training game.
     startTraining: function(){
         return makeNotesArray();
+    },
+    increaseCount(targetNote, counter){
+        for (i = 0; i <= counter.length - 1; i++) {
+            if ((counter[i].targetNote === targetNote) && (counter[i].count < 5)) {
+                counter[i].increase();
+                //stop the iteration, save memory and return the adjusted counter:
+                return counter
+            }
+        }
+
+        //no changes made, return counter:
+        return counter;
+    },
+    getTargetNote:function(counter){
+        return RandomNotes(counter);
     }
 };
 

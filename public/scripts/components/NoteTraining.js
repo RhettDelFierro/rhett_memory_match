@@ -1,17 +1,33 @@
 var React = require("react");
 
-var PlayD = React.createClass({
-    playD: function(){
-      this.props.onPlayNote("D4");
+var Keys = React.createClass({
+    playThisNote: function () {
+        this.props.onLoadChosenNote(this.props.note);
     },
-    render: function() {
-        return <button className="btn btn-lg btn-primary" onClick={this.playD}>Testing D</button>
+    render: function () {
+        return (
+            <button className="btn btn-sm btn-primary" onClick={this.playThisNote}>{this.props.note}</button>
+        )
     }
 });
 
-function NoteTraining(props){
+function ScoresContainer(props) {
     return (
-        <PlayD onPlayNote={props.onPlayNote}/>
+        props.correct === false
+            ? <div onClick={props.onLoadTargetNote}>{props.targetNote}</div>
+            : <div onClick={props.onLoadTargetNote}>Next Note</div>
+    )
+}
+
+function NoteTraining(props) {
+    return (
+        <div>
+            <ScoresContainer correct={props.correct} targetNote={props.targetNote}
+                             onLoadTargetNote={props.onLoadTargetNote}/>
+            {props.notes.map(function (note) {
+                return <Keys note={note.targetNote} key={note.targetNote} onLoadChosenNote={props.onLoadChosenNote}/>
+            })}
+        </div>
     )
 }
 
