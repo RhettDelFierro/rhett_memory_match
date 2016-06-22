@@ -9,7 +9,7 @@ var HomeContainer = require('../containers/HomeContainer');
 var PerfectPitchContainer = require("../containers/PerfectPitchContainer");
 var MemoryMatchContainer = require("../containers/MemoryMatchContainer");
 var ScoreboardContainer = require("../containers/ScoreboardContainer");
-var TrainingContainer = require("../containers/trainingContainer");
+var TrainingContainer = require("../containers/TrainingContainer");
 
 var routes = (
     <Router history={hashHistory}>

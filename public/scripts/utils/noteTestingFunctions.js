@@ -52,7 +52,7 @@ function NotesTracker(targetNote) {
 
 //initialize the counter (objects with targetNote and count properties):
 function makeNotesArray(){
-    var notes = MakeNotesObject();
+    var notes = makeNotesObject();
 
     var notesArray = [];
 
@@ -73,7 +73,7 @@ function RandomNotes(counter) {
         }
     });
 
-    return availableNotes[Math.floor(availableNotes.length * Math.random())]
+    return availableNotes[Math.floor(availableNotes.length * Math.random())] || "Finished"
 }
 
 
@@ -115,6 +115,7 @@ var noteTestingFunctions = {
         loadSounds(notes);
 
         return function (note) {
+            console.log(note);
             var source = context.createBufferSource();
             source.buffer = notes[note].buffer;
             source.connect(context.destination);
@@ -122,7 +123,7 @@ var noteTestingFunctions = {
         }
 
     },
-    //should be called to start the chosen training game.
+    //should called on componentwill mount.
     startTraining: function(){
         return makeNotesArray();
     },
@@ -139,6 +140,7 @@ var noteTestingFunctions = {
         return counter;
     },
     getTargetNote:function(counter){
+        console.log("counter: ", counter);
         return RandomNotes(counter);
     }
 };

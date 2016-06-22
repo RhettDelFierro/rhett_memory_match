@@ -123,12 +123,11 @@ var TestingComplete = React.createClass({
         return (
             <div style={styles.container}>
                 <p style={{color: "#ffffff", alignSelf: "center", marginBottom: "7px"}}>Here is your score: {this.props.score}</p>
-                <button className="btn btn-lg btn-primary" onClick={this.props.handleToTraining}>Start Training</button>
+                <button className="btn btn-lg btn-primary" onClick={this.handleToTraining}>Start Training</button>
             </div>
         )
     }
 });
-
 
 function PerfectPitch(props) {
     return props.testingComplete === true

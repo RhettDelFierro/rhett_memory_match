@@ -27,7 +27,7 @@ var NoteTrainingContainer = React.createClass({
     },
     handleLoadChosenNote: function (note) {
         this.handlePlayNote(note);
-
+        var targetNote = noteTestingFunctions.getTargetNote(this.state.counter);
         var counter = noteTestingFunctions.increaseCount(this.state.targetNote, this.state.counter);
 
         var correct = true;
@@ -40,12 +40,14 @@ var NoteTrainingContainer = React.createClass({
             chosenNotePlayed: true,
             chosenNote: note,
             correct: correct,
-            counter: update(this.state.counter, {$set: counter})
+            counter: update(this.state.counter, {$set: counter}),
+            targetNote: targetNote
         } : {
             chosenNotePlayed: true,
             chosenNote: note,
             correct: correct,
-            counter: update(this.state.counter, {$set: counter})
+            counter: update(this.state.counter, {$set: counter}),
+            targetNote: targetNote
         };
         this.setState(newState)
     },
@@ -64,23 +66,24 @@ var NoteTrainingContainer = React.createClass({
             })
         }
     },
-    componentWillUpdate: function () {
-        this.handleGuess();
-    },
-    componentDidMount: function () {
-        var targetNote = noteTestingFunctions.getTargetNote(this.props.counter);
+    componentWillMount: function () {
+        console.log("componentwillmount");
+        var counter = noteTestingFunctions.startTraining();
+        var targetNote = noteTestingFunctions.getTargetNote(counter);
         this.setState({
-            counter: this.props.counter,
+            counter: counter,
             targetNote: targetNote
         })
     },
     render: function () {
-        return <NoteTraining notes={this.props.counter}
+        return <NoteTraining notes={this.state.counter}
                              onLoadTargetNote={this.handleLoadTargetNote}
                              onLoadChosenNote={this.handleLoadChosenNote}
                              correct={this.state.correct}
                              targetNote={this.state.targetNote}
-                             chosenNote={this.state.chosenNote}/>
+                             chosenNote={this.state.chosenNote}
+                             chosenNotePlayed={this.state.chosenNotePlayed}
+                             targetNotePLayed={this.state.targetNotePlayed}/>
     }
 });
 
