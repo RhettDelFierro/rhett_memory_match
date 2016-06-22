@@ -115,7 +115,6 @@ var noteTestingFunctions = {
         loadSounds(notes);
 
         return function (note) {
-            console.log(note);
             var source = context.createBufferSource();
             source.buffer = notes[note].buffer;
             source.connect(context.destination);
@@ -140,7 +139,6 @@ var noteTestingFunctions = {
         return counter;
     },
     getTargetNote:function(counter){
-        console.log("counter: ", counter);
         return RandomNotes(counter);
     }
 };

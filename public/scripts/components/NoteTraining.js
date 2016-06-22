@@ -12,19 +12,15 @@ var Keys = React.createClass({
 });
 
 var ScoresContainer = React.createClass({
-    loadTargetNote: function(){
+    loadTargetNote: function () {
         this.props.onLoadTargetNote(this.props.targetNote);
     },
-    componentWillReceiveProps: function(){
-      if (this.props.correct === false && this.props.targetNotePlayed && this.props.chosenNotePlayed){
-          this.props.onLoadTargetNote(this.props.targetNote)
-      }
-    },
-    render: function() {
+    render: function () {
         return (
-            this.props.correct === false
-                ? <div onClick={this.loadTargetNote}>{this.props.targetNote}</div>
-                : <div onClick={this.loadTargetNote}>Next Note</div>
+            <div onClick={this.loadTargetNote}>
+                <p>Next Note</p>
+                <p><span>{!this.props.correct ? this.props.cacheTargetNote : "Correct!"}</span></p>
+            </div>
         )
     }
 });
@@ -34,11 +30,12 @@ function NoteTraining(props) {
         <div>
             <ScoresContainer correct={props.correct}
                              targetNote={props.targetNote}
-                             onLoadTargetNote={props.onLoadTargetNote}
-            targetNotePlayed={props.targetNotePlayed}
-            chosenNotePlayed={props.chosenNotePlayed}/>
+                             cacheTargetNote={props.cacheTargetNote}
+                             onLoadTargetNote={props.onLoadTargetNote} />
+
+
             {props.notes.map(function (note) {
-                return <Keys note={note.targetNote} key={note.targetNote} onLoadChosenNote={props.onLoadChosenNote} />
+                return <Keys note={note.targetNote} key={note.targetNote} onLoadChosenNote={props.onLoadChosenNote}/>
             })}
         </div>
     )

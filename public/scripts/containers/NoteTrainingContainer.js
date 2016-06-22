@@ -12,7 +12,8 @@ var NoteTrainingContainer = React.createClass({
             targetNote: "",
             chosenNote: "",
             targetNotePlayed: false,
-            chosenNotePlayed: false
+            chosenNotePlayed: false,
+            cacheTargetNote: ""
         }
     },
     handlePlayNote: function (note) {
@@ -29,11 +30,14 @@ var NoteTrainingContainer = React.createClass({
         this.handlePlayNote(note);
         var targetNote = noteTestingFunctions.getTargetNote(this.state.counter);
         var counter = noteTestingFunctions.increaseCount(this.state.targetNote, this.state.counter);
-
+        var cacheCurrentTargetNote = this.state.targetNote;
         var correct = true;
 
         if (note !== this.state.targetNote) {
             correct = false;
+            setTimeout(function () {
+                this.handlePlayNote(cacheCurrentTargetNote)
+            }.bind(this), 1500)
         }
         var newState = correct === false ? {
             keyMissed: update(this.state.keyMissed, {$push: [note]}),
@@ -41,13 +45,15 @@ var NoteTrainingContainer = React.createClass({
             chosenNote: note,
             correct: correct,
             counter: update(this.state.counter, {$set: counter}),
-            targetNote: targetNote
+            targetNote: targetNote,
+            cacheTargetNote: cacheCurrentTargetNote
         } : {
             chosenNotePlayed: true,
             chosenNote: note,
             correct: correct,
             counter: update(this.state.counter, {$set: counter}),
-            targetNote: targetNote
+            targetNote: targetNote,
+            cacheTargetNote: cacheCurrentTargetNote
         };
         this.setState(newState)
     },
@@ -67,7 +73,6 @@ var NoteTrainingContainer = React.createClass({
         }
     },
     componentWillMount: function () {
-        console.log("componentwillmount");
         var counter = noteTestingFunctions.startTraining();
         var targetNote = noteTestingFunctions.getTargetNote(counter);
         this.setState({
@@ -76,14 +81,15 @@ var NoteTrainingContainer = React.createClass({
         })
     },
     render: function () {
-        return <NoteTraining notes={this.state.counter}
-                             onLoadTargetNote={this.handleLoadTargetNote}
-                             onLoadChosenNote={this.handleLoadChosenNote}
+        return <NoteTraining onLoadTargetNote={this.handleLoadTargetNote}
                              correct={this.state.correct}
                              targetNote={this.state.targetNote}
                              chosenNote={this.state.chosenNote}
-                             chosenNotePlayed={this.state.chosenNotePlayed}
-                             targetNotePLayed={this.state.targetNotePlayed}/>
+                             cacheTargetNote={this.state.cacheTargetNote}
+
+                             notes={this.state.counter}
+
+                             onLoadChosenNote={this.handleLoadChosenNote}/>
     }
 });
 
