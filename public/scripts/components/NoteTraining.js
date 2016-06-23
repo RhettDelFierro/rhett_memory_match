@@ -1,6 +1,6 @@
-var React = require("react");
+import React from "react"
 
-var Keys = React.createClass({
+const Keys = React.createClass({
     playThisNote: function () {
         this.props.onLoadChosenNote(this.props.note);
     },
@@ -11,7 +11,7 @@ var Keys = React.createClass({
     }
 });
 
-var ScoresContainer = React.createClass({
+const ScoresContainer = React.createClass({
     loadTargetNote: function () {
         this.props.onLoadTargetNote(this.props.targetNote, 1);
     },
@@ -32,13 +32,13 @@ var ScoresContainer = React.createClass({
     }
 });
 
-var CompleteTesting = React.createClass({
+const CompleteTesting = React.createClass({
     score: function(){
         return (this.props.keysMissed.length/60)
     },
     keysMainlyMissed: function(){
-        var initialValue = {};
-        var reducer = function(tally, note){
+        const initialValue = {};
+        let reducer = function(tally, note){
             if (!tally[note]) {
                 tally[note] = 1;
             } else {
@@ -48,9 +48,9 @@ var CompleteTesting = React.createClass({
             return tally
         };
 
-        var result = this.props.keysMissed.reduce(reducer, initialValue);
+        let result = this.props.keysMissed.reduce(reducer, initialValue);
 
-        var resultString = "";
+        let resultString = "";
 
         for (var note in result) {
             resultString += note + ": " + result[note] + ", ";
@@ -84,4 +84,4 @@ function NoteTraining(props) {
 
 }
 
-module.exports = NoteTraining;
+export default NoteTraining

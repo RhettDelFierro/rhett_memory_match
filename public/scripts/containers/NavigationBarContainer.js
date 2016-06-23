@@ -1,8 +1,7 @@
-var React = require("react");
-var NavigationBar = require("../components/NavigationBar");
-var PropTypes = React.PropTypes;
+import React, { PropTypes } from "react"
+import NavigationBar from "../components/NavigationBar"
 
-var NavigationBarContainer = React.createClass({
+const NavigationBarContainer = React.createClass({
     propTypes: {
         isLoggedIn: PropTypes.bool.isRequired,
         onUpdateLogin: PropTypes.func.isRequired,
@@ -17,4 +16,4 @@ var NavigationBarContainer = React.createClass({
     }
 });
 
-module.exports = NavigationBarContainer;
+export default NavigationBarContainer;

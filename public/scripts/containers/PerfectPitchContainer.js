@@ -1,9 +1,13 @@
-var React = require("react");
-var PerfectPitch = require("../components/PerfectPitch");
-var noteFunctions = require("../utils/noteFunctions");
-var update = require("react-addons-update");
+import React from "react"
+import PerfectPitch from "../components/PerfectPitch"
 
-var PerfectPitchContainer = React.createClass({
+import { initializeStartPoin, getAverage, convertCents,
+    playTargetNote, playStartingNote, playGuessNote, checkerSelection,
+    getNotes } from "../utils/noteFunctions"
+
+import update from "react-addon-update"
+
+const PerfectPitchContainer = React.createClass({
     //ajax call to get audio.
     //increase and decrease cents.
     //play audio.
@@ -23,7 +27,7 @@ var PerfectPitchContainer = React.createClass({
     },
     componentDidMount: function () {
         //load the two notes to be used when this component is loaded:
-        var notes = noteFunctions.initializeStartPoint();
+        const notes = initializeStartPoint();
         this.makeNewCount(notes);
     },
     makeNewCount: function (notes) {
@@ -37,8 +41,8 @@ var PerfectPitchContainer = React.createClass({
     },
     handleControl: function (cents) {
         //increase/decrease cents from here.
-        var totalCents = this.state.cents + (cents);
-        var convertedFrequency = noteFunctions.convertCents(totalCents, this.state.startingNote);
+        const totalCents = this.state.cents + (cents);
+        const convertedFrequency = convertCents(totalCents, this.state.startingNote);
         this.setState({
             convertedFrequency: convertedFrequency,
             cents: totalCents
@@ -50,7 +54,7 @@ var PerfectPitchContainer = React.createClass({
     handlePlayTarget: function () {
         //var counter = noteFunctions.keepCount(this.state.targetNote, this.state.startingNote, this.state.counter);
         if (this.state.guessesArray.length === 64) {
-            var average = noteFunctions.getAverage(this.state.guessesArray);
+            const average = getAverage(this.state.guessesArray);
             this.setState({
                 average: average,
                 testingComplete: true
@@ -59,7 +63,7 @@ var PerfectPitchContainer = React.createClass({
         console.log("number of guesses: ", this.state.guessesArray.length);
 
         if (this.state.targetNotePlayed === false) {
-            noteFunctions.playTargetNote(this.state.targetNote);
+            playTargetNote(this.state.targetNote);
             this.setState({
                 targetNotePlayed: true,
                 startingNotePlayed: false
@@ -68,19 +72,19 @@ var PerfectPitchContainer = React.createClass({
     },
     handlePlayStarting: function () {
         if (this.state.targetNotePlayed === true && this.state.startingNotePlayed === false) {
-            noteFunctions.playStartingNote(this.state.startingNote);
+            playStartingNote(this.state.startingNote);
             this.setState({
                 targetNotePlayed: false,
                 startingNotePlayed: true
             })
         } else if (this.state.targetNotePlayed === false && this.state.startingNotePlayed === true) {
-            noteFunctions.playGuessNote(this.state.StartingNote, this.state.cents);
+            playGuessNote(this.state.StartingNote, this.state.cents);
         }
     },
     handleSubmitNote: function () {
-        var results = noteFunctions.checkerSelection(this.state.targetNote, this.state.startingNote, this.state.cents);
+        const results = checkerSelection(this.state.targetNote, this.state.startingNote, this.state.cents);
         //switch statement to pass in the right array. The array will be based on this.state.targetNote.
-        var newNotes = noteFunctions.getNotes(this.state.targetNote, this.state.startingNote, this.state.counter);
+        const newNotes = getNotes(this.state.targetNote, this.state.startingNote, this.state.counter);
         this.setState({
             targetNote: newNotes.targetNote,
             startingNote: newNotes.startingNote,
@@ -102,4 +106,4 @@ var PerfectPitchContainer = React.createClass({
     }
 });
 
-module.exports = PerfectPitchContainer;
+export default PerfectPitchContainer;

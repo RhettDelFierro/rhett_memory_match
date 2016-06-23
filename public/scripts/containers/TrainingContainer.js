@@ -1,8 +1,8 @@
-var React = require("react");
-var Training = require("../components/Training");
-var noteTestingFunctions = require("../utils/noteTestingFunctions");
+import React from "react"
+import Training from "../components/Training"
+import { loadNotes } from "../utils/noteTestingFunctions"
 
-var TrainingContainer = React.createClass({
+const TrainingContainer = React.createClass({
     getInitialState: function () {
         return {
             inm: 0,
@@ -21,11 +21,11 @@ var TrainingContainer = React.createClass({
     },
     render: function () {
         //maybe depending which one they go to, render that.
-        var playNotes = noteTestingFunctions.loadNotes();
+        const playNotes = noteTestingFunctions.loadNotes();
         return (
             <Training playNotes={playNotes} scores={this.state.scoresTest}/>
         )
     }
 });
 
-module.exports = TrainingContainer;
+export default TrainingContainer

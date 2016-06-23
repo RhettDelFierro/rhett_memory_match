@@ -1,4 +1,4 @@
-var React = require("react");
+import React from "react"
 
 function MemoryMatch(props){
     return (
@@ -6,4 +6,4 @@ function MemoryMatch(props){
     )
 }
 
-module.exports = MemoryMatch;
+export default MemoryMatch

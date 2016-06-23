@@ -33,46 +33,23 @@ function WhiteNoise() {
     }, 1000)
 }
 
-/**
- * @return {string}
- * gets name of note from frequency (target).
- */
-function KeepTrackTarget(note) {
-    for (var name in notes.target) {
-        if (note === notes.target[name]) {
-            return name
-        }
-    }
-}
-
-/**
- * @return {string}
- * gets name of note from frequency (starting).
- */
-function KeepTrackStarting(note) {
-    for (var name in notes.starting) {
-        if (note === notes.starting[name]) {
-            return name
-        }
-    }
-}
 //these two functions take in a note name and return a frequency. Use this to play the sounds.
 function TargetNameToFrequency(noteName) {
-    for (var note in notes.target) {
+    for (let note in notes.target) {
         if (noteName === note) {
             return notes.target[note];
         }
     }
 }
 function StartingNameToFrequency(noteName) {
-    for (var note in notes.starting) {
+    for (let note in notes.starting) {
         if (noteName === note) {
             return notes.starting[note];
         }
     }
 }
 
-var notes = {
+const notes = {
 
     starting: {
         "D": 293.665,
@@ -117,100 +94,99 @@ function CountCombinations(targetNote, startingNote, counter) {
 }
 //generate a random target/starting note combination.
 function RandomNotes(counter) {
-    var availableNotes = [];
-    counter.map(function(item){
-        if (item.count < 2){
+    let availableNotes = [];
+    counter.map(function (item) {
+        if (item.count < 2) {
             availableNotes.push({targetNote: item.targetNote, startingNote: item.startingNote})
         }
     });
     return availableNotes[Math.floor(availableNotes.length * Math.random())]
 }
 
-var noteFunctions = {
-    getNotes: function (targetNote, startingNote, counter) {
+export function getNotes(targetNote, startingNote, counter) {
 
-        var notesArray = CountCombinations(targetNote, startingNote, counter);
-        var randomNote = RandomNotes(notesArray);
-        return {
-            targetNote: randomNote.targetNote,
-            startingNote: randomNote.startingNote,
-            counter: notesArray
-        }
-    },
-    //on componentDidMount, initialize a random counter object:
-    initializeStartPoint: function () {
-        //get two random frequencies:
-        var counter = [];
-        for (var target in notes.target){
-            for (var starting in notes.starting){
-                counter.push(new NotesTracker(target, starting))
-            }
-        }
-        var randomNote =  counter[Math.floor(counter.length * Math.random())];
-        //returns note names, not frequencies
-        return {
-            targetNote: randomNote.targetNote,
-            startingNote: randomNote.startingNote,
-            counter: counter
-        }
-    },
-    whiteNoise: function () {
-        WhiteNoise()
-    },
-    playTargetNote: function (targetNote) {
-        //get two note frequencies from their names:
-        var target = TargetNameToFrequency(targetNote);
-        MakeNote(target);
-        setTimeout(WhiteNoise, 1000);
-    },
-    playStartingNote: function (startingNote) {
-        var starting = StartingNameToFrequency(startingNote);
-        MakeNote(starting);
-    },
-    playGuessNote: function(startingNote, centsValue){
-        var startingFrequency = notes.starting[startingNote];
-        var cents = centsValue;
-
-        var outputFrequency = startingFrequency * Math.pow(2, (cents / 1000));
-
-        MakeNote(outputFrequency);
-    },
-    onSubmitSelection: function () {
-
-    },
-    //takes in the two note names. Frequency conversion handled also:
-    //will have to change this to take in two frequencies.
-    checkerSelection: function (targetNote, startingNote, cents) {
-        var startingFrequency = notes.starting[startingNote];
-        var targetFrequency = notes.target[targetNote];
-
-        var outputFrequency = startingFrequency * Math.pow(2, (cents / 1000));
-
-        //numerator will give us a number in the 100's, to get the number of half-notes, divide by 100.
-        var accuracy = (1200 * Math.log2(targetFrequency/outputFrequency)) / 100;
-        console.log(accuracy);
-        return accuracy;
-    },
-    convertCents: function (cents, startingNote) {
-        var startingFrequency = notes.starting[startingNote];
-        var outputFrequency = startingFrequency * Math.pow(2, (cents / 1000));
-        MakeNote(outputFrequency);
-        return ({
-            checkingFrequency: outputFrequency
-        })
-    },
-    getAverage: function(guessesArray){
-        var absoluteValueArray = guessesArray.map(function(item){
-           return Math.abs(item);
-        });
-        var initialValue = 0;
-        var reducer = function(accumulator, item) {
-            return accumulator + item
-        };
-        var total = absoluteValueArray.reduce(reducer, initialValue);
-        return total/absoluteValueArray.length;
+    const notesArray = CountCombinations(targetNote, startingNote, counter);
+    const randomNote = RandomNotes(notesArray);
+    return {
+        targetNote: randomNote.targetNote,
+        startingNote: randomNote.startingNote,
+        counter: notesArray
     }
+}
+//on componentDidMount, initialize a random counter object:
+export function initializeStartPoint() {
+    //get two random frequencies:
+    let counter = [];
+    for (let target in notes.target) {
+        for (let starting in notes.starting) {
+            counter.push(new NotesTracker(target, starting))
+        }
+    }
+    let randomNote = counter[Math.floor(counter.length * Math.random())];
+    //returns note names, not frequencies
+    return {
+        targetNote: randomNote.targetNote,
+        startingNote: randomNote.startingNote,
+        counter: counter
+    }
+}
 
-};
+export function whiteNoise() {
+    WhiteNoise()
+}
 
-module.exports = noteFunctions;
+export function playTargetNote(targetNote) {
+    //get two note frequencies from their names:
+    const target = TargetNameToFrequency(targetNote);
+    MakeNote(target);
+    setTimeout(WhiteNoise, 1000);
+}
+
+export function playStartingNote(startingNote) {
+    const starting = StartingNameToFrequency(startingNote);
+    MakeNote(starting);
+}
+
+export function playGuessNote(startingNote, centsValue) {
+    const startingFrequency = notes.starting[startingNote];
+    const cents = centsValue;
+
+    const outputFrequency = startingFrequency * Math.pow(2, (cents / 1000));
+
+    MakeNote(outputFrequency);
+}
+
+//takes in the two note names. Frequency conversion handled also:
+//will have to change this to take in two frequencies.
+export function checkerSelection(targetNote, startingNote, cents) {
+    const startingFrequency = notes.starting[startingNote];
+    const targetFrequency = notes.target[targetNote];
+
+    const outputFrequency = startingFrequency * Math.pow(2, (cents / 1000));
+
+    //numerator will give us a number in the 100's, to get the number of half-notes, divide by 100.
+    const accuracy = (1200 * Math.log2(targetFrequency / outputFrequency)) / 100;
+    console.log(accuracy);
+    return accuracy;
+}
+
+export function convertCents(cents, startingNote) {
+    const startingFrequency = notes.starting[startingNote];
+    const outputFrequency = startingFrequency * Math.pow(2, (cents / 1000));
+    MakeNote(outputFrequency);
+    return ({
+        checkingFrequency: outputFrequency
+    })
+}
+
+export function getAverage(guessesArray) {
+    let absoluteValueArray = guessesArray.map(function (item) {
+        return Math.abs(item);
+    });
+    let initialValue = 0;
+    let reducer = function (accumulator, item) {
+        return accumulator + item
+    };
+    let total = absoluteValueArray.reduce(reducer, initialValue);
+    return total / absoluteValueArray.length;
+}

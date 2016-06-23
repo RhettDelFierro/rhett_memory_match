@@ -1,7 +1,7 @@
-var React = require("react");
-var MemoryMatch = require("../components/MemoryMatch");
+import React from "react"
+import MemoryMatch from "../components/MemoryMatch"
 
-var MemoryMatchContainer = React.createClass({
+const MemoryMatchContainer = React.createClass({
     render: function(){
         return (
             <MemoryMatch />
@@ -9,4 +9,4 @@ var MemoryMatchContainer = React.createClass({
     }
 });
 
-module.exports = MemoryMatchContainer;
+export default MemoryMatchContainer

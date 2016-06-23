@@ -1,4 +1,4 @@
-var React = require("react");
+import React from "react"
 
 function Scoreboard(props){
     return (
@@ -6,4 +6,4 @@ function Scoreboard(props){
     )
 }
 
-module.exports = Scoreboard;
+export default Scoreboard

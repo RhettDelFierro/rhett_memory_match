@@ -1,16 +1,9 @@
-var React = require("react");
-var Bootstrap = require("react-bootstrap");
-var FormGroup = Bootstrap.FormGroup;
-var FormControl = Bootstrap.FormControl;
-var Button = Bootstrap.Button;
-var form = Bootstrap.Form;
-var ControlLabel = Bootstrap.ControlLabel;
-var PropTypes = React.PropTypes;
-var HelpBlock = Bootstrap.HelpBlock;
+import React, { PropTypes } from "react"
+import { FormGroup, FormControl, Button, form, ControlLabel, HelpBlock } from "react-bootstrap"
 
 
 function RegisterForm(props) {
-    var helpBlock;
+    let helpBlock;
     if (props.duplicate) {
         helpBlock = <HelpBlock bsClass={props.helpBlock}
                                style={{color: "red"}}>
@@ -56,4 +49,4 @@ RegisterForm.propTypes = {
     helpBlock: PropTypes.string.isRequired
 };
 
-module.exports = RegisterForm;
+export default RegisterForm

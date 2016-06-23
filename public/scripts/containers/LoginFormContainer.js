@@ -1,8 +1,8 @@
-var React = require("react");
-var LoginForm = require("../components/LoginForm");
-var userFunctions = require("../utils/userFunctions");
+import React from "react"
+import LoginForm from "../components/LoginForm"
+import { loginUser } from "../utils/userFunctions"
 
-var LoginFormContainer = React.createClass({
+const LoginFormContainer = React.createClass({
     //don't forget to go to the logged in route.
     contextTypes: {
         router: React.PropTypes.object.isRequired
@@ -56,7 +56,7 @@ var LoginFormContainer = React.createClass({
 
     //called on navbar login.
     getToken: function () {
-        userFunctions.loginUser({
+        loginUser({
             user: this.state.user,
             password: this.state.password
         }).then(function (data) {
@@ -94,4 +94,4 @@ var LoginFormContainer = React.createClass({
 });
 
 
-module.exports = LoginFormContainer;
+export default LoginFormContainer;

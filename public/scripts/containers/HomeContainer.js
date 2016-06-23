@@ -1,10 +1,9 @@
 //will contain <StudentFormContainer> <TableContainer>
-var React = require("react");
-var Home = require("../components/Home");
-var PropTypes = React.PropTypes;
-var update = require("react-addons-update");
+import React, { PropTypes } from "react"
+import Home from "../components/Home"
+import update from "react-addons-update"
 
-var HomeContainer = React.createClass({
+const HomeContainer = React.createClass({
     render: function () {
         return (
             <Home />
@@ -12,4 +11,4 @@ var HomeContainer = React.createClass({
     }
 });
 
-module.exports = HomeContainer;
+export default HomeContainer

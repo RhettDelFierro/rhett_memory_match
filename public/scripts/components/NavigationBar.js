@@ -1,13 +1,8 @@
-var React = require("react");
-var ReactRouter = require("react-router");
-var Link = ReactRouter.Link;
-var PropTypes = React.PropTypes;
-var Bootstrap = require("react-bootstrap");
-var LoginFormContainer = require("../containers/LoginFormContainer");
-var Navbar = Bootstrap.Navbar;
-var Nav = Bootstrap.Nav;
-var NavItem = Bootstrap.NavItem;
-var RegisterModalContainer = require("../containers/RegisterModalContainer");
+import React, { PropTypes } from "react"
+import { Link } from "react-router"
+import { Nav, Navbar, NavItem } from "react-bootstrap"
+import LoginFormContainer from "../containers/LoginFormContainer"
+import RegisterModalContainer from "../containers/RegisterModalContainer"
 
 
 function RegisterToggle(props) {
@@ -50,4 +45,4 @@ NavigationBar.propTypes = {
     onUpdateLogin: PropTypes.func.isRequired
 };
 
-module.exports = NavigationBar;
+export default NavigationBar

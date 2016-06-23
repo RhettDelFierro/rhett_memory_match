@@ -1,8 +1,7 @@
-var React = require("react");
-var ReactRouter = require("react-router");
-var Link = ReactRouter.Link;
+import React from "react"
+import { Link } from "react-router"
 
-var styles = {
+const styles = {
     container: {
         backgroundSize: 'cover',
         backgroundImage: "url('public/images/crowd.jpg')",
@@ -33,4 +32,4 @@ function Home(props) {
 
 }
 
-module.exports = Home;
+export default Home

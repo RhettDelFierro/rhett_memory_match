@@ -1,12 +1,6 @@
-var React = require("react");
-var Bootstrap = require("react-bootstrap");
-var Button = Bootstrap.Button;
-var Modal = Bootstrap.Modal;
-var Popover = Bootstrap.Popover;
-var Tooltip = Bootstrap.Tooltip;
-var OverlayTrigger = Bootstrap.OverlayTrigger;
-var PropTypes = React.PropTypes;
-var RegisterFormContainer = require("../containers/RegisterFormContainer");
+import React, { PropTypes } from "react"
+import { Button, Modal } from "react-bootstrap"
+import RegisterFormContainer from "../containers/RegisterFormContainer"
 
 function RegisterModal(props) {
     return (
@@ -39,4 +33,4 @@ RegisterModal.propTypes = {
     onClose: PropTypes.func.isRequired
 };
 
-module.exports = RegisterModal;
+export default RegisterModal

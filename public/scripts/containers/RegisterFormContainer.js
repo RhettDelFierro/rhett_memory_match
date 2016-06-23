@@ -1,8 +1,9 @@
-var React = require("react");
-var RegisterForm = require("../components/RegisterForm");
-var userFunctions = require("../utils/userFunctions");
+import React from "react"
+import RegisterForm from "../components/RegisterForm"
+import { verifyName, registerUser, loginPassword } from "../utils/userFunctions"
 
-var RegisterFormContainer = React.createClass({
+
+const RegisterFormContainer = React.createClass({
     contextTypes: {
         router: React.PropTypes.object.isRequired
     },
@@ -43,7 +44,7 @@ var RegisterFormContainer = React.createClass({
         }
     },
     ajaxValidUserName: function () {
-        userFunctions.verifyName(this.state.user)
+        verifyName(this.state.user)
             .then(function (userdata) {
                 this.setState({
                     duplicate: userdata.taken
@@ -70,7 +71,7 @@ var RegisterFormContainer = React.createClass({
             userInfo: {}
         });
         //on fail stay on page and display error messages. Also re-set the state to have the info.
-        userFunctions.registerUser({
+        registerUser({
                 user: this.state.user,
                 email: this.state.email,
                 password: this.state.password
@@ -80,7 +81,7 @@ var RegisterFormContainer = React.createClass({
             }.bind(this));
     },
     getUser: function (user) {
-        userFunctions.loginPassword(user)
+        loginPassword(user)
             .then(function (data) {
                 console.log("2nd data: ", data);
                 var date = new Date();
@@ -103,4 +104,4 @@ var RegisterFormContainer = React.createClass({
     }
 });
 
-module.exports = RegisterFormContainer;
+export default RegisterFormContainer

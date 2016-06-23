@@ -1,16 +1,7 @@
-var React = require("react");
-var Bootstrap = require("react-bootstrap");
-var Navbar = Bootstrap.Navbar;
-var Nav = Bootstrap.Nav;
-var FormGroup = Bootstrap.FormGroup;
-var FormControl = Bootstrap.FormControl;
-var Button = Bootstrap.Button;
-var NavItem = Bootstrap.NavItem;
-var MenuItem = Bootstrap.MenuItem;
-var NavDropdown = Bootstrap.NavDropdown;
-var RegisterFormContainer = require("../containers/RegisterFormContainer");
+import React from "react"
+import { Navbar, Nav, FormGroup, FormControl, Button, NavItem, MenuItem, NavDropdown } from "react-bootstrap"
 
-var styles = {
+const styles = {
     signedIn: {
         "marginRight": 0
     }
@@ -60,4 +51,4 @@ function LoginForm(props) {
         : <NotLoggedIn user={props.user} password={props.password} onUpdateUser={props.onUpdateUser} onUpdatePassword={props.onUpdatePassword} onSubmitUser={props.onSubmitUser} onRegisterLogin={props.onRegisterLogin}/>
 }
 
-module.exports = LoginForm;
+export default LoginForm

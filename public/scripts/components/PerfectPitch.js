@@ -1,7 +1,7 @@
-var React = require("react");
-var InfoContainer = require("../containers/InfoContainer");
+import React from "react"
+import InfoContainer from "../containers/InfoContainer"
 
-var styles = {
+const styles = {
     container: {
         backgroundSize: 'cover',
         backgroundImage: "url('public/images/coachella.jpg')",
@@ -15,7 +15,7 @@ var styles = {
     }
 };
 
-var DoubleIncreaseCents = React.createClass({
+const DoubleIncreaseCents = React.createClass({
     updateCents: function () {
         this.props.onControl(66)
     },
@@ -27,7 +27,7 @@ var DoubleIncreaseCents = React.createClass({
     }
 });
 
-var DoubleDecreaseCents = React.createClass({
+const DoubleDecreaseCents = React.createClass({
     updateCents: function () {
         this.props.onControl(-66)
     },
@@ -39,7 +39,7 @@ var DoubleDecreaseCents = React.createClass({
     }
 });
 
-var DecreaseCents = React.createClass({
+const DecreaseCents = React.createClass({
     updateCents: function () {
         this.props.onControl(-33)
     },
@@ -51,7 +51,7 @@ var DecreaseCents = React.createClass({
     }
 });
 
-var IncreaseCents = React.createClass({
+const IncreaseCents = React.createClass({
     updateCents: function () {
         this.props.onControl(33)
     },
@@ -96,7 +96,7 @@ function InTesting(props) {
     )
 }
 
-var TestingComplete = React.createClass({
+const TestingComplete = React.createClass({
     getInitialState: function(){
       return {
           score: 0
@@ -138,4 +138,4 @@ function PerfectPitch(props) {
 
 }
 
-module.exports = PerfectPitch;
+export default PerfectPitch

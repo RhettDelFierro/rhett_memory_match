@@ -1,7 +1,7 @@
-var React = require("react");
-var Info = require("../components/Info");
+import React from "react"
+import Info from "../components/Info"
 
-var InfoContainer = React.createClass({
+const InfoContainer = React.createClass({
     render: function(){
         return(
             <Info onPlayTarget={this.props.onPlayTarget}/>
@@ -9,4 +9,4 @@ var InfoContainer = React.createClass({
     }
 });
 
-module.exports = InfoContainer;
+export default InfoContainer

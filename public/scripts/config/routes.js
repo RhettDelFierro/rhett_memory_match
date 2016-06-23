@@ -1,17 +1,13 @@
-var React = require('react');
-var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route;
-var hashHistory = ReactRouter.hashHistory;
-var IndexRoute = ReactRouter.IndexRoute;
-var MainContainer = require('../containers/MainContainer');
-var HomeContainer = require('../containers/HomeContainer');
-var PerfectPitchContainer = require("../containers/PerfectPitchContainer");
-var MemoryMatchContainer = require("../containers/MemoryMatchContainer");
-var ScoreboardContainer = require("../containers/ScoreboardContainer");
-var TrainingContainer = require("../containers/TrainingContainer");
+import React from "react"
+import { Router, Route, hashHistory, Index Route } from "react-router"
+import MainContainer from '../containers/MainContainer'
+import HomeContainer from '../containers/HomeContainer'
+import PerfectPitchContainer from '../containers/PerfectPitchContainer'
+import MemoryMatchContainer from '../containers/MemoryMatchContainer'
+import ScoreboardContainer from "../containers/ScoreboardContainer"
+import TrainingContainer from "../containers/TrainingContainer"
 
-var routes = (
+const routes = (
     <Router history={hashHistory}>
         <Route path="/" component={MainContainer}>
             <IndexRoute component={HomeContainer} />
@@ -23,4 +19,4 @@ var routes = (
     </Router>
 );
 
-module.exports = routes;
+export default routes

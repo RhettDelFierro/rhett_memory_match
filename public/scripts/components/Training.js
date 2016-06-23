@@ -1,7 +1,5 @@
-var React = require("react");
-//var PreTestContainer = require("../containers/PreTestContainer");
-var NoteTrainingContainer = require("../containers/NoteTrainingContainer");
-//var PostTrainingContainer = require("../containers/PostTrainingContainer");
+import React from "react"
+import NoteTrainingContainer from "../containers/NoteTrainingContainer"
 
 function Training(props){
     return(
@@ -9,4 +7,4 @@ function Training(props){
     )
 }
 
-module.exports = Training;
+export default Training

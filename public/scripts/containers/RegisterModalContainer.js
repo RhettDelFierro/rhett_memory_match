@@ -1,7 +1,7 @@
-var React = require("react");
-var RegisterModal = require("../components/RegisterModal");
+import React from "react"
+import RegisterModal from "../components/RegisterModal"
 
-var RegisterModalContainer = React.createClass({
+const RegisterModalContainer = React.createClass({
     getInitialState: function () {
         return { showModal: false };
     },
@@ -21,4 +21,4 @@ var RegisterModalContainer = React.createClass({
     }
 });
 
-module.exports = RegisterModalContainer;
+export default RegisterModalContainer

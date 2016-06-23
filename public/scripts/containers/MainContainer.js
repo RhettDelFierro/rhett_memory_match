@@ -1,14 +1,14 @@
-var React = require('react');
-var NavigationBarContainer = require("./NavigationBarContainer");
+import React from "react"
+import NavigationBarContainer from "./NavigationBarContainer"
 
-var styles = {
+const styles = {
     container: {
         height: "100%",
         padding: "0px"
     }
 };
 
-var MainContainer = React.createClass({
+const MainContainer = React.createClass({
     getInitialState: function () {
         return {
             isLoggedIn: false,
@@ -35,4 +35,4 @@ var MainContainer = React.createClass({
     }
 });
 
-module.exports = MainContainer;
+export default MainContainer

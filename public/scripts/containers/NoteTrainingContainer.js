@@ -1,9 +1,10 @@
-var React = require("react");
-var NoteTraining = require("../components/NoteTraining");
-var noteTestingFunctions = require("../utils/noteTestingFunctions");
-var update = require("react-addons-update");
+import React from "react"
+import NoteTraining from "../components/NoteTraining"
+import update from "react-addons-update"
+import { maskingNotes, makeNoise, getTargetNote,
+    increaseCount, startTraining} from "../utils/noteTestingFunctions"
 
-var NoteTrainingContainer = React.createClass({
+const NoteTrainingContainer = React.createClass({
     getInitialState: function () {
         return {
             counter: [],
@@ -35,19 +36,19 @@ var NoteTrainingContainer = React.createClass({
     },
     handleMaskingNotes(){
 
-        var newArray = noteTestingFunctions.maskingNotes(this.state.counter);
+        var newArray = maskingNotes(this.state.counter);
         setTimeout(function(){
             newArray.map(function(item){
                 this.handlePlayNote(item,2)
             }.bind(this))
         }.bind(this),1500);
 
-        noteTestingFunctions.makeNoise();
+        makeNoise();
     },
     handleLoadChosenNote: function (note, seconds) {
         this.handlePlayNote(note, 1);
         //new target note for next round. gets random note.
-        var targetNote = noteTestingFunctions.getTargetNote(this.state.counter);
+        var targetNote = getTargetNote(this.state.counter);
         //in that random notes function, when all have been played five times, it'll return "Finished".
         if (targetNote === "Finished"){
             console.log(this.state.keysMissed);
@@ -56,7 +57,7 @@ var NoteTrainingContainer = React.createClass({
             })
         }
         //increases the count fo reach note.
-        var counter = noteTestingFunctions.increaseCount(this.state.targetNote, this.state.counter);
+        var counter = increaseCount(this.state.targetNote, this.state.counter);
         //because we're about to change state and need the note that was last played, we'll cache this current target note.
         var cacheCurrentTargetNote = this.state.targetNote;
 
@@ -90,8 +91,8 @@ var NoteTrainingContainer = React.createClass({
         this.setState(newState)
     },
     componentWillMount: function () {
-        var counter = noteTestingFunctions.startTraining();
-        var targetNote = noteTestingFunctions.getTargetNote(counter);
+        var counter = startTraining();
+        var targetNote = getTargetNote(counter);
         this.setState({
             counter: counter,
             targetNote: targetNote
@@ -113,4 +114,4 @@ var NoteTrainingContainer = React.createClass({
     }
 });
 
-module.exports = NoteTrainingContainer;
+export default NoteTrainingContainer

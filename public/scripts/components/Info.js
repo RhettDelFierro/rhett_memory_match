@@ -1,6 +1,6 @@
-var React = require("react");
+import React from "react"
 
-var styles = {
+const styles = {
     alignSelf: "center",
     display: "flex",
     width: "75%",
@@ -20,4 +20,4 @@ function Info(props) {
     )
 }
 
-module.exports = Info;
+export default Info;

@@ -1,7 +1,7 @@
-var React = require("react");
-var Scoreboard = require("../components/Scoreboard");
+import react from "react"
+import Scoreboard from "../components/Scoreboard"
 
-var ScoreboardContainer = React.createClass({
+const ScoreboardContainer = React.createClass({
     render: function(){
         return (
             <Scoreboard />
@@ -9,4 +9,4 @@ var ScoreboardContainer = React.createClass({
     }
 });
 
-module.exports = ScoreboardContainer;
+export default ScoreboardContainer;
