@@ -49,7 +49,7 @@ var PerfectPitchContainer = React.createClass({
     //when they press "Begin" (or "Submit"?)
     handlePlayTarget: function () {
         //var counter = noteFunctions.keepCount(this.state.targetNote, this.state.startingNote, this.state.counter);
-        if (this.state.guessesArray.length === 5) {
+        if (this.state.guessesArray.length === 64) {
             var average = noteFunctions.getAverage(this.state.guessesArray);
             this.setState({
                 average: average,

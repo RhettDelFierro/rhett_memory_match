@@ -1,4 +1,4 @@
-function makeNotesObject(){
+function makeNotesObject() {
     var notes = {
         A4: {
             src: 'public/sounds/piano/A4'
@@ -51,12 +51,12 @@ function NotesTracker(targetNote) {
 }
 
 //initialize the counter (objects with targetNote and count properties):
-function makeNotesArray(){
+function makeNotesArray() {
     var notes = makeNotesObject();
 
     var notesArray = [];
 
-    for (var note in notes){
+    for (var note in notes) {
         notesArray.push(new NotesTracker(note))
     }
 
@@ -67,8 +67,8 @@ function makeNotesArray(){
 function RandomNotes(counter) {
     var availableNotes = [];
 
-    counter.map(function(item){
-        if (item.count < 5){
+    counter.map(function (item) {
+        if (item.count < 5) {
             availableNotes.push(item.targetNote)
         }
     });
@@ -114,16 +114,16 @@ var noteTestingFunctions = {
 
         loadSounds(notes);
 
-        return function (note) {
+        return function (note, seconds) {
             var source = context.createBufferSource();
             source.buffer = notes[note].buffer;
             source.connect(context.destination);
-            source.start(0,0,1);
+            source.start(0, 0, seconds);
         }
 
     },
     //should called on componentwill mount.
-    startTraining: function(){
+    startTraining: function () {
         return makeNotesArray();
     },
     increaseCount(targetNote, counter){
@@ -138,8 +138,44 @@ var noteTestingFunctions = {
         //no changes made, return counter:
         return counter;
     },
-    getTargetNote:function(counter){
+    getTargetNote: function (counter) {
         return RandomNotes(counter);
+    },
+    maskingNotes: function (counter) {
+        //var newArray = counter.map(function(item){
+        //    return item.targetNote;
+        //});
+
+        var newArray = [];
+
+        for (i = 0; i < 16; i++) {
+            newArray.push(counter[Math.floor(counter.length * Math.random())].targetNote)
+        }
+
+        return newArray
+    },
+    makeNoise: function () {
+        var context = new AudioContext;
+        var node = context.createBufferSource()
+            , buffer = context.createBuffer(1, 4096, context.sampleRate)
+            , data = buffer.getChannelData(0);
+
+        node.gainNode = context.createGain();
+
+        node.gainNode.connect(context.destination);
+
+        node.gainNode.gain.value = .5;
+
+        for (var i = 0; i < 4096; i++) {
+            data[i] = Math.random();
+        }
+        node.buffer = buffer;
+        node.loop = true;
+        node.connect(context.destination);
+        node.start(3, 0, 1);
+        setTimeout(function () {
+            context.close()
+        }, 4000);
     }
 };
 
