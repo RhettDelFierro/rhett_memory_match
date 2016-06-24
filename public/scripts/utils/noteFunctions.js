@@ -7,7 +7,7 @@ function MakeNote(note) {
 
     oscillator.start(0);
 
-    setTimeout(function () {
+    setTimeout(() => {
         oscillator.stop(0);
         context.close();
     }, 250)
@@ -27,7 +27,7 @@ function WhiteNoise() {
     node.loop = true;
     node.connect(context.destination);
     node.start(0);
-    setTimeout(function () {
+    setTimeout(() => {
         node.stop(0);
         context.close();
     }, 1000)
@@ -95,7 +95,7 @@ function CountCombinations(targetNote, startingNote, counter) {
 //generate a random target/starting note combination.
 function RandomNotes(counter) {
     let availableNotes = [];
-    counter.map(function (item) {
+    counter.map((item) => {
         if (item.count < 2) {
             availableNotes.push({targetNote: item.targetNote, startingNote: item.startingNote})
         }
@@ -180,9 +180,7 @@ export function convertCents(cents, startingNote) {
 }
 
 export function getAverage(guessesArray) {
-    let absoluteValueArray = guessesArray.map(function (item) {
-        return Math.abs(item);
-    });
+    let absoluteValueArray = guessesArray.map((item) => Math.abs(item));
     let initialValue = 0;
     let reducer = function (accumulator, item) {
         return accumulator + item

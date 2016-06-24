@@ -2,25 +2,25 @@ import React, { PropTypes } from "react"
 import { Button, Modal } from "react-bootstrap"
 import RegisterFormContainer from "../containers/RegisterFormContainer"
 
-function RegisterModal(props) {
+function RegisterModal({onOpen, modalToggle, onClose, onUpdateLogin, onClose}) {
     return (
         <div>
             <Button
                 bsClass="btn btn-primary navbar-btn"
-                onClick={props.onOpen}
+                onClick={onOpen}
             >
                 Register
             </Button>
 
-            <Modal show={props.modalToggle} onHide={props.onClose}>
+            <Modal show={modalToggle} onHide={onClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Register</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <RegisterFormContainer onUpdateLogin={props.onUpdateLogin}/>
+                    <RegisterFormContainer onUpdateLogin={onUpdateLogin}/>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={props.onClose}>Close</Button>
+                    <Button onClick={onClose}>Close</Button>
                 </Modal.Footer>
             </Modal>
         </div>

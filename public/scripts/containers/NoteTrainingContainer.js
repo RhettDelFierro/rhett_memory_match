@@ -5,7 +5,7 @@ import { maskingNotes, makeNoise, getTargetNote,
     increaseCount, startTraining} from "../utils/noteTestingFunctions"
 
 const NoteTrainingContainer = React.createClass({
-    getInitialState: function () {
+    getInitialState () {
         return {
             counter: [],
             score: 0,
@@ -18,10 +18,10 @@ const NoteTrainingContainer = React.createClass({
             testingComplete: false
         }
     },
-    handlePlayNote: function (note, seconds) {
+    handlePlayNote (note, seconds) {
         this.props.playNotes(note,seconds);
     },
-    handleLoadTargetNote: function (note, seconds) {
+    handleLoadTargetNote (note, seconds) {
         //play the selected note.
         this.handlePlayNote(note,1);
 
@@ -36,44 +36,37 @@ const NoteTrainingContainer = React.createClass({
     },
     handleMaskingNotes(){
 
-        var newArray = maskingNotes(this.state.counter);
-        setTimeout(function(){
-            newArray.map(function(item){
-                this.handlePlayNote(item,2)
-            }.bind(this))
-        }.bind(this),1500);
+        let newArray = maskingNotes(this.state.counter);
+        setTimeout(() => newArray.map((item) => this.handlePlayNote(item,2)),1500);
 
         makeNoise();
     },
-    handleLoadChosenNote: function (note, seconds) {
+    handleLoadChosenNote (note, seconds) {
         this.handlePlayNote(note, 1);
         //new target note for next round. gets random note.
-        var targetNote = getTargetNote(this.state.counter);
+        const targetNote = getTargetNote(this.state.counter);
         //in that random notes function, when all have been played five times, it'll return "Finished".
         if (targetNote === "Finished"){
-            console.log(this.state.keysMissed);
             this.setState({
                 testingComplete: true
             })
         }
         //increases the count fo reach note.
-        var counter = increaseCount(this.state.targetNote, this.state.counter);
+        const counter = increaseCount(this.state.targetNote, this.state.counter);
         //because we're about to change state and need the note that was last played, we'll cache this current target note.
-        var cacheCurrentTargetNote = this.state.targetNote;
+        const cacheCurrentTargetNote = this.state.targetNote;
 
-        var correct = true;
+        let correct = true;
 
         //checking for match.
         if (note !== this.state.targetNote) {
             correct = false;
             //wait for 1.5 seconds to play what the correct note sounds like.
-            setTimeout(function () {
-                this.handlePlayNote(cacheCurrentTargetNote, 1)
-            }.bind(this), 1500)
+            setTimeout(() => this.handlePlayNote(cacheCurrentTargetNote, 1), 1500)
         }
 
         //set the state based on if the two notes matches.
-        var newState = correct === false ? {
+        let newState = correct === false ? {
             chosenNotePlayed: true,
             chosenNote: note,
             correct: correct,
@@ -90,15 +83,15 @@ const NoteTrainingContainer = React.createClass({
         };
         this.setState(newState)
     },
-    componentWillMount: function () {
-        var counter = startTraining();
-        var targetNote = getTargetNote(counter);
+    componentWillMount () {
+        const counter = startTraining();
+        const targetNote = getTargetNote(counter);
         this.setState({
             counter: counter,
             targetNote: targetNote
         })
     },
-    render: function () {
+    render () {
         return <NoteTraining onLoadTargetNote={this.handleLoadTargetNote}
                              correct={this.state.correct}
                              targetNote={this.state.targetNote}

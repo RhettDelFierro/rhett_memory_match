@@ -1,6 +1,6 @@
 import React from "react"
 
-function MemoryMatch(props){
+function MemoryMatch(){
     return (
         <div>Here is the game stuff</div>
     )

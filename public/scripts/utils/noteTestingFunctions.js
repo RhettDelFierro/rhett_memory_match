@@ -67,7 +67,7 @@ function makeNotesArray() {
 function RandomNotes(counter) {
     let availableNotes = [];
 
-    counter.map(function (item) {
+    counter.map((item) => {
         if (item.count < 5) {
             availableNotes.push(item.targetNote)
         }
@@ -84,8 +84,9 @@ export function loadNotes() {
     const notes = makeNotesObject();
 
     let loadSound = function (obj) {
+        const { src } = obj;
         var request = new XMLHttpRequest();
-        request.open('GET', obj.src + ".mp3", true);
+        request.open('GET', src + ".mp3", true);
         request.responseType = 'arraybuffer';
 
         request.onload = function () {
@@ -126,7 +127,7 @@ export function startTraining() {
     return makeNotesArray();
 }
 export function increaseCount(targetNote, counter) {
-    for (i = 0; i <= counter.length - 1; i++) {
+    for (let i = 0; i <= counter.length - 1; i++) {
         if ((counter[i].targetNote === targetNote) && (counter[i].count < 5)) {
             counter[i].increase();
             //stop the iteration, save memory and return the adjusted counter:
@@ -149,7 +150,7 @@ export function maskingNotes(counter) {
 
     let newArray = [];
 
-    for (i = 0; i < 16; i++) {
+    for (let i = 0; i < 16; i++) {
         newArray.push(counter[Math.floor(counter.length * Math.random())].targetNote)
     }
 

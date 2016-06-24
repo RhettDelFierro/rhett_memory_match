@@ -7,7 +7,7 @@ const styles = {
     }
 };
 
-function LoggedIn(props) {
+function LoggedIn({user, onLogout}) {
     //add delete to menu item: <MenuItem eventKey={3.2} onClick={props.onUpdateLogin}>Delete Profile</MenuItem>
     //probably just use a dropdown instead of just text.
     return (
@@ -16,39 +16,40 @@ function LoggedIn(props) {
                 Signed in as:
             </Navbar.Text>
 
-            <NavDropdown eventKey={3} title={props.user} id="basic-nav-dropdown">
-                <MenuItem evenKey={3.1} onClick={props.onLogout}>Logout</MenuItem>
+            <NavDropdown eventKey={3} title={user} id="basic-nav-dropdown">
+                <MenuItem evenKey={3.1} onClick={onLogout}>Logout</MenuItem>
             </NavDropdown>
         </Nav>
     )
 }
 
-function NotLoggedIn(props) {
+function NotLoggedIn({user, onUpdateUser, password, onUpdatePassword, onSubmitUser}) {
     //remember, two different FormContainers.
     //throw in the RegisterFormContainer here?
     return (
         <Nav pullRight>
             <Navbar.Form>
                 <FormGroup>
-                    <FormControl sm={7} type="text" placeholder="Username or Email" value={props.user}
-                                 onChange={props.onUpdateUser}/>
+                    <FormControl sm={7} type="text" placeholder="Username or Email" value={user}
+                                 onChange={onUpdateUser}/>
                 </FormGroup>
                 {' '}
                 <FormGroup>
-                    <FormControl sm={7} type="password" placeholder="Password" value={props.password}
-                                 onChange={props.onUpdatePassword}/>
+                    <FormControl sm={7} type="password" placeholder="Password" value={password}
+                                 onChange={onUpdatePassword}/>
                 </FormGroup>
                 {' '}
-                <Button type="submit" onClick={props.onSubmitUser}>Login</Button>
+                <Button type="submit" onClick={onSubmitUser}>Login</Button>
             </Navbar.Form>
         </Nav>
     )
 }
 
-function LoginForm(props) {
-    return props.isLoggedIn === true
-        ? <LoggedIn user={props.user} onLogout={props.onLogout}/>
-        : <NotLoggedIn user={props.user} password={props.password} onUpdateUser={props.onUpdateUser} onUpdatePassword={props.onUpdatePassword} onSubmitUser={props.onSubmitUser} onRegisterLogin={props.onRegisterLogin}/>
+function LoginForm({user, onLogout, password, onUpdateUser, onUpdatePassword, onRegisterLogin, isLoggedIn}) {
+    return isLoggedIn === true
+        ? <LoggedIn user={user} onLogout={onLogout}/>
+        : <NotLoggedIn user={user} password={password} onUpdateUser={onUpdateUser} onUpdatePassword={onUpdatePassword}
+                       onSubmitUser={onSubmitUser} onRegisterLogin={onRegisterLogin}/>
 }
 
 export default LoginForm

@@ -1,5 +1,5 @@
 import React from "react"
-import { Router, Route, hashHistory, Index Route } from "react-router"
+import { Router, Route, hashHistory, IndexRoute } from "react-router"
 import MainContainer from '../containers/MainContainer'
 import HomeContainer from '../containers/HomeContainer'
 import PerfectPitchContainer from '../containers/PerfectPitchContainer'

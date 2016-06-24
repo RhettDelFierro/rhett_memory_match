@@ -21,7 +21,7 @@ const styles = {
 };
 
 
-function Home(props) {
+function Home() {
     return (
         <div style={styles.container}>
             <Link to="/note_memory">

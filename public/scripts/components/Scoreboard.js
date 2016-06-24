@@ -1,6 +1,6 @@
 import React from "react"
 
-function Scoreboard(props){
+function Scoreboard(){
     return (
         <div>Here is the game stuff</div>
     )

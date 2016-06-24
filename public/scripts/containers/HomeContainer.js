@@ -4,7 +4,7 @@ import Home from "../components/Home"
 import update from "react-addons-update"
 
 const HomeContainer = React.createClass({
-    render: function () {
+    render () {
         return (
             <Home />
         )

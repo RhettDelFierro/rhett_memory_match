@@ -1,10 +1,10 @@
 import React from "react"
 
 const Keys = React.createClass({
-    playThisNote: function () {
+    playThisNote () {
         this.props.onLoadChosenNote(this.props.note);
     },
-    render: function () {
+    render () {
         return (
             <button className="btn btn-sm btn-primary" onClick={this.playThisNote}>{this.props.note}</button>
         )
@@ -12,17 +12,17 @@ const Keys = React.createClass({
 });
 
 const ScoresContainer = React.createClass({
-    loadTargetNote: function () {
+    loadTargetNote () {
         this.props.onLoadTargetNote(this.props.targetNote, 1);
     },
-    message: function(){
+    message (){
       if (this.props.correct === false){
           return this.props.cacheTargetNote
       } else {
           return "Correct!"
       }
     },
-    render: function () {
+    render () {
         return (
             <div onClick={this.loadTargetNote}>
                 <p>Next Note</p>
@@ -33,10 +33,10 @@ const ScoresContainer = React.createClass({
 });
 
 const CompleteTesting = React.createClass({
-    score: function(){
+    score (){
         return (this.props.keysMissed.length/60)
     },
-    keysMainlyMissed: function(){
+    keysMainlyMissed (){
         const initialValue = {};
         let reducer = function(tally, note){
             if (!tally[note]) {
@@ -58,7 +58,7 @@ const CompleteTesting = React.createClass({
 
         return resultString
     },
-    render: function () {
+    render () {
         return (
             <div>
                 <p>Score: {this.score}</p>
@@ -69,17 +69,21 @@ const CompleteTesting = React.createClass({
 });
 
 function NoteTraining(props) {
-    return props.testingComplete === true
-        ? <CompleteTesting keysMissed={props.keysMissed}/>
-        : <div>
-        <ScoresContainer correct={props.correct}
-                         targetNote={props.targetNote}
-                         cacheTargetNote={props.cacheTargetNote}
-                         onLoadTargetNote={props.onLoadTargetNote}/>
 
-        {props.notes.map(function (note) {
-            return <Keys note={note.targetNote} key={note.targetNote} onLoadChosenNote={props.onLoadChosenNote}/>
-        })}
+    const { testingComplete, keysMissed, correct,
+        targetNote, cacheTargetNote, onLoadTargetNote,
+        notes, onLoadChosenNote } = props;
+
+    return testingComplete === true
+        ? <CompleteTesting keysMissed={keysMissed}/>
+        : <div>
+        <ScoresContainer correct={correct}
+                         targetNote={targetNote}
+                         cacheTargetNote={cacheTargetNote}
+                         onLoadTargetNote={onLoadTargetNote}/>
+
+        {notes.map((note) => <Keys note={note.targetNote} key={note.targetNote} onLoadChosenNote={onLoadChosenNote}/>)}
+
     </div>
 
 }

@@ -3,7 +3,7 @@ import Training from "../components/Training"
 import { loadNotes } from "../utils/noteTestingFunctions"
 
 const TrainingContainer = React.createClass({
-    getInitialState: function () {
+    getInitialState () {
         return {
             inm: 0,
             scoresTest: {},
@@ -11,17 +11,14 @@ const TrainingContainer = React.createClass({
             counter: []
         }
     },
-    componentDidMount: function () {
+    componentDidMount () {
         this.setState({
             inm: this.props.location.query.score,
         })
     },
-    handleUpdateScores: function(testScores){
-        //set state may need react-addon-update.
-    },
-    render: function () {
+    render () {
         //maybe depending which one they go to, render that.
-        const playNotes = noteTestingFunctions.loadNotes();
+        const playNotes = loadNotes();
         return (
             <Training playNotes={playNotes} scores={this.state.scoresTest}/>
         )

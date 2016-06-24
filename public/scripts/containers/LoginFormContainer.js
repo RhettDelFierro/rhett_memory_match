@@ -7,7 +7,7 @@ const LoginFormContainer = React.createClass({
     contextTypes: {
         router: React.PropTypes.object.isRequired
     },
-    getInitialState: function () {
+    getInitialState () {
         return {
             isLoggedIn: false,
             user: "",
@@ -16,12 +16,12 @@ const LoginFormContainer = React.createClass({
         };
     },
     //tie state to inputs.
-    handleUpdateUser: function (e) {
+    handleUpdateUser (e) {
         this.setState({
             user: e.target.value
         })
     },
-    handleUpdatePassword: function (e) {
+    handleUpdatePassword (e) {
         this.setState({
             password: e.target.value
         })
@@ -31,7 +31,7 @@ const LoginFormContainer = React.createClass({
     //onSubmit: handling AJAX here. Probably not the best?
     //do a this.props.updateLogin. This will update the state of Main and re-render this.
     //no Ajax here. Handle that in componenntDidMount since it will re-render from Main.
-    handleSubmitUser: function (e) {
+    handleSubmitUser (e) {
         e.preventDefault();
         this.getToken();
     },
@@ -40,13 +40,13 @@ const LoginFormContainer = React.createClass({
     //componentDidMount: function () {
     //    this.getToken()
     //},
-    componentWillReceiveProps: function (nextProps) {
+    componentWillReceiveProps (nextProps) {
         this.setState({
             isLoggedIn: nextProps.isLoggedIn,
             user: nextProps.user
         })
     },
-    handleRegisterLogin: function (user, password) {
+    handleRegisterLogin (user, password) {
         this.setState({
             user: user,
             password: password
@@ -55,19 +55,19 @@ const LoginFormContainer = React.createClass({
     },
 
     //called on navbar login.
-    getToken: function () {
+    getToken () {
         loginUser({
             user: this.state.user,
             password: this.state.password
-        }).then(function (data) {
-            var date = new Date();
+        }).then((data) => {
+            const date = new Date();
             date.setMinutes(15);
             document.cookie = "expires=" + date;
             document.cookie = "token=" + data.token;
             this.props.onUpdateLogin(true, data.user.username);
-        }.bind(this));
+        });
     },
-    handleLogout: function () {
+    handleLogout () {
         this.setState({
             isLoggedIn: false,
             user: "",
@@ -79,7 +79,7 @@ const LoginFormContainer = React.createClass({
         document.cookie = "expires=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
         this.props.onUpdateLogin(false, "");
     },
-    render: function () {
+    render () {
         return (
             <LoginForm isLoggedIn={this.props.isLoggedIn}
                        user={this.state.user}

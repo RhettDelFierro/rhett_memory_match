@@ -16,10 +16,10 @@ const styles = {
 };
 
 const DoubleIncreaseCents = React.createClass({
-    updateCents: function () {
+    updateCents () {
         this.props.onControl(66)
     },
-    render: function () {
+    render () {
         return (
             <button onClick={this.updateCents} style={{alignSelf: "center", marginBottom: "7px", marginTop: "7%"}}
                     className="btn btn-lg btn-primary">Double Increase</button>
@@ -28,10 +28,10 @@ const DoubleIncreaseCents = React.createClass({
 });
 
 const DoubleDecreaseCents = React.createClass({
-    updateCents: function () {
+    updateCents () {
         this.props.onControl(-66)
     },
-    render: function () {
+    render () {
         return (
             <button onClick={this.updateCents} style={{alignSelf: "center", marginBottom: "7px"}}
                     className="btn btn-lg btn-primary">Double Decrease</button>
@@ -40,10 +40,10 @@ const DoubleDecreaseCents = React.createClass({
 });
 
 const DecreaseCents = React.createClass({
-    updateCents: function () {
+    updateCents () {
         this.props.onControl(-33)
     },
-    render: function () {
+    render () {
         return (
             <button onClick={this.updateCents} style={{alignSelf: "center", marginBottom: "7px"}}
                     className="btn btn-lg btn-primary">Decrease</button>
@@ -52,10 +52,10 @@ const DecreaseCents = React.createClass({
 });
 
 const IncreaseCents = React.createClass({
-    updateCents: function () {
+    updateCents () {
         this.props.onControl(33)
     },
-    render: function () {
+    render () {
         return (
             <button onClick={this.updateCents} style={{alignSelf: "center", marginBottom: "7px"}}
                     className="btn btn-lg btn-primary">Increase</button>
@@ -64,31 +64,31 @@ const IncreaseCents = React.createClass({
 });
 
 
-function SubmitSound(props) {
+function SubmitSound({onSubmitNote}) {
     return (
-        <button onClick={props.onSubmitNote} style={{alignSelf: "center", marginBottom: "7px"}}
+        <button onClick={onSubmitNote} style={{alignSelf: "center", marginBottom: "7px"}}
                 className="btn btn-lg btn-primary">Submit
             Sound</button>
     )
 }
 
-function PlaySound(props) {
+function PlaySound({onPlayStarting}) {
     return (
-        <button onClick={props.onPlayStarting} style={{alignSelf: "center", marginBottom: "7px"}}
+        <button onClick={onPlayStarting} style={{alignSelf: "center", marginBottom: "7px"}}
                 className="btn btn-lg btn-primary">Play Sound</button>
     )
 }
 
-function InTesting(props) {
+function InTesting({onPlayTarget, onControl, onPlayStarting, onSubmitNote}) {
     return (
         <div style={styles.container}>
-            <InfoContainer onPlayTarget={props.onPlayTarget}/>
-            <DoubleIncreaseCents onControl={props.onControl}/>
-            <IncreaseCents onControl={props.onControl}/>
-            <PlaySound onPlayStarting={props.onPlayStarting}/>
-            <DecreaseCents onControl={props.onControl}/>
-            <DoubleDecreaseCents onControl={props.onControl}/>
-            <SubmitSound onSubmitNote={props.onSubmitNote}/>
+            <InfoContainer onPlayTarget={onPlayTarget}/>
+            <DoubleIncreaseCents onControl={onControl}/>
+            <IncreaseCents onControl={onControl}/>
+            <PlaySound onPlayStarting={onPlayStarting}/>
+            <DecreaseCents onControl={onControl}/>
+            <DoubleDecreaseCents onControl={onControl}/>
+            <SubmitSound onSubmitNote={onSubmitNote}/>
             <iframe src="https://embed.spotify.com/?uri=spotify%3Atrack%3A33Q6ldVXuJyQmqs8BmAa0k" width="300"
                     height="80" frameborder="0" allowtransparency="true"
                     style={{alignSelf: "center", marginTop: "7%"}}></iframe>
@@ -97,20 +97,20 @@ function InTesting(props) {
 }
 
 const TestingComplete = React.createClass({
-    getInitialState: function(){
-      return {
-          score: 0
-      }
+    getInitialState (){
+        return {
+            score: 0
+        }
     },
     contextTypes: {
         router: React.PropTypes.object.isRequired
     },
-    componentDidMount: function(){
-      this.setState({
-          score: this.props.score
-      })
+    componentDidMount (){
+        this.setState({
+            score: this.props.score
+        })
     },
-    handleToTraining: function () {
+    handleToTraining () {
         this.context.router.push({
             pathname: "/perfect_pitch_training",
             state: {
@@ -119,21 +119,22 @@ const TestingComplete = React.createClass({
         })
 
     },
-    render: function () {
+    render () {
         return (
             <div style={styles.container}>
-                <p style={{color: "#ffffff", alignSelf: "center", marginBottom: "7px"}}>Here is your score: {this.props.score}</p>
+                <p style={{color: "#ffffff", alignSelf: "center", marginBottom: "7px"}}>Here is your
+                    score: {this.props.score}</p>
                 <button className="btn btn-lg btn-primary" onClick={this.handleToTraining}>Start Training</button>
             </div>
         )
     }
 });
 
-function PerfectPitch(props) {
-    return props.testingComplete === true
-        ? <TestingComplete score={props.score} onToTraining={props.onToTraining}/>
-        : <InTesting onPlayTarget={props.onPlayTarget} onControl={props.onControl} onPlayStarting={props.onPlayStarting}
-                     onSubmitNote={props.onSubmitNote}/>
+function PerfectPitch({testingComplete, score, onToTraining, onPLaytarget, onControl, onPlayStarting, onSubmitNote}) {
+    return testingComplete === true
+        ? <TestingComplete score={score} onToTraining={onToTraining}/>
+        : <InTesting onPlayTarget={onPlayTarget} onControl={onControl} onPlayStarting={onPlayStarting}
+                     onSubmitNote={onSubmitNote}/>
 
 
 }

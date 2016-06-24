@@ -5,15 +5,15 @@ import LoginFormContainer from "../containers/LoginFormContainer"
 import RegisterModalContainer from "../containers/RegisterModalContainer"
 
 
-function RegisterToggle(props) {
+function RegisterToggle({UpdateLogin}) {
     return (
         <Nav pullRight>
-            <RegisterModalContainer onUpdateLogin={props.onUpdateLogin}/>
+            <RegisterModalContainer onUpdateLogin={UpdateLogin}/>
         </Nav>
     )
 }
 
-function NavigationBar(props) {
+function NavigationBar({isLoggedIn, onUpdateLogin, user}) {
     return (
         <Navbar fluid staticTop inverse>
             <Navbar.Header>
@@ -30,10 +30,10 @@ function NavigationBar(props) {
                     <NavItem eventKey={4} href="#/scoreboard">High Scores</NavItem>
 
                 </Nav>
-                {!props.isLoggedIn && <RegisterToggle onUpdateLogin={props.onUpdateLogin}/>}
-                <LoginFormContainer isLoggedIn={props.isLoggedIn}
-                                    user={props.user}
-                                    onUpdateLogin={props.onUpdateLogin}/>
+                {!isLoggedIn && <RegisterToggle onUpdateLogin={onUpdateLogin}/>}
+                <LoginFormContainer isLoggedIn={isLoggedIn}
+                                    user={user}
+                                    onUpdateLogin={onUpdateLogin}/>
             </Navbar.Collapse>
         </Navbar>
     )

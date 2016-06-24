@@ -2,16 +2,16 @@ import React from "react"
 import RegisterModal from "../components/RegisterModal"
 
 const RegisterModalContainer = React.createClass({
-    getInitialState: function () {
+    getInitialState () {
         return { showModal: false };
     },
-    handleClose: function () {
+    handleClose () {
         this.setState({ showModal: false });
     },
-    handleOpen() {
+    handleOpen () {
         this.setState({ showModal: true });
     },
-    render: function () {
+    render () {
         return (
             <RegisterModal onOpen={this.handleOpen}
                            onClose={this.handleClose}

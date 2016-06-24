@@ -9,20 +9,20 @@ const styles = {
 };
 
 const MainContainer = React.createClass({
-    getInitialState: function () {
+    getInitialState () {
         return {
             isLoggedIn: false,
             username: ""
         }
     },
-    handleUpdateLogin: function (loggedIn, username) {
+    handleUpdateLogin (loggedIn, username) {
         this.setState({
             isLoggedIn: loggedIn, //!(this.state.isLoggedIn),
             username: username
         });
         console.log("are we getting these?", loggedIn, username)
     },
-    render: function () {
+    render () {
         //<HomeContainer> is a child.
         return (
             <div className="container-fluid" style={styles.container}>

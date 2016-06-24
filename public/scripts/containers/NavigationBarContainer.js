@@ -7,7 +7,7 @@ const NavigationBarContainer = React.createClass({
         onUpdateLogin: PropTypes.func.isRequired,
         user: PropTypes.string
     },
-    render: function () {
+    render () {
         return (
             <NavigationBar isLoggedIn={this.props.isLoggedIn}
                            user={this.props.user}
