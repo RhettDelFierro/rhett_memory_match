@@ -21,12 +21,10 @@ const NoteTrainingContainer = React.createClass({
     handlePlayNote (note, seconds) {
         this.props.playNotes(note,seconds);
     },
-    handleLoadTargetNote (note, seconds) {
+    handleLoadTargetNote (note) {
         //play the selected note.
         this.handlePlayNote(note,1);
 
-        //masking notes
-        this.handleMaskingNotes();
 
         //set the state.
         this.setState({
@@ -38,11 +36,9 @@ const NoteTrainingContainer = React.createClass({
 
         let newArray = maskingNotes(this.state.counter);
         setTimeout(() => newArray.map((item) => this.handlePlayNote(item,2)),1500);
-
         makeNoise();
     },
-    handleLoadChosenNote (note, seconds) {
-        this.handlePlayNote(note, 1);
+    handleLoadChosenNote (note) {
         //new target note for next round. gets random note.
         const targetNote = getTargetNote(this.state.counter);
         //in that random notes function, when all have been played five times, it'll return "Finished".
@@ -62,24 +58,26 @@ const NoteTrainingContainer = React.createClass({
         if (note !== this.state.targetNote) {
             correct = false;
             //wait for 1.5 seconds to play what the correct note sounds like.
-            setTimeout(() => this.handlePlayNote(cacheCurrentTargetNote, 1), 1500)
+            //maybe start using promises?
+            this.handlePlayNote(cacheCurrentTargetNote, 1);
+            this.handleMaskingNotes();
         }
 
         //set the state based on if the two notes matches.
         let newState = correct === false ? {
             chosenNotePlayed: true,
             chosenNote: note,
-            correct: correct,
+            correct,
             counter: update(this.state.counter, {$set: counter}),
-            targetNote: targetNote,
+            targetNote,
             cacheTargetNote: cacheCurrentTargetNote,
             keysMissed: update(this.state.keysMissed, {$push: [cacheCurrentTargetNote]})
         } : {
             chosenNotePlayed: true,
             chosenNote: note,
-            correct: correct,
+            correct,
             counter: update(this.state.counter, {$set: counter}),
-            targetNote: targetNote
+            targetNote
         };
         this.setState(newState)
     },
@@ -87,8 +85,8 @@ const NoteTrainingContainer = React.createClass({
         const counter = startTraining();
         const targetNote = getTargetNote(counter);
         this.setState({
-            counter: counter,
-            targetNote: targetNote
+            counter,
+            targetNote
         })
     },
     render () {

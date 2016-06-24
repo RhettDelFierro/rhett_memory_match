@@ -2,7 +2,7 @@ import React, { PropTypes } from "react"
 import { Button, Modal } from "react-bootstrap"
 import RegisterFormContainer from "../containers/RegisterFormContainer"
 
-function RegisterModal({onOpen, modalToggle, onClose, onUpdateLogin, onClose}) {
+function RegisterModal({onOpen, modalToggle, onClose, onUpdateLogin}) {
     return (
         <div>
             <Button

@@ -30,11 +30,11 @@ const PerfectPitchContainer = React.createClass({
         const notes = initializeStartPoint();
         this.makeNewCount(notes);
     },
-    makeNewCount ({counter, targetNote, startingNte}) {
+    makeNewCount ({counter, targetNote, startingNote}) {
         this.setState({
             counter: update(this.state.counter, {$set: counter}),
-            targetNote: targetNote,
-            startingNote: startingNote,
+            targetNote,
+            startingNote,
             guessesArray: [],
             average: 0
         })
@@ -51,7 +51,7 @@ const PerfectPitchContainer = React.createClass({
     //when they press "Begin" (or "Submit"?)
     handlePlayTarget () {
         //var counter = noteFunctions.keepCount(this.state.targetNote, this.state.startingNote, this.state.counter);
-        if (this.state.guessesArray.length === 64) {
+        if (this.state.guessesArray.length === 5) {
             const average = getAverage(this.state.guessesArray);
             this.setState({
                 average: average,
@@ -81,14 +81,14 @@ const PerfectPitchContainer = React.createClass({
     handleSubmitNote () {
         const results = checkerSelection(this.state.targetNote, this.state.startingNote, this.state.cents);
         //switch statement to pass in the right array. The array will be based on this.state.targetNote.
-        const newNotes = getNotes(this.state.targetNote, this.state.startingNote, this.state.counter);
+        const { targetNote, startingNote, counter } = getNotes(this.state.targetNote, this.state.startingNote, this.state.counter);
         this.setState({
-            targetNote: newNotes.targetNote,
-            startingNote: newNotes.startingNote,
+            targetNote,
+            startingNote,
             guessesArray: update(this.state.guessesArray, {$push: [results]}),
             targetNotePlayed: false,
             startingNotePlayed: false,
-            counter: update(this.state.counter, {$set: newNotes.counter}),
+            counter: update(this.state.counter, {$set: counter}),
             cents: 0
         });
     },

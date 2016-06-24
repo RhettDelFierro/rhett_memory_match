@@ -40,16 +40,16 @@ const LoginFormContainer = React.createClass({
     //componentDidMount: function () {
     //    this.getToken()
     //},
-    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps ({isLoggedIn, user}) {
         this.setState({
-            isLoggedIn: nextProps.isLoggedIn,
-            user: nextProps.user
+            isLoggedIn,
+            user
         })
     },
     handleRegisterLogin (user, password) {
         this.setState({
-            user: user,
-            password: password
+            user,
+            password
         });
         this.getToken()
     },
@@ -62,8 +62,8 @@ const LoginFormContainer = React.createClass({
         }).then((data) => {
             const date = new Date();
             date.setMinutes(15);
-            document.cookie = "expires=" + date;
-            document.cookie = "token=" + data.token;
+            document.cookie = `expires=${date}`;
+            document.cookie = `token=${data.token}`;
             this.props.onUpdateLogin(true, data.user.username);
         });
     },

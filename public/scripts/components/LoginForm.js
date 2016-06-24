@@ -45,7 +45,7 @@ function NotLoggedIn({user, onUpdateUser, password, onUpdatePassword, onSubmitUs
     )
 }
 
-function LoginForm({user, onLogout, password, onUpdateUser, onUpdatePassword, onRegisterLogin, isLoggedIn}) {
+function LoginForm({user, onLogout, password, onUpdateUser, onUpdatePassword, onRegisterLogin, isLoggedIn, onSubmitUser}) {
     return isLoggedIn === true
         ? <LoggedIn user={user} onLogout={onLogout}/>
         : <NotLoggedIn user={user} password={password} onUpdateUser={onUpdateUser} onUpdatePassword={onUpdatePassword}

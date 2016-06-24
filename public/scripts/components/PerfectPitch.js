@@ -130,7 +130,7 @@ const TestingComplete = React.createClass({
     }
 });
 
-function PerfectPitch({testingComplete, score, onToTraining, onPLaytarget, onControl, onPlayStarting, onSubmitNote}) {
+function PerfectPitch({testingComplete, score, onToTraining, onPlayTarget, onControl, onPlayStarting, onSubmitNote}) {
     return testingComplete === true
         ? <TestingComplete score={score} onToTraining={onToTraining}/>
         : <InTesting onPlayTarget={onPlayTarget} onControl={onControl} onPlayStarting={onPlayStarting}

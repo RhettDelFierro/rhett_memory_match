@@ -82,7 +82,7 @@ function NotesTracker(targetNote, startingNote) {
 //Keeps track of targetNote/startingNote combinations.
 function CountCombinations(targetNote, startingNote, counter) {
 
-    for (i = 0; i <= counter.length - 1; i++) {
+    for (let i = 0; i <= counter.length - 1; i++) {
         if ((counter[i].targetNote === targetNote) && (counter[i].startingNote === startingNote) && counter[i].count < 2) {
             counter[i].increase();
             //stop the iteration, save memory and return the adjusted counter:

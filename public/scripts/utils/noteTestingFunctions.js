@@ -86,7 +86,7 @@ export function loadNotes() {
     let loadSound = function (obj) {
         const { src } = obj;
         var request = new XMLHttpRequest();
-        request.open('GET', src + ".mp3", true);
+        request.open('GET', `${src}.mp3`, true);
         request.responseType = 'arraybuffer';
 
         request.onload = function () {
