@@ -127,9 +127,16 @@ export function loadNotes() {
     loadSounds(notes);
 
     //this is a play sound closure.
-    return function (note, seconds) {
+    return function (note, seconds, volume = 1) {
         const source = context.createBufferSource();
         source.buffer = notes[note].buffer;
+        //code for the volume
+        notes[note].gainNode = context.createGain();
+        source.connect(notes[note].gainNode);
+        notes[note].volume = volume;
+        notes[note].gainNode.gain.value = notes[note].volume;
+        notes[note].gainNode.connect(context.destination);
+
         source.connect(context.destination);
         source.start(0, 0, seconds);
     }
@@ -171,23 +178,25 @@ export function maskingNotes(counter) {
 }
 
 export function makeNoise() {
-    const context = new AudioContext;
-    let node = context.createBufferSource()
+    var context = new AudioContext || new window.webkitAudioContext;
+    var node = context.createBufferSource()
         , buffer = context.createBuffer(1, 4096, context.sampleRate)
         , data = buffer.getChannelData(0);
 
-    node.gainNode = context.createGain();
-
-    node.gainNode.connect(context.destination);
-
-    node.gainNode.gain.value = .5;
-
-    for (let i = 0; i < 4096; i++) {
+    for (var i = 0; i < 4096; i++) {
         data[i] = Math.random();
     }
+
     node.buffer = buffer;
+
+    //volume- This works!
+    var gain = context.createGain();
+    gain.gain.value = 0.05;
+    node.connect(gain);
+    gain.connect(context.destination);
+
     node.loop = true;
-    node.connect(context.destination);
+    //node.connect(context.destination);
     node.start(3, 0, 1);
     setTimeout(function () {
         context.close()

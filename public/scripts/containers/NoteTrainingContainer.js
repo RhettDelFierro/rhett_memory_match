@@ -20,8 +20,8 @@ class NoteTrainingContainer extends Component {
         }
     }
 
-    handlePlayNote(note, seconds) {
-        this.props.playNotes(note, seconds);
+    handlePlayNote(note, seconds, volume) {
+        this.props.playNotes(note, seconds, volume);
     }
 
     handleLoadTargetNote(note) {
@@ -39,8 +39,9 @@ class NoteTrainingContainer extends Component {
     handleMaskingNotes() {
 
         let newArray = maskingNotes(this.state.counter);
+        console.log(newArray);
 
-        setTimeout(() => newArray.map((item) => this.handlePlayNote(item, 2)), 1500);
+        setTimeout(() => newArray.map((item) => this.handlePlayNote(item, 2, 0.001)), 1500);
         makeNoise();
     }
 
@@ -65,7 +66,7 @@ class NoteTrainingContainer extends Component {
             correct = false;
             //wait for 1.5 seconds to play what the correct note sounds like.
             //maybe start using promises?
-            this.handlePlayNote(cacheCurrentTargetNote, 1);
+            this.handlePlayNote(cacheCurrentTargetNote, 1, 1);
             this.handleMaskingNotes();
         }
 
