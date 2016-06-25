@@ -35,6 +35,7 @@ const NoteTrainingContainer = React.createClass({
     handleMaskingNotes(){
 
         let newArray = maskingNotes(this.state.counter);
+
         setTimeout(() => newArray.map((item) => this.handlePlayNote(item,2)),1500);
         makeNoise();
     },

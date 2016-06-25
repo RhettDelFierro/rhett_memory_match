@@ -43,13 +43,12 @@ const RegisterFormContainer = React.createClass({
             this.setState({helpBlock: "hidden"})
         }
     },
-    ajaxValidUserName () {
-        verifyName(this.state.user)
-            .then((userdata) => {
-                this.setState({
-                    duplicate: userdata.taken
-                })
-            });
+    async ajaxValidUserName () {
+        const userData = await verifyName(this.state.user);
+        this.setState({
+            duplicate: userData.taken
+        });
+
     },
     handleUpdateEmail (e) {
         this.setState({
@@ -61,7 +60,7 @@ const RegisterFormContainer = React.createClass({
             password: e.target.value
         });
     },
-    handleSubmitUser (e) {
+    async handleSubmitUser (e) {
         e.preventDefault();
         //in case for a backspace, but this should be done after the push to a new route:
         this.setState({
@@ -71,25 +70,23 @@ const RegisterFormContainer = React.createClass({
             userInfo: {}
         });
         //on fail stay on page and display error messages. Also re-set the state to have the info.
-        registerUser({
+        const userData = await registerUser({
             user: this.state.user,
             email: this.state.email,
             password: this.state.password
-        })
-            .then((userdata) => {
-                this.getUser(userdata.username);
-            });
+        });
+        this.getUser(userData.username);
+
     },
-    getUser (user) {
-        loginPassword(user)
-            .then((data) => {
-                console.log("2nd data: ", data);
-                const date = new Date();
-                date.setMinutes(15);
-                document.cookie = "expires=" + date;
-                document.cookie = "token=" + data.token;
-                this.props.onUpdateLogin(true, data.user.username);
-            });
+    async getUser (user) {
+        const data = await loginPassword(user);
+
+        const date = new Date();
+        date.setMinutes(15);
+        document.cookie = `expires=${date}`;
+        document.cookie = `token=${data.token}`;
+        this.props.onUpdateLogin(true, data.user.username);
+
     },
     render () {
         return (

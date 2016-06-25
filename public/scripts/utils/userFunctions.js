@@ -10,26 +10,41 @@ function cookieFinder(name) {
     }, initialValue);
 }
 
-export function verifyName(user) {
-    return axios.post("/username", {data: {username: user}})
-        .then((response) => response.data)
-        .catch((error) => console.log(error))
+export async function verifyName(user) {
+    try {
+        const response = axios.post("/username", {data: {username: user}});
+        return response.data;
+    } catch (error){
+        console.log(error);
+    }
 }
 
-export function registerUser({user, email, password}) {
-    return axios.post("/users/register", {data: {username: user, email: email, password: password}})
-        .then((response) => response.data)
-        .catch((error) => console.log(error))
+export async function registerUser({user, email, password}) {
+    try {
+        const response = await axios.post("/users/register",
+            {data: {username: user, email: email, password: password}});
+        return response.data
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
-export function loginUser({user, password}) {
-    return axios.post("/users/login", {data: {login: user, password: password}})
-        .then((response) => response.data)
-        .catch((error) => console.log(error))
+export async function loginUser({user, password}) {
+    try {
+        const response = await axios.post("/users/login", {data: {login: user, password: password}});
+        return response.data
+    } catch (error){
+        console.log(error)
+    }
 }
 
-export function loginPassword(user) {
-    return axios.post("/users/pw", {data: {login: user}})
-        .then((response) => response.data)
-        .catch((error) => console.log(error))
+export async function loginPassword(user) {
+    try {
+        const response = axios.post("/users/pw", {data: {login: user}});
+        return response.data
+    } catch (error) {
+        console.log(error);
+    }
+
 }

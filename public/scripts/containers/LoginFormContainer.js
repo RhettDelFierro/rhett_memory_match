@@ -27,19 +27,11 @@ const LoginFormContainer = React.createClass({
         })
     },
 
-    //navbar form.
-    //onSubmit: handling AJAX here. Probably not the best?
-    //do a this.props.updateLogin. This will update the state of Main and re-render this.
-    //no Ajax here. Handle that in componenntDidMount since it will re-render from Main.
     handleSubmitUser (e) {
         e.preventDefault();
         this.getToken();
     },
 
-    //this will run also on logout. Must fix. This happens because of the re-render and the Main container will send in a new state as props.
-    //componentDidMount: function () {
-    //    this.getToken()
-    //},
     componentWillReceiveProps ({isLoggedIn, user}) {
         this.setState({
             isLoggedIn,
@@ -55,17 +47,18 @@ const LoginFormContainer = React.createClass({
     },
 
     //called on navbar login.
-    getToken () {
-        loginUser({
+    async getToken () {
+        const data = await loginUser({
             user: this.state.user,
             password: this.state.password
-        }).then((data) => {
-            const date = new Date();
-            date.setMinutes(15);
-            document.cookie = `expires=${date}`;
-            document.cookie = `token=${data.token}`;
-            this.props.onUpdateLogin(true, data.user.username);
         });
+
+        const date = new Date();
+        date.setMinutes(15);
+        document.cookie = `expires=${date}`;
+        document.cookie = `token=${data.token}`;
+        this.props.onUpdateLogin(true, data.user.username);
+
     },
     handleLogout () {
         this.setState({
