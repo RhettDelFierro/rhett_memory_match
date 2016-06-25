@@ -1,12 +1,13 @@
-import React from "react"
+import React, { Component } from "react"
 import NoteTraining from "../components/NoteTraining"
 import update from "react-addons-update"
 import { maskingNotes, makeNoise, getTargetNote,
     increaseCount, startTraining} from "../utils/noteTestingFunctions"
 
-const NoteTrainingContainer = React.createClass({
-    getInitialState () {
-        return {
+class NoteTrainingContainer extends Component {
+    constructor() {
+        super();
+        this.state = {
             counter: [],
             score: 0,
             keysMissed: [],
@@ -17,13 +18,15 @@ const NoteTrainingContainer = React.createClass({
             cacheTargetNote: "",
             testingComplete: false
         }
-    },
-    handlePlayNote (note, seconds) {
-        this.props.playNotes(note,seconds);
-    },
-    handleLoadTargetNote (note) {
+    }
+
+    handlePlayNote(note, seconds) {
+        this.props.playNotes(note, seconds);
+    }
+
+    handleLoadTargetNote(note) {
         //play the selected note.
-        this.handlePlayNote(note,1);
+        this.handlePlayNote(note, 1);
 
 
         //set the state.
@@ -31,19 +34,21 @@ const NoteTrainingContainer = React.createClass({
             targetNote: note,
             targetNotePlayed: true
         });
-    },
-    handleMaskingNotes(){
+    }
+
+    handleMaskingNotes() {
 
         let newArray = maskingNotes(this.state.counter);
 
-        setTimeout(() => newArray.map((item) => this.handlePlayNote(item,2)),1500);
+        setTimeout(() => newArray.map((item) => this.handlePlayNote(item, 2)), 1500);
         makeNoise();
-    },
-    handleLoadChosenNote (note) {
+    }
+
+    handleLoadChosenNote(note) {
         //new target note for next round. gets random note.
         const targetNote = getTargetNote(this.state.counter);
         //in that random notes function, when all have been played five times, it'll return "Finished".
-        if (targetNote === "Finished"){
+        if (targetNote === "Finished") {
             this.setState({
                 testingComplete: true
             })
@@ -81,29 +86,30 @@ const NoteTrainingContainer = React.createClass({
             targetNote
         };
         this.setState(newState)
-    },
-    componentWillMount () {
+    }
+
+    componentWillMount() {
         const counter = startTraining();
         const targetNote = getTargetNote(counter);
         this.setState({
             counter,
             targetNote
         })
-    },
-    render () {
-        return <NoteTraining onLoadTargetNote={this.handleLoadTargetNote}
+    }
+
+    render() {
+        return <NoteTraining onLoadTargetNote={(note) => this.handleLoadTargetNote(note)}
                              correct={this.state.correct}
                              targetNote={this.state.targetNote}
                              chosenNote={this.state.chosenNote}
                              cacheTargetNote={this.state.cacheTargetNote}
 
-
                              notes={this.state.counter}
                              testingComplete={this.state.testingComplete}
                              keysMissed={this.state.keysMissed}
 
-                             onLoadChosenNote={this.handleLoadChosenNote}/>
+                             onLoadChosenNote={(note) => this.handleLoadChosenNote(note)}/>
     }
-});
+}
 
 export default NoteTrainingContainer

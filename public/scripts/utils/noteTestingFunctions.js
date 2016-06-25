@@ -1,40 +1,52 @@
 function makeNotesObject() {
     const notes = {
         A4: {
-            src: 'public/sounds/piano/A4'
+            src: 'public/sounds/piano/A4',
+            volume: 1
         },
         Ab4: {
-            src: 'public/sounds/piano/Ab4'
+            src: 'public/sounds/piano/Ab4',
+            volume: 1
         },
         B4: {
-            src: 'public/sounds/piano/B4'
+            src: 'public/sounds/piano/B4',
+            volume: 1
         },
         Bb4: {
-            src: 'public/sounds/piano/Bb4'
+            src: 'public/sounds/piano/Bb4',
+            volume: 1
         },
         C4: {
-            src: 'public/sounds/piano/C4'
+            src: 'public/sounds/piano/C4',
+            volume: 1
         },
         D4: {
-            src: 'public/sounds/piano/D4'
+            src: 'public/sounds/piano/D4',
+            volume: 1
         },
         Db4: {
-            src: 'public/sounds/piano/Db4'
+            src: 'public/sounds/piano/Db4',
+            volume: 1
         },
         E4: {
-            src: 'public/sounds/piano/E4'
+            src: 'public/sounds/piano/E4',
+            volume: 1
         },
         Eb4: {
-            src: 'public/sounds/piano/Eb4'
+            src: 'public/sounds/piano/Eb4',
+            volume: 1
         },
         F4: {
-            src: 'public/sounds/piano/F4'
+            src: 'public/sounds/piano/F4',
+            volume: 1
         },
         G4: {
-            src: 'public/sounds/piano/G4'
+            src: 'public/sounds/piano/G4',
+            volume: 1
         },
         Gb4: {
-            src: 'public/sounds/piano/Gb4'
+            src: 'public/sounds/piano/Gb4',
+            volume: 1
         }
     };
 
@@ -114,6 +126,7 @@ export function loadNotes() {
 
     loadSounds(notes);
 
+    //this is a play sound closure.
     return function (note, seconds) {
         const source = context.createBufferSource();
         source.buffer = notes[note].buffer;

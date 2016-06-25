@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import PerfectPitch from "../components/PerfectPitch"
 
 import { initializeStartPoint, getAverage, convertCents,
@@ -7,12 +7,10 @@ import { initializeStartPoint, getAverage, convertCents,
 
 import update from "react-addons-update"
 
-const PerfectPitchContainer = React.createClass({
-    //ajax call to get audio.
-    //increase and decrease cents.
-    //play audio.
-    getInitialState () {
-        return {
+class PerfectPitchContainer extends Component {
+    constructor() {
+        super();
+        this.state = {
             targetNote: "",
             targetNotePlayed: false,
             cents: 0,
@@ -24,13 +22,19 @@ const PerfectPitchContainer = React.createClass({
             average: 0,
             testingComplete: false
         }
-    },
-    componentDidMount () {
+    }
+
+    //ajax call to get audio.
+    //increase and decrease cents.
+    //play audio.
+
+    componentDidMount() {
         //load the two notes to be used when this component is loaded:
         const notes = initializeStartPoint();
         this.makeNewCount(notes);
-    },
-    makeNewCount ({counter, targetNote, startingNote}) {
+    }
+
+    makeNewCount({counter, targetNote, startingNote}) {
         this.setState({
             counter: update(this.state.counter, {$set: counter}),
             targetNote,
@@ -38,8 +42,9 @@ const PerfectPitchContainer = React.createClass({
             guessesArray: [],
             average: 0
         })
-    },
-    handleControl (cents) {
+    }
+
+    handleControl(cents) {
         //increase/decrease cents from here.
         const totalCents = this.state.cents + (cents);
         const convertedFrequency = convertCents(totalCents, this.state.startingNote);
@@ -47,9 +52,10 @@ const PerfectPitchContainer = React.createClass({
             convertedFrequency: convertedFrequency,
             cents: totalCents
         });
-    },
+    }
+
     //when they press "Begin" (or "Submit"?)
-    handlePlayTarget () {
+    handlePlayTarget() {
         //var counter = noteFunctions.keepCount(this.state.targetNote, this.state.startingNote, this.state.counter);
         if (this.state.guessesArray.length === 5) {
             const average = getAverage(this.state.guessesArray);
@@ -66,8 +72,9 @@ const PerfectPitchContainer = React.createClass({
                 startingNotePlayed: false
             });
         }
-    },
-    handlePlayStarting () {
+    }
+
+    handlePlayStarting() {
         if (this.state.targetNotePlayed === true && this.state.startingNotePlayed === false) {
             playStartingNote(this.state.startingNote);
             this.setState({
@@ -77,8 +84,9 @@ const PerfectPitchContainer = React.createClass({
         } else if (this.state.targetNotePlayed === false && this.state.startingNotePlayed === true) {
             playGuessNote(this.state.StartingNote, this.state.cents);
         }
-    },
-    handleSubmitNote () {
+    }
+
+    handleSubmitNote() {
         const results = checkerSelection(this.state.targetNote, this.state.startingNote, this.state.cents);
         //switch statement to pass in the right array. The array will be based on this.state.targetNote.
         const { targetNote, startingNote, counter } = getNotes(this.state.targetNote, this.state.startingNote, this.state.counter);
@@ -91,16 +99,17 @@ const PerfectPitchContainer = React.createClass({
             counter: update(this.state.counter, {$set: counter}),
             cents: 0
         });
-    },
-    render () {
+    }
+
+    render() {
         //accuracy will give how many half-notes the user was off.
         return (
-            <PerfectPitch onControl={this.handleControl} onPlayStarting={this.handlePlayStarting}
-                          onPlayTarget={this.handlePlayTarget} onSubmitNote={this.handleSubmitNote}
+            <PerfectPitch onControl={(cents) => this.handleControl(cents)} onPlayStarting={() => this.handlePlayStarting()}
+                          onPlayTarget={() => this.handlePlayTarget()} onSubmitNote={() => this.handleSubmitNote ()}
                           score={this.state.average}
                           testingComplete={this.state.testingComplete}/>
         )
     }
-});
+}
 
 export default PerfectPitchContainer;

@@ -1,17 +1,12 @@
-import React from "react"
+import React, { Component } from "react"
 import RegisterForm from "../components/RegisterForm"
 import { verifyName, registerUser, loginPassword } from "../utils/userFunctions"
 
 
-const RegisterFormContainer = React.createClass({
-    contextTypes: {
-        router: React.PropTypes.object.isRequired
-    },
-    //make the ajax calls from here.
-    getInitialState () {
-        //bet we get the values of the input texts and make an object out of it
-        return ({
-            //isLoggedIn maybe will pass into /teachers/:users to re-render "/"
+class RegisterFormContainer extends Component {
+    constructor() {
+        super();
+        this.state = {
             isLoggedIn: false,
             user: "",
             email: "",
@@ -19,9 +14,10 @@ const RegisterFormContainer = React.createClass({
             userInfo: {},
             duplicate: true,
             helpBlock: "hidden"
-        })
-    },
-    componentWillUnmount (){
+        }
+    }
+
+    componentWillUnmount() {
         this.setState({
             user: "",
             email: "",
@@ -30,8 +26,9 @@ const RegisterFormContainer = React.createClass({
             duplicate: true,
             helpBlock: "hidden"
         })
-    },
-    handleUpdateUser (e) {
+    }
+
+    handleUpdateUser(e) {
         this.setState({
             user: e.target.value
         });
@@ -42,25 +39,29 @@ const RegisterFormContainer = React.createClass({
         } else {
             this.setState({helpBlock: "hidden"})
         }
-    },
-    async ajaxValidUserName () {
+    }
+
+    async ajaxValidUserName() {
         const userData = await verifyName(this.state.user);
         this.setState({
             duplicate: userData.taken
         });
 
-    },
-    handleUpdateEmail (e) {
+    }
+
+    handleUpdateEmail(e) {
         this.setState({
             email: e.target.value
         });
-    },
-    handleUpdatePassword (e) {
+    }
+
+    handleUpdatePassword(e) {
         this.setState({
             password: e.target.value
         });
-    },
-    async handleSubmitUser (e) {
+    }
+
+    async handleSubmitUser(e) {
         e.preventDefault();
         //in case for a backspace, but this should be done after the push to a new route:
         this.setState({
@@ -77,8 +78,9 @@ const RegisterFormContainer = React.createClass({
         });
         this.getUser(userData.username);
 
-    },
-    async getUser (user) {
+    }
+
+    async getUser(user) {
         const data = await loginPassword(user);
 
         const date = new Date();
@@ -87,18 +89,23 @@ const RegisterFormContainer = React.createClass({
         document.cookie = `token=${data.token}`;
         this.props.onUpdateLogin(true, data.user.username);
 
-    },
-    render () {
+    }
+
+    render() {
         return (
-            <RegisterForm onUpdateUser={this.handleUpdateUser}
-                          onUpdateEmail={this.handleUpdateEmail}
-                          onUpdatePassword={this.handleUpdatePassword}
-                          onSubmitUser={this.handleSubmitUser}
+            <RegisterForm onUpdateUser={(event) => this.handleUpdateUser(event)}
+                          onUpdateEmail={(event) => this.handleUpdateEmail(event)}
+                          onUpdatePassword={(event) => this.handleUpdatePassword(event)}
+                          onSubmitUser={(event) => this.handleSubmitUser(event)}
                           user={this.state.user}
                           duplicate={this.state.duplicate}
                           helpBlock={this.state.helpBlock}/>
         )
     }
-});
+}
+
+RegisterFormContainer.contextTypes = {
+    router: React.PropTypes.object.isRequired
+};
 
 export default RegisterFormContainer

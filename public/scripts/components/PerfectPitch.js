@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import InfoContainer from "../containers/InfoContainer"
 
 const styles = {
@@ -15,53 +15,74 @@ const styles = {
     }
 };
 
-const DoubleIncreaseCents = React.createClass({
-    updateCents () {
+class DoubleIncreaseCents extends Component {
+    constructor() {
+        super()
+    }
+
+    updateCents() {
         this.props.onControl(66)
-    },
-    render () {
+    }
+
+    render() {
         return (
-            <button onClick={this.updateCents} style={{alignSelf: "center", marginBottom: "7px", marginTop: "7%"}}
+            <button onClick={() => this.updateCents()}
+                    style={{alignSelf: "center", marginBottom: "7px", marginTop: "7%"}}
                     className="btn btn-lg btn-primary">Double Increase</button>
         )
     }
-});
+}
 
-const DoubleDecreaseCents = React.createClass({
-    updateCents () {
+class DoubleDecreaseCents extends Component {
+    constructor() {
+        super()
+    }
+
+    updateCents() {
         this.props.onControl(-66)
-    },
-    render () {
+    }
+
+    render() {
         return (
-            <button onClick={this.updateCents} style={{alignSelf: "center", marginBottom: "7px"}}
+            <button onClick={() => this.updateCents()} style={{alignSelf: "center", marginBottom: "7px"}}
                     className="btn btn-lg btn-primary">Double Decrease</button>
         )
     }
-});
+}
 
-const DecreaseCents = React.createClass({
-    updateCents () {
+class DecreaseCents extends Component {
+    constructor() {
+        super()
+    }
+
+    updateCents() {
         this.props.onControl(-33)
-    },
-    render () {
+    }
+
+    render() {
         return (
-            <button onClick={this.updateCents} style={{alignSelf: "center", marginBottom: "7px"}}
+            <button onClick={() => this.updateCents()} style={{alignSelf: "center", marginBottom: "7px"}}
                     className="btn btn-lg btn-primary">Decrease</button>
         )
     }
-});
+}
 
-const IncreaseCents = React.createClass({
-    updateCents () {
+class IncreaseCents extends Component {
+    constructor() {
+        super()
+    }
+
+    updateCents() {
         this.props.onControl(33)
-    },
-    render () {
+    }
+
+    render() {
         return (
-            <button onClick={this.updateCents} style={{alignSelf: "center", marginBottom: "7px"}}
+            <button onClick={() => this.updateCents()} style={{alignSelf: "center", marginBottom: "7px"}}
                     className="btn btn-lg btn-primary">Increase</button>
         )
     }
-});
+}
 
 
 function SubmitSound({onSubmitNote}) {
@@ -96,21 +117,22 @@ function InTesting({onPlayTarget, onControl, onPlayStarting, onSubmitNote}) {
     )
 }
 
-const TestingComplete = React.createClass({
-    getInitialState (){
-        return {
+class TestingComplete extends Component {
+    constructor() {
+        super();
+        this.state = {
             score: 0
         }
-    },
-    contextTypes: {
-        router: React.PropTypes.object.isRequired
-    },
-    componentDidMount (){
+    }
+
+
+    componentDidMount() {
         this.setState({
             score: this.props.score
         })
-    },
-    handleToTraining () {
+    }
+
+    handleToTraining() {
         this.context.router.push({
             pathname: "/perfect_pitch_training",
             state: {
@@ -118,17 +140,23 @@ const TestingComplete = React.createClass({
             }
         })
 
-    },
-    render () {
+    }
+
+    render() {
         return (
             <div style={styles.container}>
                 <p style={{color: "#ffffff", alignSelf: "center", marginBottom: "7px"}}>Here is your
                     score: {this.props.score}</p>
-                <button className="btn btn-lg btn-primary" onClick={this.handleToTraining}>Start Training</button>
+                <button className="btn btn-lg btn-primary" onClick={() => this.handleToTraining()}>Start Training
+                </button>
             </div>
         )
     }
-});
+}
+
+TestingComplete.contextTypes = {
+    router: React.PropTypes.object.isRequired
+};
 
 function PerfectPitch({testingComplete, score, onToTraining, onPlayTarget, onControl, onPlayStarting, onSubmitNote}) {
     return testingComplete === true

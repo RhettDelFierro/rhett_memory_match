@@ -1,28 +1,31 @@
-import React from "react"
+import React, { Component } from "react"
 import Training from "../components/Training"
 import { loadNotes } from "../utils/noteTestingFunctions"
 
-const TrainingContainer = React.createClass({
-    getInitialState () {
-        return {
+class TrainingContainer extends Component {
+    constructor() {
+        super();
+        this.state = {
             inm: 0,
             scoresTest: {},
             chosen: "",
             counter: []
         }
-    },
-    componentDidMount () {
+    }
+
+    componentDidMount() {
         this.setState({
-            inm: this.props.location.query.score,
+            inm: this.props.location.query.score
         })
-    },
-    render () {
+    }
+
+    render() {
         //maybe depending which one they go to, render that.
         const playNotes = loadNotes();
         return (
             <Training playNotes={playNotes} scores={this.state.scoresTest}/>
         )
     }
-});
+}
 
 export default TrainingContainer

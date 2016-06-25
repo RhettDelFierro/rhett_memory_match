@@ -1,12 +1,16 @@
-import React from "react"
+import React, { Component } from "react"
 import MemoryMatch from "../components/MemoryMatch"
 
-const MemoryMatchContainer = React.createClass({
-    render (){
+class MemoryMatchContainer extends Component {
+    constructor() {
+        super()
+    }
+
+    render() {
         return (
             <MemoryMatch />
         )
     }
-});
+}
 
 export default MemoryMatchContainer

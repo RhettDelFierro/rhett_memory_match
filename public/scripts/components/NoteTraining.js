@@ -1,48 +1,64 @@
-import React from "react"
+import React, { Component } from "react"
 
-const Keys = React.createClass({
-    playThisNote () {
+class Keys extends Component {
+    constructor() {
+        super()
+    }
+
+    playThisNote() {
         this.props.onLoadChosenNote(this.props.note);
-    },
-    render () {
+    }
+
+    render() {
         return (
-            <button className="btn btn-sm btn-primary" onClick={this.playThisNote}>{this.props.note}</button>
+            <button className="btn btn-sm btn-primary" onClick={() => this.playThisNote()}>{this.props.note}</button>
         )
     }
-});
+}
 
-const ScoresContainer = React.createClass({
-    loadTargetNote () {
+class ScoresContainer extends Component {
+    constructor() {
+        super()
+    }
+
+    loadTargetNote() {
         this.props.onLoadTargetNote(this.props.targetNote, 1);
-    },
-    message (){
-      if (this.props.correct === false){
-          return this.props.cacheTargetNote
-      } else {
-          return "Correct!"
-      }
-    },
-    render () {
+    }
+
+    message() {
+        if (this.props.correct === false) {
+            return this.props.cacheTargetNote
+        } else {
+            return "Correct!"
+        }
+    }
+
+    render() {
         return (
-            <div onClick={this.loadTargetNote}>
+            <div onClick={() => this.loadTargetNote()}>
                 <p>Next Note</p>
                 <p><span>{!this.props.correct ? this.props.cacheTargetNote : "Correct!"}</span></p>
             </div>
         )
     }
-});
+}
 
-const CompleteTesting = React.createClass({
-    score (){
-        return (this.props.keysMissed.length/60)
-    },
-    keysMainlyMissed (){
+class CompleteTesting extends Component {
+    constructor() {
+        super()
+    }
+
+    score() {
+        return (this.props.keysMissed.length / 60)
+    }
+
+    keysMainlyMissed() {
         const initialValue = {};
-        let reducer = function(tally, note){
+        let reducer = function (tally, note) {
             if (!tally[note]) {
                 tally[note] = 1;
             } else {
-                tally[note] = tally[note] +1
+                tally[note] = tally[note] + 1
             }
 
             return tally
@@ -57,8 +73,9 @@ const CompleteTesting = React.createClass({
         }
 
         return resultString
-    },
-    render () {
+    }
+
+    render() {
         return (
             <div>
                 <p>Score: {this.score}</p>
@@ -66,7 +83,7 @@ const CompleteTesting = React.createClass({
             </div>
         )
     }
-});
+}
 
 function NoteTraining(props) {
 
