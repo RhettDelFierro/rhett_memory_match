@@ -41,7 +41,7 @@ class NoteTrainingContainer extends Component {
         let newArray = maskingNotes(this.state.counter);
         console.log(newArray);
 
-        setTimeout(() => newArray.map((item) => this.handlePlayNote(item, 2, 0.001)), 1500);
+        setTimeout(() => newArray.map((item) => this.handlePlayNote(item, 2, 0.05)), 1500);
         makeNoise();
     }
 

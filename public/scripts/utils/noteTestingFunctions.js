@@ -137,7 +137,12 @@ export function loadNotes() {
         notes[note].gainNode.gain.value = notes[note].volume;
         notes[note].gainNode.connect(context.destination);
 
-        source.connect(context.destination);
+        //var gain = context.createGain();
+        //gain.gain.value = volume;
+        //source.connect(gain);
+        //gain.connect(context.destination);
+
+        //source.connect(context.destination);
         source.start(0, 0, seconds);
     }
 
@@ -191,7 +196,7 @@ export function makeNoise() {
 
     //volume- This works!
     var gain = context.createGain();
-    gain.gain.value = 0.05;
+    gain.gain.value = 0.01;
     node.connect(gain);
     gain.connect(context.destination);
 
