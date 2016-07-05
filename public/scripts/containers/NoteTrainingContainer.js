@@ -16,7 +16,8 @@ class NoteTrainingContainer extends Component {
             targetNotePlayed: false,
             chosenNotePlayed: false,
             cacheTargetNote: "",
-            testingComplete: false
+            testingComplete: false,
+            guesses: 0
         }
     }
 
@@ -26,7 +27,7 @@ class NoteTrainingContainer extends Component {
 
     handleLoadTargetNote(note) {
         //play the selected note.
-        this.handlePlayNote(note, 1);
+        this.handlePlayNote(note, 1, 1);
 
 
         //set the state.
@@ -39,7 +40,6 @@ class NoteTrainingContainer extends Component {
     handleMaskingNotes() {
 
         let newArray = maskingNotes(this.state.counter);
-        console.log(newArray);
 
         setTimeout(() => newArray.map((item) => this.handlePlayNote(item, 2, 0.05)), 1500);
         makeNoise();
@@ -52,8 +52,10 @@ class NoteTrainingContainer extends Component {
         if (targetNote === "Finished") {
             this.setState({
                 testingComplete: true
-            })
+            });
+            console.log(this.state.counter);
         }
+        console.log(this.state.guesses +1);
         //increases the count fo reach note.
         const counter = increaseCount(this.state.targetNote, this.state.counter);
         //because we're about to change state and need the note that was last played, we'll cache this current target note.
@@ -78,13 +80,15 @@ class NoteTrainingContainer extends Component {
             counter: update(this.state.counter, {$set: counter}),
             targetNote,
             cacheTargetNote: cacheCurrentTargetNote,
-            keysMissed: update(this.state.keysMissed, {$push: [cacheCurrentTargetNote]})
+            keysMissed: update(this.state.keysMissed, {$push: [cacheCurrentTargetNote]}),
+            guesses: this.state.guesses +1
         } : {
             chosenNotePlayed: true,
             chosenNote: note,
             correct,
             counter: update(this.state.counter, {$set: counter}),
-            targetNote
+            targetNote,
+            guesses: this.state.guesses +1
         };
         this.setState(newState)
     }

@@ -80,7 +80,7 @@ function RandomNotes(counter) {
     let availableNotes = [];
 
     counter.map((item) => {
-        if (item.count < 5) {
+        if (item.count < 1) {
             availableNotes.push(item.targetNote)
         }
     });
@@ -137,12 +137,6 @@ export function loadNotes() {
         notes[note].gainNode.gain.value = notes[note].volume;
         notes[note].gainNode.connect(context.destination);
 
-        //var gain = context.createGain();
-        //gain.gain.value = volume;
-        //source.connect(gain);
-        //gain.connect(context.destination);
-
-        //source.connect(context.destination);
         source.start(0, 0, seconds);
     }
 
@@ -151,9 +145,10 @@ export function loadNotes() {
 export function startTraining() {
     return makeNotesArray();
 }
+
 export function increaseCount(targetNote, counter) {
     for (let i = 0; i <= counter.length - 1; i++) {
-        if ((counter[i].targetNote === targetNote) && (counter[i].count < 5)) {
+        if ((counter[i].targetNote === targetNote) && (counter[i].count < 1)) {
             counter[i].increase();
             //stop the iteration, save memory and return the adjusted counter:
             return counter
@@ -169,9 +164,6 @@ export function getTargetNote(counter) {
 }
 
 export function maskingNotes(counter) {
-    //var newArray = counter.map(function(item){
-    //    return item.targetNote;
-    //});
 
     let newArray = [];
 
@@ -196,12 +188,11 @@ export function makeNoise() {
 
     //volume- This works!
     var gain = context.createGain();
-    gain.gain.value = 0.01;
+    gain.gain.value = 0.007;
     node.connect(gain);
     gain.connect(context.destination);
 
     node.loop = true;
-    //node.connect(context.destination);
     node.start(3, 0, 1);
     setTimeout(function () {
         context.close()
