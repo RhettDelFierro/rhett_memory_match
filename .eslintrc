@@ -1,0 +1,57 @@
+{
+  //  this fixes the quick export from our index.js. This line tells eslint the parser to use.
+  parser: "babel-eslint",
+  env: {
+    es6: true,
+    browser: true
+  },
+  parserOptions: {
+    ecmaversion: 6,
+    sourcetype: "module",
+    ecmaFeatures: {
+      jsx: true,
+      experimentalObjectRestSpread: true,
+    }
+  },
+  plugins: [
+    "react"
+  ],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "standard"
+  ],
+  "rules": {
+    "jsx-quotes": [
+      2,
+      "prefer-single"
+    ],
+    "react/jsx-boolean-value": [
+      2,
+      "always"
+    ],
+    "react/jsx-closing-bracket-location": [
+      2,
+      {
+        selfClosing: "after-props",
+        nonEmpty: "after-props"
+      }
+    ],
+    "react/jsx-curly-spacing": [
+      2,
+      "never",
+      {
+        "allowMultiline": false
+      }
+    ],
+    "react/jsx-max-props-per-line": [
+      2,
+      {
+        maximum: 3
+      }
+    ],
+    "react/jsx-no-literals": 2,
+    "react/self-closing-comp": 2,
+    "react/sort-comp": 2
+  },
+}
