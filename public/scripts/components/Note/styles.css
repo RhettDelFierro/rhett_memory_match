@@ -8,11 +8,17 @@
     width: 420px;
 }
 
+.container > *:hover {
+    background-color: #c9ecf2;
+}
+
 .keys {
     width: 60px;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
     border: 1px solid black;
     margin: 0;
+    display: flex;
+    color: black;
 }
 
 .minorKeys {
@@ -21,5 +27,12 @@
     height: 225px;
     margin: 0 -4%;
     position: absolute;
-    z-index: 0;
+    display: flex;
+    color: white;
+}
+
+p {
+    align-self: flex-end;
+    margin-left: auto;
+    margin-right: auto;
 }

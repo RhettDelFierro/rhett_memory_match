@@ -7,7 +7,7 @@ function Major({name, key}) {
         keyClass = minorKeys;
     }
 
-    return <div className={keyClass}>{name}</div>
+    return <div className={keyClass}><p>{name}</p></div>
 }
 
 function Note(props) {
