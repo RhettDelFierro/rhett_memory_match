@@ -1,16 +1,25 @@
 .container {
     display: flex;
     border: 1px solid black;
-    width: 50%;
     flex-wrap: nowrap;
     /*justify-content: center; going to just hard code the widths.*/
     height: 300px;
+    position: relative;
+    width: 420px;
 }
 
 .keys {
-    width: 44px;
+    width: 60px;
     color: #FFFFFF;
-    height: 300px;
     border: 1px solid black;
     margin: 0;
+}
+
+.minorKeys {
+    width: 30px;
+    background-color: black;
+    height: 225px;
+    margin: 0 -4%;
+    position: absolute;
+    z-index: 0;
 }

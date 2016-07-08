@@ -1,17 +1,22 @@
 import React from 'react'
-import { keyboardContainer, container, keys, majorKey, minorKey } from './styles.css'
+import { keyboardContainer, container, keys, minorKeys } from './styles.css'
 
 function Major({name, key}) {
-    //{name === 'Db4' || 'Eb4' || 'Gb4' || 'Ab4' || 'Bb4' ? minorKey : ""}
-    return <div className={keys}>{name}</div>
+    let keyClass = keys
+    if (name[1] === 'b') {
+        keyClass = minorKeys;
+    }
+
+    return <div className={keyClass}>{name}</div>
 }
 
 function Note(props) {
-    const keys = ['C4', 'Db4','D4', 'Eb4', 'E4', 'F4', 'Gb4', 'G4', 'Ab4', 'A', 'Bb4', 'B']
+    const notes = ['C4', 'Db', 'D4', 'Eb4', 'E4', 'F', 'Gb4', 'G4', 'Ab4', 'A', 'Bb4', 'B']
+
 
     return (
         <div className={container}>
-            {keys.map(key => <Major name={key} id={key} key={key}/>)}
+            {notes.map(note => <Major name={note} id={note} key={note}/>)}
         </div>
     )
 }
