@@ -11,7 +11,9 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 //just points to app and build directory. Will modify our entry to use these.
 const PATHS = {
     app: path.join(__dirname, 'public/scripts'),
-    build: path.join(__dirname, 'public/dist')
+    build: path.join(__dirname, 'public/dist'),
+    images: path.join(__dirname, 'public/images'),
+    sounds: path.join(__dirname, 'public/sounds')
 };
 
 //to figure out if we are in a production build or development build:
@@ -51,7 +53,8 @@ const base = {
         loaders: [
             {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
             //the css modules need the source map so your components can have individual style sheets.
-            {test: /\.css$/, loader: "style!css?sourceMap&modules&localIdentName=[name]__[local]___[hash:base64:5]"}
+            {test: /\.css$/, loader: "style!css?sourceMap&modules&localIdentName=[name]__[local]___[hash:base64:5]"},
+            {test: /\.(jpg|png)$/, include: PATHS.images,  loader: 'url?limit=25000'}
         ]
     },
     //allows to not use relative path directories, just the direct path from the value..

@@ -1,22 +1,18 @@
 import React from "react"
 import { Router, Route, hashHistory, IndexRoute } from "react-router"
-import MainContainer from '../containers/MainContainer'
-import HomeContainer from '../containers/HomeContainer'
-import PerfectPitchContainer from '../containers/PerfectPitchContainer'
-import MemoryMatchContainer from '../containers/MemoryMatchContainer'
-import ScoreboardContainer from "../containers/ScoreboardContainer"
-import TrainingContainer from "../containers/TrainingContainer"
+import { MainContainer, HomeContainer, PerfectPitchContainer,
+    MemoryMatchContainer, ScoreboardContainer, NoteTrainingContainer } from 'scripts/containers'
 
 const routes = (
     <Router history={hashHistory}>
         <Route path="/" component={MainContainer}>
-            <IndexRoute component={HomeContainer} />
+            <IndexRoute component={HomeContainer}/>
             <Route path="perfect_pitch" component={PerfectPitchContainer}/>
             <Route path="memory_match" component={MemoryMatchContainer}/>
             <Route path="scoreboard" component={ScoreboardContainer}/>
-            <Route path="perfect_pitch_training" component={TrainingContainer}/>
+            <Route path="perfect_pitch_training" component={NoteTrainingContainer}/>
         </Route>
     </Router>
-);
+)
 
 export default routes
