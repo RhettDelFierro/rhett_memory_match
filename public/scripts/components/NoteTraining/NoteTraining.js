@@ -9,7 +9,6 @@ function NoteTraining(props) {
             <NoteContainer />
         </div>
     )
-
 }
 
 export default NoteTraining
