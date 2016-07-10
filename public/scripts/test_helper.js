@@ -3,10 +3,10 @@ import jsdom from 'jsdom'
 import jquery from 'jquery'
 import TestUtils from 'react-addons-test-utils'
 import ReactDOM from 'react-dom'
-import chain, { expect } from 'chai'
+import chai, { expect } from 'chai'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import reducers from 'our reducers file (the index.js reference to all the exports'
+import * as reducers from './redux/modules'
 import chaiJquery from 'chai-jquery'
 
 //setting up jqUer environment in terminal:

@@ -1,3 +1,5 @@
+import { Map, List, fromJS } from 'immutable'
+
 const TARGET_NOTE_CHOSEN = 'TARGET_NOTE_CHOSEN'
 const TARGET_NOTE_PLAYED = 'TARGET_NOTE_PLAYED'
 const SELECTED_NOTE_CHOSEN = 'SELECTED NOTE CHOSEN'
@@ -23,29 +25,26 @@ export function selectedNoteChosen(selectedNoteChosen) {
     }
 }
 
-const initialState = {
+const initialState = Map({
     targetNoteChosen: "",
     targetNotePlayed: false,
     selectedNoteChosen: ""
-}
+})
 
 export default function notes(state = {}, action) {
     switch (action.type) {
         case(TARGET_NOTE_CHOSEN):
-            return {
-                ...state,
+            return state.merge({
                 targetNoteChosen: action.targetNoteChosen
-            }
+            })
         case(TARGET_NOTE_PLAYED):
-            return {
-                ...state,
+            return state.merge({
                 targetNotePlayed: true
-            }
+            })
         case(SELECTED_NOTE_CHOSEN):
-            return {
-                ...state,
+            return state.merge({
                 selectedNoteChosen: action.selectedNoteChosen
-            }
+            })
         default:
             return state
     }

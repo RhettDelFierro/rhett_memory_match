@@ -7,7 +7,9 @@
     "start": "webpack-dev-server",
     "production": "webpack -p",
     "lint": "eslint public/.; exit 0",
-    "fix": "eslint --fix public/.; exit 0"
+    "fix": "eslint --fix public/.; exit 0",
+    "test": "mocha --compilers js:babel-core/register --require ./public//scripts/test_helper.js --recursive ./public",
+    "test:watch": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",

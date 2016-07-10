@@ -1,3 +1,7 @@
+export function counterIncrement (targetNote, counter) {
+    return counter.map
+}
+
 function makeNotesObject() {
     const notes = {
         A4: {
