@@ -1,11 +1,12 @@
 import { Map, List, fromJS } from 'immutable'
+import { increaseCount } from './training'
 
 const TARGET_NOTE_CHOSEN = 'TARGET_NOTE_CHOSEN'
 const TARGET_NOTE_PLAYED = 'TARGET_NOTE_PLAYED'
 const SELECTED_NOTE_CHOSEN = 'SELECTED NOTE CHOSEN'
 
 //generated at random
-export function targetNoteChosen(targetNoteChosen) {
+function targetNoteChosen(targetNoteChosen) {
     return {
         type: TARGET_NOTE_CHOSEN,
         targetNoteChosen
@@ -22,6 +23,13 @@ export function selectedNoteChosen(selectedNoteChosen) {
     return {
         type: SELECTED_NOTE_CHOSEN,
         selectedNoteChosen
+    }
+}
+
+export function targetNoteThunk(targetNoteChosen){
+    return function (dispatch,getState) {
+        dispatch(targetNoteChosen(targetNoteChosen))
+        dispatch(increaseCount(targetNoteChosen))
     }
 }
 
