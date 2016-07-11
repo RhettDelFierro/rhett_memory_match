@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from "react"
-import { NoteTraining } from "scripts/components"
+import { NoteTraining, Counter } from "scripts/components"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as noteActionCreators from 'scripts/redux/modules/notes'
@@ -10,10 +10,10 @@ class NoteTrainingContainer extends Component {
     }
 
     render() {
-        //<Counter attempts={this.props.attempts}/>
+        //<p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
         return (
             <div>
-                <p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
+                <Counter />
                 <NoteTraining />
             </div>
         )
@@ -22,9 +22,10 @@ class NoteTrainingContainer extends Component {
 
 function mapStateToProps({notes, training}) {
     return {
-        targetNote: notes.targetNote,
-        correct: training.correct,
-        attempts: training.attempts,
+        targetNote: notes.get('targetNote'),
+        correct: training.get('correct'),
+        attempts: training.get('attempts'),
+        start: training.get('start')
     }
 }
 

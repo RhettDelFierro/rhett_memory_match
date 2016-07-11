@@ -22,7 +22,8 @@ NoteContainer.propTypes = {
 
 function mapStateToProps({training, notes}) {
     return {
-        targetNoteChosen: PropTypes.func.isRequired
+        targetNoteChosen: notes.targetNoteChosen,
+        correct: training.correct,
     }
 }
 
@@ -30,4 +31,4 @@ function mapDispatchToProps(dispatch){
 
 }
 
-export default NoteContainer
+export default connect(mapStateToProps, mapDispatchToProps)(NoteContainer)

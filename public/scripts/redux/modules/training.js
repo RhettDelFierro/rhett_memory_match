@@ -5,6 +5,7 @@ const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
 const INCREASE_COUNT = 'INCREASE_COUNT'
 const FINISH_DATE = 'FINISH_DATE'
+const START_GAME = 'START_GAME'
 
 const tracker = [{name: 'C4', count: 0},
     {name: 'Db4', count: 0},
@@ -19,7 +20,8 @@ const tracker = [{name: 'C4', count: 0},
     {name: 'Bb4', count: 0},
     {name: 'B4', count: 0}]
 
-function checkCorrect(targetNote, selectedNoteChosen) {
+//on every click
+export function checkCorrect(targetNote, selectedNoteChosen) {
     return {
         type: CHECK_CORRECT,
         correct: (targetNote === selectedNoteChosen)
@@ -30,6 +32,12 @@ export function increaseCount(targetNote) {
     return {
         type: INCREASE_COUNT,
         targetNote
+    }
+}
+
+export function startGame(){
+    return {
+        type: START_GAME
     }
 }
 
@@ -58,7 +66,8 @@ const initialState = fromJS({
     score: 0,
     finishDate: '',
     completed: false,
-    roundsCompleted: 0
+    roundsCompleted: 0,
+    start: false
 })
 
 export default function training(state = initialState, action){
@@ -68,12 +77,14 @@ export default function training(state = initialState, action){
                 attempts: state.get('attempts') + 1,
                 correct: action.correct
             })
-
         case INCREASE_COUNT:
             return state.merge({
                 tracker: increaseTracker(state.get('tracker'), action)
             })
-
+        case START_GAME:
+            return state.merge({
+                start: true
+            })
         default:
             return state
     }
