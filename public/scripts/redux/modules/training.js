@@ -12,23 +12,24 @@ const SET_DATE_COMPLETE = 'SET_DATE_COMPLETE'
 const COMPLETE_ROUND = 'COMPLETE_ROUND'
 
 const tracker = [{name: 'C4', count: 0},
-    {name: 'Db4', count: 0},
-    {name: 'D4', count: 0},
-    {name: 'Eb4', count: 0},
-    {name: 'E4', count: 0},
-    {name: 'F4', count: 0},
-    {name: 'Gb4', count: 0},
-    {name: 'G4', count: 0},
-    {name: 'Ab4', count: 0},
-    {name: 'A4', count: 0},
-    {name: 'Bb4', count: 0},
-    {name: 'B4', count: 0}]
+    {name: 'Db4', count: 0, missed: 0},
+    {name: 'D4', count: 0, missed: 0},
+    {name: 'Eb4', count: 0, missed: 0},
+    {name: 'E4', count: 0, missed: 0},
+    {name: 'F4', count: 0, missed: 0},
+    {name: 'Gb4', count: 0, missed: 0},
+    {name: 'G4', count: 0, missed: 0},
+    {name: 'Ab4', count: 0, missed: 0},
+    {name: 'A4', count: 0, missed: 0},
+    {name: 'Bb4', count: 0, missed: 0},
+    {name: 'B4', count: 0, missed: 0}]
 
 //on every click
 export function checkCorrect(targetNote, selectedNoteChosen) {
     return {
         type: CHECK_CORRECT,
-        correct: (targetNote === selectedNoteChosen)
+        correct: (targetNote === selectedNoteChosen),
+        noteMissed: targetNote !== selectedNoteChosen ? targetNote : ''
     }
 }
 
@@ -90,7 +91,8 @@ const initialState = fromJS({
     dateComplete: '',
     completed: false,
     roundsCompleted: 0,
-    start: false
+    start: false,
+    notesMissed: []
 })
 
 export default function training(state = initialState, action) {
@@ -98,7 +100,8 @@ export default function training(state = initialState, action) {
         case CHECK_CORRECT:
             return state.merge({
                 attempts: state.get('attempts') + 1,
-                correct: action.correct
+                correct: action.correct,
+                notesMissed: state.get('notesMissed').concat(action.noteMissed)
             })
         case INCREASE_COUNT:
             return state.merge({
