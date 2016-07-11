@@ -1,3 +1,5 @@
+import { Map, List, fromJS } from 'immutable'
+
 export function counterIncrement (targetNote, counter) {
     return counter.map
 }
@@ -80,16 +82,17 @@ function makeNotesArray() {
 }
 
 //take counter array and return a random targetNote if it hasn't been played 5 times.
-function RandomNotes(counter) {
-    let availableNotes = [];
+export function randomNotes(tracker) {
+    let availableNotes = List();
 
-    counter.map((item) => {
+    //going to have to convert it to a map/list? Don't think so.
+    tracker.map((item) => {
         if (item.count < 1) {
-            availableNotes.push(item.targetNote)
+            availableNotes.push(item.name)
         }
     });
 
-    return availableNotes[Math.floor(availableNotes.length * Math.random())] || "Finished"
+    return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())) : ''
 }
 
 

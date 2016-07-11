@@ -9,6 +9,12 @@ class NoteTrainingContainer extends Component {
         super()
     }
 
+    componentWillReceiveProps(newProps) {
+        if (newProps.start && newProps.selectedNoteChosen) {
+            //play random note
+        }
+    }
+
     render() {
         //<p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
         return (
@@ -25,7 +31,8 @@ function mapStateToProps({notes, training}) {
         targetNote: notes.get('targetNote'),
         correct: training.get('correct'),
         attempts: training.get('attempts'),
-        start: training.get('start')
+        start: training.get('start'),
+        selectedNoteChosen: notes.get('selectedNoteChosen')
     }
 }
 

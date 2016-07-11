@@ -1,0 +1,1 @@
+export const sixMonths = 1.577e+10

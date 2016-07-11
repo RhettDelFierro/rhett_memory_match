@@ -43,7 +43,8 @@ export default function notes(state = {}, action) {
     switch (action.type) {
         case(TARGET_NOTE_CHOSEN):
             return state.merge({
-                targetNoteChosen: action.targetNoteChosen
+                targetNoteChosen: action.targetNoteChosen,
+                selectedNoteChosen: ''
             })
         case(TARGET_NOTE_PLAYED):
             return state.merge({
