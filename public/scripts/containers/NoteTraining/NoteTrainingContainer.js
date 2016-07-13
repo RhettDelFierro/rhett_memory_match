@@ -15,7 +15,7 @@ class NoteTrainingContainer extends Component {
             //user has guessed:
             if (newProps.selectedNotePlayed) {
                 //this.props.chooseRandomNote() //problem- we're going to generate a random note every time.
-                this.props.checkCorect(this.props.targetNote, this.props.selectedNoteChosen)
+                this.props.checkCorect(this.props.targetNote, this.props.selectedNote)
             }
         }
     }
@@ -34,7 +34,7 @@ class NoteTrainingContainer extends Component {
 NoteTrainingContainer.propTypes = {
     chooseRandomNote: PropTypes.func.isRequired,
     start: PropTypes.bool.isRequired,
-    selectedNoteChosen: PropTypes.string,
+    selectedNote: PropTypes.string,
     correct: PropTypes.bool.isRequired,
     targetNote: PropTypes.string,
     attempts: PropTypes.number.isRequired,
@@ -47,7 +47,7 @@ function mapStateToProps({notes, training}) {
         correct: training.get('correct'),
         attempts: training.get('attempts'),
         start: training.get('start'),
-        selectedNoteChosen: notes.get('selectedNoteChosen')
+        selectedNote: notes.get('selectedNote')
     }
 }
 

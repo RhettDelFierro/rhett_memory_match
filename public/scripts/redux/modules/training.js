@@ -27,10 +27,10 @@ const tracker = [
 ]
 
 //on every note click
-export function checkCorrect(targetNote, selectedNoteChosen) {
+export function checkCorrect(targetNote, selectedNote) {
     return {
         type: CHECK_CORRECT,
-        correct: (targetNote === selectedNoteChosen),
+        correct: (targetNote === selectedNote),
         noteMissed: targetNote !== selectedNoteChosen ? targetNote : ''
     }
 }

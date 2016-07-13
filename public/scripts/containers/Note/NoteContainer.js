@@ -10,14 +10,14 @@ class NoteContainer extends Component {
         super()
     }
 
-    handleNoteSelected(name){
-        this.props.selectedNoteChosen(name)
+    componentWillReceiveProps() {
+
     }
 
     render() {
 
         return (
-            <Note onNoteSelected={(name) => this.handleNoteSelected(name)}/>
+            <Note {...props}/>
         )
     }
 }
@@ -29,7 +29,7 @@ NoteContainer.propTypes = {
 
 function mapStateToProps({training, notes}) {
     return {
-        targetNoteChosen: notes.get('targetNoteChosen'),
+        targetNoteChosen: notes.get('targetNote'),
         correct: training.get('correct')
     }
 }

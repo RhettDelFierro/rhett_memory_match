@@ -6,24 +6,24 @@ const TARGET_NOTE_PLAYED = 'TARGET_NOTE_PLAYED'
 const SELECTED_NOTE_CHOSEN = 'SELECTED NOTE CHOSEN'
 
 //generated at random
-function targetNoteChosen(targetNoteChosen) {
+function targetNoteChosen(targetNote) {
     return {
         type: TARGET_NOTE_CHOSEN,
-        targetNoteChosen
+        targetNote
     }
 }
 
-export function selectedNoteChosen(selectedNoteChosen) {
+export function selectedNoteChosen(selectedNote) {
     return {
         type: SELECTED_NOTE_CHOSEN,
-        selectedNoteChosen
+        selectedNote
     }
 }
 
-export function targetNoteThunk(targetNoteChosen){
+export function targetNoteThunk(targetNote){
     return function (dispatch,getState) {
-        dispatch(targetNoteChosen(targetNoteChosen))
-        dispatch(increaseCount(targetNoteChosen))
+        dispatch(targetNoteChosen(targetNote))
+        dispatch(increaseCount(targetNote))
     }
 }
 
@@ -38,14 +38,14 @@ export default function notes(state = {}, action) {
     switch (action.type) {
         case(TARGET_NOTE_CHOSEN):
             return state.merge({
-                targetNoteChosen: action.targetNoteChosen,
-                selectedNoteChosen: '',
+                targetNote: action.targetNote,
+                selectedNote: '',
                 targetNotePlayed: true
             })
 
         case(SELECTED_NOTE_CHOSEN):
             return state.merge({
-                selectedNoteChosen: action.selectedNoteChosen,
+                selectedNote: action.selectedNote,
                 selectedNotePlayed: true,
                 targetNotePlayed: false
             })
