@@ -14,7 +14,7 @@ class NoteTrainingContainer extends Component {
     componentWillMount(){
         //load notes.
         //throw links into redux store?
-        this.props.getNotespath(makeNotesObject)
+        this.props.getNotesPath(makeNotesObject)
     }
 
     componentWillReceiveProps(newProps) {
