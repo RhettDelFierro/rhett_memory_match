@@ -1,84 +1,62 @@
 import { Map, List, fromJS } from 'immutable'
 
-export function counterIncrement (targetNote, counter) {
+export function counterIncrement(targetNote, counter) {
     return counter.map
 }
 
-function makeNotesObject() {
-    const notes = {
+export function makeNotesMap() {
+    const notes = fromJS({
         A4: {
-            src: 'public/sounds/piano/A4',
+            src: 'sounds/piano/A4',
             volume: 1
         },
         Ab4: {
-            src: 'public/sounds/piano/Ab4',
+            src: 'sounds/piano/Ab4',
             volume: 1
         },
         B4: {
-            src: 'public/sounds/piano/B4',
+            src: 'sounds/piano/B4',
             volume: 1
         },
         Bb4: {
-            src: 'public/sounds/piano/Bb4',
+            src: 'sounds/piano/Bb4',
             volume: 1
         },
         C4: {
-            src: 'public/sounds/piano/C4',
+            src: 'sounds/piano/C4',
             volume: 1
         },
         D4: {
-            src: 'public/sounds/piano/D4',
+            src: 'sounds/piano/D4',
             volume: 1
         },
         Db4: {
-            src: 'public/sounds/piano/Db4',
+            src: 'sounds/piano/Db4',
             volume: 1
         },
         E4: {
-            src: 'public/sounds/piano/E4',
+            src: 'sounds/piano/E4',
             volume: 1
         },
         Eb4: {
-            src: 'public/sounds/piano/Eb4',
+            src: 'sounds/piano/Eb4',
             volume: 1
         },
         F4: {
-            src: 'public/sounds/piano/F4',
+            src: 'sounds/piano/F4',
             volume: 1
         },
         G4: {
-            src: 'public/sounds/piano/G4',
+            src: 'sounds/piano/G4',
             volume: 1
         },
         Gb4: {
-            src: 'public/sounds/piano/Gb4',
+            src: 'sounds/piano/Gb4',
             volume: 1
         }
-    };
+    })
 
     return notes;
-}
-
-//constructor for notes.
-function NotesTracker(targetNote) {
-    this.targetNote = targetNote,
-        this.count = 0,
-        this.increase = function () {
-            this.count += 1;
-        }
-}
-
-//initialize the counter (objects with targetNote and count properties):
-function makeNotesArray() {
-    const notes = makeNotesObject();
-
-    let notesArray = [];
-
-    for (let note in notes) {
-        notesArray.push(new NotesTracker(note))
-    }
-
-    return notesArray;
 }
 
 //take counter array and return a random targetNote if it hasn't been played 5 times.
@@ -97,13 +75,13 @@ export function randomNotes(tracker) {
 
 
 //called on TrainingContainer Mount to use the closure in the child components.
-export function loadNotes() {
+export function loadNotes(notesMap) {
     const context = new AudioContext || new window.webkitAudioContext;
 
-    const notes = makeNotesObject();
+    const notes = notesMap;
 
-    let loadSound = function (obj) {
-        const { src } = obj;
+    let loadSound = function (map) {
+        const src = map.get('src');
         var request = new XMLHttpRequest();
         request.open('GET', `${src}.mp3`, true);
         request.responseType = 'arraybuffer';
@@ -111,7 +89,7 @@ export function loadNotes() {
         request.onload = function () {
             // request.response is encoded... so decode it now
             context.decodeAudioData(request.response, function (buffer) {
-                obj.buffer = buffer;
+                map.set('buffer', buffer)
             }, function (err) {
                 console.log(err);
             });
@@ -120,15 +98,9 @@ export function loadNotes() {
         request.send();
     };
 
-    function loadSounds(obj) {
-
-        // iterate over sounds obj
-        for (let note in obj) {
-            if (obj.hasOwnProperty(note)) {
-                // load sound
-                loadSound(obj[note]);
-            }
-        }
+    //load the property names of the notes map:
+    function loadSounds(map) {
+        loadSound(map.keySeq());
     }
 
     loadSounds(notes);
@@ -136,13 +108,14 @@ export function loadNotes() {
     //this is a play sound closure.
     return function (note, seconds, volume = 1) {
         const source = context.createBufferSource();
-        source.buffer = notes[note].buffer;
+        source.buffer = notes.getIn(note, 'buffer');
         //code for the volume
-        notes[note].gainNode = context.createGain();
-        source.connect(notes[note].gainNode);
-        notes[note].volume = volume;
-        notes[note].gainNode.gain.value = notes[note].volume;
-        notes[note].gainNode.connect(context.destination);
+        notes.setIn([note, 'gainNode'],context.createGain())
+        source.connect(notes.getIn(note, 'gainNode'))
+        notes.setIn([note, 'volume'], volume)
+        notes.setIn([note, 'gainNode', 'gain', 'value'], notes.getIn([note, 'volume']))
+        let connect = notes.getIn([note, 'gainNode','connect'])
+        connect()
 
         source.start(0, 0, seconds);
     }

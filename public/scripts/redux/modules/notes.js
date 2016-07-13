@@ -4,6 +4,7 @@ import { increaseCount } from './training'
 const TARGET_NOTE_CHOSEN = 'TARGET_NOTE_CHOSEN'
 const TARGET_NOTE_PLAYED = 'TARGET_NOTE_PLAYED'
 const SELECTED_NOTE_CHOSEN = 'SELECTED NOTE CHOSEN'
+const NOTES_PATH = 'NOTES_PATH'
 
 //generated at random
 function targetNoteChosen(targetNote) {
@@ -17,6 +18,14 @@ export function selectedNoteChosen(selectedNote) {
     return {
         type: SELECTED_NOTE_CHOSEN,
         selectedNote
+    }
+}
+
+//maybe a thunk
+export function getNotesPath(notesObject){
+    return {
+        type: NOTES_PATH,
+        notesObject
     }
 }
 

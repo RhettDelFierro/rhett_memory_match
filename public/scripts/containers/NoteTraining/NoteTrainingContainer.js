@@ -2,11 +2,19 @@ import React, { PropTypes, Component } from "react"
 import { NoteTraining, Counter } from "scripts/components"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { makeNotesObject } from 'scripts/utils/noteTestingFunctions'
 import * as noteActionCreators from 'scripts/redux/modules/notes'
+import * as trainingActionCreators from 'scrips/redux/modules/training'
 
 class NoteTrainingContainer extends Component {
     constructor() {
         super()
+    }
+
+    componentWillMount(){
+        //load notes.
+        //throw links into redux store?
+        this.props.getNotespath(makeNotesObject)
     }
 
     componentWillReceiveProps(newProps) {
