@@ -1,6 +1,5 @@
 import { Map, List, fromJS } from 'immutable'
-import { randomNotes } from 'scripts/utils/noteTestingFunctions'
-import targetNoteThunk from './notes'
+import { randomNotes, loadNotes, playNotes, makeNoise } from 'scripts/utils/noteTestingFunctions'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -10,6 +9,51 @@ const START_GAME = 'START_GAME'
 const CHOOSE_RANDOM_NOTE = 'CHOOSE_RANDOM_NOTE'
 const SET_DATE_COMPLETE = 'SET_DATE_COMPLETE'
 const COMPLETE_ROUND = 'COMPLETE_ROUND'
+const TARGET_NOTE_CHOSEN = 'TARGET_NOTE_CHOSEN'
+const TARGET_NOTE_PLAYED = 'TARGET_NOTE_PLAYED'
+const SELECTED_NOTE_CHOSEN = 'SELECTED NOTE CHOSEN'
+const NOTES_PATH = 'NOTES_PATH'
+const NOTE_MISSED = 'NOTE_MISSED'
+
+//generated at random
+function targetNoteChosen(targetNote) {
+    return {
+        type: TARGET_NOTE_CHOSEN,
+        targetNote
+    }
+}
+
+export function selectedNoteChosen(selectedNote) {
+    return {
+        type: SELECTED_NOTE_CHOSEN,
+        selectedNote
+    }
+}
+
+export function playNote({note, time, volume}) {
+
+    return function (dispatch, getState) {
+        playNotes(note, time, volume)
+            .then(() => makeNoise()
+                .then(() => {
+                    //random notes
+                    const currentTracker = getState().training.tracker
+                    let randomMaskingNotes = playNotes(currentTracker)
+                    Promise.all(playNotes(randomMaskingNotes.map((note) => note),0, 2))
+                }).then(()=> {
+                    dispatch(chooseRandomNote)
+                })
+            )
+
+    }
+}
+
+export function targetNoteThunk(targetNote) {
+    return function (dispatch, getState) {
+        dispatch(targetNoteChosen(targetNote))
+        dispatch(increaseCount(targetNote))
+    }
+}
 
 const tracker = [
     {name: 'C4', count: 0},
@@ -27,11 +71,15 @@ const tracker = [
 ]
 
 //on every note click
-export function checkCorrect(targetNote, selectedNote) {
+export function checkCorrect() {
     return {
-        type: CHECK_CORRECT,
-        correct: (targetNote === selectedNote),
-        noteMissed: targetNote !== selectedNoteChosen ? targetNote : ''
+        type: CHECK_CORRECT
+    }
+}
+
+export function noteMissed() {
+    return {
+        type: NOTE_MISSED
     }
 }
 
@@ -43,8 +91,12 @@ export function increaseCount(targetNote) {
 }
 
 export function startGame() {
-    return {
-        type: START_GAME
+    return function (dispatch) {
+        loadNotes().then(() => {
+            //dispatch the random targetNote action
+            dispatch({type: START_GAME})
+
+        })
     }
 }
 
@@ -53,7 +105,7 @@ export function chooseRandomNote() {
     return function (dispatch, getState) {
         const currentTracker = getState().training.tracker
         const randomNote = randomNote(currentTracker)
-        if (randomNotes === '') {
+        if (randomNote === '') {
             dispatch({type: COMPLETE_ROUND})
             if (getState().training.roundsComplete === 2) {
                 dispatch(setDateComplete)
@@ -83,6 +135,16 @@ function increaseTracker(state = initialStateTracker, action) {
     }
 }
 
+const initialStateNotesMissed = List();
+
+function notesMissed(state, action){
+    state.get('notesMissed').concat(state.targetNote)
+    switch(action.type){
+        case CHECK_CORRECT:
+            return state.get('notesMissed').concat(state.targetNote)
+    }
+}
+
 const initialState = fromJS({
     correct: false,
     attempts: 0,
@@ -92,16 +154,37 @@ const initialState = fromJS({
     completed: false,
     roundsCompleted: 0,
     start: false,
-    notesMissed: []
+    notesMissed: [],
+    targetNote: "",
+    targetNotePlayed: false,
+    selectedNote: "",
+    selectedNotePlayed: false
 })
 
 export default function training(state = initialState, action) {
     switch (action.type) {
+        case(TARGET_NOTE_CHOSEN):
+            return state.merge({
+                targetNote: action.targetNote,
+                selectedNote: '',
+                targetNotePlayed: true,
+                selectedNotePlayed: false
+            })
+
+        case(SELECTED_NOTE_CHOSEN):
+            return state.merge({
+                selectedNote: action.selectedNote,
+                selectedNotePlayed: true,
+                targetNotePlayed: false
+            })
         case CHECK_CORRECT:
             return state.merge({
                 attempts: state.get('attempts') + 1,
-                correct: action.correct,
-                notesMissed: state.get('notesMissed').concat(action.noteMissed)
+                correct: (state.targetNote === state.selectedNote)
+            })
+        case NOTE_MISSED:
+            return state.merge({
+                notesMissed: state.get('notesMissed').concat(state.targetNote)
             })
         case INCREASE_COUNT:
             return state.merge({

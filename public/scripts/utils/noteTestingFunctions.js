@@ -22,61 +22,71 @@ export function randomNotes(tracker) {
 
 
 //called on TrainingContainer Mount to use the closure in the child components.
-function loadNotes() {
 
-    let loadSound = function (map) {
-        const src = map.get('src');
-        var request = new XMLHttpRequest();
-        request.open('GET', `${src}.mp3`, true);
-        request.responseType = 'arraybuffer';
 
-        request.onload = function () {
-            // request.response is encoded... so decode it now
-            context.decodeAudioData(request.response, function (buffer) {
-                map.set('buffer', buffer)
-            }, function (err) {
-                console.log(err);
-            });
-        };
+let loadSound = function (map) {
+    return new Promise((resolve, reject) => {
+    const src = map.get('src');
+    var request = new XMLHttpRequest();
+    request.open('GET', `${src}.mp3`, true);
+    request.responseType = 'arraybuffer';
+
+    request.onload = function () {
+        // request.response is encoded... so decode it now
+        context.decodeAudioData(request.response)
+            .then((buffer) => {
+                resolve(map.set('buffer', buffer))
+            }).catch((err) => {
+            reject(err)
+        })
 
         request.send();
-    };
+    }
+        //end of promise
+    })
 
+}
+
+
+export function loadNotes() {
     //load the property names of the notes map:
     function loadSounds(map) {
-        loadSound(map.keySeq());
+        //probably should use promise.all
+        Promise.all(loadSound(map.keySeq())).then(() => true).catch((err) => Error('Promise.all error:', err));
     }
 
     loadSounds(notes);
-
 }
 
-export function playNotes (note, seconds, volume = 1) {
+export function playNotes(note, seconds = 1, volume = 1) {
+    return new Promise((resolve,reject) => {
     const source = context.createBufferSource();
     source.buffer = notes.getIn(note, 'buffer');
     //code for the volume
-    notes.setIn([note, 'gainNode'],context.createGain())
+    notes.setIn([note, 'gainNode'], context.createGain())
     source.connect(notes.getIn(note, 'gainNode'))
     notes.setIn([note, 'volume'], volume)
     notes.setIn([note, 'gainNode', 'gain', 'value'], notes.getIn([note, 'volume']))
-    let connect = notes.getIn([note, 'gainNode','connect'])
+    let connect = notes.getIn([note, 'gainNode', 'connect'])
     connect()
 
     source.start(0, 0, seconds);
+    })
 }
 
 //make for Redux
-export function maskingNotes(counter) {
+export function maskingNotes(tracker) {
 
-    let newArray = [];
+    let newArray = List();
 
     for (let i = 0; i < 16; i++) {
-        newArray.push(counter[Math.floor(counter.length * Math.random())].targetNote)
+        newArray.push(tracker.get(Math.floor(tracker.size * Math.random())).get('name'))
     }
 
     return newArray
 }
 
+//make adjustments to have volume control.
 export function makeNoise() {
     var node = context.createBufferSource()
         , buffer = context.createBuffer(1, 4096, context.sampleRate)
@@ -95,9 +105,6 @@ export function makeNoise() {
     gain.connect(context.destination);
 
     node.loop = true;
-    node.start(3, 0, 1);
-    setTimeout(function () {
-        context.close()
-    }, 4000);
+    node.start(0, 0, 1);
 }
 

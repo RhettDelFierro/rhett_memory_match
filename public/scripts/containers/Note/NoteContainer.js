@@ -27,9 +27,9 @@ NoteContainer.propTypes = {
     correct: PropTypes.bool
 }
 
-function mapStateToProps({training, notes}) {
+function mapStateToProps({training}) {
     return {
-        targetNoteChosen: notes.get('targetNote'),
+        targetNoteChosen: training.get('targetNote'),
         correct: training.get('correct')
     }
 }
