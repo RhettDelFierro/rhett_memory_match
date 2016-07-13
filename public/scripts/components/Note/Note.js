@@ -12,23 +12,21 @@ import { keyboardContainer, container, keys, minorKeys } from './styles.css'
 
 function Note(props) {
 
-    let keyClass = keys
-    if (name[1] === 'b') {
-        keyClass = minorKeys;
-    }
-
-    const incorrect = {backgroundColor: green}
+    let incorrect = {backgroundColor: 'green'}
 
     const notes = ['C4', 'Db', 'D4', 'Eb4', 'E4', 'F', 'Gb4', 'G4', 'Ab4', 'A', 'Bb4', 'B']
 
     return (
         <div className={container}>
             {notes.map(note => {
+                let keyClass = keys
+                if (note[1] === 'b') {
+                    keyClass = minorKeys;
+                }
                 return (
                     <div
-                        className={keyClass} ref={note} id={note} key={note}
-                        onClick={(note) => props.selectedNoteChosen(note)}
-                        {!props.correct && props.targetNote === note ? style = {incorrect} : ''}>
+                        className={keyClass} id={note} key={note}
+                        onClick={(note) => props.selectedNoteChosen(note)}>
                         {note}
                     </div>
                 )

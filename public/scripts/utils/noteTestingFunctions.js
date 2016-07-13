@@ -1,5 +1,5 @@
 import { Map, List, fromJS } from 'immutable'
-import { notes } from 'scripts/config/contants'
+import { notes } from 'scripts/config/constants'
 
 export function counterIncrement(targetNote, counter) {
     return counter.map

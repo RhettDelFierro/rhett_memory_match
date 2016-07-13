@@ -2,14 +2,16 @@ import React, {PropTypes} from 'react'
 
 export default function Counter(props) {
     return (
-        <div onClick={this.props.startGame}>
-            {!this.props.start ? {'Click to begin'}
+        <div onClick={props.startGame}>
+            {!props.start ? <p>{'Click to begin'}</p>
                 : <div>
-                <p>Counter: <span>{this.props.attempts}/60 attempts</span></p>
-                <p>{`Select this note: ${this.props.targetNoteChosen}`}</p>
-                <p>{!this.props.correct && this.props.targetNotePlayed ? `Here is the correct note: ${this.props.targetNoteChosen}` : ''}</p>
+                <p>Counter: <span>{props.attempts}/60 attempts</span></p>
+                <p>{`Select this note: ${props.targetNote}`}</p>
+                <p>{!props.correct && props.targetNotePlayed
+                    ? `Here is the correct note: ${props.targetNote}`
+                    : ''}</p>
             </div>}
-            {this.props.correct ? <p>{''}</p> : <p>Here is the correct note {this.props.targetNoteChosen}</p>}
+            {props.correct ? <p>{''}</p> : <p>Here is the correct note {props.targetNote}</p>}
         </div>
     )
 }

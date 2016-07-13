@@ -1,9 +1,10 @@
 import React, { PropTypes, Component } from "react"
-import { NoteTraining, Counter } from "scripts/components"
+import { NoteTraining } from "scripts/components"
+import { CounterContainer } from 'scripts/containers'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { makeNotesObject } from 'scripts/utils/noteTestingFunctions'
-import * as trainingActionCreators from 'scrips/redux/modules/training'
+import * as trainingActionCreators from 'scripts/redux/modules/training'
 
 class NoteTrainingContainer extends Component {
     constructor() {
@@ -30,7 +31,7 @@ class NoteTrainingContainer extends Component {
         //<p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
         return (
             <div>
-                <Counter />
+                <CounterContainer />
                 <NoteTraining />
             </div>
         )
@@ -46,7 +47,7 @@ NoteTrainingContainer.propTypes = {
     attempts: PropTypes.number.isRequired,
     checkCorrect: PropTypes.func.isRequired,
     playNote: PropTypes.func.isRequired,
-    noteMissed: PropTypes.func, isRequired
+    noteMissed: PropTypes.func.isRequired
 }
 
 function mapStateToProps({training}) {
@@ -60,7 +61,7 @@ function mapStateToProps({training}) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators(noteActionCreators, dispatch)
+    return bindActionCreators(trainingActionCreators, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoteTrainingContainer)

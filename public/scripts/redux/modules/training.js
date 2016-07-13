@@ -16,7 +16,7 @@ const NOTES_PATH = 'NOTES_PATH'
 const NOTE_MISSED = 'NOTE_MISSED'
 
 //generated at random
-function targetNoteChosen(targetNote) {
+export function targetNoteChosen(targetNote) {
     return {
         type: TARGET_NOTE_CHOSEN,
         targetNote
@@ -132,16 +132,6 @@ function increaseTracker(state = initialStateTracker, action) {
                 (item) => item.set('count', item.get('count') + 1)))
         default:
             return state
-    }
-}
-
-const initialStateNotesMissed = List();
-
-function notesMissed(state, action){
-    state.get('notesMissed').concat(state.targetNote)
-    switch(action.type){
-        case CHECK_CORRECT:
-            return state.get('notesMissed').concat(state.targetNote)
     }
 }
 

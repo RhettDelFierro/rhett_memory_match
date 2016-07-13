@@ -15,9 +15,8 @@ class NoteContainer extends Component {
     }
 
     render() {
-
         return (
-            <Note {...props}/>
+            <Note {...this.props} />
         )
     }
 }
@@ -29,13 +28,13 @@ NoteContainer.propTypes = {
 
 function mapStateToProps({training}) {
     return {
-        targetNoteChosen: training.get('targetNote'),
+        targetNote: training.get('targetNote'),
         correct: training.get('correct')
     }
 }
 
 function mapDispatchToProps(dispatch){
-    bindActionCreators({noteActionCreators, trainingActionCreators}, dispatch)
+    return bindActionCreators(trainingActionCreators, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NoteContainer)

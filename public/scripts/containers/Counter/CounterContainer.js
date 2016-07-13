@@ -6,8 +6,8 @@ import * as trainingActionCreators from 'scripts/redux/modules/training'
 
 function mapStateToProps({training}) {
     return {
-        targetNoteChosen: training.targetNoteChosen,
-        targetNotePlayed: training.targetNotePlayed,
+        targetNote: training.get('targetNote'),
+        targetNotePlayed: training.get('targetNotePlayed'),
         correct: training.get('correct'),
         start: training.get('start'),
         attempts: training.get('attempts')
