@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react'
 import { keyboardContainer, container, keys, minorKeys } from './styles.css'
 
-//function Keys({name, key, onNoteSelected}) {
+//function Keys({name, key, onnote}) {
 //    let keyClass = keys
 //    if (name[1] === 'b') {
 //        keyClass = minorKeys;
 //    }
 //
-//    return <div className={keyClass} onClick={onNoteSelected}><p>{name}</p></div>
+//    return <div className={keyClass} onClick={onnote}><p>{name}</p></div>
 //}
 
 function Note(props) {
@@ -26,7 +26,7 @@ function Note(props) {
                 return (
                     <div
                         className={keyClass} id={note} key={note}
-                        onClick={(note) => props.selectedNoteChosen(note)}>
+                        onClick={() => props.selectedNoteChosen(note)}>
                         {note}
                     </div>
                 )

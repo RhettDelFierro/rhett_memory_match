@@ -16,13 +16,18 @@ class NoteTrainingContainer extends Component {
         if (newProps.start) {
             //user has guessed:
             if (newProps.selectedNotePlayed && !newProps.targetNotePlayed) {
+                console.log('componentwillreceiveprops')
                 //this.props.chooseRandomNote() //problem- we're going to generate a random note every time.
                 this.props.checkCorrect(this.props.targetNote, this.props.selectedNote)
             }
-            if (!newProps.targetNotePlayed && newProps.correct === false) {
+            //first render after start is running this:
+            if (!newProps.targetNotePlayed && !newProps.correct && this.props.attempts !== 0) {
                 this.props.noteMissed()
                 this.props.playNote(this.props.targetNote, 1, 1)
+            }
 
+            if(this.props.attempts === 0 && !newProps.targetNotePlayed && newProps.targetNote === '') {
+                this.props.chooseRandomNote()
             }
         }
     }
@@ -47,7 +52,8 @@ NoteTrainingContainer.propTypes = {
     attempts: PropTypes.number.isRequired,
     checkCorrect: PropTypes.func.isRequired,
     playNote: PropTypes.func.isRequired,
-    noteMissed: PropTypes.func.isRequired
+    noteMissed: PropTypes.func.isRequired,
+    selectedNotePlayed: PropTypes.bool.isRequired
 }
 
 function mapStateToProps({training}) {
@@ -56,7 +62,9 @@ function mapStateToProps({training}) {
         correct: training.get('correct'),
         attempts: training.get('attempts'),
         start: training.get('start'),
-        selectedNote: training.get('selectedNote')
+        selectedNote: training.get('selectedNote'),
+        tracker: training.get('tracker'),
+        selectedNotePlayed: training.get('selectedNotePlayed')
     }
 }
 

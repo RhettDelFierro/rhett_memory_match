@@ -1,5 +1,5 @@
-import { Map, List, fromJS } from 'immutable'
-import { notes } from 'scripts/config/constants'
+import { Map, List, fromJS, Iterable } from 'immutable'
+import { notes, context } from 'scripts/config/constants'
 
 export function counterIncrement(targetNote, counter) {
     return counter.map
@@ -8,69 +8,71 @@ export function counterIncrement(targetNote, counter) {
 //Redux
 //take counter array and return a random targetNote if it hasn't been played 5 times.
 export function randomNotes(tracker) {
-    let availableNotes = List();
+    const availableNotes = List();
 
     //going to have to convert it to a map/list? Don't think so.
-    tracker.map((item) => {
-        if (item.count < 1) {
-            availableNotes.push(item.name)
+    const randomNotes = tracker.map((item) => {
+        if (item.get('count') < 1) {
+            return availableNotes.push(item)
         }
     });
 
-    return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())) : ''
+    return randomNotes.size > 0 ? randomNotes.get(Math.floor(randomNotes.size * Math.random())) : ''
 }
 
 
 //called on TrainingContainer Mount to use the closure in the child components.
 
 
-let loadSound = function (map) {
+let loadSound = function (obj) {
+
     return new Promise((resolve, reject) => {
-    const src = map.get('src');
-    var request = new XMLHttpRequest();
-    request.open('GET', `${src}.mp3`, true);
-    request.responseType = 'arraybuffer';
+        const src = obj.get('src')
+        var request = new XMLHttpRequest();
+        request.open('GET', `${src}.mp3`, true);
+        request.responseType = 'arraybuffer';
 
-    request.onload = function () {
-        // request.response is encoded... so decode it now
-        context.decodeAudioData(request.response)
-            .then((buffer) => {
-                resolve(map.set('buffer', buffer))
-            }).catch((err) => {
-            reject(err)
-        })
+        request.onload = function () {
+            // request.response is encoded... so decode it now
+            context.decodeAudioData(request.response)
+                .then((buffer) => {
+                    obj.set('buffer', buffer)
+                    resolve(true)
+                }).catch((err) => {
+                reject(Error('loadSound error', err))
+            })
 
-        request.send();
-    }
+            request.send();
+        }
         //end of promise
     })
-
 }
-
 
 export function loadNotes() {
     //load the property names of the notes map:
-    function loadSounds(map) {
-        //probably should use promise.all
-        Promise.all(loadSound(map.keySeq())).then(() => true).catch((err) => Error('Promise.all error:', err));
-    }
-
-    loadSounds(notes);
+    //function loadSounds(map) {
+    //    Promise.all(map.map((note) => loadSound(note)
+    //    )).then((data) => data ).catch((err) => Error('Promise.all error:', err));
+    //}
+    //
+    //loadSounds(notes);
+    return Promise.all(notes.map((note) => loadSound(note))).then((data) => data ).catch((err) => Error('Promise.all error:', err));
 }
 
 export function playNotes(note, seconds = 1, volume = 1) {
-    return new Promise((resolve,reject) => {
-    const source = context.createBufferSource();
-    source.buffer = notes.getIn(note, 'buffer');
-    //code for the volume
-    notes.setIn([note, 'gainNode'], context.createGain())
-    source.connect(notes.getIn(note, 'gainNode'))
-    notes.setIn([note, 'volume'], volume)
-    notes.setIn([note, 'gainNode', 'gain', 'value'], notes.getIn([note, 'volume']))
-    let connect = notes.getIn([note, 'gainNode', 'connect'])
-    connect()
+    return new Promise((resolve, reject) => {
+        const source = context.createBufferSource();
+        console.log(note)
+        source.buffer = notes.getIn([note, 'buffer']);
+        //code for the volume
+        notes.setIn([note, 'gainNode'], context.createGain())
+        source.connect(notes.getIn([note, 'gainNode']))
+        notes.setIn([note, 'volume'], volume)
+        notes.setIn([note, 'gainNode', 'gain', 'value'], notes.getIn([note, 'volume']))
+        let connect = notes.getIn([note, 'gainNode', 'connect'])
+        connect()
 
-    source.start(0, 0, seconds);
+        resolve(source.start(0, 0, seconds));
     })
 }
 

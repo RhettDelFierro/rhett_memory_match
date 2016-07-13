@@ -15,6 +15,21 @@ const SELECTED_NOTE_CHOSEN = 'SELECTED NOTE CHOSEN'
 const NOTES_PATH = 'NOTES_PATH'
 const NOTE_MISSED = 'NOTE_MISSED'
 
+const tracker = [
+    {name: 'C4', count: 0},
+    {name: 'Db4', count: 0},
+    {name: 'D4', count: 0},
+    {name: 'Eb4', count: 0},
+    {name: 'E4', count: 0},
+    {name: 'F4', count: 0},
+    {name: 'Gb4', count: 0},
+    {name: 'G4', count: 0},
+    {name: 'Ab4', count: 0},
+    {name: 'A4', count: 0},
+    {name: 'Bb4', count: 0},
+    {name: 'B4', count: 0}
+]
+
 //generated at random
 export function targetNoteChosen(targetNote) {
     return {
@@ -39,7 +54,7 @@ export function playNote({note, time, volume}) {
                     //random notes
                     const currentTracker = getState().training.tracker
                     let randomMaskingNotes = playNotes(currentTracker)
-                    Promise.all(playNotes(randomMaskingNotes.map((note) => note),0, 2))
+                    Promise.all(playNotes(randomMaskingNotes.map((note) => note), 0, 2))
                 }).then(()=> {
                     dispatch(chooseRandomNote)
                 })
@@ -54,21 +69,6 @@ export function targetNoteThunk(targetNote) {
         dispatch(increaseCount(targetNote))
     }
 }
-
-const tracker = [
-    {name: 'C4', count: 0},
-    {name: 'Db4', count: 0},
-    {name: 'D4', count: 0},
-    {name: 'Eb4', count: 0},
-    {name: 'E4', count: 0},
-    {name: 'F4', count: 0},
-    {name: 'Gb4', count: 0},
-    {name: 'G4', count: 0},
-    {name: 'Ab4', count: 0},
-    {name: 'A4', count: 0},
-    {name: 'Bb4', count: 0},
-    {name: 'B4', count: 0}
-]
 
 //on every note click
 export function checkCorrect() {
@@ -92,7 +92,7 @@ export function increaseCount(targetNote) {
 
 export function startGame() {
     return function (dispatch) {
-        loadNotes().then(() => {
+        loadNotes().then((data) => {
             //dispatch the random targetNote action
             dispatch({type: START_GAME})
 
@@ -103,8 +103,8 @@ export function startGame() {
 export function chooseRandomNote() {
 
     return function (dispatch, getState) {
-        const currentTracker = getState().training.tracker
-        const randomNote = randomNote(currentTracker)
+        const currentTracker = getState().training.get('tracker')
+        const randomNote = randomNotes(currentTracker)
         if (randomNote === '') {
             dispatch({type: COMPLETE_ROUND})
             if (getState().training.roundsComplete === 2) {
@@ -112,7 +112,7 @@ export function chooseRandomNote() {
             }
         } else {
             //chooses next target note
-            dispatch(targetNoteThunk(randomNote))
+            dispatch(targetNoteThunk(randomNote.first().get('name')))
         }
     }
 
@@ -128,8 +128,8 @@ const initialStateTracker = tracker;
 function increaseTracker(state = initialStateTracker, action) {
     switch (action.type) {
         case INCREASE_COUNT:
-            return state.update(state.findIndex((item) => item.get('name') === action.targetNote,
-                (item) => item.set('count', item.get('count') + 1)))
+            return state.update(state.findIndex((item) => item.get('name') === action.targetNote),
+                (item) => item.set('count', item.get('count') + 1))
         default:
             return state
     }
@@ -169,12 +169,12 @@ export default function training(state = initialState, action) {
             })
         case CHECK_CORRECT:
             return state.merge({
-                attempts: state.get('attempts') + 1,
-                correct: (state.targetNote === state.selectedNote)
+                attempts: state.set('attempts', state.get('attempts') + 1),
+                correct: (state.get('targetNote') === state.get('selectedNote'))
             })
         case NOTE_MISSED:
             return state.merge({
-                notesMissed: state.get('notesMissed').concat(state.targetNote)
+                notesMissed: state.get('notesMissed').push(state.targetNote)
             })
         case INCREASE_COUNT:
             return state.merge({
