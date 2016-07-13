@@ -13,12 +13,6 @@ function targetNoteChosen(targetNoteChosen) {
     }
 }
 
-export function targetNotePlayed() {
-    return {
-        type: TARGET_NOTE_PLAYED
-    }
-}
-
 export function selectedNoteChosen(selectedNoteChosen) {
     return {
         type: SELECTED_NOTE_CHOSEN,
@@ -36,7 +30,8 @@ export function targetNoteThunk(targetNoteChosen){
 const initialState = Map({
     targetNoteChosen: "",
     targetNotePlayed: false,
-    selectedNoteChosen: ""
+    selectedNoteChosen: "",
+    selectedNotePlayed: false
 })
 
 export default function notes(state = {}, action) {
@@ -44,15 +39,15 @@ export default function notes(state = {}, action) {
         case(TARGET_NOTE_CHOSEN):
             return state.merge({
                 targetNoteChosen: action.targetNoteChosen,
-                selectedNoteChosen: ''
-            })
-        case(TARGET_NOTE_PLAYED):
-            return state.merge({
+                selectedNoteChosen: '',
                 targetNotePlayed: true
             })
+
         case(SELECTED_NOTE_CHOSEN):
             return state.merge({
-                selectedNoteChosen: action.selectedNoteChosen
+                selectedNoteChosen: action.selectedNoteChosen,
+                selectedNotePlayed: true,
+                targetNotePlayed: false
             })
         default:
             return state

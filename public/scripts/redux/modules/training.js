@@ -11,20 +11,22 @@ const CHOOSE_RANDOM_NOTE = 'CHOOSE_RANDOM_NOTE'
 const SET_DATE_COMPLETE = 'SET_DATE_COMPLETE'
 const COMPLETE_ROUND = 'COMPLETE_ROUND'
 
-const tracker = [{name: 'C4', count: 0},
-    {name: 'Db4', count: 0, missed: 0},
-    {name: 'D4', count: 0, missed: 0},
-    {name: 'Eb4', count: 0, missed: 0},
-    {name: 'E4', count: 0, missed: 0},
-    {name: 'F4', count: 0, missed: 0},
-    {name: 'Gb4', count: 0, missed: 0},
-    {name: 'G4', count: 0, missed: 0},
-    {name: 'Ab4', count: 0, missed: 0},
-    {name: 'A4', count: 0, missed: 0},
-    {name: 'Bb4', count: 0, missed: 0},
-    {name: 'B4', count: 0, missed: 0}]
+const tracker = [
+    {name: 'C4', count: 0},
+    {name: 'Db4', count: 0},
+    {name: 'D4', count: 0},
+    {name: 'Eb4', count: 0},
+    {name: 'E4', count: 0},
+    {name: 'F4', count: 0},
+    {name: 'Gb4', count: 0},
+    {name: 'G4', count: 0},
+    {name: 'Ab4', count: 0},
+    {name: 'A4', count: 0},
+    {name: 'Bb4', count: 0},
+    {name: 'B4', count: 0}
+]
 
-//on every click
+//on every note click
 export function checkCorrect(targetNote, selectedNoteChosen) {
     return {
         type: CHECK_CORRECT,
@@ -57,6 +59,7 @@ export function chooseRandomNote() {
                 dispatch(setDateComplete)
             }
         } else {
+            //chooses next target note
             dispatch(targetNoteThunk(randomNote))
         }
     }
@@ -66,9 +69,6 @@ export function chooseRandomNote() {
 function completeRound() {
     return {type: COMPLETE_ROUND}
 }
-
-
-//type: GET_NOTES_MISSED
 
 //reducer composition:
 const initialStateTracker = tracker;
