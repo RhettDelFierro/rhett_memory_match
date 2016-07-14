@@ -12,8 +12,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 const PATHS = {
     app: path.join(__dirname, 'public/scripts'),
     build: path.join(__dirname, 'public/dist'),
-    images: path.join(__dirname, 'public/images'),
-    sounds: path.join(__dirname, 'public/sounds')
+    assets: path.join(__dirname, 'public/assets')
 };
 
 //to figure out if we are in a production build or development build:
@@ -42,7 +41,6 @@ const productionPlugin = new webpack.DefinePlugin({
 //configurations for development and production builds. Shared.
 const base = {
     entry: [
-        'babel-polyfill',
         PATHS.app
     ],
     output: {
@@ -54,7 +52,7 @@ const base = {
             {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
             //the css modules need the source map so your components can have individual style sheets.
             {test: /\.css$/, loader: "style!css?sourceMap&modules&localIdentName=[name]__[local]___[hash:base64:5]"},
-            {test: /\.(jpg|png)$/, include: PATHS.images,  loader: 'url?limit=25000'}
+            {test: /\.(mp3)$/, include: PATHS.assets,  loader: 'url?limit=250000000'}
         ]
     },
     //allows to not use relative path directories, just the direct path from the value..

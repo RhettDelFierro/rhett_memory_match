@@ -49,7 +49,7 @@ export function playNote(note, time, volume) {
 
     return function (dispatch, getState) {
         playNotes(note, time, volume)
-            .then(() => makeNoise()
+            .then(() => makeNoise())
                 .then(() => {
                     //random notes
                     console.log('random notes')
@@ -59,7 +59,7 @@ export function playNote(note, time, volume) {
                 }).then(()=> {
                     dispatch(chooseRandomNote)
                 })
-            ).catch((error) => Error('error in promise chain', error))
+            .catch((error) => Error('error in promise chain', error))
 
     }
 }
@@ -96,6 +96,7 @@ export function startGame() {
     return function (dispatch) {
         loadNotes().then((data) => {
             //dispatch the random targetNote action
+            console.log(data)
             dispatch({type: START_GAME})
 
         })

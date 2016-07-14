@@ -1,4 +1,4 @@
-import { Map, List, fromJS, Iterable } from 'immutable'
+import { Map, List, fromJS, Iterable, toJS } from 'immutable'
 import { notes, context } from 'scripts/config/constants'
 
 export function counterIncrement(targetNote, counter) {
@@ -26,51 +26,53 @@ export function randomNotes(tracker) {
 
 let loadSound = function (obj) {
 
-    return new Promise((resolve, reject) => {
-        const src = obj.get('src')
+        const { src } = obj
+
         var request = new XMLHttpRequest();
         request.open('GET', `${src}.mp3`, true);
         request.responseType = 'arraybuffer';
-
         request.onload = function () {
+            if (request.response === 200) {
+                console.log('request successful')
+            }
             // request.response is encoded... so decode it now
-            context.decodeAudioData(request.response)
+             context.decodeAudioData(request.response)
                 .then((buffer) => {
-                    obj.set('buffer', buffer)
-                    resolve(true)
+                    obj.buffer = buffer
                 }).catch((err) => {
-                reject(Error('loadSound error', err))
-            })
+                console.log(err)
+            });
 
             request.send();
         }
         //end of promise
-    })
 }
 
 export function loadNotes() {
-    //load the property names of the notes map:
-    //function loadSounds(map) {
-    //    Promise.all(map.map((note) => loadSound(note)
-    //    )).then((data) => data ).catch((err) => Error('Promise.all error:', err));
-    //}
-    //
-    //loadSounds(notes);
-    return Promise.all(notes.map((note) => loadSound(note))).then((data) => data ).catch((err) => Error('Promise.all error:', err));
+
+    for (let note in notes) {
+        if (notes.hasOwnProperty(note)) {
+            // load sound
+            loadSound(notes[note])
+        }
+    }
+
+    console.log(notes)
+
+    //return Promise.all(notes.map((note) => loadSound(note))).then((data) => {console.log(notes)}).catch((err) => Error('Promise.all error:', err));
 }
 
 export function playNotes(note, seconds = 1, volume = 1) {
     return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
-        source.buffer = notes.getIn([note, 'buffer']);
+        source.buffer = notes[note].buffer
         console.log('source.buffer', source.buffer)
         //code for the volume
-        notes.setIn([note, 'gainNode'], context.createGain())
-        source.connect(notes.getIn([note, 'gainNode']))
-        notes.setIn([note, 'volume'], volume)
-        notes.setIn([note, 'gainNode', 'gain', 'value'], notes.getIn([note, 'volume']))
-        let connect = notes.getIn([note, 'gainNode', 'connect'])
-        connect()
+        notes[note].gainNode = context.createGain()
+        source.connect(notes[note].gainNode)
+        notes[note].volume = volume
+        notes[note].gainNode.gain.value = notes[note].volume
+        notes[note].gainNode.connect()
 
         resolve(source.start(0, 0, seconds));
     })
