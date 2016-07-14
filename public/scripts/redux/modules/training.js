@@ -45,20 +45,21 @@ export function selectedNoteChosen(selectedNote) {
     }
 }
 
-export function playNote({note, time, volume}) {
+export function playNote(note, time, volume) {
 
     return function (dispatch, getState) {
         playNotes(note, time, volume)
             .then(() => makeNoise()
                 .then(() => {
                     //random notes
+                    console.log('random notes')
                     const currentTracker = getState().training.tracker
                     let randomMaskingNotes = playNotes(currentTracker)
                     Promise.all(playNotes(randomMaskingNotes.map((note) => note), 0, 2))
                 }).then(()=> {
                     dispatch(chooseRandomNote)
                 })
-            )
+            ).catch((error) => Error('error in promise chain', error))
 
     }
 }
@@ -78,6 +79,7 @@ export function checkCorrect() {
 }
 
 export function noteMissed() {
+    console.log('noteMissed')
     return {
         type: NOTE_MISSED
     }

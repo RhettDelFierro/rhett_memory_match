@@ -62,8 +62,8 @@ export function loadNotes() {
 export function playNotes(note, seconds = 1, volume = 1) {
     return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
-        console.log(note)
         source.buffer = notes.getIn([note, 'buffer']);
+        console.log('source.buffer', source.buffer)
         //code for the volume
         notes.setIn([note, 'gainNode'], context.createGain())
         source.connect(notes.getIn([note, 'gainNode']))
