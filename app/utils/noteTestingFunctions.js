@@ -20,34 +20,44 @@ export function randomNotes(tracker) {
     return randomNotes.size > 0 ? randomNotes.get(Math.floor(randomNotes.size * Math.random())) : ''
 }
 
-
-//called on TrainingContainer Mount to use the closure in the child components.
-
-
-let loadSound = function (obj) {
-    return new Promise((resolve,reject) => {
-        const { src } = obj.get('src')
-        console.log(context)
+function loadSoundRequest(obj) {
+    return new Promise((resolve, reject) => {
+        const src = obj.get('src')
         var request = new XMLHttpRequest();
         request.open('GET', src, true);
         request.responseType = 'arraybuffer';
 
         request.onload = function () {
-            // request.response is encoded... so decode it now
-            context.decodeAudioData(request.response).then((buffer) => {
-                obj.buffer = buffer;
-                resolve(obj)
-            }).catch((err) => {
-                console.log(err);
-            });
+            if (request.status === 200) {
+                resolve(request.response)
+            }
         }
-        //end of promise
         request.send();
     })
 }
 
+function bufferSound(response) {
+   return context.decodeAudioData(response)
+}
+
+function loadSounds(note) {
+    loadSoundRequest(note)
+        .then(bufferSound)
+        .then((buffer) => {
+            return note.set('buffer', buffer)
+        })
+}
+
+
 export function loadNotes() {
 
+    //const promises =
+
+    return Promise.all(notes.map((note) => loadSounds(note)))
+        .then((data) => {
+            return data
+        })
+        .catch((err) => Error('Promise.all error:', err));
     //const promises = []
     //
     //for (let note in notes) {
@@ -57,8 +67,13 @@ export function loadNotes() {
     //    }
     //}
     //console.log(promises)
-    return Promise.all(notes.map((note) => loadSound(note))).then((data) => data.map((note) => notes.merge({note})))
-        .catch((err) => Error('Promise.all error:', err));
+    //return Promise.all(promises).then((data) => {
+    //        console.log('data', data)
+    //        data.map((item) => {
+    //            notes.merge(item)
+    //        })
+    //    })
+    //    .catch((err) => Error('Promise.all error:', err));
 }
 
 export function playNotes(note, seconds = 1, volume = 1) {

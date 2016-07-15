@@ -2,7 +2,7 @@ import { fromJS } from 'immutable'
 
 export const sixMonths = 1.577e+10
 export const context = new AudioContext || new window.webkitAudioContext;
-export const notes = {
+export const notes = fromJS({
     A4: {
         src: require('assets/sounds/piano/A4.mp3'),
         volume: 1
@@ -51,4 +51,4 @@ export const notes = {
         src: require('assets/sounds/piano/Gb4.mp3'),
         volume: 1
     }
-}
+})
