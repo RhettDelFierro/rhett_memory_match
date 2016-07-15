@@ -3,16 +3,16 @@ import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-    template: __dirname + "/templates/index.html",
+    template: __dirname + "/app/index.html",
     filename: "index.html",
     inject: "body"
 });
 
 //just points to app and build directory. Will modify our entry to use these.
 const PATHS = {
-    app: path.join(__dirname, 'public/scripts'),
-    build: path.join(__dirname, 'public/dist'),
-    assets: path.join(__dirname, 'public/assets')
+    app: path.join(__dirname, 'app'),
+    build: path.join(__dirname, 'dist'),
+    assets: path.join(__dirname, 'app/assets')
 };
 
 //to figure out if we are in a production build or development build:
@@ -41,6 +41,7 @@ const productionPlugin = new webpack.DefinePlugin({
 //configurations for development and production builds. Shared.
 const base = {
     entry: [
+        'babel-polyfill',
         PATHS.app
     ],
     output: {
@@ -52,12 +53,14 @@ const base = {
             {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
             //the css modules need the source map so your components can have individual style sheets.
             {test: /\.css$/, loader: "style!css?sourceMap&modules&localIdentName=[name]__[local]___[hash:base64:5]"},
-            {test: /\.(mp3)$/, include: PATHS.assets,  loader: 'url?limit=250000000'}
+            {test: /\.jpg$/, loader: 'url?limit=25000000'}, //anything to the right of the '?' in the 'loader' key can also be placed in a 'query' parameter as key:value pairs. That way it'll just be loader: url.
+            {test: /\.mp3$/, loader: 'file?name=[path][name].[ext]'}
+
         ]
     },
     //allows to not use relative path directories, just the direct path from the value..
     resolve: {
-        root: path.resolve('./public')
+        root: path.resolve('./app')
     }
 };
 
