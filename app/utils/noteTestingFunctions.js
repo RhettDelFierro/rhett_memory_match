@@ -25,42 +25,40 @@ export function randomNotes(tracker) {
 
 
 let loadSound = function (obj) {
-    return new Promise((resolve, reject) => {
-        const { src } = obj
-        console.log(obj)
+    return new Promise((resolve,reject) => {
+        const { src } = obj.get('src')
+        console.log(context)
         var request = new XMLHttpRequest();
         request.open('GET', src, true);
         request.responseType = 'arraybuffer';
+
         request.onload = function () {
             // request.response is encoded... so decode it now
             context.decodeAudioData(request.response).then((buffer) => {
-                console.log(buffer)
                 obj.buffer = buffer;
                 resolve(obj)
             }).catch((err) => {
                 console.log(err);
             });
-
-            request.send();
         }
         //end of promise
+        request.send();
     })
 }
 
 export function loadNotes() {
 
-    const promises = []
-
-    for (let note in notes) {
-        if (notes.hasOwnProperty(note)) {
-            // load sound
-            promises.push(loadSound(notes[note]))
-        }
-    }
-    console.log(promises)
-    return Promise.all(promises).then((data) => {
-        data.map((obj) => obj)
-    }).catch((err) => Error('Promise.all error:', err));
+    //const promises = []
+    //
+    //for (let note in notes) {
+    //    if (notes.hasOwnProperty(note)) {
+    //        // load sound
+    //        promises.push(loadSound(notes[note]))
+    //    }
+    //}
+    //console.log(promises)
+    return Promise.all(notes.map((note) => loadSound(note))).then((data) => data.map((note) => notes.merge({note})))
+        .catch((err) => Error('Promise.all error:', err));
 }
 
 export function playNotes(note, seconds = 1, volume = 1) {
