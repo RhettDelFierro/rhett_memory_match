@@ -94,11 +94,9 @@ export function increaseCount(targetNote) {
 
 export function startGame() {
     return function (dispatch) {
-        loadNotes().then((data) => {
-            //dispatch the random targetNote action
-            console.log(data)
-            dispatch({type: START_GAME})
-
+        loadNotes().then((notesUsed) => {
+            console.log(fromJS(notesUsed))
+            dispatch({type: START_GAME, notesUsed: fromJS(notesUsed)})
         })
     }
 }
@@ -151,7 +149,8 @@ const initialState = fromJS({
     targetNote: "",
     targetNotePlayed: false,
     selectedNote: "",
-    selectedNotePlayed: false
+    selectedNotePlayed: false,
+    notesUsed: {}
 })
 
 export default function training(state = initialState, action) {
@@ -185,6 +184,7 @@ export default function training(state = initialState, action) {
             })
         case START_GAME:
             return state.merge({
+                notesUsed: state.set('notesUsed', action.notesUsed),
                 start: true
             })
         case SET_DATE_COMPLETE:

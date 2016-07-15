@@ -20,42 +20,62 @@ export function randomNotes(tracker) {
     return randomNotes.size > 0 ? randomNotes.get(Math.floor(randomNotes.size * Math.random())) : ''
 }
 
-function loadSoundRequest(obj) {
+function loadSoundRequest(note, obj) {
+
     return new Promise((resolve, reject) => {
-        const src = obj.get('src')
+        const { src } = obj
+        console.log(src)
         var request = new XMLHttpRequest();
         request.open('GET', src, true);
         request.responseType = 'arraybuffer';
 
         request.onload = function () {
-            if (request.status === 200) {
-                resolve(request.response)
-            }
+
+            context.decodeAudioData(request.response)
+                .then((buffer)=> {
+                        obj.buffer = buffer
+                        resolve({note, obj})
+                    }
+                )
         }
         request.send();
     })
 }
 
-function bufferSound(response) {
-   return context.decodeAudioData(response)
-}
-
-function loadSounds(note) {
-    loadSoundRequest(note)
-        .then(bufferSound)
-        .then((buffer) => {
-            return note.set('buffer', buffer)
-        })
-}
+//function bufferSound(response) {
+//    console.log(response)
+//    return context.decodeAudioData(response)
+//}
+//
+//function loadSounds(note) {
+//    loadSoundRequest(note)
+//        .then(bufferSound)
+//        .then((buffer) => {
+//            console.log(buffer)
+//            return note.buffer = buffer
+//        })
+//}
 
 
 export function loadNotes() {
 
-    //const promises =
+    const promises = [];
+    const obj = notes.toJS();
 
-    return Promise.all(notes.map((note) => loadSounds(note)))
+    for (var note in obj) {
+        if (obj.hasOwnProperty(note)) {
+            // load sound
+            promises.push(loadSoundRequest(note, obj[note]))
+        }
+    }
+
+    return Promise.all(promises)
         .then((data) => {
-            return data
+            data.map((item) => {
+                    obj[item.note] = item.obj
+                }
+            )
+            return obj
         })
         .catch((err) => Error('Promise.all error:', err));
     //const promises = []
@@ -75,6 +95,7 @@ export function loadNotes() {
     //    })
     //    .catch((err) => Error('Promise.all error:', err));
 }
+
 
 export function playNotes(note, seconds = 1, volume = 1) {
     return new Promise((resolve, reject) => {
