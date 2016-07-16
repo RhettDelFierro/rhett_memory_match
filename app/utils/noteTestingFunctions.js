@@ -42,21 +42,6 @@ function loadSoundRequest(note, obj) {
     })
 }
 
-//function bufferSound(response) {
-//    console.log(response)
-//    return context.decodeAudioData(response)
-//}
-//
-//function loadSounds(note) {
-//    loadSoundRequest(note)
-//        .then(bufferSound)
-//        .then((buffer) => {
-//            console.log(buffer)
-//            return note.buffer = buffer
-//        })
-//}
-
-
 export function loadNotes() {
 
     const promises = [];
@@ -78,24 +63,7 @@ export function loadNotes() {
             return obj
         })
         .catch((err) => Error('Promise.all error:', err));
-    //const promises = []
-    //
-    //for (let note in notes) {
-    //    if (notes.hasOwnProperty(note)) {
-    //        // load sound
-    //        promises.push(loadSound(notes[note]))
-    //    }
-    //}
-    //console.log(promises)
-    //return Promise.all(promises).then((data) => {
-    //        console.log('data', data)
-    //        data.map((item) => {
-    //            notes.merge(item)
-    //        })
-    //    })
-    //    .catch((err) => Error('Promise.all error:', err));
 }
-
 
 export function playNotes(note, seconds = 1, volume = 1) {
     return new Promise((resolve, reject) => {
