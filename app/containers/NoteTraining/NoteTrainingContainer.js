@@ -18,13 +18,11 @@ class NoteTrainingContainer extends Component {
         if (newProps.start) {
             //user has guessed:
             if (newProps.selectedNotePlayed && !newProps.targetNotePlayed && !newProps.onCheck) {
-                console.log('componentwillreceiveprops')
                 //this.props.chooseRandomNote() //problem- we're going to generate a random note every time.
                 this.props.checkCorrect(this.props.targetNote, this.props.selectedNote)
             }
             //handles incorrect.:
             if (!newProps.targetNotePlayed && !newProps.correct && newProps.attempts !== 0) {
-                console.log('2nd component will receive props')
                 this.props.noteMissed()
                 this.props.playNote(this.props.targetNote, 1, 1)
             }

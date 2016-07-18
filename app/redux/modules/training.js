@@ -48,14 +48,18 @@ export function selectedNoteChosen(selectedNote) {
 export function playNote(note, time, volume) {
 
     return function (dispatch, getState) {
+        console.log(makeNoise)
         playNotes(note, time, volume)
-            .then(() => makeNoise())
-            .then(() => {
+            .then((sound) => {
+                return makeNoise()
+            })
+            .then((noise) => {
+                noise()
                 //random notes
                 console.log('random notes')
                 const currentTracker = getState().training.tracker
                 let randomMaskingNotes = playNotes(currentTracker)
-                Promise.all(playNotes(randomMaskingNotes.map((note) => note), 0, 2))
+                return Promise.all(playNotes(randomMaskingNotes.map((note) => note), 0, 2))
             }).then(()=> {
                 dispatch(chooseRandomNote)
             })
@@ -73,7 +77,6 @@ export function targetNoteThunk(targetNote) {
 
 //on every note click
 export function checkCorrect() {
-    console.log('check correct')
     return {
         type: CHECK_CORRECT
     }
@@ -95,7 +98,6 @@ export function increaseCount(targetNote) {
 export function startGame() {
     return function (dispatch) {
         loadNotes().then((notesUsed) => {
-            console.log(fromJS(notesUsed))
             dispatch({type: START_GAME, notesUsed: fromJS(notesUsed)})
         })
     }

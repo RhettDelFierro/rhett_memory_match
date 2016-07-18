@@ -24,7 +24,6 @@ function loadSoundRequest(note, obj) {
 
     return new Promise((resolve, reject) => {
         const { src } = obj
-        console.log(src)
         var request = new XMLHttpRequest();
         request.open('GET', src, true);
         request.responseType = 'arraybuffer';
@@ -65,17 +64,21 @@ export function loadNotes() {
 }
 
 export function playNotes(note, seconds = 1, volume = 1) {
-    const source = context.createBufferSource();
-    source.buffer = notes[note].buffer
-    //code for the volume
-    notes[note].gainNode = context.createGain()
-    source.connect(notes[note].gainNode)
-    notes[note].volume = volume
-    notes[note].gainNode.gain.value = notes[note].volume
-    notes[note].gainNode.connect(context.destination)
 
+    return new Promise((resolve, reject) => {
+        const source = context.createBufferSource();
+        source.buffer = notes[note].buffer
+        //code for the volume
+        notes[note].gainNode = context.createGain()
+        source.connect(notes[note].gainNode)
+        notes[note].volume = volume
+        notes[note].gainNode.gain.value = notes[note].volume
+        notes[note].gainNode.connect(context.destination)
 
-    source.start(0, 0, seconds)
+        //figure out how to use as a promise
+        resolve(source.start(0, 0, seconds))
+
+    })
 }
 
 //make for Redux
@@ -92,23 +95,27 @@ export function maskingNotes(tracker) {
 
 //make adjustments to have volume control.
 export function makeNoise() {
-    var node = context.createBufferSource()
-        , buffer = context.createBuffer(1, 4096, context.sampleRate)
-        , data = buffer.getChannelData(0);
 
-    for (var i = 0; i < 4096; i++) {
-        data[i] = Math.random();
-    }
+    return new Promise((resolve, reject) => {
+        console.log('get to here?')
+        var node = context.createBufferSource()
+            , buffer = context.createBuffer(1, 4096, context.sampleRate)
+            , data = buffer.getChannelData(0);
 
-    node.buffer = buffer;
+        for (var i = 0; i < 4096; i++) {
+            data[i] = Math.random();
+        }
 
-    //volume- This works!
-    var gain = context.createGain();
-    gain.gain.value = 0.007;
-    node.connect(gain);
-    gain.connect(context.destination);
+        node.buffer = buffer;
 
-    node.loop = true;
-    node.start(0, 0, 1);
+        //volume- This works!
+        var gain = context.createGain();
+        gain.gain.value = 0.007;
+        node.connect(gain);
+        gain.connect(context.destination);
+
+        node.loop = true;
+        resolve(node.start(0, 1, 1));
+    })
 }
 
