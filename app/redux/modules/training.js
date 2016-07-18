@@ -50,15 +50,15 @@ export function playNote(note, time, volume) {
     return function (dispatch, getState) {
         playNotes(note, time, volume)
             .then(() => makeNoise())
-                .then(() => {
-                    //random notes
-                    console.log('random notes')
-                    const currentTracker = getState().training.tracker
-                    let randomMaskingNotes = playNotes(currentTracker)
-                    Promise.all(playNotes(randomMaskingNotes.map((note) => note), 0, 2))
-                }).then(()=> {
-                    dispatch(chooseRandomNote)
-                })
+            .then(() => {
+                //random notes
+                console.log('random notes')
+                const currentTracker = getState().training.tracker
+                let randomMaskingNotes = playNotes(currentTracker)
+                Promise.all(playNotes(randomMaskingNotes.map((note) => note), 0, 2))
+            }).then(()=> {
+                dispatch(chooseRandomNote)
+            })
             .catch((error) => Error('error in promise chain', error))
 
     }
@@ -73,13 +73,13 @@ export function targetNoteThunk(targetNote) {
 
 //on every note click
 export function checkCorrect() {
+    console.log('check correct')
     return {
         type: CHECK_CORRECT
     }
 }
 
 export function noteMissed() {
-    console.log('noteMissed')
     return {
         type: NOTE_MISSED
     }
@@ -150,7 +150,8 @@ const initialState = fromJS({
     targetNotePlayed: false,
     selectedNote: "",
     selectedNotePlayed: false,
-    notesUsed: {}
+    notesUsed: {},
+    onCheck: false
 })
 
 export default function training(state = initialState, action) {
@@ -171,12 +172,14 @@ export default function training(state = initialState, action) {
             })
         case CHECK_CORRECT:
             return state.merge({
-                attempts: state.set('attempts', state.get('attempts') + 1),
-                correct: (state.get('targetNote') === state.get('selectedNote'))
+                //attempts: state.set('attempts', state.get('attempts') + 1),
+                attempts: state.get('attempts') + 1,
+                correct: (state.get('targetNote') === state.get('selectedNote')),
+                onCheck: true
             })
         case NOTE_MISSED:
             return state.merge({
-                notesMissed: state.get('notesMissed').push(state.targetNote)
+                notesMissed: state.get('notesMissed').push(state.get('targetNote'))
             })
         case INCREASE_COUNT:
             return state.merge({

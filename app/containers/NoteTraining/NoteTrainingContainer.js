@@ -16,12 +16,12 @@ class NoteTrainingContainer extends Component {
         //remember, we're accessing a store.
         if (newProps.start) {
             //user has guessed:
-            if (newProps.selectedNotePlayed && !newProps.targetNotePlayed) {
+            if (newProps.selectedNotePlayed && !newProps.targetNotePlayed && !this.props.onCheck) {
                 console.log('componentwillreceiveprops')
                 //this.props.chooseRandomNote() //problem- we're going to generate a random note every time.
                 this.props.checkCorrect(this.props.targetNote, this.props.selectedNote)
             }
-            //first render after start is running this:
+            //handles incorrect.:
             if (!newProps.targetNotePlayed && !newProps.correct && this.props.attempts !== 0) {
                 this.props.noteMissed()
                 this.props.playNote(this.props.targetNote, 1, 1)
@@ -54,7 +54,8 @@ NoteTrainingContainer.propTypes = {
     checkCorrect: PropTypes.func.isRequired,
     playNote: PropTypes.func.isRequired,
     noteMissed: PropTypes.func.isRequired,
-    selectedNotePlayed: PropTypes.bool.isRequired
+    selectedNotePlayed: PropTypes.bool.isRequired,
+    onCheck: PropTypes.bool.isRequired
 }
 
 function mapStateToProps({training}) {
@@ -65,7 +66,8 @@ function mapStateToProps({training}) {
         start: training.get('start'),
         selectedNote: training.get('selectedNote'),
         tracker: training.get('tracker'),
-        selectedNotePlayed: training.get('selectedNotePlayed')
+        selectedNotePlayed: training.get('selectedNotePlayed'),
+        onCheck: training.get('onCheck')
     }
 }
 

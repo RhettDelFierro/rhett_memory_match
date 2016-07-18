@@ -66,7 +66,6 @@ export function loadNotes() {
 }
 
 export function playNotes(note, seconds = 1, volume = 1) {
-    return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
         source.buffer = notes[note].buffer
         console.log('source.buffer', source.buffer)
@@ -76,9 +75,7 @@ export function playNotes(note, seconds = 1, volume = 1) {
         notes[note].volume = volume
         notes[note].gainNode.gain.value = notes[note].volume
         notes[note].gainNode.connect()
-
-        resolve(source.start(0, 0, seconds));
-    })
+        source.start(0, 0, seconds)
 }
 
 //make for Redux
