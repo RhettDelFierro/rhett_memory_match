@@ -45,37 +45,37 @@ function loadSoundRequest(note, obj) {
 export function loadNotes() {
 
     const promises = [];
-    const obj = notes.toJS();
 
-    for (var note in obj) {
-        if (obj.hasOwnProperty(note)) {
+    for (var note in notes) {
+        if (notes.hasOwnProperty(note)) {
             // load sound
-            promises.push(loadSoundRequest(note, obj[note]))
+            promises.push(loadSoundRequest(note, notes[note]))
         }
     }
 
     return Promise.all(promises)
         .then((data) => {
             data.map((item) => {
-                    obj[item.note] = item.obj
+                    notes[item.note] = item.obj
                 }
             )
-            return obj
+            return notes
         })
         .catch((err) => Error('Promise.all error:', err));
 }
 
 export function playNotes(note, seconds = 1, volume = 1) {
-        const source = context.createBufferSource();
-        source.buffer = notes[note].buffer
-        console.log('source.buffer', source.buffer)
-        //code for the volume
-        notes[note].gainNode = context.createGain()
-        source.connect(notes[note].gainNode)
-        notes[note].volume = volume
-        notes[note].gainNode.gain.value = notes[note].volume
-        notes[note].gainNode.connect()
-        source.start(0, 0, seconds)
+    const source = context.createBufferSource();
+    source.buffer = notes[note].buffer
+    //code for the volume
+    notes[note].gainNode = context.createGain()
+    source.connect(notes[note].gainNode)
+    notes[note].volume = volume
+    notes[note].gainNode.gain.value = notes[note].volume
+    notes[note].gainNode.connect(context.destination)
+
+
+    source.start(0, 0, seconds)
 }
 
 //make for Redux

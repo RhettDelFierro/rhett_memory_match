@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 import { makeNotesObject } from 'utils/noteTestingFunctions'
 import * as trainingActionCreators from 'redux/modules/training'
 import { container } from './styles.css'
+import { Map } from 'immutable'
 
 class NoteTrainingContainer extends Component {
     constructor() {
@@ -16,13 +17,14 @@ class NoteTrainingContainer extends Component {
         //remember, we're accessing a store.
         if (newProps.start) {
             //user has guessed:
-            if (newProps.selectedNotePlayed && !newProps.targetNotePlayed && !this.props.onCheck) {
+            if (newProps.selectedNotePlayed && !newProps.targetNotePlayed && !newProps.onCheck) {
                 console.log('componentwillreceiveprops')
                 //this.props.chooseRandomNote() //problem- we're going to generate a random note every time.
                 this.props.checkCorrect(this.props.targetNote, this.props.selectedNote)
             }
             //handles incorrect.:
-            if (!newProps.targetNotePlayed && !newProps.correct && this.props.attempts !== 0) {
+            if (!newProps.targetNotePlayed && !newProps.correct && newProps.attempts !== 0) {
+                console.log('2nd component will receive props')
                 this.props.noteMissed()
                 this.props.playNote(this.props.targetNote, 1, 1)
             }
@@ -55,7 +57,8 @@ NoteTrainingContainer.propTypes = {
     playNote: PropTypes.func.isRequired,
     noteMissed: PropTypes.func.isRequired,
     selectedNotePlayed: PropTypes.bool.isRequired,
-    onCheck: PropTypes.bool.isRequired
+    onCheck: PropTypes.bool.isRequired,
+    noteBuffer: PropTypes.instanceOf(Map)
 }
 
 function mapStateToProps({training}) {

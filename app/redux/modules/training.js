@@ -179,7 +179,8 @@ export default function training(state = initialState, action) {
             })
         case NOTE_MISSED:
             return state.merge({
-                notesMissed: state.get('notesMissed').push(state.get('targetNote'))
+                notesMissed: state.get('notesMissed').push(state.get('targetNote')),
+                noteBuffer: state.getIn('notesUsed', state.get(state.get('targetNote')))
             })
         case INCREASE_COUNT:
             return state.merge({
@@ -187,7 +188,7 @@ export default function training(state = initialState, action) {
             })
         case START_GAME:
             return state.merge({
-                notesUsed: state.set('notesUsed', action.notesUsed),
+                notesUsed: action.notesUsed,
                 start: true
             })
         case SET_DATE_COMPLETE:
