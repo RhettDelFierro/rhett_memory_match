@@ -63,8 +63,19 @@ export function loadNotes() {
         .catch((err) => Error('Promise.all error:', err));
 }
 
-export function playNotes(note, seconds = 1, volume = 1) {
+export async function handleIncorrect(note, time, volume, maskingNotes) {
+    try {
+        const playNote = await playNotes(note, time, volume)
+        const noise = await makeNoise(1000)
+        //const maskNotes = await Promise.all(playNotes(maskingNotes.map((note) => note), 2, 1))
+        return true
+    } catch (error) {
+        console.log('error in async function handleIncorrect', error)
+    }
+}
 
+//this is the api call:
+function playNotes(note, seconds = 1000, volume = 1) {
     return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
         source.buffer = notes[note].buffer
@@ -75,9 +86,11 @@ export function playNotes(note, seconds = 1, volume = 1) {
         notes[note].gainNode.gain.value = notes[note].volume
         notes[note].gainNode.connect(context.destination)
 
-        //figure out how to use as a promise
-        resolve(source.start(0, 0, seconds))
-
+        //yield before here?
+        source.start(0)
+        setTimeout(() => {
+            resolve(source.stop())
+        }, seconds)
     })
 }
 
@@ -94,9 +107,9 @@ export function maskingNotes(tracker) {
 }
 
 //make adjustments to have volume control.
-export function makeNoise() {
+export function makeNoise(seconds, volume) {
 
-        console.log('get to here?')
+    return new Promise((resolve, reject) => {
         var node = context.createBufferSource()
             , buffer = context.createBuffer(1, 4096, context.sampleRate)
             , data = buffer.getChannelData(0);
@@ -114,6 +127,10 @@ export function makeNoise() {
         gain.connect(context.destination);
 
         node.loop = true;
-        node.start(0, 1, 1)
+        node.start(0)
+        setTimeout(()=> {
+            resolve(node.stop())
+        }, seconds)
+    })
 }
 

@@ -1,5 +1,5 @@
 import { Map, List, fromJS } from 'immutable'
-import { randomNotes, loadNotes, playNotes, makeNoise } from 'utils/noteTestingFunctions'
+import { randomNotes, loadNotes, playNotes, makeNoise, maskingNotes, handleIncorrect } from 'utils/noteTestingFunctions'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -45,24 +45,22 @@ export function selectedNoteChosen(selectedNote) {
     }
 }
 
+
+
 export function playNote(note, time, volume) {
 
     return function (dispatch, getState) {
 
-        playNotes(note, time, volume)
-            .then((sound) => {
-                return makeNoise()
-            })
-            .then((noise) => {
-                //random notes
-                console.log('random notes')
-                const currentTracker = getState().training.tracker
-                let randomMaskingNotes = playNotes(currentTracker)
-                return Promise.all(playNotes(randomMaskingNotes.map((note) => note), 0, 2))
-            }).then(()=> {
+        const currentTracker = getState().training.get('tracker')
+        let randomMaskingNotes = maskingNotes(currentTracker)
+
+        //I also want to dispatch to handle the rendering of missed note.
+        console.log('is note defined:', note)
+        handleIncorrect(note, time, volume, randomMaskingNotes)
+            .then(() => {
                 dispatch(chooseRandomNote)
             })
-            .catch((error) => Error('error in promise chain', error))
+            .catch((error) => Error('error in playNote thunk', error))
 
     }
 }
