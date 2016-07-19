@@ -3,12 +3,12 @@
     border: 1px solid black;
     flex-wrap: nowrap;
     /*justify-content: center; going to just hard code the widths.*/
-    /*height: 300px;*/
+    height: 300px;
     position: relative;
-    /*width: 420px;*/
+    width: 420px;
 
     animation-name: fadeIn;
-    animation-duration: 2s;
+    animation-duration: 1s;
     animation-iteration-count: 1;
     animation-direction: normal;
     animation-timing-function: ease-out;
@@ -17,8 +17,10 @@
 }
 
 @keyframes fadeIn {
-    from { width: 0; height: 0; }
-    to   { width: 420px; height: 300px; }
+    /*from { width: 0; height: 0; }*/
+    /*to   { width: 420px; height: 300px; }*/
+    0% { opacity: 0}
+    100% { opacity: 1}
 }
 
 .container > *:hover {
