@@ -48,13 +48,12 @@ export function selectedNoteChosen(selectedNote) {
 export function playNote(note, time, volume) {
 
     return function (dispatch, getState) {
-        console.log(makeNoise)
+
         playNotes(note, time, volume)
             .then((sound) => {
                 return makeNoise()
             })
             .then((noise) => {
-                noise()
                 //random notes
                 console.log('random notes')
                 const currentTracker = getState().training.tracker

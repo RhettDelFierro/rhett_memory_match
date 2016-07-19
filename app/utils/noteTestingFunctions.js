@@ -96,7 +96,6 @@ export function maskingNotes(tracker) {
 //make adjustments to have volume control.
 export function makeNoise() {
 
-    return new Promise((resolve, reject) => {
         console.log('get to here?')
         var node = context.createBufferSource()
             , buffer = context.createBuffer(1, 4096, context.sampleRate)
@@ -110,12 +109,11 @@ export function makeNoise() {
 
         //volume- This works!
         var gain = context.createGain();
-        gain.gain.value = 0.007;
+        gain.gain.value = 0.010;
         node.connect(gain);
         gain.connect(context.destination);
 
         node.loop = true;
-        resolve(node.start(0, 1, 1));
-    })
+        node.start(0, 1, 1)
 }
 
