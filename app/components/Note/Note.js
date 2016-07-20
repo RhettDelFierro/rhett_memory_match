@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import { keyboardContainer, container, keys, minorKeys } from './styles.css'
+import { Map, List } from 'immutable'
 
 //function Keys({name, key, onnote}) {
 //    let keyClass = keys
@@ -11,27 +12,44 @@ import { keyboardContainer, container, keys, minorKeys } from './styles.css'
 //}
 
 function Note(props) {
+    let background = {backgroundColor: 'springgreen'}
+    let incorrect = props.correct ? '' : background
 
-    let incorrect = {backgroundColor: 'green'}
+    //can also just use tracker.get('name')
+    const notes = ['C4', 'Db4', 'D4', 'Eb4', 'E4', 'F4', 'Gb4', 'G4', 'Ab4', 'A4', 'Bb4', 'B4']
 
-    const notes = ['C4', 'Db', 'D4', 'Eb4', 'E4', 'F', 'Gb4', 'G4', 'Ab4', 'A', 'Bb4', 'B']
+    //{notes.map(note => {
+    //    let keyClass = keys
+    //    if (note[1] === 'b') {
+    //        keyClass = minorKeys
+    //    }
+    //
+    //    return (
+    //        <div
+    //            className={keyClass} id={note} key={note}
+    //            onClick={() => props.selectedNoteChosen(note)}>
+    //            {note}
+    //        </div>
+    //    )
+    //})
+    //}
 
     return (
         <div className={container}>
-            {notes.map(note => {
+            {props.tracker.map((note) => {
                 let keyClass = keys
-                if (note[1] === 'b') {
-                    keyClass = minorKeys;
+                if (note.get('name')[1] === 'b') {
+                    keyClass = minorKeys
                 }
+
                 return (
                     <div
-                        className={keyClass} id={note} key={note}
-                        onClick={() => props.selectedNoteChosen(note)}>
-                        {note}
+                        className={keyClass} id={note.get('name')} key={note.get('name')}
+                        onClick={() => props.selectedNoteChosen(note.get('name'))}>
+                        {note.get('name')}
                     </div>
                 )
-            })
-            }
+            })}
         </div>
     )
 }

@@ -65,7 +65,7 @@ export function playNote({ note, time, volume } ) {
     }
 }
 
-function completeGuess() {
+export function completeGuess() {
     return { type: COMPLETE_GUESS }
 }
 
@@ -123,7 +123,7 @@ export function chooseRandomNote() {
 
 }
 
-function completeRound() {
+export function completeRound() {
     return {type: COMPLETE_ROUND}
 }
 
@@ -155,7 +155,9 @@ const initialState = fromJS({
     selectedNote: "",
     selectedNotePlayed: false,
     notesUsed: {},
-    onCheck: false
+    onCheck: false,
+    roundCompleted: false
+
 })
 
 export default function training(state = initialState, action) {
@@ -163,7 +165,8 @@ export default function training(state = initialState, action) {
         case(TARGET_NOTE_CHOSEN):
             return state.merge({
                 targetNote: action.targetNote,
-                targetNotePlayed: true
+                targetNotePlayed: true,
+                roundCompleted: false
             })
         case(SELECTED_NOTE_CHOSEN):
             return state.merge({
@@ -206,7 +209,8 @@ export default function training(state = initialState, action) {
             })
         case COMPLETE_ROUND:
             return state.merge({
-                roundsCompleted: state.get('roundsCompleted') + 1
+                roundsCompleted: state.get('roundsCompleted') + 1,
+                roundCompleted: true
             })
         default:
             return state
