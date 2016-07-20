@@ -26,14 +26,16 @@ NoteContainer.propTypes = {
     targetNoteChosen: PropTypes.func.isRequired,
     correct: PropTypes.bool,
     targetNote: PropTypes.string,
-    tracker: PropTypes.instanceOf(List)
+    tracker: PropTypes.instanceOf(List),
+    onCheck: PropTypes.bool.isRequired
 }
 
 function mapStateToProps({training}) {
     return {
         targetNote: training.get('targetNote'),
         correct: training.get('correct'),
-        tracker: training.get('tracker')
+        tracker: training.get('tracker'),
+        onCheck: training.get('onCheck')
     }
 }
 

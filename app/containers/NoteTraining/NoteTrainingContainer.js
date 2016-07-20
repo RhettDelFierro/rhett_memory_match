@@ -25,7 +25,7 @@ class NoteTrainingContainer extends Component {
             if (!newProps.correct && newProps.onCheck) {
                 //console.log('componentwillreceiveprops 2')
                 this.props.noteMissed()
-                this.props.playNote({ note: this.props.targetNote, time: 1000, volume: 1 })
+                this.props.playIncorrect({ note: this.props.targetNote, time: 1000, volume: 1 })
             }
 
             if(newProps.correct && newProps.onCheck){
@@ -63,7 +63,8 @@ NoteTrainingContainer.propTypes = {
     selectedNotePlayed: PropTypes.bool.isRequired,
     onCheck: PropTypes.bool.isRequired,
     noteBuffer: PropTypes.instanceOf(Map),
-    completeGuess: PropTypes.func.isRequired
+    completeGuess: PropTypes.func.isRequired,
+    playIncorrect: PropTypes.func.isRequired
 }
 
 function mapStateToProps({training}) {

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { keyboardContainer, container, keys, minorKeys } from './styles.css'
+import { keyboardContainer, container, keys, minorKeys, incorrect } from './styles.css'
 import { Map, List } from 'immutable'
 
 //function Keys({name, key, onnote}) {
@@ -12,27 +12,7 @@ import { Map, List } from 'immutable'
 //}
 
 function Note(props) {
-    let background = {backgroundColor: 'springgreen'}
-    let incorrect = props.correct ? '' : background
 
-    //can also just use tracker.get('name')
-    const notes = ['C4', 'Db4', 'D4', 'Eb4', 'E4', 'F4', 'Gb4', 'G4', 'Ab4', 'A4', 'Bb4', 'B4']
-
-    //{notes.map(note => {
-    //    let keyClass = keys
-    //    if (note[1] === 'b') {
-    //        keyClass = minorKeys
-    //    }
-    //
-    //    return (
-    //        <div
-    //            className={keyClass} id={note} key={note}
-    //            onClick={() => props.selectedNoteChosen(note)}>
-    //            {note}
-    //        </div>
-    //    )
-    //})
-    //}
 
     return (
         <div className={container}>
@@ -40,6 +20,10 @@ function Note(props) {
                 let keyClass = keys
                 if (note.get('name')[1] === 'b') {
                     keyClass = minorKeys
+                }
+
+                if (!props.correct && props.targetNote === note.get('name') && props.onCheck) {
+                    keyClass = `${keyClass} ${incorrect}`
                 }
 
                 return (

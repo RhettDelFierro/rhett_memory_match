@@ -46,7 +46,7 @@ export function selectedNoteChosen(selectedNote) {
     }
 }
 
-export function playNote({ note, time, volume } ) {
+export function playIncorrect({ note, time, volume }) {
 
     return function (dispatch, getState) {
 
@@ -54,7 +54,26 @@ export function playNote({ note, time, volume } ) {
         let randomMaskingNotes = maskingNotes(currentTracker)
 
         //I also want to dispatch to handle the rendering of missed note.
-        handleIncorrect( { note, time, volume, randomMaskingNotes })
+        handleIncorrect({note, time, volume, randomMaskingNotes})
+            .then((maskingNotes) => {
+                //dispatch other action creators to reset.
+                dispatch(completeGuess())
+                //maskingNotes is a resolved promise. Not going to do anything with it.
+                dispatch(chooseRandomNote())
+            })
+            .catch((error) => Error('error in playNote thunk', error))
+    }
+}
+
+export function playNote({ note, time, volume }) {
+
+    return function (dispatch, getState) {
+
+        const currentTracker = getState().training.get('tracker')
+        let randomMaskingNotes = maskingNotes(currentTracker)
+
+        //I also want to dispatch to handle the rendering of missed note.
+        handleIncorrect({note, time, volume, randomMaskingNotes})
             .then((maskingNotes) => {
                 //dispatch other action creators to reset.
                 dispatch(completeGuess())
@@ -66,13 +85,15 @@ export function playNote({ note, time, volume } ) {
 }
 
 export function completeGuess() {
-    return { type: COMPLETE_GUESS }
+    return {type: COMPLETE_GUESS}
 }
 
 export function targetNoteThunk(targetNote) {
     return function (dispatch, getState) {
-        dispatch(targetNoteChosen(targetNote))
-        dispatch(increaseCount(targetNote))
+        playNotes({note: targetNote}).then(() => {
+            dispatch(targetNoteChosen(targetNote))
+            dispatch(increaseCount(targetNote))
+        })
     }
 }
 
@@ -203,7 +224,7 @@ export default function training(state = initialState, action) {
         case COMPLETE_GUESS:
             return state.merge({
                 targetNote: '',
-                selectedNote:'',
+                selectedNote: '',
                 selectedNotePlayed: false,
                 onCheck: false
             })

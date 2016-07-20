@@ -50,6 +50,10 @@
     color: white;
 }
 
+.incorrect {
+    background-color: springgreen;
+}
+
 p {
     align-self: flex-end;
     margin-left: auto;
