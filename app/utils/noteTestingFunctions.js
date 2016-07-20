@@ -77,7 +77,7 @@ export async function handleIncorrect({ note, time, volume, randomMaskingNotes }
 
 //this is the api call:
 function playNotes({ note, time = 1000, volume = 1 }) {
-    console.log(note)
+
     return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
         source.buffer = notes[note].buffer

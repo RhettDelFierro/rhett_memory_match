@@ -17,12 +17,13 @@ class NoteTrainingContainer extends Component {
         //remember, we're accessing a store.
         if (newProps.start) {
             //user has guessed:
-            if (newProps.selectedNotePlayed && !newProps.targetNotePlayed && !newProps.onCheck) {
-                //this.props.chooseRandomNote() //problem- we're going to generate a random note every time.
-                this.props.checkCorrect(this.props.targetNote, this.props.selectedNote)
+            if (newProps.selectedNotePlayed && !newProps.onCheck) {
+                console.log('componentwillreceiveprops 1')
+                this.props.checkCorrect()
             }
             //handles incorrect.:
-            if (!newProps.targetNotePlayed && !newProps.correct && newProps.attempts !== 0) {
+            if (!newProps.correct && newProps.onCheck) {
+                console.log('componentwillreceiveprops 2')
                 this.props.noteMissed()
                 this.props.playNote({ note: this.props.targetNote, time: 1000, volume: 1 })
             }

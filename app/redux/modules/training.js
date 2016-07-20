@@ -14,6 +14,7 @@ const TARGET_NOTE_PLAYED = 'TARGET_NOTE_PLAYED'
 const SELECTED_NOTE_CHOSEN = 'SELECTED NOTE CHOSEN'
 const NOTES_PATH = 'NOTES_PATH'
 const NOTE_MISSED = 'NOTE_MISSED'
+const COMPLETE_GUESS = 'COMPLETE_GUESS'
 
 const tracker = [
     {name: 'C4', count: 0},
@@ -45,8 +46,6 @@ export function selectedNoteChosen(selectedNote) {
     }
 }
 
-
-
 export function playNote({ note, time, volume } ) {
 
     return function (dispatch, getState) {
@@ -57,12 +56,17 @@ export function playNote({ note, time, volume } ) {
         //I also want to dispatch to handle the rendering of missed note.
         handleIncorrect( { note, time, volume, randomMaskingNotes })
             .then((maskingNotes) => {
+                //dispatch other action creators to reset.
+                dispatch(completeGuess())
                 //maskingNotes is a resolved promise. Not going to do anything with it.
-                dispatch(chooseRandomNote)
+                dispatch(chooseRandomNote())
             })
             .catch((error) => Error('error in playNote thunk', error))
-
     }
+}
+
+function completeGuess() {
+    return { type: COMPLETE_GUESS }
 }
 
 export function targetNoteThunk(targetNote) {
@@ -95,7 +99,7 @@ export function increaseCount(targetNote) {
 export function startGame() {
     return function (dispatch) {
         loadNotes().then((notesUsed) => {
-            dispatch({type: START_GAME, notesUsed: fromJS(notesUsed)})
+            dispatch({type: START_GAME})
         })
     }
 }
@@ -108,7 +112,7 @@ export function chooseRandomNote() {
         if (randomNote === '') {
             dispatch({type: COMPLETE_ROUND})
             if (getState().training.roundsComplete === 2) {
-                dispatch(setDateComplete)
+                dispatch(setDateComplete())
             }
         } else {
             //chooses next target note
@@ -160,9 +164,7 @@ export default function training(state = initialState, action) {
                 targetNote: action.targetNote,
                 selectedNote: '',
                 targetNotePlayed: true,
-                selectedNotePlayed: false
             })
-
         case(SELECTED_NOTE_CHOSEN):
             return state.merge({
                 selectedNote: action.selectedNote,
@@ -187,7 +189,6 @@ export default function training(state = initialState, action) {
             })
         case START_GAME:
             return state.merge({
-                notesUsed: action.notesUsed,
                 start: true
             })
         case SET_DATE_COMPLETE:
@@ -195,6 +196,11 @@ export default function training(state = initialState, action) {
             //going to need this property to make google event/send email.
             return state.merge({
                 dateComplete: new Date()
+            })
+        case COMPLETE_GUESS:
+            return state.merge({
+                selectedNotePlayed: false,
+                onCheck: false
             })
         case COMPLETE_ROUND:
             return state.merge({
