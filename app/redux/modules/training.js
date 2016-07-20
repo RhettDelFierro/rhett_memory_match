@@ -116,7 +116,8 @@ export function chooseRandomNote() {
             }
         } else {
             //chooses next target note
-            dispatch(targetNoteThunk(randomNote.first().get('name')))
+            //dispatch(targetNoteThunk(randomNote.first().get('name')))
+            dispatch(targetNoteThunk(randomNote.get('name')))
         }
     }
 
@@ -162,8 +163,7 @@ export default function training(state = initialState, action) {
         case(TARGET_NOTE_CHOSEN):
             return state.merge({
                 targetNote: action.targetNote,
-                selectedNote: '',
-                targetNotePlayed: true,
+                targetNotePlayed: true
             })
         case(SELECTED_NOTE_CHOSEN):
             return state.merge({
@@ -199,12 +199,14 @@ export default function training(state = initialState, action) {
             })
         case COMPLETE_GUESS:
             return state.merge({
+                targetNote: '',
+                selectedNote:'',
                 selectedNotePlayed: false,
                 onCheck: false
             })
         case COMPLETE_ROUND:
             return state.merge({
-                roundsComplete: state.get('roundsComplete') + 1
+                roundsCompleted: state.get('roundsCompleted') + 1
             })
         default:
             return state

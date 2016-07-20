@@ -18,12 +18,12 @@ class NoteTrainingContainer extends Component {
         if (newProps.start) {
             //user has guessed:
             if (newProps.selectedNotePlayed && !newProps.onCheck) {
-                console.log('componentwillreceiveprops 1')
+                //console.log('componentwillreceiveprops 1')
                 this.props.checkCorrect()
             }
             //handles incorrect.:
             if (!newProps.correct && newProps.onCheck) {
-                console.log('componentwillreceiveprops 2')
+                //console.log('componentwillreceiveprops 2')
                 this.props.noteMissed()
                 this.props.playNote({ note: this.props.targetNote, time: 1000, volume: 1 })
             }

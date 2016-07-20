@@ -8,16 +8,10 @@ export function counterIncrement(targetNote, counter) {
 //Redux
 //take counter array and return a random targetNote if it hasn't been played 5 times.
 export function randomNotes(tracker) {
-    const availableNotes = List();
 
-    //going to have to convert it to a map/list? Don't think so.
-    const randomNotes = tracker.map((item) => {
-        if (item.get('count') < 1) {
-            return availableNotes.push(item)
-        }
-    });
+    const availableNotes = tracker.filter((item) => item.get('count') < 1)
 
-    return randomNotes.size > 0 ? randomNotes.get(Math.floor(randomNotes.size * Math.random())) : ''
+    return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())) : ''
 }
 
 function loadSoundRequest(note, obj) {
