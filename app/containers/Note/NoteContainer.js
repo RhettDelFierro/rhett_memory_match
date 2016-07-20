@@ -9,15 +9,18 @@ import * as trainingActionCreators from 'redux/modules/training'
 class NoteContainer extends Component {
     constructor() {
         super()
+        this.handleSelect = this.handleSelect.bind(this)
     }
 
-    componentWillReceiveProps() {
-
+    handleSelect(note) {
+        if (this.props.targetNotePlayed) {
+            this.props.selectedNoteChosen(note)
+        }
     }
 
     render() {
         return (
-            <Note {...this.props} />
+            <Note onSelect={this.handleSelect} {...this.props} />
         )
     }
 }
@@ -27,7 +30,9 @@ NoteContainer.propTypes = {
     correct: PropTypes.bool,
     targetNote: PropTypes.string,
     tracker: PropTypes.instanceOf(List),
-    onCheck: PropTypes.bool.isRequired
+    onCheck: PropTypes.bool.isRequired,
+    selectedNoteChosen: PropTypes.func.isRequired,
+    targetNotePlayed: PropTypes.bool.isRequired
 }
 
 function mapStateToProps({training}) {
@@ -35,11 +40,12 @@ function mapStateToProps({training}) {
         targetNote: training.get('targetNote'),
         correct: training.get('correct'),
         tracker: training.get('tracker'),
-        onCheck: training.get('onCheck')
+        onCheck: training.get('onCheck'),
+        targetNotePlayed: training.get('targetNotePlayed')
     }
 }
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
     return bindActionCreators(trainingActionCreators, dispatch)
 }
 

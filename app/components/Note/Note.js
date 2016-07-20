@@ -29,7 +29,7 @@ function Note(props) {
                 return (
                     <div
                         className={keyClass} id={note.get('name')} key={note.get('name')}
-                        onClick={() => props.selectedNoteChosen(note.get('name'))}>
+                        onClick={() => props.onSelect(note.get('name'))}>
                         {note.get('name')}
                     </div>
                 )

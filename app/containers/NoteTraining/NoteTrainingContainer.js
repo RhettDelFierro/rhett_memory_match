@@ -58,7 +58,6 @@ NoteTrainingContainer.propTypes = {
     targetNote: PropTypes.string,
     attempts: PropTypes.number.isRequired,
     checkCorrect: PropTypes.func.isRequired,
-    playNote: PropTypes.func.isRequired,
     noteMissed: PropTypes.func.isRequired,
     selectedNotePlayed: PropTypes.bool.isRequired,
     onCheck: PropTypes.bool.isRequired,

@@ -65,25 +65,6 @@ export function playIncorrect({ note, time, volume }) {
     }
 }
 
-export function playNote({ note, time, volume }) {
-
-    return function (dispatch, getState) {
-
-        const currentTracker = getState().training.get('tracker')
-        let randomMaskingNotes = maskingNotes(currentTracker)
-
-        //I also want to dispatch to handle the rendering of missed note.
-        handleIncorrect({note, time, volume, randomMaskingNotes})
-            .then((maskingNotes) => {
-                //dispatch other action creators to reset.
-                dispatch(completeGuess())
-                //maskingNotes is a resolved promise. Not going to do anything with it.
-                dispatch(chooseRandomNote())
-            })
-            .catch((error) => Error('error in playNote thunk', error))
-    }
-}
-
 export function completeGuess() {
     return {type: COMPLETE_GUESS}
 }
@@ -91,6 +72,7 @@ export function completeGuess() {
 export function targetNoteThunk(targetNote) {
     return function (dispatch, getState) {
         playNotes({note: targetNote}).then(() => {
+            //make it so you can't choose anything before this:
             dispatch(targetNoteChosen(targetNote))
             dispatch(increaseCount(targetNote))
         })
