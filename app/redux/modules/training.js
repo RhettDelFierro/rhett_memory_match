@@ -47,7 +47,7 @@ export function selectedNoteChosen(selectedNote) {
 
 
 
-export function playNote(note, time, volume) {
+export function playNote({ note, time, volume } ) {
 
     return function (dispatch, getState) {
 
@@ -55,9 +55,9 @@ export function playNote(note, time, volume) {
         let randomMaskingNotes = maskingNotes(currentTracker)
 
         //I also want to dispatch to handle the rendering of missed note.
-        console.log('is note defined:', note)
-        handleIncorrect(note, time, volume, randomMaskingNotes)
-            .then(() => {
+        handleIncorrect( { note, time, volume, randomMaskingNotes })
+            .then((maskingNotes) => {
+                //maskingNotes is a resolved promise. Not going to do anything with it.
                 dispatch(chooseRandomNote)
             })
             .catch((error) => Error('error in playNote thunk', error))

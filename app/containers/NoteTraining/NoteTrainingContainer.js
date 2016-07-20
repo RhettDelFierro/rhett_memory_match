@@ -24,7 +24,7 @@ class NoteTrainingContainer extends Component {
             //handles incorrect.:
             if (!newProps.targetNotePlayed && !newProps.correct && newProps.attempts !== 0) {
                 this.props.noteMissed()
-                this.props.playNote(this.props.targetNote, 1000, 1)
+                this.props.playNote({ note: this.props.targetNote, time: 1000, volume: 1 })
             }
 
             if(this.props.attempts === 0 && !newProps.targetNotePlayed && newProps.targetNote === '') {

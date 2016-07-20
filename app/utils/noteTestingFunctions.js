@@ -1,4 +1,4 @@
-import { Map, List, fromJS, Iterable, toJS } from 'immutable'
+import { Map, List, fromJS, Iterable, toJS, toKeyedSeq } from 'immutable'
 import { notes, context } from 'config/constants'
 
 export function counterIncrement(targetNote, counter) {
@@ -63,19 +63,21 @@ export function loadNotes() {
         .catch((err) => Error('Promise.all error:', err));
 }
 
-export async function handleIncorrect(note, time, volume, maskingNotes) {
+export async function handleIncorrect({ note, time, volume, randomMaskingNotes }) {
     try {
-        const playNote = await playNotes(note, time, volume)
-        const noise = await makeNoise(1000)
-        //const maskNotes = await Promise.all(playNotes(maskingNotes.map((note) => note), 2, 1))
-        return true
+        const playNote = await playNotes({ note, time, volume })
+        const noise = await makeNoise({ time: 1000 } )
+        //const array = randomMaskingNotes.toJS()
+        return await Promise.all(randomMaskingNotes.map((value) => playNotes({ note: value, time: 2000, volume: 0.5 })))
+
     } catch (error) {
         console.log('error in async function handleIncorrect', error)
     }
 }
 
 //this is the api call:
-function playNotes(note, seconds = 1000, volume = 1) {
+function playNotes({ note, time = 1000, volume = 1 }) {
+    console.log(note)
     return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
         source.buffer = notes[note].buffer
@@ -90,7 +92,7 @@ function playNotes(note, seconds = 1000, volume = 1) {
         source.start(0)
         setTimeout(() => {
             resolve(source.stop())
-        }, seconds)
+        }, time)
     })
 }
 
@@ -100,14 +102,14 @@ export function maskingNotes(tracker) {
     let newArray = List();
 
     for (let i = 0; i < 16; i++) {
-        newArray.push(tracker.get(Math.floor(tracker.size * Math.random())).get('name'))
+        newArray = newArray.push(tracker.get(Math.floor(tracker.size * Math.random())).get('name'))
     }
 
     return newArray
 }
 
 //make adjustments to have volume control.
-export function makeNoise(seconds, volume) {
+export function makeNoise({ time, volume = 0.010 }) {
 
     return new Promise((resolve, reject) => {
         var node = context.createBufferSource()
@@ -122,7 +124,7 @@ export function makeNoise(seconds, volume) {
 
         //volume- This works!
         var gain = context.createGain();
-        gain.gain.value = 0.010;
+        gain.gain.value = volume;
         node.connect(gain);
         gain.connect(context.destination);
 
@@ -130,7 +132,7 @@ export function makeNoise(seconds, volume) {
         node.start(0)
         setTimeout(()=> {
             resolve(node.stop())
-        }, seconds)
+        }, time)
     })
 }
 
