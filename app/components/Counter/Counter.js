@@ -6,12 +6,11 @@ export default function Counter(props) {
             {!props.start ? <p>{'Click to begin'}</p>
                 : <div>
                 <p>Counter: <span>{props.attempts}/60 attempts</span></p>
-                <p>{`Select this note: ${props.targetNote}`}</p>
-                <p>{!props.correct && props.targetNotePlayed
-                    ? `Here is the correct note: ${props.targetNote}`
-                    : ''}</p>
+                <p style={{color: 'springgreen'}}>
+                    {!props.correct && props.onCheck
+                        ? `Here is the correct note: ${props.targetNote}`
+                        : ''}</p>
             </div>}
-            {props.correct ? <p>{''}</p> : <p>Here is the correct note {props.targetNote}</p>}
         </div>
     )
 }

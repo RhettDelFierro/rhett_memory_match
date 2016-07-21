@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { makeNotesObject } from 'utils/noteTestingFunctions'
 import * as trainingActionCreators from 'redux/modules/training'
-import { container } from './styles.css'
+import { container, start } from './styles.css'
 import { Map } from 'immutable'
 
 class NoteTrainingContainer extends Component {
@@ -40,9 +40,10 @@ class NoteTrainingContainer extends Component {
     }
 
     render() {
+        let containerClass = this.props.start ? `${container} ${start}` : `${container}`
         //<p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
         return (
-            <div className={container}>
+            <div className={containerClass}>
                 <CounterContainer />
                 <NoteTraining />
             </div>

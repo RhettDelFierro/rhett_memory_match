@@ -10,7 +10,8 @@ function mapStateToProps({training}) {
         targetNotePlayed: training.get('targetNotePlayed'),
         correct: training.get('correct'),
         start: training.get('start'),
-        attempts: training.get('attempts')
+        attempts: training.get('attempts'),
+        onCheck: training.get('onCheck')
     }
 }
 
