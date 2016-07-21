@@ -11,7 +11,7 @@ import { Map, List } from 'immutable'
 //    return <div className={keyClass} onClick={onnote}><p>{name}</p></div>
 //}
 
-function Note(props) {
+export default function Note(props) {
 
 
     return (
@@ -25,12 +25,12 @@ function Note(props) {
                 if (!props.correct && props.targetNote === note.get('name') && props.onCheck) {
                     keyClass = `${keyClass} ${incorrect}`
                 }
-
+                console.log(note.get('name'))
                 return (
                     <div
                         className={keyClass} id={note.get('name')} key={note.get('name')}
                         onClick={() => props.onSelect(note.get('name'))}>
-                        {note.get('name')}
+                        <p>{note.get('name')}</p>
                     </div>
                 )
             })}
@@ -41,7 +41,8 @@ function Note(props) {
 Note.propTypes = {
     selectedNoteChosen: PropTypes.func.isRequired,
     correct: PropTypes.bool,
-    targetNote: PropTypes.string
+    targetNote: PropTypes.string,
+    tracker: PropTypes.instanceOf(List).isRequired,
+    onSelect: PropTypes.func.isRequired,
+    onCheck: PropTypes.bool.isRequired
 }
-
-export default Note

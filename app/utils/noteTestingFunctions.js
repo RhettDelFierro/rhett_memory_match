@@ -118,7 +118,7 @@ export function makeNoise({ time, volume = 0.010 }) {
 
         //volume- This works!
         var gain = context.createGain();
-        gain.gain.value = volume * .01;
+        gain.gain.value = volume;
         node.connect(gain);
         gain.connect(context.destination);
 

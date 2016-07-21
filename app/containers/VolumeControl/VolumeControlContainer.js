@@ -18,7 +18,7 @@ class VolumeControlContainer extends Component {
     }
 
     handleUpdateMaskingNotesVolume(event) {
-        this.props.maskingNotesVolume(event.target.value)
+        this.props.maskingNotesVolumeChange(event.target.value)
     }
 
     render() {

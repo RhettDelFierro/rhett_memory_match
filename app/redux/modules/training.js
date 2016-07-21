@@ -59,7 +59,7 @@ export function playIncorrect({ note, time, targetNoteVolume, maskingNotesVolume
                 //dispatch other action creators to reset.
                 dispatch(completeGuess())
                 //maskingNotes is a resolved promise. Not going to do anything with it.
-                dispatch(chooseRandomNote())
+                dispatch(chooseRandomNote({targetNoteVolume}))
             })
             .catch((error) => Error('error in playNote thunk', error))
     }
@@ -69,12 +69,12 @@ export function completeGuess() {
     return {type: COMPLETE_GUESS}
 }
 
-export function targetNoteThunk({ note: targetNote, targetNoteVolume }) {
+export function targetNoteThunk({ note, targetNoteVolume }) {
     return function (dispatch, getState) {
-        playNotes({note: targetNote, volume: targetNoteVolume}).then(() => {
+        playNotes({note , volume: targetNoteVolume}).then(() => {
             //make it so you can't choose anything before this:
-            dispatch(targetNoteChosen(targetNote))
-            dispatch(increaseCount(targetNote))
+            dispatch(targetNoteChosen(note))
+            dispatch(increaseCount(note))
         })
     }
 }
@@ -120,7 +120,7 @@ export function chooseRandomNote({targetNoteVolume}) {
         } else {
             //chooses next target note
             //dispatch(targetNoteThunk(randomNote.first().get('name')))
-            dispatch(targetNoteThunk({note: randomNote.get('name'), targetNoteVolume }))
+            dispatch(targetNoteThunk({ note: randomNote.get('name'), targetNoteVolume }))
         }
     }
 

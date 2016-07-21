@@ -26,9 +26,9 @@ export function maskingNotesVolumeChange(value) {
 }
 
 const initialState = Map({
-    targetNoteVolume: 0,
-    noiseVolume: 0,
-    maskingNotesVolume: 0
+    targetNoteVolume: "0",
+    noiseVolume: "0",
+    maskingNotesVolume: "0"
 })
 
 export default function volume (state = initialState, action) {

@@ -1,11 +1,9 @@
 import React, { PropTypes, Component } from "react"
 import { NoteTraining } from "components"
-import { CounterContainer, VolumeControlContainer } from 'containers'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { makeNotesObject } from 'utils/noteTestingFunctions'
 import * as trainingActionCreators from 'redux/modules/training'
-import { container, start } from './styles.css'
 import { Map } from 'immutable'
 
 class NoteTrainingContainer extends Component {
@@ -25,30 +23,27 @@ class NoteTrainingContainer extends Component {
             if (!newProps.correct && newProps.onCheck) {
                 //console.log('componentwillreceiveprops 2')
                 this.props.noteMissed()
-                this.props.playIncorrect({ note: this.props.targetNote, time: 1000,
-                    volume: this.props.targetNoteVolume, maskingNotesVolume: this.props.maskingNotesVolume })
+                this.props.playIncorrect({
+                    note: this.props.targetNote, time: 1000,
+                    volume: this.props.targetNoteVolume, maskingNotesVolume: this.props.maskingNotesVolume
+                })
             }
 
-            if(newProps.correct && newProps.onCheck){
+            if (newProps.correct && newProps.onCheck) {
                 this.props.completeGuess()
-                this.props.chooseRandomNote()
+                this.props.chooseRandomNote({targetNoteVolume: this.props.targetNoteVolume})
             }
 
-            if(this.props.attempts === 0 && !newProps.targetNotePlayed && newProps.targetNote === '') {
-                this.props.chooseRandomNote()
+            if (this.props.attempts === 0 && !newProps.targetNotePlayed && newProps.targetNote === '') {
+                this.props.chooseRandomNote({targetNoteVolume: this.props.targetNoteVolume})
             }
         }
     }
 
     render() {
-        let containerClass = this.props.start ? `${container} ${start}` : `${container}`
         //<p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
         return (
-            <div className={containerClass}>
-                <CounterContainer />
-                <NoteTraining />
-                <VolumeControlContainer />
-            </div>
+            <NoteTraining start={this.props.start} />
         )
     }
 }
@@ -66,7 +61,10 @@ NoteTrainingContainer.propTypes = {
     onCheck: PropTypes.bool.isRequired,
     noteBuffer: PropTypes.instanceOf(Map),
     completeGuess: PropTypes.func.isRequired,
-    playIncorrect: PropTypes.func.isRequired
+    playIncorrect: PropTypes.func.isRequired,
+    targetNoteVolume: PropTypes.string,
+    noiseVolume: PropTypes.string,
+    maskingNotesVolume: PropTypes.string
 }
 
 function mapStateToProps({training, volume}) {

@@ -1,6 +1,19 @@
-.noteTrainingContainer {
+.container {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    flex-direction: column;
     height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-image: url(../../assets/images/coachella.jpg);
+    background-size: cover;
+    background-color: darkgray;
+    background-blend-mode: normal;
+    /*values to use: normal(nothing happens), multiply, screen, overlay, darken, lighten, color-dodge, color-burn,
+             hard-light, soft-light, exclusion, saturation, luminosity*/
+}
+
+.start {
+    background-blend-mode: multiply;
 }
