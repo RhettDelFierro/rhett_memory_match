@@ -57,12 +57,12 @@ export function loadNotes() {
         .catch((err) => Error('Promise.all error:', err));
 }
 
-export async function handleIncorrect({ note, time, volume, randomMaskingNotes }) {
+export async function handleIncorrect({ note, time, targetNoteVolume, randomMaskingNotes, maskingNotesVolume, noiseVolume }) {
     try {
-        const playNote = await playNotes({ note, time, volume })
-        const noise = await makeNoise({ time: 1000 } )
+        const playNote = await playNotes({ note, time, volume: targetNoteVolume })
+        const noise = await makeNoise({ time: 1000, volume: noiseVolume } )
         //const array = randomMaskingNotes.toJS()
-        return await Promise.all(randomMaskingNotes.map((value) => playNotes({ note: value, time: 2000, volume: 0.5 })))
+        return await Promise.all(randomMaskingNotes.map((value) => playNotes({ note: value, time: 2000, volume: maskingNotesVolume })))
 
     } catch (error) {
         console.log('error in async function handleIncorrect', error)
@@ -118,7 +118,7 @@ export function makeNoise({ time, volume = 0.010 }) {
 
         //volume- This works!
         var gain = context.createGain();
-        gain.gain.value = volume;
+        gain.gain.value = volume * .01;
         node.connect(gain);
         gain.connect(context.destination);
 

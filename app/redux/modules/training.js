@@ -46,7 +46,7 @@ export function selectedNoteChosen(selectedNote) {
     }
 }
 
-export function playIncorrect({ note, time, volume }) {
+export function playIncorrect({ note, time, targetNoteVolume, maskingNotesVolume, noiseVolume }) {
 
     return function (dispatch, getState) {
 
@@ -54,7 +54,7 @@ export function playIncorrect({ note, time, volume }) {
         let randomMaskingNotes = maskingNotes(currentTracker)
 
         //I also want to dispatch to handle the rendering of missed note.
-        handleIncorrect({note, time, volume, randomMaskingNotes})
+        handleIncorrect({note, time, targetNoteVolume, randomMaskingNotes, maskingNotesVolume, noiseVolume })
             .then((maskingNotes) => {
                 //dispatch other action creators to reset.
                 dispatch(completeGuess())
@@ -69,9 +69,9 @@ export function completeGuess() {
     return {type: COMPLETE_GUESS}
 }
 
-export function targetNoteThunk(targetNote) {
+export function targetNoteThunk({ note: targetNote, targetNoteVolume }) {
     return function (dispatch, getState) {
-        playNotes({note: targetNote}).then(() => {
+        playNotes({note: targetNote, volume: targetNoteVolume}).then(() => {
             //make it so you can't choose anything before this:
             dispatch(targetNoteChosen(targetNote))
             dispatch(increaseCount(targetNote))
@@ -107,7 +107,7 @@ export function startGame() {
     }
 }
 
-export function chooseRandomNote() {
+export function chooseRandomNote({targetNoteVolume}) {
 
     return function (dispatch, getState) {
         const currentTracker = getState().training.get('tracker')
@@ -120,7 +120,7 @@ export function chooseRandomNote() {
         } else {
             //chooses next target note
             //dispatch(targetNoteThunk(randomNote.first().get('name')))
-            dispatch(targetNoteThunk(randomNote.get('name')))
+            dispatch(targetNoteThunk({note: randomNote.get('name'), targetNoteVolume }))
         }
     }
 
@@ -213,7 +213,8 @@ export default function training(state = initialState, action) {
         case COMPLETE_ROUND:
             return state.merge({
                 roundsCompleted: state.get('roundsCompleted') + 1,
-                roundCompleted: true
+                roundCompleted: true,
+                score: Math.floor(((12-state.get('notesMissed').size)/12) * 100) + '%'
             })
         default:
             return state

@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from "react"
 import { NoteTraining } from "components"
-import { CounterContainer } from 'containers'
+import { CounterContainer, VolumeControlContainer } from 'containers'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { makeNotesObject } from 'utils/noteTestingFunctions'
@@ -25,7 +25,8 @@ class NoteTrainingContainer extends Component {
             if (!newProps.correct && newProps.onCheck) {
                 //console.log('componentwillreceiveprops 2')
                 this.props.noteMissed()
-                this.props.playIncorrect({ note: this.props.targetNote, time: 1000, volume: 1 })
+                this.props.playIncorrect({ note: this.props.targetNote, time: 1000,
+                    volume: this.props.targetNoteVolume, maskingNotesVolume: this.props.maskingNotesVolume })
             }
 
             if(newProps.correct && newProps.onCheck){
@@ -46,6 +47,7 @@ class NoteTrainingContainer extends Component {
             <div className={containerClass}>
                 <CounterContainer />
                 <NoteTraining />
+                <VolumeControlContainer />
             </div>
         )
     }
@@ -67,7 +69,7 @@ NoteTrainingContainer.propTypes = {
     playIncorrect: PropTypes.func.isRequired
 }
 
-function mapStateToProps({training}) {
+function mapStateToProps({training, volume}) {
     return {
         targetNote: training.get('targetNote'),
         correct: training.get('correct'),
@@ -76,7 +78,10 @@ function mapStateToProps({training}) {
         selectedNote: training.get('selectedNote'),
         tracker: training.get('tracker'),
         selectedNotePlayed: training.get('selectedNotePlayed'),
-        onCheck: training.get('onCheck')
+        onCheck: training.get('onCheck'),
+        targetNoteVolume: volume.get('targetNoteVolume'),
+        noiseVolume: volume.get('noiseVolume'),
+        maskingNotesVolume: volume.get('maskingNotesVolume')
     }
 }
 

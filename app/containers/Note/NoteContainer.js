@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Note } from 'components'
 import { Map, List } from 'immutable'
-import * as noteActionCreators from 'redux/modules/notes'
 import * as trainingActionCreators from 'redux/modules/training'
 
 class NoteContainer extends Component {
