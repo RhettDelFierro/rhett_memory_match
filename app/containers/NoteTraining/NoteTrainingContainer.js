@@ -25,7 +25,9 @@ class NoteTrainingContainer extends Component {
                 this.props.noteMissed()
                 this.props.playIncorrect({
                     note: this.props.targetNote, time: 1000,
-                    volume: this.props.targetNoteVolume, maskingNotesVolume: this.props.maskingNotesVolume
+                    targetNoteVolume: this.props.targetNoteVolume,
+                    noiseVolume: this.props.noiseVolume,
+                    maskingNotesVolume: this.props.maskingNotesVolume
                 })
             }
 

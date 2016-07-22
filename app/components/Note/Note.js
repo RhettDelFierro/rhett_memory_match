@@ -25,7 +25,7 @@ export default function Note(props) {
                 if (!props.correct && props.targetNote === note.get('name') && props.onCheck) {
                     keyClass = `${keyClass} ${incorrect}`
                 }
-                console.log(note.get('name'))
+
                 return (
                     <div
                         className={keyClass} id={note.get('name')} key={note.get('name')}
