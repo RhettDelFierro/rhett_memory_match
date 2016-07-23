@@ -1,5 +1,6 @@
 import { Map, List, fromJS } from 'immutable'
-import { randomNotes, loadNotes, playNotes, makeNoise, maskingNotes, handleIncorrect } from 'utils/noteTestingFunctions'
+import { randomNotes, loadNotes, playNotes, makeNoise, maskingNotes, handleIncorrect, buffer } from 'utils/noteTestingFunctions'
+import { tracker } from 'config/constants'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -16,22 +17,6 @@ const NOTES_PATH = 'NOTES_PATH'
 const NOTE_MISSED = 'NOTE_MISSED'
 const COMPLETE_GUESS = 'COMPLETE_GUESS'
 
-const tracker = [
-    {name: 'C4', count: 0},
-    {name: 'Db4', count: 0},
-    {name: 'D4', count: 0},
-    {name: 'Eb4', count: 0},
-    {name: 'E4', count: 0},
-    {name: 'F4', count: 0},
-    {name: 'Gb4', count: 0},
-    {name: 'G4', count: 0},
-    {name: 'Ab4', count: 0},
-    {name: 'A4', count: 0},
-    {name: 'Bb4', count: 0},
-    {name: 'B4', count: 0}
-]
-
-//generated at random
 export function targetNoteChosen(targetNote) {
     return {
         type: TARGET_NOTE_CHOSEN,
@@ -46,40 +31,10 @@ export function selectedNoteChosen(selectedNote) {
     }
 }
 
-export function playIncorrect({ note, time, targetNoteVolume, maskingNotesVolume, noiseVolume }) {
-
-    return function (dispatch, getState) {
-
-        const currentTracker = getState().training.get('tracker')
-        let randomMaskingNotes = maskingNotes(currentTracker)
-
-        //I also want to dispatch to handle the rendering of missed note.
-        handleIncorrect({note, time, targetNoteVolume, randomMaskingNotes, maskingNotesVolume, noiseVolume })
-            .then((maskingNotes) => {
-                //dispatch other action creators to reset.
-                dispatch(completeGuess())
-                //maskingNotes is a resolved promise. Not going to do anything with it.
-                dispatch(chooseRandomNote({targetNoteVolume}))
-            })
-            .catch((error) => Error('error in playNote thunk', error))
-    }
-}
-
 export function completeGuess() {
     return {type: COMPLETE_GUESS}
 }
 
-export function targetNoteThunk({ note, targetNoteVolume }) {
-    return function (dispatch, getState) {
-        playNotes({note , volume: targetNoteVolume}).then(() => {
-            //make it so you can't choose anything before this:
-            dispatch(targetNoteChosen(note))
-            dispatch(increaseCount(note))
-        })
-    }
-}
-
-//on every note click
 export function checkCorrect() {
     return {
         type: CHECK_CORRECT
@@ -99,6 +54,10 @@ export function increaseCount(targetNote) {
     }
 }
 
+export function completeRound() {
+    return {type: COMPLETE_ROUND}
+}
+
 export function startGame() {
     return function (dispatch) {
         loadNotes().then((notesUsed) => {
@@ -107,7 +66,57 @@ export function startGame() {
     }
 }
 
-export function chooseRandomNote({targetNoteVolume}) {
+
+export function playIncorrect() {
+
+    return function (dispatch, getState) {
+
+        const note = getState().training.get('targetNote')
+        const targetNoteVolume = getState().volume.get('targetNoteVolume')
+
+        //I also want to dispatch to handle the rendering of missed note.
+        playNotes({note, volume: targetNoteVolume})
+            .then((result) => {
+                dispatch(guessed())
+            })
+            .catch((error) => Error('error in playNote thunk', error))
+    }
+}
+
+//handle a guess after every guess, this will happen:
+export function guessed(){
+    return function (dispatch, getState) {
+
+        const currentTracker = getState().training.get('tracker')
+        const randomMaskingNotes = maskingNotes(currentTracker)
+        const maskingNotesVolume = getState().volume.get('maskingNotesVolume')
+        const noiseVolume = getState().volume.get('noiseVolume')
+
+        //I also want to dispatch to handle the rendering of missed note.
+        buffer({randomMaskingNotes, maskingNotesVolume, noiseVolume })
+            .then((maskingNotes) => {
+                //dispatch other action creators to reset.
+                dispatch(completeGuess())
+                //maskingNotes is a resolved promise. Not going to do anything with it.
+                dispatch(chooseRandomNote())
+            })
+            .catch((error) => Error('error in playNote thunk', error))
+    }
+}
+
+//called after chooseRandomNote: after every guess to start the next
+export function targetNoteThunk({ note }) {
+    return function (dispatch, getState) {
+        const volume = getState().volume.get('targetNoteVolume')
+        playNotes({note , volume }).then(() => {
+            //make it so you can't choose anything before this:
+            dispatch(targetNoteChosen(note))
+            dispatch(increaseCount(note))
+        })
+    }
+}
+
+export function chooseRandomNote() {
 
     return function (dispatch, getState) {
         const currentTracker = getState().training.get('tracker')
@@ -119,15 +128,10 @@ export function chooseRandomNote({targetNoteVolume}) {
             }
         } else {
             //chooses next target note
-            //dispatch(targetNoteThunk(randomNote.first().get('name')))
-            dispatch(targetNoteThunk({ note: randomNote.get('name'), targetNoteVolume }))
+            dispatch(targetNoteThunk({ note: randomNote.get('name') }))
         }
     }
 
-}
-
-export function completeRound() {
-    return {type: COMPLETE_ROUND}
 }
 
 //reducer composition:
@@ -160,7 +164,6 @@ const initialState = fromJS({
     notesUsed: {},
     onCheck: false,
     roundCompleted: false
-
 })
 
 export default function training(state = initialState, action) {
@@ -186,8 +189,7 @@ export default function training(state = initialState, action) {
             })
         case NOTE_MISSED:
             return state.merge({
-                notesMissed: state.get('notesMissed').push(state.get('targetNote')),
-                noteBuffer: state.getIn('notesUsed', state.get(state.get('targetNote')))
+                notesMissed: state.get('notesMissed').push(state.get('targetNote'))
             })
         case INCREASE_COUNT:
             return state.merge({

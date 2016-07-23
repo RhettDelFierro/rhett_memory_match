@@ -52,3 +52,18 @@ export const notes = {
         volume: 1
     }
 }
+
+export const tracker = [
+    {name: 'C4', count: 0},
+    {name: 'Db4', count: 0},
+    {name: 'D4', count: 0},
+    {name: 'Eb4', count: 0},
+    {name: 'E4', count: 0},
+    {name: 'F4', count: 0},
+    {name: 'Gb4', count: 0},
+    {name: 'G4', count: 0},
+    {name: 'Ab4', count: 0},
+    {name: 'A4', count: 0},
+    {name: 'Bb4', count: 0},
+    {name: 'B4', count: 0}
+]

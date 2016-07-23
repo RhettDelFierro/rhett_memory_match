@@ -69,6 +69,16 @@ export async function handleIncorrect({ note, time, targetNoteVolume, randomMask
     }
 }
 
+export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolume }) {
+    try {
+        const noise = await makeNoise({ time: 1000, volume: noiseVolume } )
+        return await Promise.all(randomMaskingNotes.map((value) => playNotes({ note: value, time: 2000, volume: maskingNotesVolume })))
+
+    } catch (error) {
+        console.log('error in buffer', error)
+    }
+}
+
 //this is the api call:
 export function playNotes({ note, time = 1000, volume = 1 }) {
 

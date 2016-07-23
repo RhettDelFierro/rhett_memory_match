@@ -23,21 +23,15 @@ class NoteTrainingContainer extends Component {
             if (!newProps.correct && newProps.onCheck) {
                 //console.log('componentwillreceiveprops 2')
                 this.props.noteMissed()
-                this.props.playIncorrect({
-                    note: this.props.targetNote, time: 1000,
-                    targetNoteVolume: this.props.targetNoteVolume,
-                    noiseVolume: this.props.noiseVolume,
-                    maskingNotesVolume: this.props.maskingNotesVolume
-                })
+                this.props.playIncorrect()
             }
 
             if (newProps.correct && newProps.onCheck) {
-                this.props.completeGuess()
-                this.props.chooseRandomNote({targetNoteVolume: this.props.targetNoteVolume})
+                this.props.guessed()
             }
 
             if (this.props.attempts === 0 && !newProps.targetNotePlayed && newProps.targetNote === '') {
-                this.props.chooseRandomNote({targetNoteVolume: this.props.targetNoteVolume})
+                this.props.chooseRandomNote()
             }
         }
     }
@@ -64,9 +58,7 @@ NoteTrainingContainer.propTypes = {
     noteBuffer: PropTypes.instanceOf(Map),
     completeGuess: PropTypes.func.isRequired,
     playIncorrect: PropTypes.func.isRequired,
-    targetNoteVolume: PropTypes.string,
-    noiseVolume: PropTypes.string,
-    maskingNotesVolume: PropTypes.string
+    guessed: PropTypes.func.isRequired
 }
 
 function mapStateToProps({training, volume}) {
@@ -78,10 +70,7 @@ function mapStateToProps({training, volume}) {
         selectedNote: training.get('selectedNote'),
         tracker: training.get('tracker'),
         selectedNotePlayed: training.get('selectedNotePlayed'),
-        onCheck: training.get('onCheck'),
-        targetNoteVolume: volume.get('targetNoteVolume'),
-        noiseVolume: volume.get('noiseVolume'),
-        maskingNotesVolume: volume.get('maskingNotesVolume')
+        onCheck: training.get('onCheck')
     }
 }
 
