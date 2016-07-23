@@ -6,7 +6,7 @@
     /*justify-content: center; going to just hard code the widths.*/
     height: 300px;
     position: relative;
-    width: 420px;
+    width: 409px;
     align-self: center;
 
     animation-name: fadeIn;
@@ -21,8 +21,12 @@
 @keyframes fadeIn {
     /*from { width: 0; height: 0; }*/
     /*to   { width: 420px; height: 300px; }*/
-    0% { opacity: 0}
-    100% { opacity: 1}
+    0% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
 }
 
 .container > *:hover {
@@ -37,6 +41,31 @@
     display: flex;
     color: black;
     z-index: 0;
+    position: relative;
+}
+
+.keys::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    width: 6px;
+    height: 10px;
+    border-width: 2px 1px 0 2px;
+    border-style: solid;
+    border-color: springgreen transparent transparent springgreen;
+    background: transparent;
+    border-radius: 0 10px 0 0;
+}
+
+.keys::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    width: 7px;
+    height: 6px;
+    top: 7px;
+    background: springgreen;
+    border-radius: 10px;
 }
 
 .minorKeys {
