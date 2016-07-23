@@ -59,10 +59,10 @@
     height: var(--beforeheight);
     border-width: 2px 1px 0 2px;
     border-style: solid;
-    border-color: blue transparent transparent blue;
+    border-color: red transparent transparent red;
     background: transparent;
     border-radius: 0 10px 0 0;
-    z-index: 1;
+    animation: riseBefore 4s
 }
 
 .incorrect::after {
@@ -71,10 +71,9 @@
     left: calc(50% - 5px);
     width: 7px;
     height: 6px;
-    top: 7px;
-    background: blue;
+    background: red;
     border-radius: 10px;
-    z-index: 1;
+    animation: riseAfter 4s;
 }
 
 .minorKeys {
@@ -98,4 +97,64 @@ p {
     align-self: flex-end;
     margin-left: auto;
     margin-right: auto;
+}
+
+@keyframes riseBefore {
+    /*from { width: 0; height: 0; }*/
+    /*to   { width: 420px; height: 300px; }*/
+    0% {
+        opacity: 1;
+        top: -17px
+    }
+
+    /*10% {*/
+        /*border-color: blue transparent transparent blue;*/
+    /*}*/
+
+    /*25% {*/
+        /*border-color: purple transparent transparent purple;*/
+    /*}*/
+
+    /*50% {*/
+        /*border-color: red transparent transparent red;*/
+    /*}*/
+
+    /*75% {*/
+        /*border-color: yellow transparent transparent yellow;*/
+    /*}*/
+
+    100% {
+        opacity: 0;
+        top: -34px
+    }
+}
+
+@keyframes riseAfter {
+    /*from { width: 0; height: 0; }*/
+    /*to   { width: 420px; height: 300px; }*/
+    0% {
+        opacity: 1;
+        top: -10px
+    }
+
+    /*10% {*/
+        /*background-color: blue;*/
+    /*}*/
+
+    /*25% {*/
+        /*background-color: purple;*/
+    /*}*/
+
+    /*50% {*/
+        /*background-color: red;*/
+    /*}*/
+
+    /*75% {*/
+        /*background-color: yellow;*/
+    /*}*/
+
+    100% {
+        opacity: 0;
+        top: -27px;
+    }
 }

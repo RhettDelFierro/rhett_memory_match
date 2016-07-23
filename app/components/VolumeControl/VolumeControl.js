@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 function VolumeControl(props) {
-    return <input type="range" min="0" max="5" step="0.01" disabled={props.onCheck} onChange={props.onUpdate} />
+    return <input type="range" min="0" max="9" step="0.01" disabled={props.onCheck} onChange={props.onUpdate} />
 }
 
 VolumeControl.proptTypes = {
