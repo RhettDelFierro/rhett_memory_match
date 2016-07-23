@@ -3,54 +3,30 @@ import { fromJS } from 'immutable'
 export const sixMonths = 1.577e+10
 export const context = new AudioContext || new window.webkitAudioContext;
 export const notes = {
-    A4: {
-        src: require('assets/sounds/piano/A4.mp3'),
-        volume: 1
-    },
-    Ab4: {
-        src: require('assets/sounds/piano/Ab4.mp3'),
-        volume: 1
-    },
-    B4: {
-        src: require('assets/sounds/piano/B4.mp3'),
-        volume: 1
-    },
-    Bb4: {
-        src: require('assets/sounds/piano/Bb4.mp3'),
-        volume: 1
-    },
-    C4: {
-        src: require('assets/sounds/piano/C4.mp3'),
-        volume: 1
-    },
-    D4: {
-        src: require('assets/sounds/piano/D4.mp3'),
-        volume: 1
-    },
-    Db4: {
-        src: require('assets/sounds/piano/Db4.mp3'),
-        volume: 1
-    },
-    E4: {
-        src: require('assets/sounds/piano/E4.mp3'),
-        volume: 1
-    },
-    Eb4: {
-        src: require('assets/sounds/piano/Eb4.mp3'),
-        volume: 1
-    },
-    F4: {
-        src: require('assets/sounds/piano/F4.mp3'),
-        volume: 1
-    },
-    G4: {
-        src: require('assets/sounds/piano/G4.mp3'),
-        volume: 1
-    },
-    Gb4: {
-        src: require('assets/sounds/piano/Gb4.mp3'),
-        volume: 1
-    }
+    A4:     {src: require('assets/sounds/piano/A4.mp3')},
+    Ab4:    {src: require('assets/sounds/piano/Ab4.mp3')},
+    B4:     {src: require('assets/sounds/piano/B4.mp3')},
+    Bb4:    {src: require('assets/sounds/piano/Bb4.mp3')},
+    C4:     {src: require('assets/sounds/piano/C4.mp3')},
+    D4:     {src: require('assets/sounds/piano/D4.mp3')},
+    Db4:    {src: require('assets/sounds/piano/Db4.mp3')},
+    E4:     {src: require('assets/sounds/piano/E4.mp3')},
+    Eb4:    {src: require('assets/sounds/piano/Eb4.mp3')},
+    F4:     {src: require('assets/sounds/piano/F4.mp3')},
+    G4:     {src: require('assets/sounds/piano/G4.mp3')},
+    Gb4:    {src: require('assets/sounds/piano/Gb4.mp3')},
+    A5:     {src: require('assets/sounds/piano/A5.mp3')},
+    Ab5:    {src: require('assets/sounds/piano/Ab5.mp3')},
+    B5:     {src: require('assets/sounds/piano/B5.mp3')},
+    Bb5:    {src: require('assets/sounds/piano/Bb5.mp3')},
+    C5:     {src: require('assets/sounds/piano/C5.mp3')},
+    D5:     {src: require('assets/sounds/piano/D5.mp3')},
+    Db5:    {src: require('assets/sounds/piano/Db5.mp3')},
+    E5:     {src: require('assets/sounds/piano/E5.mp3')},
+    Eb5:    {src: require('assets/sounds/piano/Eb5.mp3')},
+    F5:     {src: require('assets/sounds/piano/F5.mp3')},
+    G5:     {src: require('assets/sounds/piano/G5.mp3')},
+    Gb5:    {src: require('assets/sounds/piano/Gb5.mp3')}
 }
 
 export const tracker = [
