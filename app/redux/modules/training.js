@@ -180,19 +180,6 @@ const initialState = fromJS({
     mode: 'pretest'
 })
 
-//export default function rootTraining(state, action) {
-//    switch (action.type) {
-//        case RESET_TRAINING:
-//            console.log('get here?')
-//            state = undefined
-//            training(state, action)
-//            return
-//
-//        default:
-//            return state
-//    }
-//}
-
 export default function training(state = initialState, action) {
     switch (action.type) {
         case(TARGET_NOTE_CHOSEN):
