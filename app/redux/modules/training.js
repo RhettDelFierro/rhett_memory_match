@@ -1,5 +1,5 @@
 import { Map, List, fromJS } from 'immutable'
-import { randomNotes, loadNotes, playNotes, makeNoise, maskingNotes, handleIncorrect, buffer } from 'utils/noteTestingFunctions'
+import { randomNotes, loadNotes, playNotes, maskingNotes, handleIncorrect, buffer } from 'utils/noteTestingFunctions'
 import { tracker } from 'config/constants'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
@@ -16,6 +16,15 @@ const SELECTED_NOTE_CHOSEN = 'SELECTED NOTE CHOSEN'
 const NOTES_PATH = 'NOTES_PATH'
 const NOTE_MISSED = 'NOTE_MISSED'
 const COMPLETE_GUESS = 'COMPLETE_GUESS'
+const SET_MODE = 'SET_MODE'
+const RESET_TRAINING = 'RESET_TRAINING'
+
+export function setMode(mode) {
+    return {
+        type: SET_MODE,
+        mode
+    }
+}
 
 export function targetNoteChosen(targetNote) {
     return {
@@ -56,6 +65,10 @@ export function increaseCount(targetNote) {
 
 export function completeRound() {
     return {type: COMPLETE_ROUND}
+}
+
+export function resetTraining() {
+    return { type: RESET_TRAINING}
 }
 
 export function startGame() {
@@ -123,7 +136,7 @@ export function chooseRandomNote() {
         const randomNote = randomNotes(currentTracker)
         if (randomNote === '') {
             dispatch({type: COMPLETE_ROUND})
-            if (getState().training.roundsComplete === 2) {
+            if (getState().training.roundsComplete === 3) {
                 dispatch(setDateComplete())
             }
         } else {
@@ -163,8 +176,22 @@ const initialState = fromJS({
     selectedNotePlayed: false,
     notesUsed: {},
     onCheck: false,
-    roundCompleted: false
+    roundCompleted: false,
+    mode: 'pretest'
 })
+
+//export default function rootTraining(state, action) {
+//    switch (action.type) {
+//        case RESET_TRAINING:
+//            console.log('get here?')
+//            state = undefined
+//            training(state, action)
+//            return
+//
+//        default:
+//            return state
+//    }
+//}
 
 export default function training(state = initialState, action) {
     switch (action.type) {
@@ -216,8 +243,14 @@ export default function training(state = initialState, action) {
             return state.merge({
                 roundsCompleted: state.get('roundsCompleted') + 1,
                 roundCompleted: true,
-                score: Math.floor(((12-state.get('notesMissed').size)/12) * 100) + '%'
+                score: Math.floor(((60-state.get('notesMissed').size)/60) * 100) + '%'
             })
+        case SET_MODE:
+            return state.merge({
+                mode: action.mode
+            })
+        case RESET_TRAINING:
+            return initialState
         default:
             return state
     }

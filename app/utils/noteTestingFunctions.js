@@ -9,7 +9,7 @@ export function counterIncrement(targetNote, counter) {
 //take counter array and return a random targetNote if it hasn't been played 5 times.
 export function randomNotes(tracker) {
 
-    const availableNotes = tracker.filter((item) => item.get('count') < 1)
+    const availableNotes = tracker.filter((item) => item.get('count') < 5)
 
     return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())) : ''
 }
@@ -55,18 +55,6 @@ export function loadNotes() {
             return notes
         })
         .catch((err) => Error('Promise.all error:', err));
-}
-
-export async function handleIncorrect({ note, time, targetNoteVolume, randomMaskingNotes, maskingNotesVolume, noiseVolume }) {
-    try {
-        const playNote = await playNotes({ note, time, volume: targetNoteVolume })
-        const noise = await makeNoise({ time: 1000, volume: noiseVolume } )
-        //const array = randomMaskingNotes.toJS()
-        return await Promise.all(randomMaskingNotes.map((value) => playNotes({ note: value, time: 2000, volume: maskingNotesVolume })))
-
-    } catch (error) {
-        console.log('error in async function handleIncorrect', error)
-    }
 }
 
 export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolume }) {

@@ -6,11 +6,11 @@ import { makeNotesObject } from 'utils/noteTestingFunctions'
 import * as trainingActionCreators from 'redux/modules/training'
 import { Map } from 'immutable'
 
-class NoteTrainingContainer extends Component {
+class PreTestContainer extends Component {
     constructor() {
         super()
         this.state = {
-            mode: 'training'
+            mode: 'pretest'
         }
     }
 
@@ -34,7 +34,8 @@ class NoteTrainingContainer extends Component {
             if (!newProps.correct && newProps.onCheck) {
                 //console.log('componentwillreceiveprops 2')
                 this.props.noteMissed()
-                this.props.playIncorrect()
+                this.props.guessed()
+
             }
 
             if (newProps.correct && newProps.onCheck) {
@@ -50,12 +51,12 @@ class NoteTrainingContainer extends Component {
     render() {
         //<p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
         return (
-            <NoteTraining start={this.props.start} mode={this.state.mode}/>
+            <NoteTraining start={this.props.start} />
         )
     }
 }
 
-NoteTrainingContainer.propTypes = {
+PreTestContainer.propTypes = {
     chooseRandomNote: PropTypes.func.isRequired,
     start: PropTypes.bool.isRequired,
     selectedNote: PropTypes.string,
@@ -66,12 +67,10 @@ NoteTrainingContainer.propTypes = {
     noteMissed: PropTypes.func.isRequired,
     selectedNotePlayed: PropTypes.bool.isRequired,
     onCheck: PropTypes.bool.isRequired,
-    noteBuffer: PropTypes.instanceOf(Map),
     completeGuess: PropTypes.func.isRequired,
     playIncorrect: PropTypes.func.isRequired,
     guessed: PropTypes.func.isRequired,
     setMode: PropTypes.func.isRequired,
-    mode: PropTypes.string.isRequired,
     resetTraining: PropTypes.func.isRequired
 }
 
@@ -93,4 +92,4 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(trainingActionCreators, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NoteTrainingContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(PreTestContainer)

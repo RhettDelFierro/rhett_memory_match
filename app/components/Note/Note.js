@@ -13,7 +13,6 @@ import { Map, List } from 'immutable'
 
 export default function Note(props) {
 
-
     return (
         <div className={container}>
             {props.tracker.map((note) => {
@@ -22,9 +21,10 @@ export default function Note(props) {
                     keyClass = minorKeys
                 }
 
-                if (!props.correct && props.targetNote === note.get('name') && props.onCheck) {
+                if (!props.correct && props.targetNote === note.get('name') && props.onCheck && props.mode === 'training') {
                     keyClass = `${keyClass} ${incorrect}`
                 }
+
 
                 return (
                     <div
@@ -44,5 +44,6 @@ Note.propTypes = {
     targetNote: PropTypes.string,
     tracker: PropTypes.instanceOf(List).isRequired,
     onSelect: PropTypes.func.isRequired,
-    onCheck: PropTypes.bool.isRequired
+    onCheck: PropTypes.bool.isRequired,
+    mode: PropTypes.string
 }

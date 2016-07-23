@@ -31,7 +31,8 @@ NoteContainer.propTypes = {
     tracker: PropTypes.instanceOf(List),
     onCheck: PropTypes.bool.isRequired,
     selectedNoteChosen: PropTypes.func.isRequired,
-    targetNotePlayed: PropTypes.bool.isRequired
+    targetNotePlayed: PropTypes.bool.isRequired,
+    mode: PropTypes.string.isRequired
 }
 
 function mapStateToProps({training}) {
@@ -40,7 +41,8 @@ function mapStateToProps({training}) {
         correct: training.get('correct'),
         tracker: training.get('tracker'),
         onCheck: training.get('onCheck'),
-        targetNotePlayed: training.get('targetNotePlayed')
+        targetNotePlayed: training.get('targetNotePlayed'),
+        mode: training.get('mode')
     }
 }
 

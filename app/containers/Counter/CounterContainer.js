@@ -11,7 +11,8 @@ function mapStateToProps({training}) {
         correct: training.get('correct'),
         start: training.get('start'),
         attempts: training.get('attempts'),
-        onCheck: training.get('onCheck')
+        onCheck: training.get('onCheck'),
+        mode: training.get('mode')
     }
 }
 
