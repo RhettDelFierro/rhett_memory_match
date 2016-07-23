@@ -1,3 +1,10 @@
+:root {
+    --beforewidth: calc(var(--beforeheight) * 3/5);
+    --beforeheight: 10px;
+    --afterwidth: 6px;
+    --afterheight: 7px;
+}
+
 .container {
     display: flex;
     border: 1px solid black;
@@ -44,28 +51,30 @@
     position: relative;
 }
 
-.keys::before {
+.incorrect::before {
     content: '';
     position: absolute;
-    left: 9px;
-    width: 6px;
-    height: 10px;
+    left: 50%;
+    width: calc(var(--beforeheight) * 3/5);
+    height: var(--beforeheight);
     border-width: 2px 1px 0 2px;
     border-style: solid;
-    border-color: springgreen transparent transparent springgreen;
+    border-color: blue transparent transparent blue;
     background: transparent;
     border-radius: 0 10px 0 0;
+    z-index: 1;
 }
 
-.keys::after {
+.incorrect::after {
     content: '';
     position: absolute;
-    left: 4px;
+    left: calc(50% - 5px);
     width: 7px;
     height: 6px;
     top: 7px;
-    background: springgreen;
+    background: blue;
     border-radius: 10px;
+    z-index: 1;
 }
 
 .minorKeys {
@@ -77,6 +86,8 @@
     z-index: 1;
     display: flex;
     color: white;
+    margin-top: 1px;
+    position: relative;
 }
 
 .incorrect {
