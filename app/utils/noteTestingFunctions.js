@@ -39,6 +39,8 @@ export function loadNotes() {
 
     const promises = [];
 
+    console.log(notes)
+
     for (var note in notes) {
         if (notes.hasOwnProperty(note)) {
             // load sound

@@ -49,7 +49,6 @@ class PostTestContainer extends Component {
     }
 
     render() {
-        //<p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
         return (
             <NoteTraining start={this.props.start} />
         )
