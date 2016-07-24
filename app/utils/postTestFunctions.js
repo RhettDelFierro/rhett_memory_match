@@ -39,20 +39,20 @@ export function loadNotes() {
 
     const promises = [];
 
-    for (var note in notes) {
-        if (notes.hasOwnProperty(note)) {
-            // load sound
-            promises.push(loadSoundRequest(note, notes[note]))
+    for (var instrument in notes) {
+        for (var octave in instrument) {
+            for (var note in octave) {
+                if (octave.hasOwnProperty(note)) {
+                    // load sound
+                    promises.push(loadSoundRequest(note, notes.instrument.octave[note]))
+                }
+            }
         }
     }
 
     return Promise.all(promises)
         .then((data) => {
-            data.map((item) => {
-                    notes[item.note] = item.obj
-                }
-            )
-            return notes
+            return data
         })
         .catch((err) => Error('Promise.all error:', err));
 }
@@ -71,18 +71,20 @@ export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolu
     }
 }
 
-//this is the api call:
-export function playNotes({ note, time = 1000, volume = 1 }) {
+//
+export function playNotes({ note, instrument, octave, time = 1000, volume = 1 }) {
+
+    const { reference } =  notes[instrument][octave][note]
 
     return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
-        source.buffer = notes[note].buffer
+        source.buffer = reference.buffer
         //code for the volume
-        notes[note].gainNode = context.createGain()
-        source.connect(notes[note].gainNode)
-        notes[note].volume = volume
-        notes[note].gainNode.gain.value = notes[note].volume
-        notes[note].gainNode.connect(context.destination)
+        reference.gainNode = context.createGain()
+        source.connect(reference.gainNode)
+        reference.volume = volume
+        reference.gainNode.gain.value = reference.volume
+        reference.gainNode.connect(context.destination)
 
         //yield before here?
         source.start(0)

@@ -56,7 +56,7 @@ class PostTestContainer extends Component {
     }
 }
 
-PreTestContainer.propTypes = {
+PostTestContainer.propTypes = {
     chooseRandomNote: PropTypes.func.isRequired,
     start: PropTypes.bool.isRequired,
     selectedNote: PropTypes.string,
