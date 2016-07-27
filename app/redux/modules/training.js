@@ -148,7 +148,7 @@ export function chooseRandomNote() {
 }
 
 //reducer composition:
-const initialStateTracker = notes;
+const initialStateTracker = notes
 
 function increaseTracker(state = initialStateTracker, action) {
     switch (action.type) {

@@ -40,19 +40,20 @@ function loadSoundRequest(obj) {
 export function loadNotes() {
 
     const promises = [];
+    console.log(notes)
 
     //get the piano and guitar octave objects
-    notes.forEach((note) => {
-        const { four, five } = note.piano
-        promises.push(loadSoundRequest(four))
-        promises.push(loadSoundRequest(five))
-    })
-
-    notes.forEach((note) => {
-        const { three, four } = note.guitar
-        promises.push(loadSoundRequest(three))
-        promises.push(loadSoundRequest(four))
-    })
+    //notes.forEach((note) => {
+    //    const { four, five } = note.piano
+    //    promises.push(loadSoundRequest(four))
+    //    promises.push(loadSoundRequest(five))
+    //})
+    //
+    //notes.forEach((note) => {
+    //    const { three, four } = note.guitar
+    //    promises.push(loadSoundRequest(three))
+    //    promises.push(loadSoundRequest(four))
+    //})
 
     //send those into loadSoundRequest one at a time.
 

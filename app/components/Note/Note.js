@@ -17,7 +17,7 @@ export default function Note(props) {
     return (
         <div className={container}>
             {props.tracker.map((note) => {
-                console.log(note.name)
+                console.log(note.get('name'))
                 let keyClass = keys
                 if (note.get('name')[1] === 'b') {
                     keyClass = minorKeys
