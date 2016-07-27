@@ -19,6 +19,32 @@ export const tracker = [
     {name: 'B', count: 0}
 ]
 
+class Note {
+    constructor(name){
+        this.name = name,
+            this.piano = {
+                four: {
+                    src: require(`assets/sounds/piano/${name}4.mp3`),
+                    count:0
+                },
+                five: {
+                    src: require(`assets/sounds/piano/${name}5.mp3`),
+                    count:0
+                }
+            },
+            this.guitar = {
+                three: {
+                    src: require(`assets/sounds/piano/${name}3.mp3`),
+                    count:0
+                },
+                four: {
+                    src: require(`assets/sounds/piano/${name}4.mp3`),
+                    count:0
+                }
+            }
+    }
+}
+
 function makeRequireString({name, instrument, octaveName}) {
     const octaves = {
         'three': 3,

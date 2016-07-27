@@ -14,9 +14,10 @@ export function randomNotes(tracker) {
     return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())) : ''
 }
 
-function loadSoundRequest(note, obj) {
+function loadSoundRequest(obj) {
 
     return new Promise((resolve, reject) => {
+        //console.log(obj)
         const { src } = obj
         var request = new XMLHttpRequest();
         request.open('GET', src, true);
@@ -27,7 +28,7 @@ function loadSoundRequest(note, obj) {
             context.decodeAudioData(request.response)
                 .then((buffer)=> {
                         obj.buffer = buffer
-                        resolve({note, obj})
+                        resolve({obj})
                     }
                 )
         }
@@ -35,26 +36,37 @@ function loadSoundRequest(note, obj) {
     })
 }
 
-export function loadNotes() {
-
-    const promises = [];
-
-    console.log(notes)
-
-    for (var note in notes) {
-        if (notes.hasOwnProperty(note)) {
-            // load sound
-            promises.push(loadSoundRequest(note, notes[note]))
+function digObject(obj){
+    //iterate through the keys:
+    let srcNotes = [];
+    for (var key in obj) {
+        if (key.hasOwnProperty('src')) {
+            srcNotes.push(obj[key])
+        }
+        if (obj[key] !== null && typeof obj[key] === "object") {
+            // Recurse into children
+            digObject(obj[key]);
         }
     }
+    return srcNotes
+}
+
+export function loadNotes() {
+
+    const promiseObjects = digObject(notes)
+    console.log(promiseObjects)
+    let promises = promiseObjects.map((obj) => loadSoundRequest(obj))
+
+    //for (var note in notes) {
+    //    let { octave } = notes[note].piano
+    //    if (notes.hasOwnProperty(note)) {
+    //        promises.push(loadSoundRequest(note, notes[note]))
+    //    }
+    //}
 
     return Promise.all(promises)
         .then((data) => {
-            data.map((item) => {
-                    notes[item.note] = item.obj
-                }
-            )
-            return notes
+            console.log(data)
         })
         .catch((err) => Error('Promise.all error:', err));
 }
