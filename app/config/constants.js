@@ -89,4 +89,4 @@ function makeTracker() {
     return notes
 }
 
-export const notes = makeTracker()
+export let notes = makeTracker()

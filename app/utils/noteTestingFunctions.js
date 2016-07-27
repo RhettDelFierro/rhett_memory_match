@@ -5,6 +5,8 @@ export function counterIncrement(targetNote, counter) {
     return counter.map
 }
 
+let newNotes = notes;
+
 //Redux
 //take counter array and return a random targetNote if it hasn't been played 5 times.
 export function randomNotes(tracker) {
@@ -14,10 +16,12 @@ export function randomNotes(tracker) {
     return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())) : ''
 }
 
-function loadSoundRequest(obj) {
+function loadSoundRequest(obj, name) {
+    console.log(name)
 
     return new Promise((resolve, reject) => {
         const src = obj.get('src')
+
         var request = new XMLHttpRequest();
         request.open('GET', src, true);
         request.responseType = 'arraybuffer';
@@ -26,53 +30,33 @@ function loadSoundRequest(obj) {
 
             context.decodeAudioData(request.response)
                 .then((buffer)=> {
-                        console.log(buffer)
                         obj = obj.set('buffer', buffer)
-                    //console.log(obj.get('buffer'))
-                        resolve(obj)
-
+                        //console.log(obj.get('buffer'))
+                        resolve({name, obj})
                     }
                 ).catch((error) => {
-                    console.log(error)
+                console.log(error)
             })
         }
         request.send();
     })
 }
 
-function loopImmutable(){
 
-}
-
-export function loadNotes() {
-
-    const promises = notes.map((note) => {
-        return loadSoundRequest(note.getIn(['piano', 'four']))
-    })
-
-    //get the piano and guitar octave objects
-
-    //notes.forEach((note) => {
-    //    const { four, five } = note.piano
-    //    promises.push(loadSoundRequest(four))
-    //    promises.push(loadSoundRequest(five))
-    //})
-    //
-    //notes.forEach((note) => {
-    //    const { three, four } = note.guitar
-    //    promises.push(loadSoundRequest(three))
-    //    promises.push(loadSoundRequest(four))
-    //})
-
+export async function loadNotes() {
+    const promises = []
     //send those into loadSoundRequest one at a time.
-
-    //resolve the super promise
-
+    newNotes.forEach((note) => {
+         promises.push(loadSoundRequest(note.getIn(['piano', 'four']), note.get('name')))
+    })
 
     //resolve the super promise
     return Promise.all(promises)
         .then((data) => {
-            console.log(data)
+            data.forEach((note) => {
+                newNotes = newNotes.setIn([note.name, 'piano', 'four'], note.obj)
+                console.log(newNotes)
+            })
         })
         .catch((err) => Error('Promise.all error:', err));
 }
