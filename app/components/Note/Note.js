@@ -12,10 +12,12 @@ import { Map, List } from 'immutable'
 //}
 
 export default function Note(props) {
+    console.log(props.tracker)
 
     return (
         <div className={container}>
             {props.tracker.map((note) => {
+                console.log(note.name)
                 let keyClass = keys
                 if (note.get('name')[1] === 'b') {
                     keyClass = minorKeys

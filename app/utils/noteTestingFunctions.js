@@ -29,6 +29,7 @@ function loadSoundRequest(obj) {
                 .then((buffer)=> {
                         obj.buffer = buffer
                         resolve({obj})
+
                     }
                 )
         }
@@ -37,10 +38,21 @@ function loadSoundRequest(obj) {
 }
 
 export function loadNotes() {
-    console.log(notes)
+
+    const promises = [];
 
     //get the piano and guitar octave objects
-    const notesMap = notes.map((note) => console.log(note))
+    notes.forEach((note) => {
+        const { four, five } = note.piano
+        promises.push(loadSoundRequest(four))
+        promises.push(loadSoundRequest(five))
+    })
+
+    notes.forEach((note) => {
+        const { three, four } = note.guitar
+        promises.push(loadSoundRequest(three))
+        promises.push(loadSoundRequest(four))
+    })
 
     //send those into loadSoundRequest one at a time.
 
@@ -50,7 +62,7 @@ export function loadNotes() {
     //resolve the super promise
     return Promise.all(promises)
         .then((data) => {
-            console.log(data)
+            return notes
         })
         .catch((err) => Error('Promise.all error:', err));
 }
