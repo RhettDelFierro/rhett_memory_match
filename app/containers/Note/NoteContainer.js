@@ -2,7 +2,7 @@ import React, { PropTypes,Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Note } from 'components'
-import { Map, List } from 'immutable'
+import { Map, List, OrderedMap } from 'immutable'
 import * as trainingActionCreators from 'redux/modules/training'
 
 class NoteContainer extends Component {
@@ -28,7 +28,7 @@ NoteContainer.propTypes = {
     targetNoteChosen: PropTypes.func.isRequired,
     correct: PropTypes.bool,
     targetNote: PropTypes.string,
-    tracker: PropTypes.instanceOf(List),
+    tracker: PropTypes.instanceOf(OrderedMap),
     onCheck: PropTypes.bool.isRequired,
     selectedNoteChosen: PropTypes.func.isRequired,
     targetNotePlayed: PropTypes.bool.isRequired,

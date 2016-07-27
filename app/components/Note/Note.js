@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { keyboardContainer, container, keys, minorKeys, incorrect } from './styles.css'
-import { Map, List } from 'immutable'
+import { Map, List, OrderedMap } from 'immutable'
 
 //function Keys({name, key, onnote}) {
 //    let keyClass = keys
@@ -12,12 +12,10 @@ import { Map, List } from 'immutable'
 //}
 
 export default function Note(props) {
-    console.log(props.tracker)
 
     return (
         <div className={container}>
             {props.tracker.map((note) => {
-                console.log(note.get('name'))
                 let keyClass = keys
                 if (note.get('name')[1] === 'b') {
                     keyClass = minorKeys
@@ -44,7 +42,7 @@ Note.propTypes = {
     selectedNoteChosen: PropTypes.func.isRequired,
     correct: PropTypes.bool,
     targetNote: PropTypes.string,
-    tracker: PropTypes.instanceOf(List).isRequired,
+    tracker: PropTypes.instanceOf(OrderedMap).isRequired,
     onSelect: PropTypes.func.isRequired,
     onCheck: PropTypes.bool.isRequired,
     mode: PropTypes.string

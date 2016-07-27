@@ -17,8 +17,7 @@ export function randomNotes(tracker) {
 function loadSoundRequest(obj) {
 
     return new Promise((resolve, reject) => {
-        //console.log(obj)
-        const { src } = obj
+        const src = obj.get('src')
         var request = new XMLHttpRequest();
         request.open('GET', src, true);
         request.responseType = 'arraybuffer';
@@ -27,22 +26,32 @@ function loadSoundRequest(obj) {
 
             context.decodeAudioData(request.response)
                 .then((buffer)=> {
-                        obj.buffer = buffer
-                        resolve({obj})
+                        console.log(buffer)
+                        obj = obj.set('buffer', buffer)
+                    //console.log(obj.get('buffer'))
+                        resolve(obj)
 
                     }
-                )
+                ).catch((error) => {
+                    console.log(error)
+            })
         }
         request.send();
     })
 }
 
+function loopImmutable(){
+
+}
+
 export function loadNotes() {
 
-    const promises = [];
-    console.log(notes)
+    const promises = notes.map((note) => {
+        return loadSoundRequest(note.getIn(['piano', 'four']))
+    })
 
     //get the piano and guitar octave objects
+
     //notes.forEach((note) => {
     //    const { four, five } = note.piano
     //    promises.push(loadSoundRequest(four))
@@ -63,7 +72,7 @@ export function loadNotes() {
     //resolve the super promise
     return Promise.all(promises)
         .then((data) => {
-            return notes
+            console.log(data)
         })
         .catch((err) => Error('Promise.all error:', err));
 }
