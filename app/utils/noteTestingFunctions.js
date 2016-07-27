@@ -36,34 +36,18 @@ function loadSoundRequest(obj) {
     })
 }
 
-function digObject(obj){
-    //iterate through the keys:
-    let srcNotes = [];
-    for (var key in obj) {
-        if (key.hasOwnProperty('src')) {
-            srcNotes.push(obj[key])
-        }
-        if (obj[key] !== null && typeof obj[key] === "object") {
-            // Recurse into children
-            digObject(obj[key]);
-        }
-    }
-    return srcNotes
-}
-
 export function loadNotes() {
+    console.log(notes)
 
-    const promiseObjects = digObject(notes)
-    console.log(promiseObjects)
-    let promises = promiseObjects.map((obj) => loadSoundRequest(obj))
+    //get the piano and guitar octave objects
+    const notesMap = notes.map((note) => console.log(note))
 
-    //for (var note in notes) {
-    //    let { octave } = notes[note].piano
-    //    if (notes.hasOwnProperty(note)) {
-    //        promises.push(loadSoundRequest(note, notes[note]))
-    //    }
-    //}
+    //send those into loadSoundRequest one at a time.
 
+    //resolve the super promise
+
+
+    //resolve the super promise
     return Promise.all(promises)
         .then((data) => {
             console.log(data)

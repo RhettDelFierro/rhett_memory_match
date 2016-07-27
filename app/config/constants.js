@@ -1,8 +1,7 @@
-import { fromJS } from 'immutable'
+import { Map, fromJS } from 'immutable'
 
 export const sixMonths = 1.577e+10
 export const context = new AudioContext || new window.webkitAudioContext;
-export const notes = makeTracker()
 
 export const tracker = [
     {name: 'C', count: 0},
@@ -20,85 +19,52 @@ export const tracker = [
 ]
 
 class Note {
-    constructor(name){
-        this.name = name,
-            this.piano = {
-                four: {
-                    src: require(`assets/sounds/piano/${name}4.mp3`),
-                    count:0
-                },
-                five: {
-                    src: require(`assets/sounds/piano/${name}5.mp3`),
-                    count:0
-                }
+
+    constructor(name) {
+        this.name = name;
+
+        this.piano = {
+            four: {
+                src: require(`assets/sounds/piano/${name}4.mp3`),
+                count: 0
             },
-            this.guitar = {
-                three: {
-                    src: require(`assets/sounds/piano/${name}3.mp3`),
-                    count:0
-                },
-                four: {
-                    src: require(`assets/sounds/piano/${name}4.mp3`),
-                    count:0
-                }
+            five: {
+                src: require(`assets/sounds/piano/${name}5.mp3`),
+                count: 0
             }
-    }
-}
+        }
 
-function makeRequireString({name, instrument, octaveName}) {
-    const octaves = {
-        'three': 3,
-        'four': 4,
-        'five': 5
-    }
-    return require(`assets/sounds/${instrument}/${name}${octaves[octaveName]}.mp3`)
-}
-
-function makeOctave({ name, instrument, octaveName1, octaveName2 }) {
-    return {
-        [octaveName1]: {
-            src: makeRequireString({name, instrument, octaveName: octaveName1}),
-            count: 0
-        },
-        [octaveName2]: {
-            src: makeRequireString({name, instrument, octaveName: octaveName2}),
-            count: 0
+        this.guitar = {
+            three: {
+                src: require(`assets/sounds/guitar/${name}3.mp3`),
+                count: 0
+            },
+            four: {
+                src: require(`assets/sounds/guitar/${name}4.mp3`),
+                count: 0
+            }
         }
     }
+
+    someMethod(){
+        console.log(this)
+    }
 }
 
-function buildInstrument(instrument) {
-    return ({
-        [instrument]: {}
-    })
-}
-
-function buildNoteObject(name) {
-    return ({
-        [name]: {}
-    })
-}
-
-function fullNoteObject(name) {
-    const tracker = buildNoteObject(name)
-
-    //make a new function to run just the object.assign part?
-    Object.assign(tracker[name], buildInstrument('piano'))
-    Object.assign(tracker[name]['piano'], makeOctave({name: name, instrument: 'piano', octaveName1:'four', octaveName2: 'five'}))
-
-    Object.assign(tracker[name], buildInstrument('guitar'))
-    Object.assign(tracker[name]['guitar'], makeOctave({name: name, instrument: 'guitar', octaveName1: 'three', octaveName2: 'four'}))
-
-    return tracker
+function addNote(notes, note){
+    return notes.set(note.name, note)
 }
 
 function makeTracker() {
     const mainNotes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
-    const someCounter = {}
-    mainNotes.map((name) => {
-        Object.assign(someCounter, fullNoteObject(name))
+
+    var notes = Map()
+
+    mainNotes.forEach((note) =>{
+        notes = addNote(notes, new Note(note))
     })
 
-    return someCounter
+    return notes
 }
 
+export const notes = makeTracker()
