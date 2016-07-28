@@ -1,147 +1,158 @@
-notes : {
-    targetNoteChosen: string,
-    targetNotePlayed: bool,
-    selectedNoteChosen: string,
-    selectedNotePlayed: bool,
-    checkCorrect: bool,
-    counter: []
-}
+tracker:
 
-action creators:
-
-function targetNoteChosen(targetNote) {
-    return {
-    type: TARGET_NOTE_CHOSEN,
-    targetNote
-    }
-}
-
-function targetNotePlayed() {
-    return {type: TARGET_NOTE_PLAYED}
-}
-
-function selectedNoteChosen (selectedNoteChosen) {
-    return {
-    type: SELECTED_NOTE_CHOSEN
-    selectedNote
-    }
-}
-
-function selectedNotePlayed() {
-    return { type: SELECTED_NOTE_PLAYED }
-}
-
-function checkCorrect() {
-    return { type: CHECK_CORRECT }
-}
-
-function scrambleNotes() {
-    return { type: SCRAMBLE_NOTES }
-}
-
-function playNoise(){
-    return { type: PLAY_NOISE }
-}
-
-const initialState = {
-    targetNoteChosen: "",
-    targetNotePlayed: false,
-    selectedNoteChosen: "",
-    selectedNotePlayed: false,
-    checkCorrect: false,
-    counter: [] //componentDidMount() -> handle set-up
-}
-
-function counter(state=initialCounter, action) {
-    switch(action.type):
-        case TARGET_NOTE_CHOSE:
-            return {
-                state.map((note) => {
-                    if (note.name === action.targetNoteChosen) {
-                        note.count + 1
-                    }
-                })
+{
+        name: 'C',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
             }
-}
-
-export default function notes(state= initialState, action) {
-    switch(action.type):
-        case TARGET_NOTE_CHOSEN:
-            return {
-                ...state,
-                targetNotChosen: action.targetNoteChosen,
-                targetNotePlayed: true,
-                startingNoteChosen: "" //put this on the maskingNote or Noise action creator.
-                counter: counter(state.counter, action)
-            }
-
-}
-
-__________
-
-training: {
-    attempts: number (to 60)
-}
-
-//you may want scores as a whole to go through them easier. Scores can also reference a user. <- more for DB.
-__________
-trainingScores: {
-    pre-training:
-    training:
-    post-training:
-}
-__________
-perfectpitchscores: {
-
-}
-______
-user: {
-    scores: {
-        perfectpitch:
-        training: {
-            pre-training: trainingscores.pre-training //same for the next three.
-            training: {
-
-            }
-        },
-        memoryMatch:
-    }
-}
-
-____________________
-
-
-
-describe('notes', () => {
-
-    export function setCounter(state,counter) {
-            return state.set('counter', List(counter));
         }
-
-    describe('setting notes', () => {
-
-        it('takes count', () =>{
-            const state = Map();
-            const counter = List.of({noteName: "C4", count: 0};
-            const nextState = setCounter(state, counter);
-            expect(nextState).to.equal(Map({counter: List.of({noteName: "C4", count: 0})
-        })
-
-    })
-
-    describe('adding note count', () => {
-
-            it('takes count', () =>{
-                const state = Map();
-                const counter = [{name: "C4", count: 1}]
-                const nextState = setCounter(state, counter);
-                expect(nextState).to.equal(Map({counter: List.of({name: "C4", count: 1})});
-            })
-
-        })
-
-    describe('')
-
-
-
-})
+    ,
+    {
+        name: 'Db',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'D',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'Eb',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'E',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'F',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'Gb',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'G',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'Ab',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'A',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'Bb',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    },
+    {
+        name: 'B',
+        instrument: {
+            piano: {
+                four: 0,
+                five: 0
+            },
+            guitar: {
+                three: 0,
+                four: 0
+            }
+        }
+    }
