@@ -1,6 +1,7 @@
 import { Map, List, fromJS } from 'immutable'
-import { randomNotes, loadNotes, playNotes, maskingNotes, handleIncorrect, buffer } from 'utils/noteTestingFunctions'
-import { notes } from 'config/constants'
+import { randomNotes, playNotes, maskingNotes, handleIncorrect, buffer } from 'utils/noteTestingFunctions'
+import { notes, tracker } from 'config/constants'
+import { loadNotes } from 'utils/loadingNotes'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -72,8 +73,8 @@ export function resetTraining() {
 }
 
 export function startGame() {
-    return function (dispatch) {
-        loadNotes().then((notesUsed) => {
+    return function (dispatch, getState) {
+        loadNotes(getState().training.get('tracker')).then((notesUsed) => {
             dispatch({type: START_GAME})
         })
     }
@@ -148,7 +149,7 @@ export function chooseRandomNote() {
 }
 
 //reducer composition:
-const initialStateTracker = notes
+const initialStateTracker = tracker
 
 function increaseTracker(state = initialStateTracker, action) {
     switch (action.type) {
@@ -163,7 +164,7 @@ function increaseTracker(state = initialStateTracker, action) {
 const initialState = fromJS({
     correct: false,
     attempts: 0,
-    tracker: notes,
+    tracker: tracker,
     score: 0,
     dateComplete: '',
     completed: false,
