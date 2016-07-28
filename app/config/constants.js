@@ -109,12 +109,32 @@ function loadSoundRequest(obj, name, instrument, octave) {
     })
 }
 
-function pianoPromise(octave){
+function pianoPromise({ octave, name }){
+    const octavePromises = []
 
+    octave.forEach((number) => {
+        octavePromises.push(loadSoundRequest({
+            name,
+            instrument: 'piano',
+            octave: octave.key()
+        }))
+    })
+
+    return [...octavePromises]
 }
 
-function guitarPromise(octave){
+function guitarPromise({ octave, name }){
+    const octavePromises = []
 
+    octave.forEach((number) => {
+        individualNotePromises.push(loadSoundRequest({
+            name,
+            instrument: 'guitar',
+            octave: octave.key()
+        }))
+    })
+
+    return [...octavePromises]
 }
 
 function recursiveMap(note) {
@@ -122,34 +142,12 @@ function recursiveMap(note) {
     let individualNotePromises = []
 
     note.map((instrument) => {
-        if (instrument.key('piano')){
-            instrument.get('piano').forEach((octave) => {
-                individualNotePromises.push(loadSoundRequest({
-                    name: note.get('name'),
-                    instrument: 'piano',
-                    octave: octave.key()
-                }))
-            })
-        }
-        if (instrument.key('guitar')){
-            instrument.get('guitar').forEach((octave) => {
-                individualNotePromises.push(loadSoundRequest({
-                    name: note.get('name'),
-                    instrument: 'guitar',
-                    octave: octave.key()
-                }))
-            })
-        }
-
-    })
-
-    note.map((instrument) => {
         switch(instrument.key()) {
             case 'piano':
-                individualNotePromises.push(pianoPromise(instrument.get('piano')))
+                individualNotePromises.push({ octave: pianoPromise(note.get('piano')), name: note.get('name')})
                 break
             case 'guitar':
-                individualNotePromises.push(guitarPromise(instrument.get('guitar')))
+                individualNotePromises.push({ octave: guitarPromise(note.get('guitar')), name: note.get('name') })
                 break
         }
     })
@@ -157,13 +155,14 @@ function recursiveMap(note) {
     return Promise.all(individualNotePromises)
 }
 
-
 export async function loadNotes(tracker) {
     const promises = []
     //send those into loadSoundRequest one at a time.
     tracker.forEach((note) => {
-        recursiveMap(note).then()
-        //promises.push(loadSoundRequest({ name: note.get('name'), instrument: note.getIn(['name','piano']), octave:  })
+        recursiveMap(note).then((note) => {
+            //one note at a time:
+            //now you can urn MakeNotesInfo()
+        })
     })
 
     //resolve the super promise
