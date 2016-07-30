@@ -1,4 +1,4 @@
-import { OrderedMap, Map, fromJS, List, Record } from 'immutable'
+import { OrderedMap, Map, fromJS, List, Record, toJS } from 'immutable'
 import { context } from 'config/constants'
 
 let counter = 0;
@@ -84,7 +84,7 @@ async function guitarPromise({ octave, name }) {
 async function recursiveMap(note) {
     let noteMap = Map()
 
-    await note.forEach((instrument) => {
+    note.forEach((instrument) => {
         //can make this a switch instead:
 
         if (instrument === note.get('piano')) {
@@ -104,29 +104,16 @@ async function recursiveMap(note) {
     return await noteMap
 }
 
-export function loadNotes(tracker) {
-    const promises = []
-    //send those into loadSoundRequest one at a time.
-    tracker.forEach((notes) => {
-        recursiveMap(notes).then((note) => {
-            console.log(note)
-            //console.log('note:', note)
-            //one thing you can get notes.get('name')
-            //do addNotes process.
-            //grab the maps off each element in the array, merge them, send the whole thing to addNotes.
+export async function loadNotes(tracker) {
 
-        })
+    //send those into loadSoundRequest one at a time.
+    const promises = tracker.map((notes) => {
+        return recursiveMap(notes).then((note) => note)
     })
 
     //resolve the super promise
-    return Promise.all(promises)
-        .then((data) => {
-            data.forEach((note) => {
-                newNotes = newNotes.setIn([note.name, 'piano', 'four'], note.obj)
-                //console.log(newNotes)
-            })
-        })
-        .catch((err) => Error('Promise.all error:', err));
+    const newTrackerList = await Promise.all(promises)
+    makeNotesInfo(newTrackerList)
 }
 
 const Note = Record({
@@ -136,19 +123,20 @@ const Note = Record({
 })
 
 function addNote(notes, note) {
+    console.log(notes.toJS())
     return notes.set(note.get('name'), note)
 }
 
 //builds the note Map with links to the sound files.
 //This should build the Notes from the promises.
-function makeNotesInfo(tracker) {
-
+async function makeNotesInfo(trackerList) {
     let notes = Map()
 
     //should loop over tracker instead.
-    tracker.forEach((note) => {
+    await trackerList.forEach((note) => {
+        console.log(note.toJS())
         notes = addNote(notes, new Note({
-            name: note.get('name'),
+            name: note,
             piano: Map({
                 four: note.getIn(['piano', 'four', 'buffer']),
                 five: note.getIn(['piano', 'five', 'buffer'])
@@ -159,7 +147,7 @@ function makeNotesInfo(tracker) {
             })
         }))
     })
-
+    console.log(notes)
     return notes
 }
 
