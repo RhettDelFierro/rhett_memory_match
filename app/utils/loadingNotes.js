@@ -50,50 +50,79 @@ function loadSoundRequest({ name, instrument, octave }) {
     })
 }
 
-function pianoPromise({ octave, name }) {
-    let promise = octave.map((number) => {
-        return loadSoundRequest({
-            name,
-            instrument: 'piano',
-            octave: 'four'
-        }).then((note) => note)
-    })
+async function extractMap(octavePromises){
 
-    return promise
+    return Map({
+        [octavePromises[0].octave]: Map({
+            buffer: octavePromises[0].buffer
+        }),
+        [octavePromises[1].octave]: Map({
+            buffer: octavePromises[1].buffer
+        })
+    })
+    //octaveMap = octaveMap.setIn([octavePromises[0].octave, 'buffer'],octavePromises[0].buffer)
+    //octaveMap = octaveMap.setIn([octavePromises[1].octave, 'buffer'],octavePromises[1].buffer)
+
 }
 
-function guitarPromise({ octave, name }) {
+//fix both of these two promise functions to just return a map.
+async function pianoPromise({ octave, name }) {
+    try {
+        let octavePromises = await Promise.all(octave.map((number) => {
+            return loadSoundRequest({
+                name,
+                instrument: 'piano',
+                octave: 'four'
+            })
+        }))
+        console.log('octave promises:',octavePromises)
+        let octaveInfo = await extractMap(octavePromises)
+        console.log('after extractMap:',octaveInfo)
+    } catch (error){
+        Error('Error in pianoPromise', error)
+    }
 
-    let promise = octave.map((number) => {
+}
+
+async function guitarPromise({ octave, name }) {
+    let octaveMap = Map()
+
+    octave.map((number) => {
         return loadSoundRequest({
             name,
             instrument: 'guitar',
             octave: 'four'
-        }).then((note) => note)
+        }).then((note) => {
+            octaveMap = octaveMap.setIn([note.octave, 'buffer'], note.buffer)
+        })
     })
 
-    return promise
+    return octaveMap
 }
 
 async function recursiveMap(note) {
     //note is an individual Map() from tracker.
     let noteMap = Map()
 
-
     note.forEach((instrument) => {
-        noteMap = noteMap.setIn([note.get('name'), 'piano'], pianoPromise({octave: note.get('piano'), name: note.get('name')}))
-        noteMap = noteMap.setIn([note.get('name'), 'guitar'], guitarPromise({octave: note.get('guitar'), name: note.get('name')}))
+        noteMap = noteMap.setIn([note.get('name'), 'piano'], pianoPromise({
+            octave: note.get('piano'),
+            name: note.get('name')
+        }))
+        //noteMap = noteMap.setIn([note.get('name'), 'guitar'], guitarPromise({
+        //    octave: note.get('guitar'),
+        //    name: note.get('name')
+        //}))
     })
     return await noteMap
 }
 
 export function loadNotes(tracker) {
-    console.log('loadNotes:', tracker)
     const promises = []
     //send those into loadSoundRequest one at a time.
     tracker.forEach((notes) => {
         recursiveMap(notes).then((note) => {
-            console.log('note:', note)
+            //console.log('note:', note)
             //one thing you can get notes.get('name')
             //do addNotes process.
             //grab the maps off each element in the array, merge them, send the whole thing to addNotes.
