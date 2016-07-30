@@ -62,7 +62,7 @@ function pianoPromise({ octave, name }) {
     return promise
 }
 
-function guitarPromise(octave) {
+function guitarPromise({ octave, name }) {
 
     let promise = octave.map((number) => {
         return loadSoundRequest({
@@ -77,27 +77,27 @@ function guitarPromise(octave) {
 
 async function recursiveMap(note) {
     //note is an individual Map() from tracker.
-    let individualNotePromises = []
+    let noteMap = Map()
+
 
     note.forEach((instrument) => {
-        individualNotePromises.push(pianoPromise({octave: note.get('piano'), name: note.get('name')}))
-        individualNotePromises.push(guitarPromise({octave: note.get('guitar'), name: note.get('name')}))
+        noteMap = noteMap.setIn([note.get('name'), 'piano'], pianoPromise({octave: note.get('piano'), name: note.get('name')}))
+        noteMap = noteMap.setIn([note.get('name'), 'guitar'], guitarPromise({octave: note.get('guitar'), name: note.get('name')}))
     })
-
-    return await Promise.all(individualNotePromises)
+    return await noteMap
 }
 
 export function loadNotes(tracker) {
+    console.log('loadNotes:', tracker)
     const promises = []
     //send those into loadSoundRequest one at a time.
     tracker.forEach((notes) => {
         recursiveMap(notes).then((note) => {
+            console.log('note:', note)
             //one thing you can get notes.get('name')
             //do addNotes process.
             //grab the maps off each element in the array, merge them, send the whole thing to addNotes.
 
-
-            console.log(note)
         })
     })
 
@@ -147,4 +147,4 @@ function makeNotesInfo(tracker) {
 }
 
 //call it with the tracker passed in from Redux?
-export const notes = makeNotesInfo()
+//export const notes = makeNotesInfo()
