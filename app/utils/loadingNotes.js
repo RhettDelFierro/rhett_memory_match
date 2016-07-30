@@ -1,6 +1,8 @@
 import { OrderedMap, Map, fromJS, List, Record } from 'immutable'
 import { context } from 'config/constants'
 
+let counter = 0;
+
 function makeTrackerNote(name) {
     return {
         name: name,
@@ -23,6 +25,7 @@ export function makeTracker() {
 }
 
 function loadSoundRequest({ name, instrument, octave }) {
+    //console.log(name, instrument, octave)
     const octaveList = {
         'three': '3',
         'four': '4',
@@ -50,69 +53,53 @@ function loadSoundRequest({ name, instrument, octave }) {
     })
 }
 
-async function extractMap(octavePromises){
-
+function extractMap(octavePromises) {
     return Map({
-        [octavePromises[0].octave]: Map({
-            buffer: octavePromises[0].buffer
-        }),
-        [octavePromises[1].octave]: Map({
-            buffer: octavePromises[1].buffer
-        })
+        [octavePromises[0].octave]: octavePromises[0].buffer,
+        [octavePromises[1].octave]: octavePromises[1].buffer
     })
-    //octaveMap = octaveMap.setIn([octavePromises[0].octave, 'buffer'],octavePromises[0].buffer)
-    //octaveMap = octaveMap.setIn([octavePromises[1].octave, 'buffer'],octavePromises[1].buffer)
 
 }
 
 //fix both of these two promise functions to just return a map.
 async function pianoPromise({ octave, name }) {
-    try {
-        let octavePromises = await Promise.all(octave.map((number) => {
-            return loadSoundRequest({
-                name,
-                instrument: 'piano',
-                octave: 'four'
-            })
-        }))
-        console.log('octave promises:',octavePromises)
-        let octaveInfo = await extractMap(octavePromises)
-        console.log('after extractMap:',octaveInfo)
-    } catch (error){
-        Error('Error in pianoPromise', error)
-    }
+
+    const four = loadSoundRequest({ name, instrument: 'piano', octave: 'four' })
+    const five = loadSoundRequest({ name, instrument: 'piano', octave: 'five' })
+
+    const data = await Promise.all([four, five])
+    return extractMap(data)
 
 }
 
 async function guitarPromise({ octave, name }) {
-    let octaveMap = Map()
 
-    octave.map((number) => {
-        return loadSoundRequest({
-            name,
-            instrument: 'guitar',
-            octave: 'four'
-        }).then((note) => {
-            octaveMap = octaveMap.setIn([note.octave, 'buffer'], note.buffer)
-        })
-    })
+    const three = loadSoundRequest({ name, instrument: 'guitar', octave: 'three' })
+    const four = loadSoundRequest({ name, instrument: 'guitar', octave: 'four' })
+    const data = await Promise.all([three, four])
 
-    return octaveMap
+    return extractMap(data)
 }
 
 async function recursiveMap(note) {
-    //note is an individual Map() from tracker.
     let noteMap = Map()
 
-    note.forEach((instrument) => {
-        noteMap = noteMap.setIn([note.get('name'), 'piano'], pianoPromise({
-            octave: note.get('piano'),
-            name: note.get('name')
-        }))
-        //noteMap = noteMap.setIn([note.get('name'), 'guitar'], guitarPromise({
-        //    octave: note.get('guitar'),
-        //    name: note.get('name')
-        //}))
+    await note.forEach((instrument) => {
+        //can make this a switch instead:
+
+        if (instrument === note.get('piano')) {
+            noteMap = noteMap.setIn([note.get('name'), 'piano'], pianoPromise({
+                octave: note.get('piano'),
+                name: note.get('name')
+            }))
+        }
+
+        if (instrument === note.get('guitar')) {
+            noteMap = noteMap.setIn([note.get('name'), 'guitar'], guitarPromise({
+                octave: note.get('guitar'),
+                name: note.get('name')
+            }))
+        }
     })
     return await noteMap
 }
@@ -122,6 +109,7 @@ export function loadNotes(tracker) {
     //send those into loadSoundRequest one at a time.
     tracker.forEach((notes) => {
         recursiveMap(notes).then((note) => {
+            console.log(note)
             //console.log('note:', note)
             //one thing you can get notes.get('name')
             //do addNotes process.
