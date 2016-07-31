@@ -100,6 +100,7 @@ async function recursiveMap(note) {
                 name: note.get('name')
             }))
         }
+        noteMap = noteMap.set('name', note.get('name'))
     })
     return await noteMap
 }
@@ -124,7 +125,7 @@ const Note = Record({
 
 function addNote(notes, note) {
     console.log(notes.toJS())
-    return notes.set(note.get('name'), note)
+    return notes.set(note.name, note)
 }
 
 //builds the note Map with links to the sound files.
@@ -134,9 +135,9 @@ async function makeNotesInfo(trackerList) {
 
     //should loop over tracker instead.
     await trackerList.forEach((note) => {
-        console.log(note.toJS())
+        console.log(note)
         notes = addNote(notes, new Note({
-            name: note,
+            name: note.get('name'),
             piano: Map({
                 four: note.getIn(['piano', 'four', 'buffer']),
                 five: note.getIn(['piano', 'five', 'buffer'])
