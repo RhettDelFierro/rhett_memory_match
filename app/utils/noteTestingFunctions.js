@@ -1,6 +1,5 @@
 import { Map, List, fromJS, Iterable, toJS, toKeyedSeq } from 'immutable'
 import { notes, context } from 'config/constants'
-import { notesBuffer } from './loadingNotes'
 
 let newNotes = notes;
 
@@ -17,7 +16,7 @@ export function randomNotes({ tracker, mode }) {
         instrument = 'piano'
         octave = 'four'
         count = 5;
-        availableNotes = tracker.filter((item) => item.getIn([instrument, octave]) < count )
+        availableNotes = tracker.filter((item) => item.getIn([instrument, octave]) < count)
     } else {
         return filterList({tracker, count: count})
     }
@@ -27,7 +26,7 @@ export function randomNotes({ tracker, mode }) {
     return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())).get('name') : ''
 }
 
-function filterList({ tracker, count }){
+function filterList({ tracker, count }) {
     let availableNotes = tracker.map((note) => {
         const checkNote = note.toJS()
         for (var instrument in checkNote) {
@@ -46,7 +45,7 @@ function filterList({ tracker, count }){
             }
         }
     })
-    if (availableNotes.size > 0){
+    if (availableNotes.size > 0) {
         const element = availableNotes.get(Math.floor(availableNotes.size * Math.random()))
         return (
             Map({
@@ -119,9 +118,9 @@ export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolu
 }
 
 //this is the api call:
-export async function playNotes({ note, instrument, octave, time = 1000, volume = 1 }) {
+export async function playNotes({ note, instrument, octave, time = 1000, volume = 1, notesBuffer }) {
     //maybe have to make a Map()?
-    return new Promise((resolve, reject) => {
+    //return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
         // source.buffer = notes[note].buffer
 
@@ -133,25 +132,23 @@ export async function playNotes({ note, instrument, octave, time = 1000, volume 
         //notes[note].gainNode.connect(context.destination)
 
         //get a copy of the note:
-        console.log(notesBuffer)
-        notesBuffer.then((notes) => {
-            let notePlayed = notes.getIn([note, instrument, octave])
-            source.buffer = notePlayed
 
-            //copy of the buffer for the note being played
-            notePlayed = notePlayed.set('gainNode', context.createGain())
-            source.connect(notePlayed.get('gainNode'))
-            notePlayed = notePlayed.set('volume', volume)
-            notePlayed = notePlayed.setIn(['gainNode', 'gain', 'value'], notePlayed.get('volume'))
-            notePlayed.getIn(['gainNode', 'connect'])(context.destination)
+        let noteBuffer = await notesBuffer.get(note)[instrument][octave]
+        source.buffer = noteBuffer
 
-            //yield before here?
-            source.start(0)
-            setTimeout(() => {
-                resolve(source.stop())
-            }, time)
-        })
-    })
+        //copy of the buffer for the note being played
+        noteBuffer = noteBuffer.set('gainNode', context.createGain())
+        source.connect(noteBuffer.get('gainNode'))
+        noteBuffer = noteBuffer.set('volume', volume)
+        noteBuffer = noteBuffer.setIn(['gainNode', 'gain', 'value'], noteBuffer.get('volume'))
+        noteBuffer.getIn(['gainNode', 'connect'])(context.destination)
+
+        //yield before here?
+        source.start(0)
+        return await setTimeout(() => {
+            source.stop()
+        }, time)
+
 }
 
 //make for Redux

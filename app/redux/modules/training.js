@@ -1,7 +1,7 @@
 import { Map, List, fromJS } from 'immutable'
 import { randomNotes, playNotes, maskingNotes, handleIncorrect, buffer } from 'utils/noteTestingFunctions'
 import { notes, tracker } from 'config/constants'
-import { loadNotes } from 'utils/loadingNotes'
+import { loadNotes, makeNotesInfo } from 'utils/loadingNotes'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -73,10 +73,25 @@ export function resetTraining() {
 }
 
 export function startGame() {
-    return function (dispatch, getState) {
-        loadNotes(getState().training.get('tracker')).then((notesUsed) => {
-            dispatch({type: START_GAME})
+    return async function (dispatch, getState) {
+        const notesUsed = await loadNotes(getState().training.get('tracker'))
+        const makeNotes = await notesUsed.map((note) => {
+            return {
+                name: note.get('name'),
+                piano: {
+                    four: note.getIn([note.get('name'),'piano']).then((note) => note.four),
+                    five: note.getIn([note.get('name'),'piano']).then((note) => note.five)
+                },
+                guitar: {
+                    three: note.getIn([note.get('name'),'guitar']).then((note) => note.three),
+                    four: note.getIn([note.get('name'),'guitar']).then((note) => note.four)
+                }
+            }
         })
+        console.log('makeNotes',makeNotes)
+        const notesBuffer = await makeNotesInfo(makeNotes)
+        console.log('notesBuffer',notesBuffer)
+        dispatch({type: START_GAME, notesBuffer })
     }
 }
 
@@ -122,7 +137,8 @@ export function guessed() {
 export function targetNoteThunk({ note, instrument, octave }) {
     return function (dispatch, getState) {
         const volume = getState().volume.get('targetNoteVolume')
-        playNotes({note, instrument, octave, volume}).then(() => {
+        const notesBuffer = getState().training.get('notesBuffer')
+        playNotes({note, instrument, octave, volume, notesBuffer }).then(() => {
             //make it so you can't choose anything before this:
             dispatch(targetNoteChosen(note))
             dispatch(increaseCount(note))
@@ -181,7 +197,8 @@ const initialState = fromJS({
     notesUsed: {},
     onCheck: false,
     roundCompleted: false,
-    mode: 'pretest'
+    mode: 'pretest',
+    notesBuffer: {}
 })
 
 export default function training(state = initialState, action) {
@@ -215,7 +232,8 @@ export default function training(state = initialState, action) {
             })
         case START_GAME:
             return state.merge({
-                start: true
+                start: true,
+                notesBuffer: action.notesBuffer
             })
         case SET_DATE_COMPLETE:
             //send to format date converter.
