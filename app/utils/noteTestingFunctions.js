@@ -119,7 +119,7 @@ export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolu
 }
 
 //this is the api call:
-export function playNotes({ note, instrument, octave, time = 1000, volume = 1 }) {
+export async function playNotes({ note, instrument, octave, time = 1000, volume = 1 }) {
     //maybe have to make a Map()?
     return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
@@ -131,24 +131,26 @@ export function playNotes({ note, instrument, octave, time = 1000, volume = 1 })
         //notes[note].volume = volume
         //notes[note].gainNode.gain.value = notes[note].volume
         //notes[note].gainNode.connect(context.destination)
-        let noteClass = notesBuffer.get(note)
-        console.log(noteClass)
+
         //get a copy of the note:
-        let notePlayed = notesBuffer.getIn([note, instrument, octave])
-        source.buffer = notePlayed.get('buffer')
+        console.log(notesBuffer)
+        notesBuffer.then((notes) => {
+            let notePlayed = notes.getIn([note, instrument, octave])
+            source.buffer = notePlayed
 
-        //copy of the buffer for the note being played
-        notePlayed = notePlayed.set('gainNode', context.createGain())
-        source.connect(notePlayed.get('gainNode'))
-        notePlayed = notePlayed.set('volume', volume)
-        notePlayed = notePlayed.setIn(['gainNode', 'gain', 'value'], notePlayed.get('volume'))
-        notePlayed.getIn(['gainNode', 'connect'])(context.destination)
+            //copy of the buffer for the note being played
+            notePlayed = notePlayed.set('gainNode', context.createGain())
+            source.connect(notePlayed.get('gainNode'))
+            notePlayed = notePlayed.set('volume', volume)
+            notePlayed = notePlayed.setIn(['gainNode', 'gain', 'value'], notePlayed.get('volume'))
+            notePlayed.getIn(['gainNode', 'connect'])(context.destination)
 
-        //yield before here?
-        source.start(0)
-        setTimeout(() => {
-            resolve(source.stop())
-        }, time)
+            //yield before here?
+            source.start(0)
+            setTimeout(() => {
+                resolve(source.stop())
+            }, time)
+        })
     })
 }
 

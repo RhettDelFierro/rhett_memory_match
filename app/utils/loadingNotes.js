@@ -54,10 +54,10 @@ function loadSoundRequest({ name, instrument, octave }) {
 }
 
 function extractMap(octavePromises) {
-    return Map({
+    return {
         [octavePromises[0].octave]: octavePromises[0].buffer,
         [octavePromises[1].octave]: octavePromises[1].buffer
-    })
+    }
 
 }
 
@@ -78,7 +78,7 @@ async function guitarPromise({ octave, name }) {
     const four = loadSoundRequest({name, instrument: 'guitar', octave: 'four'})
     const data = await Promise.all([three, four])
 
-    return extractMap(data)
+    return await extractMap(data)
 }
 
 async function recursiveMap(note) {
@@ -111,7 +111,6 @@ export async function loadNotes(tracker) {
         const promises = tracker.map((notes) => {
             return recursiveMap(notes).then((note) => note)
         })
-
         //resolve the super promise
         const newTrackerList = await Promise.all(promises)
         notesBuffer = makeNotesInfo(newTrackerList)
@@ -134,6 +133,7 @@ function addNote(notes, note) {
 //builds the note Map with links to the sound files.
 //This should build the Notes from the promises.
 async function makeNotesInfo(trackerList) {
+    //keep in mind trackerList is a regular Javascript array.
 
     try {
         let notes = Map()
@@ -142,12 +142,12 @@ async function makeNotesInfo(trackerList) {
             notes = addNote(notes, new Note({
                 name: note.get('name'),
                 piano: Map({
-                    four: note.getIn(['piano', 'four', 'buffer']),
-                    five: note.getIn(['piano', 'five', 'buffer'])
+                    four: note.getIn([note.get('name'), 'piano']).then((note) => note.four),
+                    five: note.getIn([note.get('name'), 'piano']).then((note) => note.five)
                 }),
                 guitar: Map({
-                    three: note.getIn(['guitar', 'three', 'buffer']),
-                    four: note.getIn(['guitar', 'four', 'buffer'])
+                    three: note.getIn([note.get('name'), 'guitar']).then((note) => note.three),
+                    four: note.getIn([note.get('name'), 'guitar']).then((note) => note.four)
                 })
             }))
         })
