@@ -30,14 +30,13 @@ export function randomNotes({ tracker, mode }) {
 function filterList({ tracker, count }){
     let availableNotes = tracker.map((note) => {
         const checkNote = note.toJS()
-        console.log(checkNote)
         for (var instrument in checkNote) {
-            if (checkNote.hasOwnProperty(instrument)) {
-                for (var octave in instrument) {
-                    if (instrument.hasOwnProperty(octave)) {
-                        if (instrument[octave] < count) {
+            if (checkNote.hasOwnProperty(instrument) && instrument !== 'name') {
+                for (var octave in checkNote[instrument]) {
+                    if (checkNote[instrument].hasOwnProperty(octave)) {
+                        if (checkNote[instrument][octave] < count) {
                             return fromJS({
-                                name: note.name,
+                                name: checkNote.name,
                                 instrument: instrument,
                                 octave: octave
                             })
@@ -62,7 +61,6 @@ function filterList({ tracker, count }){
 }
 
 function loadSoundRequest(obj, name) {
-    console.log(name)
 
     return new Promise((resolve, reject) => {
         const src = obj.get('src')
@@ -133,7 +131,8 @@ export function playNotes({ note, instrument, octave, time = 1000, volume = 1 })
         //notes[note].volume = volume
         //notes[note].gainNode.gain.value = notes[note].volume
         //notes[note].gainNode.connect(context.destination)
-
+        let noteClass = notesBuffer.get(note)
+        console.log(noteClass)
         //get a copy of the note:
         let notePlayed = notesBuffer.getIn([note, instrument, octave])
         source.buffer = notePlayed.get('buffer')
