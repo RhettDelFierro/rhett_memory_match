@@ -19,50 +19,46 @@ export function randomNotes({ tracker, mode }) {
         count = 5;
         availableNotes = tracker.filter((item) => item.getIn([instrument, octave]) < count )
     } else {
-        //feel like this should all be a separate function.
-
-        //randomize instrument and octave. Really don't need this because you'll get a random entry at the end.
-        let instruments = ['piano', 'guitar']
-        instrument = instruments[Math.floor(instruments.length * Math.random())]
-        let octaves;
-        //if piano, can be four or five
-        switch(instrument){
-            case ('piano'):
-                octaves = ['four', 'five']
-                break;
-            case('guitar'):
-                octaves = ['three', 'four']
-                break;
-        }
-        octave = octaves[Math.floor(octaves.length * Math.random())]
-        availableNotes = filterList({tracker, count})
-        if (availableNotes.size === 0) {
-            //run the search again but iwth a different instrument/octave
-        }
+        return filterList({tracker, count: count})
     }
 
-    //tracker needs to be adjusted because it's a deeper structure.
-
-    //possible problem: if it selects guitar, but no notes are less than the count,
-    //should move to piano and vice-versa
-    //that part should probably be handled in the filter loop.
-    //const availableNotes = tracker.filter((item) => {
-    //    if (item.getIn([instrument, octave]) < count) {
-    //        return item
-    //    }
-    //
-    //
-    //})
-
-    //remeber to .get('name') of the item above.
+    //maybe an object/map also stating the instrument and octave
+    //in this case piano and four. Unless you plan to have separate Redux stores.
     return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())).get('name') : ''
 }
 
 function filterList({ tracker, count }){
-    return tracker.map((note) => {
-        //turning each entry to a javascript object
-        note.toJS()
+    let availableNotes = tracker.map((note) => {
+        const checkNote = note.toJS()
+        console.log(checkNote)
+        for (var instrument in checkNote) {
+            if (checkNote.hasOwnProperty(instrument)) {
+                for (var octave in instrument) {
+                    if (instrument.hasOwnProperty(octave)) {
+                        if (instrument[octave] < count) {
+                            return fromJS({
+                                name: note.name,
+                                instrument: instrument,
+                                octave: octave
+                            })
+                        }
+                    }
+                }
+            }
+        }
     })
+    if (availableNotes.size > 0){
+        const element = availableNotes.get(Math.floor(availableNotes.size * Math.random()))
+        return (
+            Map({
+                name: element.get('name'),
+                instrument: element.get('instrument'),
+                octave: element.get('octave')
+            })
+        )
+    } else {
+        return ''
+    }
 }
 
 function loadSoundRequest(obj, name) {

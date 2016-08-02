@@ -119,10 +119,10 @@ export function guessed() {
 }
 
 //called after chooseRandomNote: after every guess to start the next
-export function targetNoteThunk({ note }) {
+export function targetNoteThunk({ note, instrument, octave }) {
     return function (dispatch, getState) {
         const volume = getState().volume.get('targetNoteVolume')
-        playNotes({note, volume}).then(() => {
+        playNotes({note, instrument, octave, volume}).then(() => {
             //make it so you can't choose anything before this:
             dispatch(targetNoteChosen(note))
             dispatch(increaseCount(note))
@@ -143,7 +143,9 @@ export function chooseRandomNote() {
             }
         } else {
             //chooses next target note
-            dispatch(targetNoteThunk({note: randomNote.get('name')}))
+            dispatch(targetNoteThunk({note: randomNote.get('name'),
+                instrument: randomNote.get('instrument'),
+                octave: randomNote.get('octave')}))
         }
     }
 
