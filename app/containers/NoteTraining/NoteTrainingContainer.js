@@ -41,6 +41,7 @@ class NoteTrainingContainer extends Component {
                 this.props.guessed()
             }
 
+            //right when game starts(clicked on counter) will play starting target note.
             if (this.props.attempts === 0 && !newProps.targetNotePlayed && newProps.targetNote === '') {
                 this.props.chooseRandomNote()
             }

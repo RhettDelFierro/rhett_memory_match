@@ -106,7 +106,7 @@ async function recursiveMap(note) {
 }
 
 export async function loadNotes(tracker) {
-
+    console.log(tracker)
     try {
         //send those into loadSoundRequest one at a time.
         const promises = tracker.map((notes) => {

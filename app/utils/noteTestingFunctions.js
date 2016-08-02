@@ -6,11 +6,42 @@ let newNotes = notes;
 
 //Redux
 //take counter array and return a random targetNote if it hasn't been played 5 times.
-export function randomNotes(tracker) {
+export function randomNotes({ tracker, mode }) {
 
-    const availableNotes = tracker.filter((item) => item.get('count') < 5)
+    let instrument;
+    let octave;
+    let count = 1;
 
-    return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())) : ''
+    if (mode !== 'posttest') {
+        instrument = 'piano'
+        octave = 'four'
+        count = 5;
+    } else {
+        //randomize instrument and octave
+        let instruments = ['piano', 'guitar']
+        instrument = instruments[Math.floor(instruments.length * Math.random())]
+        let octaves;
+        //if piano, can be four or five
+        switch(instrument){
+            case ('piano'):
+                octaves = ['four', 'five']
+                break;
+            case('guitar'):
+                octaves = ['three', 'four']
+                break;
+        }
+        octave = octaves[Math.floor(octaves.length * Math.random())]
+    }
+
+    //tracker needs to be adjusted because it's a deeper structure.
+
+    //possible problem: if it selects guitar, but no notes are less than the count,
+    //should move to piano and vice-versa
+    //that part should probably be handled in the filter loop.
+    const availableNotes = tracker.filter((item) => item.getIn([instrument, octave]) < count)
+
+    //remeber to .get('name') of the item above.
+    return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())).get('name') : ''
 }
 
 function loadSoundRequest(obj, name) {
@@ -44,7 +75,7 @@ export async function loadNotes() {
     const promises = []
     //send those into loadSoundRequest one at a time.
     newNotes.forEach((note) => {
-         promises.push(loadSoundRequest(note.getIn(['piano', 'four']), note.get('name')))
+        promises.push(loadSoundRequest(note.getIn(['piano', 'four']), note.get('name')))
     })
 
     //resolve the super promise
@@ -77,7 +108,7 @@ export function playNotes({ note, instrument, octave, time = 1000, volume = 1 })
     //maybe have to make a Map()?
     return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
-       // source.buffer = notes[note].buffer
+        // source.buffer = notes[note].buffer
 
         //code for the volume
         //notes[note].gainNode = context.createGain()

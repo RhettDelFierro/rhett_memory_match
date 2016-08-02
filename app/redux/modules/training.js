@@ -134,7 +134,8 @@ export function chooseRandomNote() {
 
     return function (dispatch, getState) {
         const currentTracker = getState().training.get('tracker')
-        const randomNote = randomNotes(currentTracker)
+        const currentMode = getState().training.get('mode')
+        const randomNote = randomNotes({ tracker: currentTracker, mode: currentMode})
         if (randomNote === '') {
             dispatch({type: COMPLETE_ROUND})
             if (getState().training.roundsComplete === 3) {
