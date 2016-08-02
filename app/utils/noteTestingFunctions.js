@@ -137,11 +137,11 @@ export async function playNotes({ note, instrument, octave, time = 1000, volume 
         source.buffer = noteBuffer
 
         //copy of the buffer for the note being played
-        noteBuffer = noteBuffer.set('gainNode', context.createGain())
-        source.connect(noteBuffer.get('gainNode'))
-        noteBuffer = noteBuffer.set('volume', volume)
-        noteBuffer = noteBuffer.setIn(['gainNode', 'gain', 'value'], noteBuffer.get('volume'))
-        noteBuffer.getIn(['gainNode', 'connect'])(context.destination)
+        noteBuffer.gainNode = context.createGain()
+        source.connect(noteBuffer.gainNode)
+        noteBuffer.volume = volume
+        noteBuffer.gainNode.gain.value = noteBuffer.volume
+        noteBuffer.gainNode.connect(context.destination)
 
         //yield before here?
         source.start(0)
