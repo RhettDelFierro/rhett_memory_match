@@ -50,7 +50,7 @@ class PostTestContainer extends Component {
 
     render() {
         return (
-            <NoteTraining start={this.props.start} />
+            <NoteTraining start={this.props.start}/>
         )
     }
 }

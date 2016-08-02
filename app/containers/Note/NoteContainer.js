@@ -28,7 +28,7 @@ NoteContainer.propTypes = {
     targetNoteChosen: PropTypes.func.isRequired,
     correct: PropTypes.bool,
     targetNote: PropTypes.string,
-    tracker: PropTypes.instanceOf(OrderedMap),
+    tracker: PropTypes.instanceOf(List),
     onCheck: PropTypes.bool.isRequired,
     selectedNoteChosen: PropTypes.func.isRequired,
     targetNotePlayed: PropTypes.bool.isRequired,

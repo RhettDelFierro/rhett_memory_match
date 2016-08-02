@@ -42,7 +42,7 @@ Note.propTypes = {
     selectedNoteChosen: PropTypes.func.isRequired,
     correct: PropTypes.bool,
     targetNote: PropTypes.string,
-    tracker: PropTypes.instanceOf(OrderedMap).isRequired,
+    tracker: PropTypes.instanceOf(List).isRequired,
     onSelect: PropTypes.func.isRequired,
     onCheck: PropTypes.bool.isRequired,
     mode: PropTypes.string

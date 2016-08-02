@@ -1,9 +1,6 @@
 import { Map, List, fromJS, Iterable, toJS, toKeyedSeq } from 'immutable'
 import { notes, context } from 'config/constants'
-
-export function counterIncrement(targetNote, counter) {
-    return counter.map
-}
+import { notesBuffer } from './loadingNotes'
 
 let newNotes = notes;
 
@@ -76,17 +73,29 @@ export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolu
 }
 
 //this is the api call:
-export function playNotes({ note, time = 1000, volume = 1 }) {
-
+export function playNotes({ note, instrument, octave, time = 1000, volume = 1 }) {
+    //maybe have to make a Map()?
     return new Promise((resolve, reject) => {
         const source = context.createBufferSource();
-        source.buffer = notes[note].buffer
+       // source.buffer = notes[note].buffer
+
         //code for the volume
-        notes[note].gainNode = context.createGain()
-        source.connect(notes[note].gainNode)
-        notes[note].volume = volume
-        notes[note].gainNode.gain.value = notes[note].volume
-        notes[note].gainNode.connect(context.destination)
+        //notes[note].gainNode = context.createGain()
+        //source.connect(notes[note].gainNode)
+        //notes[note].volume = volume
+        //notes[note].gainNode.gain.value = notes[note].volume
+        //notes[note].gainNode.connect(context.destination)
+
+        //get a copy of the note:
+        let notePlayed = notesBuffer.getIn([note, instrument, octave])
+        source.buffer = notePlayed.get('buffer')
+
+        //copy of the buffer for the note being played
+        notePlayed = notePlayed.set('gainNode', context.createGain())
+        source.connect(notePlayed.get('gainNode'))
+        notePlayed = notePlayed.set('volume', volume)
+        notePlayed = notePlayed.setIn(['gainNode', 'gain', 'value'], notePlayed.get('volume'))
+        notePlayed.getIn(['gainNode', 'connect'])(context.destination)
 
         //yield before here?
         source.start(0)

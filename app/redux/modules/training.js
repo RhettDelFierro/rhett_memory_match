@@ -69,7 +69,7 @@ export function completeRound() {
 }
 
 export function resetTraining() {
-    return { type: RESET_TRAINING}
+    return {type: RESET_TRAINING}
 }
 
 export function startGame() {
@@ -98,7 +98,7 @@ export function playIncorrect() {
 }
 
 //handle a guess after every guess, this will happen:
-export function guessed(){
+export function guessed() {
     return function (dispatch, getState) {
 
         const currentTracker = getState().training.get('tracker')
@@ -107,7 +107,7 @@ export function guessed(){
         const noiseVolume = getState().volume.get('noiseVolume')
 
         //I also want to dispatch to handle the rendering of missed note.
-        buffer({randomMaskingNotes, maskingNotesVolume, noiseVolume })
+        buffer({randomMaskingNotes, maskingNotesVolume, noiseVolume})
             .then((maskingNotes) => {
                 //dispatch other action creators to reset.
                 dispatch(completeGuess())
@@ -122,7 +122,7 @@ export function guessed(){
 export function targetNoteThunk({ note }) {
     return function (dispatch, getState) {
         const volume = getState().volume.get('targetNoteVolume')
-        playNotes({note , volume }).then(() => {
+        playNotes({note, volume}).then(() => {
             //make it so you can't choose anything before this:
             dispatch(targetNoteChosen(note))
             dispatch(increaseCount(note))
@@ -142,7 +142,7 @@ export function chooseRandomNote() {
             }
         } else {
             //chooses next target note
-            dispatch(targetNoteThunk({ note: randomNote.get('name') }))
+            dispatch(targetNoteThunk({note: randomNote.get('name')}))
         }
     }
 
@@ -231,7 +231,7 @@ export default function training(state = initialState, action) {
             return state.merge({
                 roundsCompleted: state.get('roundsCompleted') + 1,
                 roundCompleted: true,
-                score: Math.floor(((60-state.get('notesMissed').size)/60) * 100) + '%'
+                score: Math.floor(((60 - state.get('notesMissed').size) / 60) * 100) + '%'
             })
         case SET_MODE:
             return state.merge({

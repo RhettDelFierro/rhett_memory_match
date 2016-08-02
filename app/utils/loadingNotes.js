@@ -1,7 +1,7 @@
 import { OrderedMap, Map, fromJS, List, Record, toJS } from 'immutable'
 import { context } from 'config/constants'
 
-let counter = 0;
+export let notesBuffer;
 
 function makeTrackerNote(name) {
     return {
@@ -25,7 +25,7 @@ export function makeTracker() {
 }
 
 function loadSoundRequest({ name, instrument, octave }) {
-    //console.log(name, instrument, octave)
+
     const octaveList = {
         'three': '3',
         'four': '4',
@@ -46,7 +46,7 @@ function loadSoundRequest({ name, instrument, octave }) {
                         resolve({name, instrument, octave, buffer})
                     }
                 ).catch((error) => {
-                console.log(error)
+                Error('Error in loadSoundRequest', error)
             })
         }
         request.send();
@@ -64,8 +64,8 @@ function extractMap(octavePromises) {
 //fix both of these two promise functions to just return a map.
 async function pianoPromise({ octave, name }) {
 
-    const four = loadSoundRequest({ name, instrument: 'piano', octave: 'four' })
-    const five = loadSoundRequest({ name, instrument: 'piano', octave: 'five' })
+    const four = loadSoundRequest({name, instrument: 'piano', octave: 'four'})
+    const five = loadSoundRequest({name, instrument: 'piano', octave: 'five'})
 
     const data = await Promise.all([four, five])
     return extractMap(data)
@@ -74,8 +74,8 @@ async function pianoPromise({ octave, name }) {
 
 async function guitarPromise({ octave, name }) {
 
-    const three = loadSoundRequest({ name, instrument: 'guitar', octave: 'three' })
-    const four = loadSoundRequest({ name, instrument: 'guitar', octave: 'four' })
+    const three = loadSoundRequest({name, instrument: 'guitar', octave: 'three'})
+    const four = loadSoundRequest({name, instrument: 'guitar', octave: 'four'})
     const data = await Promise.all([three, four])
 
     return extractMap(data)
@@ -107,14 +107,19 @@ async function recursiveMap(note) {
 
 export async function loadNotes(tracker) {
 
-    //send those into loadSoundRequest one at a time.
-    const promises = tracker.map((notes) => {
-        return recursiveMap(notes).then((note) => note)
-    })
+    try {
+        //send those into loadSoundRequest one at a time.
+        const promises = tracker.map((notes) => {
+            return recursiveMap(notes).then((note) => note)
+        })
 
-    //resolve the super promise
-    const newTrackerList = await Promise.all(promises)
-    makeNotesInfo(newTrackerList)
+        //resolve the super promise
+        const newTrackerList = await Promise.all(promises)
+        notesBuffer = makeNotesInfo(newTrackerList)
+        return true
+    } catch (error) {
+        Error('loadNotes error', error)
+    }
 }
 
 const Note = Record({
@@ -124,32 +129,33 @@ const Note = Record({
 })
 
 function addNote(notes, note) {
-    console.log(notes.toJS())
     return notes.set(note.name, note)
 }
 
 //builds the note Map with links to the sound files.
 //This should build the Notes from the promises.
 async function makeNotesInfo(trackerList) {
-    let notes = Map()
 
-    //should loop over tracker instead.
-    await trackerList.forEach((note) => {
-        console.log(note)
-        notes = addNote(notes, new Note({
-            name: note.get('name'),
-            piano: Map({
-                four: note.getIn(['piano', 'four', 'buffer']),
-                five: note.getIn(['piano', 'five', 'buffer'])
-            }),
-            guitar: Map({
-                three: note.getIn(['guitar', 'three', 'buffer']),
-                four: note.getIn(['guitar', 'four', 'buffer'])
-            })
-        }))
-    })
-    console.log(notes)
-    return notes
+    try {
+        let notes = Map()
+        //just make it all a map.
+        const i = await trackerList.forEach((note) => {
+            notes = addNote(notes, new Note({
+                name: note.get('name'),
+                piano: Map({
+                    four: note.getIn(['piano', 'four', 'buffer']),
+                    five: note.getIn(['piano', 'five', 'buffer'])
+                }),
+                guitar: Map({
+                    three: note.getIn(['guitar', 'three', 'buffer']),
+                    four: note.getIn(['guitar', 'four', 'buffer'])
+                })
+            }))
+        })
+        return notes
+    } catch (error) {
+        Error('error in MakeNotesInfo', error)
+    }
 }
 
 //call it with the tracker passed in from Redux?

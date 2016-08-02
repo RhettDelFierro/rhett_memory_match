@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { makeNotesObject } from 'utils/noteTestingFunctions'
 import * as trainingActionCreators from 'redux/modules/training'
-import { Map, OrderedMap } from 'immutable'
+import { Map, OrderedMap, List } from 'immutable'
 
 class NoteTrainingContainer extends Component {
     constructor() {
@@ -73,7 +73,7 @@ NoteTrainingContainer.propTypes = {
     setMode: PropTypes.func.isRequired,
     mode: PropTypes.string.isRequired,
     resetTraining: PropTypes.func.isRequired,
-    tracker: PropTypes.instanceOf(OrderedMap)
+    tracker: PropTypes.instanceOf(List)
 }
 
 function mapStateToProps({training, volume}) {
