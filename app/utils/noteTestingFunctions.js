@@ -28,16 +28,16 @@ export function randomNotes({ tracker, mode }) {
 
 
 function filterList({ tracker, count }) {
-    let availableNotes = tracker.map((note) => {
-        return note.map((obj) => {
+    let availableNotes = List();
+    tracker.forEach((note) => {
+        note.forEach((obj) => {
             if (obj !== note.get('name')) {
                 let instrument = (obj === note.get('piano')) ? 'piano' : 'guitar'
                 let octaveValue = Map()
                 let result = obj.findKey((value) => value < count)
                 if (result) {
                     octaveValue = octaveValue.set('name', note.get('name')).set('instrument', instrument).set('octave', result)
-                    console.log(octaveValue)
-                    return octaveValue
+                    availableNotes = availableNotes.push(octaveValue)
                 }
             }
         })
