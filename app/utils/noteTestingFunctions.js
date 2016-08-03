@@ -26,25 +26,42 @@ export function randomNotes({ tracker, mode }) {
     return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())).get('name') : ''
 }
 
+
 function filterList({ tracker, count }) {
     let availableNotes = tracker.map((note) => {
-        const checkNote = note.toJS()
-        for (var instrument in checkNote) {
-            if (checkNote.hasOwnProperty(instrument) && instrument !== 'name') {
-                for (var octave in checkNote[instrument]) {
-                    if (checkNote[instrument].hasOwnProperty(octave)) {
-                        if (checkNote[instrument][octave] < count) {
-                            return fromJS({
-                                name: checkNote.name,
-                                instrument: instrument,
-                                octave: octave
-                            })
-                        }
-                    }
+        return note.map((obj) => {
+            if (obj !== note.get('name')) {
+                let instrument = (obj === note.get('piano')) ? 'piano' : 'guitar'
+                let octaveValue = Map()
+                let result = obj.findKey((value) => value < count)
+                if (result) {
+                    octaveValue = octaveValue.set('name', note.get('name')).set('instrument', instrument).set('octave', result)
+                    console.log(octaveValue)
+                    return octaveValue
                 }
             }
-        }
+        })
     })
+    console.log(availableNotes)
+    //let availableNotes = tracker.map((note) => {
+    //    const checkNote = note.toJS()
+    //    for (var instrument in checkNote) {
+    //        if (checkNote.hasOwnProperty(instrument) && instrument !== 'name') {
+    //            for (var octave in checkNote[instrument]) {
+    //                if (checkNote[instrument].hasOwnProperty(octave)) {
+    //                    console.log(octave)
+    //                    if (checkNote[instrument][octave] < count) {
+    //                        return Map({
+    //                            name: checkNote.name,
+    //                            instrument: instrument,
+    //                            octave: octave
+    //                        })
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //})
     if (availableNotes.size > 0) {
         const element = availableNotes.get(Math.floor(availableNotes.size * Math.random()))
         return (
@@ -121,33 +138,33 @@ export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolu
 export async function playNotes({ note, instrument, octave, time = 1000, volume = 1, notesBuffer }) {
     //maybe have to make a Map()?
     //return new Promise((resolve, reject) => {
-        const source = context.createBufferSource();
-        // source.buffer = notes[note].buffer
+    const source = context.createBufferSource();
+    // source.buffer = notes[note].buffer
 
-        //code for the volume
-        //notes[note].gainNode = context.createGain()
-        //source.connect(notes[note].gainNode)
-        //notes[note].volume = volume
-        //notes[note].gainNode.gain.value = notes[note].volume
-        //notes[note].gainNode.connect(context.destination)
+    //code for the volume
+    //notes[note].gainNode = context.createGain()
+    //source.connect(notes[note].gainNode)
+    //notes[note].volume = volume
+    //notes[note].gainNode.gain.value = notes[note].volume
+    //notes[note].gainNode.connect(context.destination)
 
-        //get a copy of the note:
+    //get a copy of the note:
 
-        let noteBuffer = await notesBuffer.get(note)[instrument][octave]
-        source.buffer = noteBuffer
+    let noteBuffer = await notesBuffer.get(note)[instrument][octave]
+    source.buffer = noteBuffer
 
-        //copy of the buffer for the note being played
-        noteBuffer.gainNode = context.createGain()
-        source.connect(noteBuffer.gainNode)
-        noteBuffer.volume = volume
-        noteBuffer.gainNode.gain.value = noteBuffer.volume
-        noteBuffer.gainNode.connect(context.destination)
+    //copy of the buffer for the note being played
+    noteBuffer.gainNode = context.createGain()
+    source.connect(noteBuffer.gainNode)
+    noteBuffer.volume = volume
+    noteBuffer.gainNode.gain.value = noteBuffer.volume
+    noteBuffer.gainNode.connect(context.destination)
 
-        //yield before here?
-        source.start(0)
-        return await setTimeout(() => {
-            source.stop()
-        }, time)
+    //yield before here?
+    source.start(0)
+    return await setTimeout(() => {
+        source.stop()
+    }, time)
 
 }
 

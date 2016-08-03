@@ -133,7 +133,6 @@ export async function makeNotesInfo(trackerList) {
         let notes = Map()
         //just make it all a map.
         trackerList.forEach((note) => {
-            console.log(note)
             notes = addNote(notes, new Note({
                 name: note.name,
                 piano: {

@@ -88,9 +88,7 @@ export function startGame() {
                 }
             }
         })
-        console.log('makeNotes',makeNotes)
         const notesBuffer = await makeNotesInfo(makeNotes)
-        console.log('notesBuffer',notesBuffer)
         dispatch({type: START_GAME, notesBuffer })
     }
 }
@@ -152,6 +150,7 @@ export function chooseRandomNote() {
         const currentTracker = getState().training.get('tracker')
         const currentMode = getState().training.get('mode')
         const randomNote = randomNotes({ tracker: currentTracker, mode: currentMode})
+
         if (randomNote === '') {
             dispatch({type: COMPLETE_ROUND})
             if (getState().training.roundsComplete === 3) {
