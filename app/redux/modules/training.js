@@ -57,10 +57,12 @@ export function noteMissed() {
     }
 }
 
-export function increaseCount(targetNote) {
+export function increaseCount({ targetNote, instrument, octave }) {
     return {
         type: INCREASE_COUNT,
-        targetNote
+        targetNote,
+        instrument,
+        octave
     }
 }
 
@@ -139,7 +141,7 @@ export function targetNoteThunk({ note, instrument, octave }) {
         playNotes({note, instrument, octave, volume, notesBuffer }).then(() => {
             //make it so you can't choose anything before this:
             dispatch(targetNoteChosen(note))
-            dispatch(increaseCount(note))
+            dispatch(increaseCount({ targetNote: note, instrument, octave }))
         })
     }
 }
@@ -170,10 +172,11 @@ export function chooseRandomNote() {
 const initialStateTracker = tracker
 
 function increaseTracker(state = initialStateTracker, action) {
+    console.log(action)
     switch (action.type) {
         case INCREASE_COUNT:
             return state.update(state.findIndex((item) => item.get('name') === action.targetNote),
-                (item) => item.set('count', item.get('count') + 1))
+                (item) => item.setIn([action.instrument, action.octave], item.getIn([action.instrument, action.octave]) + 1))
         default:
             return state
     }
