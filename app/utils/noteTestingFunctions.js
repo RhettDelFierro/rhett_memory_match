@@ -26,7 +26,7 @@ export function randomNotes({ tracker, mode }) {
     return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())).get('name') : ''
 }
 
-
+//want to replace all the forEach's maybe break into different functions.
 function filterList({ tracker, count }) {
     let availableNotes = List();
     tracker.forEach((note) => {
@@ -34,34 +34,17 @@ function filterList({ tracker, count }) {
             if (obj !== note.get('name')) {
                 let instrument = (obj === note.get('piano')) ? 'piano' : 'guitar'
                 let octaveValue = Map()
-                let result = obj.findKey((value) => value < count)
-                if (result) {
-                    octaveValue = octaveValue.set('name', note.get('name')).set('instrument', instrument).set('octave', result)
-                    availableNotes = availableNotes.push(octaveValue)
-                }
+                obj.forEach((value) => {
+                    if (value < count) {
+                        octaveValue = octaveValue.set('name', note.get('name'))
+                            .set('instrument', instrument)
+                            .set('octave', obj.keyOf(value))
+                        availableNotes = availableNotes.push(octaveValue)
+                    }
+                })
             }
         })
     })
-    console.log(availableNotes)
-    //let availableNotes = tracker.map((note) => {
-    //    const checkNote = note.toJS()
-    //    for (var instrument in checkNote) {
-    //        if (checkNote.hasOwnProperty(instrument) && instrument !== 'name') {
-    //            for (var octave in checkNote[instrument]) {
-    //                if (checkNote[instrument].hasOwnProperty(octave)) {
-    //                    console.log(octave)
-    //                    if (checkNote[instrument][octave] < count) {
-    //                        return Map({
-    //                            name: checkNote.name,
-    //                            instrument: instrument,
-    //                            octave: octave
-    //                        })
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //})
     if (availableNotes.size > 0) {
         const element = availableNotes.get(Math.floor(availableNotes.size * Math.random()))
         return (
