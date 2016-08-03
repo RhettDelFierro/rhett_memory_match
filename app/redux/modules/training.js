@@ -1,5 +1,5 @@
 import { Map, List, fromJS } from 'immutable'
-import { randomNotes, playNotes, maskingNotes, handleIncorrect, buffer } from 'utils/noteTestingFunctions'
+import { randomNotes, playNotes, maskingNotes, handleIncorrect, buffer, makeNoise } from 'utils/noteTestingFunctions'
 import { notes, tracker } from 'config/constants'
 import { loadNotes, makeNotesInfo } from 'utils/loadingNotes'
 
@@ -81,17 +81,17 @@ export function startGame() {
             return {
                 name: note.get('name'),
                 piano: {
-                    four: note.getIn([note.get('name'),'piano']).then((note) => note.four),
-                    five: note.getIn([note.get('name'),'piano']).then((note) => note.five)
+                    four: note.getIn([note.get('name'), 'piano']).then((note) => note.four),
+                    five: note.getIn([note.get('name'), 'piano']).then((note) => note.five)
                 },
                 guitar: {
-                    three: note.getIn([note.get('name'),'guitar']).then((note) => note.three),
-                    four: note.getIn([note.get('name'),'guitar']).then((note) => note.four)
+                    three: note.getIn([note.get('name'), 'guitar']).then((note) => note.three),
+                    four: note.getIn([note.get('name'), 'guitar']).then((note) => note.four)
                 }
             }
         })
         const notesBuffer = await makeNotesInfo(makeNotes)
-        dispatch({type: START_GAME, notesBuffer })
+        dispatch({type: START_GAME, notesBuffer})
     }
 }
 
@@ -114,22 +114,29 @@ export function playIncorrect() {
 
 //handle a guess after every guess, this will happen:
 export function guessed() {
-    return function (dispatch, getState) {
-
-        const currentTracker = getState().training.get('tracker')
-        const randomMaskingNotes = maskingNotes(currentTracker)
-        const maskingNotesVolume = getState().volume.get('maskingNotesVolume')
-        const noiseVolume = getState().volume.get('noiseVolume')
-
-        //I also want to dispatch to handle the rendering of missed note.
-        buffer({randomMaskingNotes, maskingNotesVolume, noiseVolume})
-            .then((maskingNotes) => {
-                //dispatch other action creators to reset.
-                dispatch(completeGuess())
-                //maskingNotes is a resolved promise. Not going to do anything with it.
-                dispatch(chooseRandomNote())
-            })
-            .catch((error) => Error('error in playNote thunk', error))
+    return async function (dispatch, getState) {
+        try {
+            const currentTracker = getState().training.get('tracker')
+            const randomMaskingNotes = maskingNotes(currentTracker)
+            const maskingNotesVolume = getState().volume.get('maskingNotesVolume')
+            const noiseVolume = getState().volume.get('noiseVolume')
+            const notesBuffer = getState().training.get('notesBuffer')
+            //I also want to dispatch to handle the rendering of missed note.
+            const noise = await makeNoise({time: 1000, volume: noiseVolume})
+            const maskingNotesArray = await Promise.all(randomMaskingNotes.map((value) => playNotes({
+                note: value,
+                time: 2000,
+                volume: maskingNotesVolume,
+                notesBuffer,
+                masking: true
+            })))
+            //dispatch other action creators to reset.
+            dispatch(completeGuess())
+            //maskingNotes is a resolved promise. Not going to do anything with it.
+            dispatch(chooseRandomNote())
+        } catch (error) {
+            Error('error in buffer', error)
+        }
     }
 }
 
@@ -138,10 +145,10 @@ export function targetNoteThunk({ note, instrument, octave }) {
     return function (dispatch, getState) {
         const volume = getState().volume.get('targetNoteVolume')
         const notesBuffer = getState().training.get('notesBuffer')
-        playNotes({note, instrument, octave, volume, notesBuffer }).then(() => {
+        playNotes({note, instrument, octave, volume, notesBuffer}).then(() => {
             //make it so you can't choose anything before this:
             dispatch(targetNoteChosen(note))
-            dispatch(increaseCount({ targetNote: note, instrument, octave }))
+            dispatch(increaseCount({targetNote: note, instrument, octave}))
         })
     }
 }
@@ -151,7 +158,7 @@ export function chooseRandomNote() {
     return function (dispatch, getState) {
         const currentTracker = getState().training.get('tracker')
         const currentMode = getState().training.get('mode')
-        const randomNote = randomNotes({ tracker: currentTracker, mode: currentMode})
+        const randomNote = randomNotes({tracker: currentTracker, mode: currentMode})
 
         if (randomNote === '') {
             dispatch({type: COMPLETE_ROUND})
@@ -160,9 +167,11 @@ export function chooseRandomNote() {
             }
         } else {
             //chooses next target note
-            dispatch(targetNoteThunk({note: randomNote.get('name'),
+            dispatch(targetNoteThunk({
+                note: randomNote.get('name'),
                 instrument: randomNote.get('instrument'),
-                octave: randomNote.get('octave')}))
+                octave: randomNote.get('octave')
+            }))
         }
     }
 
@@ -172,7 +181,7 @@ export function chooseRandomNote() {
 const initialStateTracker = tracker
 
 function increaseTracker(state = initialStateTracker, action) {
-    console.log(action)
+
     switch (action.type) {
         case INCREASE_COUNT:
             return state.update(state.findIndex((item) => item.get('name') === action.targetNote),

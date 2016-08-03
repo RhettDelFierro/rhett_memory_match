@@ -103,14 +103,15 @@ export async function loadNotes() {
         .catch((err) => Error('Promise.all error:', err));
 }
 
-export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolume }) {
+export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolume, notesBuffer }) {
     try {
         const noise = await makeNoise({time: 1000, volume: noiseVolume})
         return await Promise.all(randomMaskingNotes.map((value) => playNotes({
             note: value,
             time: 2000,
-            volume: maskingNotesVolume
-        })))
+            volume: maskingNotesVolume,
+            notesBuffer
+        }))).then((notes) => notes)
 
     } catch (error) {
         console.log('error in buffer', error)
@@ -118,7 +119,8 @@ export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolu
 }
 
 //this is the api call:
-export async function playNotes({ note, instrument, octave, time = 1000, volume = 1, notesBuffer }) {
+export async function playNotes({ note, instrument = 'piano', octave = 'four', time = 1000,
+                                    volume = 1, notesBuffer, masking = false }) {
     //maybe have to make a Map()?
     //return new Promise((resolve, reject) => {
     const source = context.createBufferSource();
@@ -134,6 +136,7 @@ export async function playNotes({ note, instrument, octave, time = 1000, volume 
     //get a copy of the note:
 
     let noteBuffer = await notesBuffer.get(note)[instrument][octave]
+    console.log(noteBuffer)
     source.buffer = noteBuffer
 
     //copy of the buffer for the note being played
@@ -145,9 +148,17 @@ export async function playNotes({ note, instrument, octave, time = 1000, volume 
 
     //yield before here?
     source.start(0)
-    return await setTimeout(() => {
-        source.stop()
-    }, time)
+    if (masking) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(source.stop())
+            }, time)
+        })
+    } else {
+        return await setTimeout(() => {
+            source.stop()
+        }, time)
+    }
 
 }
 
@@ -159,7 +170,7 @@ export function maskingNotes(tracker) {
     for (let i = 0; i < 16; i++) {
         newArray = newArray.push(tracker.get(Math.floor(tracker.size * Math.random())).get('name'))
     }
-
+    console.log(newArray)
     return newArray
 }
 
