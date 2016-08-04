@@ -126,7 +126,7 @@ export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolu
 
 //this is the api call:
 export async function playNotes({ note, instrument = 'piano', octave = 'four', time = 1000,
-    volume = 1, notesBuffer, masking = false }) {
+    volume = 1, notesBuffer, masking = true }) {
     //maybe have to make a Map()?
     //return new Promise((resolve, reject) => {
     const source = context.createBufferSource();
@@ -154,17 +154,17 @@ export async function playNotes({ note, instrument = 'piano', octave = 'four', t
 
     //yield before here?
     source.start(0)
-    if (masking) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(source.stop())
-            }, time)
-        })
-    } else {
-        return await setTimeout(() => {
-            source.stop()
+    //if (masking) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(source.stop())
         }, time)
-    }
+    })
+    //} else {
+    //    return await setTimeout(() => {
+    //        source.stop()
+    //    }, time)
+    //}
 
 }
 
