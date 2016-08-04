@@ -23,7 +23,13 @@ export function randomNotes({ tracker, mode }) {
 
     //maybe an object/map also stating the instrument and octave
     //in this case piano and four. Unless you plan to have separate Redux stores.
-    return availableNotes.size > 0 ? availableNotes.get(Math.floor(availableNotes.size * Math.random())).get('name') : ''
+    return availableNotes.size > 0
+        ? Map({
+        name: availableNotes.get(Math.floor(availableNotes.size * Math.random())).get('name'),
+        instrument: 'piano',
+        octave: 'four'
+    })
+        : ''
 }
 
 //want to replace all the forEach's maybe break into different functions.
@@ -120,7 +126,7 @@ export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolu
 
 //this is the api call:
 export async function playNotes({ note, instrument = 'piano', octave = 'four', time = 1000,
-                                    volume = 1, notesBuffer, masking = false }) {
+    volume = 1, notesBuffer, masking = false }) {
     //maybe have to make a Map()?
     //return new Promise((resolve, reject) => {
     const source = context.createBufferSource();

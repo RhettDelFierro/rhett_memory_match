@@ -97,18 +97,29 @@ export function startGame() {
 
 
 export function playIncorrect() {
+    console.log('did we get here ot playIncorrect?')
+    return async function (dispatch, getState) {
+        try {
+            const note = getState().training.get('targetNote')
+            const targetNoteVolume = getState().volume.get('targetNoteVolume')
+            const notesBuffer = getState().training.get('notesBuffer')
 
-    return function (dispatch, getState) {
-
-        const note = getState().training.get('targetNote')
-        const targetNoteVolume = getState().volume.get('targetNoteVolume')
-
-        //I also want to dispatch to handle the rendering of missed note.
-        playNotes({note, volume: targetNoteVolume})
-            .then((result) => {
-                dispatch(guessed())
+            //I also want to dispatch to handle the rendering of missed note.
+            const incorrect = await playNotes({
+                note,
+                octave: 'four',
+                instrument: 'piano',
+                volume: targetNoteVolume,
+                notesBuffer,
+                masking: true
             })
-            .catch((error) => Error('error in playNote thunk', error))
+            dispatch(guessed())
+            //.then((result) => {
+            //    dispatch(guessed())
+            //})
+        } catch (error) {
+            Error('error in playNote thunk', error)
+        }
     }
 }
 
