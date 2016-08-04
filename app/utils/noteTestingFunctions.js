@@ -142,7 +142,6 @@ export async function playNotes({ note, instrument = 'piano', octave = 'four', t
     //get a copy of the note:
 
     let noteBuffer = await notesBuffer.get(note)[instrument][octave]
-    console.log(noteBuffer)
     source.buffer = noteBuffer
 
     //copy of the buffer for the note being played
@@ -154,18 +153,12 @@ export async function playNotes({ note, instrument = 'piano', octave = 'four', t
 
     //yield before here?
     source.start(0)
-    //if (masking) {
+
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve(source.stop())
         }, time)
     })
-    //} else {
-    //    return await setTimeout(() => {
-    //        source.stop()
-    //    }, time)
-    //}
-
 }
 
 //make for Redux

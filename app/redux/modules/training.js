@@ -132,6 +132,7 @@ export function guessed() {
             const maskingNotesVolume = getState().volume.get('maskingNotesVolume')
             const noiseVolume = getState().volume.get('noiseVolume')
             const notesBuffer = getState().training.get('notesBuffer')
+            console.log(getState().training.get('targetNote'))
             //I also want to dispatch to handle the rendering of missed note.
             const noise = await makeNoise({time: 1000, volume: noiseVolume})
             const maskingNotesArray = await Promise.all(randomMaskingNotes.map((value) => playNotes({
