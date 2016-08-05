@@ -15,7 +15,7 @@ export function randomNotes({ tracker, mode }) {
     if (mode !== 'posttest') {
         instrument = 'piano'
         octave = 'four'
-        count = 5;
+        count = 1;
         availableNotes = tracker.filter((item) => item.getIn([instrument, octave]) < count)
     } else {
         return filterList({tracker, count: count})

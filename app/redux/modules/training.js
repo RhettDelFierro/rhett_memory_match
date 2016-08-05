@@ -2,6 +2,8 @@ import { Map, List, fromJS } from 'immutable'
 import { randomNotes, playNotes, maskingNotes, handleIncorrect, buffer, makeNoise } from 'utils/noteTestingFunctions'
 import { notes, tracker } from 'config/constants'
 import { loadNotes, makeNotesInfo } from 'utils/loadingNotes'
+import { locationChange } from 'redux/modules'
+import { push } from 'react-router-redux'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -172,9 +174,31 @@ export function chooseRandomNote() {
         const randomNote = randomNotes({tracker: currentTracker, mode: currentMode})
 
         if (randomNote === '') {
+            const mode = getState().training.get('mode')
+            const roundsCompleted = getState().training.get('roundsCompleted')
             dispatch({type: COMPLETE_ROUND})
-            if (getState().training.roundsComplete === 3) {
-                dispatch(setDateComplete())
+            dispatch(push({pathname: '/perfect_pitch_posttest'}))
+
+            switch (mode) {
+                case 'training' && roundsCompleted < 2:
+
+                    break
+                case 'training' && roundsCompleted === 0:
+                    //dispatch({
+                    //    type: 'LOCATION_CHANGE',
+                    //    payload: {
+                    //        pathname: "/perfect_pitch_posttest",
+                    //        action: "PUSH",
+                    //        key: 'jfu87h'
+                    //    }
+                    //})
+                    break
+                case 'posttest':
+                    //post test-generalization
+                    dispatch(setDateComplete())
+                    break
+                case 'pretest':
+                    break
             }
         } else {
             //chooses next target note
@@ -255,7 +279,8 @@ export default function training(state = initialState, action) {
         case START_GAME:
             return state.merge({
                 start: true,
-                notesBuffer: action.notesBuffer
+                notesBuffer: action.notesBuffer,
+                roundCompleted: false
             })
         case SET_DATE_COMPLETE:
             //send to format date converter.

@@ -6,16 +6,31 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 //import { checkIfAuthed } from 'helpers/auth'
 import * as reducers from 'redux/modules'
-import { routerReducer, syncHistoryWithStore } from 'react-router-redux'
+import { routerReducer, syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
 import { hashHistory } from 'react-router'
+import { toJS } from 'immutable'
+
+const routermiddle = routerMiddleware(hashHistory)
 
 const store = createStore(
     combineReducers({...reducers, routing: routerReducer}),
     compose(
-        applyMiddleware(thunk),
+        applyMiddleware(thunk, routermiddle),
         window.devToolsExtension ? window.devToolsExtension() : (f) => f
     )
 )
+
+//const createSelectLocationState = () => {
+//    let prevRoutingState, prevRoutingStateJS;
+//    return (state) => {
+//        const routingState = state.routing
+//        if (typeof prevRoutingState === 'undefined' || prevRoutingState !== routingState) {
+//            prevRoutingState = routingState;
+//            prevRoutingStateJS = routingState;
+//        }
+//        return prevRoutingStateJS;
+//    };
+//};
 
 export const history = syncHistoryWithStore(hashHistory, store)
 

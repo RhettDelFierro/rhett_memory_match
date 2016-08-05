@@ -6,7 +6,7 @@ export default function Counter(props) {
         <div className={container} onClick={props.startGame}>
             {!props.start ? <p>{'Click to begin'}</p>
                 : <div>
-                <p>Counter: <span>{props.attempts}/60 attempts</span></p>
+                <p>Counter: <span>{props.attempts}/{props.mode === 'posttest' ? '48 attempts' : '60 attempts'}</span></p>
                 <p style={{color: 'springgreen'}}>
                     {!props.correct && props.onCheck && props.mode === 'training'
                         ? `Here is the correct note: ${props.targetNote}`
