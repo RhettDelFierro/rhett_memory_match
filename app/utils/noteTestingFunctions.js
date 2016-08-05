@@ -169,7 +169,6 @@ export function maskingNotes(tracker) {
     for (let i = 0; i < 16; i++) {
         newArray = newArray.push(tracker.get(Math.floor(tracker.size * Math.random())).get('name'))
     }
-    console.log(newArray)
     return newArray
 }
 

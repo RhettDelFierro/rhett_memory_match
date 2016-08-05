@@ -1,11 +1,13 @@
 import React from "react"
-import { Router, Route, hashHistory, IndexRoute } from "react-router"
+import { Router, Route, IndexRoute } from "react-router"
 import { MainContainer, HomeContainer, PerfectPitchContainer,
     MemoryMatchContainer, ScoreboardContainer, NoteTrainingContainer,
     PreTestContainer, PostTestContainer } from 'containers'
+import { syncHistoryWithStore } from 'react-router-redux'
+import { history } from 'index'
 
 const routes = (
-    <Router history={hashHistory}>
+    <Router history={history}>
         <Route path="/" component={MainContainer}>
             <IndexRoute component={HomeContainer}/>
             <Route path="perfect_pitch" component={PerfectPitchContainer}/>
