@@ -177,25 +177,17 @@ export function chooseRandomNote() {
             const mode = getState().training.get('mode')
             const roundsCompleted = getState().training.get('roundsCompleted')
             dispatch({type: COMPLETE_ROUND})
-            dispatch(push({pathname: '/perfect_pitch_posttest'}))
 
             switch (mode) {
-                case 'training' && roundsCompleted < 2:
-
-                    break
-                case 'training' && roundsCompleted === 0:
-                    //dispatch({
-                    //    type: 'LOCATION_CHANGE',
-                    //    payload: {
-                    //        pathname: "/perfect_pitch_posttest",
-                    //        action: "PUSH",
-                    //        key: 'jfu87h'
-                    //    }
-                    //})
+                case 'training':
+                    //record score in users reducer.
+                    if (roundsCompletes < 2) {
+                        dispatch(push({pathname: '/perfect_pitch_posttest'}))
+                    }
                     break
                 case 'posttest':
                     //post test-generalization
-                    dispatch(setDateComplete())
+                    dispatch({type: SET_DATE_COMPLETE})
                     break
                 case 'pretest':
                     break
