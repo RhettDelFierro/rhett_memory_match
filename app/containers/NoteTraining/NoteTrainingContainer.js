@@ -50,6 +50,8 @@ class NoteTrainingContainer extends Component {
 
     render() {
         //<p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
+
+        //if this.props.roundCompleted = false, render the scoreMode.
         return (
             <NoteTraining start={this.props.start}
                           mode={this.state.mode}

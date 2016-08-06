@@ -175,7 +175,10 @@ export function chooseRandomNote() {
 
         if (randomNote === '') {
             const mode = getState().training.get('mode')
-            const roundsCompleted = getState().training.get('roundsCompleted')
+            //instead of roundsCompleted in training, maybe just get the length of the state in scores reducer.
+            const roundsCompleted = getState().scores.get('training').size
+            //complete round should update a property that notetraining container decides what component should render:
+            //scoremode or more training.
             dispatch({type: COMPLETE_ROUND})
 
             switch (mode) {
