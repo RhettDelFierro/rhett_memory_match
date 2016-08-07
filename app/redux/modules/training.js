@@ -4,6 +4,7 @@ import { notes, tracker } from 'config/constants'
 import { loadNotes, makeNotesInfo } from 'utils/loadingNotes'
 import { locationChange } from 'redux/modules'
 import { push } from 'react-router-redux'
+import { checkMode } from 'utils/scoresFunctions'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -22,10 +23,12 @@ const COMPLETE_GUESS = 'COMPLETE_GUESS'
 const SET_MODE = 'SET_MODE'
 const RESET_TRAINING = 'RESET_TRAINING'
 
-export function setMode(mode) {
-    return {
-        type: SET_MODE,
-        mode
+//make a thunk into setMode.
+export function setMode() {
+    return async function(dispatch,getState){
+        console.log(getState().scores)
+        const mode = checkMode(getState().scores)
+        dispatch({type: SET_MODE, mode})
     }
 }
 

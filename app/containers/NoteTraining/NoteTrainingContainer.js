@@ -9,9 +9,6 @@ import { Map, OrderedMap, List } from 'immutable'
 class NoteTrainingContainer extends Component {
     constructor() {
         super()
-        this.state = {
-            mode: 'training'
-        }
     }
 
     componentWillUnmount() {
@@ -19,7 +16,8 @@ class NoteTrainingContainer extends Component {
     }
 
     componentWillMount() {
-        this.props.setMode(this.state.mode)
+        //instead of set-mode, check the scoring reducer/store to see where we're at.
+        this.props.setMode()
     }
 
     componentWillReceiveProps(newProps) {
@@ -54,7 +52,7 @@ class NoteTrainingContainer extends Component {
         //if this.props.roundCompleted = false, render the scoreMode.
         return (
             <NoteTraining start={this.props.start}
-                          mode={this.state.mode}
+                          mode={this.props.mode}
                           completed={this.props.completed}
                           roundsCompleted={this.props.roundsCompleted}/>
         )

@@ -3,7 +3,7 @@ import { ScoreMode } from "components"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { makeNotesObject } from 'utils/noteTestingFunctions'
-import * as trainingActionCreators from 'redux/modules/training'
+import * as scoreModeActionCreators from 'redux/modules'
 import { Map } from 'immutable'
 
 class ScoreModeContainer extends Component {
@@ -11,18 +11,14 @@ class ScoreModeContainer extends Component {
         super()
     }
 
-    componentWillReceiveProps(newProps) {
-    }
-
     render() {
-        //<p><span>{!this.props.correct ? this.props.targetNote : ''}</span></p>
         return (
-            <ScoreMode start={this.props.start} />
+            <ScoreMode />
         )
     }
 }
 
-PreTestContainer.propTypes = {
+ScoreModeContainer.propTypes = {
     chooseRandomNote: PropTypes.func.isRequired,
     start: PropTypes.bool.isRequired,
     selectedNote: PropTypes.string,
@@ -55,7 +51,7 @@ function mapStateToProps({training, volume}) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators(trainingActionCreators, dispatch)
+    return bindActionCreators(scoreModeActionCreators, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScoreModeContainerContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(ScoreModeContainer)
