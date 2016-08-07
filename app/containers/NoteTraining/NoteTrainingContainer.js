@@ -11,10 +11,6 @@ class NoteTrainingContainer extends Component {
         super()
     }
 
-    componentWillUnmount() {
-        this.props.resetTraining()
-    }
-
     componentWillMount() {
         //instead of set-mode, check the scoring reducer/store to see where we're at.
         this.props.setMode()
@@ -32,7 +28,9 @@ class NoteTrainingContainer extends Component {
             if (!newProps.correct && newProps.onCheck) {
                 //console.log('componentwillreceiveprops 2')
                 this.props.noteMissed()
-                this.props.playIncorrect()
+                if(this.props.mode === 'training'){
+                    this.props.playIncorrect()
+                }
             }
 
             if (newProps.correct && newProps.onCheck) {

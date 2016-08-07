@@ -1,50 +1,26 @@
 import { fromJS } from 'immutable'
 
-const SET_PRETEST = 'SET_PRETEST'
-const SET_TRAINING = 'SET_TRAINING'
-const SET_POSTTEST = 'SET_POSTTEST'
+const SET_SCORE = 'SET_SCORE'
 
-export function setPreset(score){
+export function setScoreReducer({mode, round, score}){
     return {
-        type: SET_PRETEST,
-        score
-    }
-}
-
-export function setTraining(score){
-    return {
-        type: SET_TRAINING,
-        score
-    }
-}
-
-export function setPosttest(score){
-    return {
-        type: SET_POSTTEST,
-        score
+        type: SET_SCORE,
     }
 }
 
 const initialState = fromJS({
-    pretest: 0,
+    pretest: {},
     training: {},
+    //MAYBE FOR POSTTEST HAVE THE NOTES MOST MISSED SO YOU CAN RUN THE SPOTIFY FEATURE WITH THOSE.
     posttest: {},
     memoryMatch:{}
 })
 
 export default function scores(state = initialState, action) {
     switch(action.type){
-        case SET_PRETEST:
+        case SET_SCORE:
             return state.merge({
-                pretest: action.score
-            })
-        case SET_TRAINING:
-            return state.merge({
-                training: state.setIn(['training', action.score.round], action.score.value)
-            })
-        case SET_POSTTEST:
-            return state.merge({
-                posttest: state.setIn(['posttest', action.score.mode], action.score.value)
+                [action.mode]: state.set(action.round, action.score)
             })
         default:
             return state

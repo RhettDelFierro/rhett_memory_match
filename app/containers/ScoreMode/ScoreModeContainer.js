@@ -11,6 +11,14 @@ class ScoreModeContainer extends Component {
         super()
     }
 
+    proceed(){
+        //method to handle navigation.
+        //this.props.navigate() -> is a dispatch to .push()
+
+        //maybe just a dispatch to set completed back to false, that way will load Notetraining container again.
+        //do we really need this ScoreMode container?
+    }
+
     render() {
         return (
             <ScoreMode />
@@ -36,16 +44,8 @@ ScoreModeContainer.propTypes = {
     resetTraining: PropTypes.func.isRequired
 }
 
-function mapStateToProps({training, volume}) {
+function mapStateToProps({training, scores, volume}) {
     return {
-        targetNote: training.get('targetNote'),
-        correct: training.get('correct'),
-        attempts: training.get('attempts'),
-        start: training.get('start'),
-        selectedNote: training.get('selectedNote'),
-        tracker: training.get('tracker'),
-        selectedNotePlayed: training.get('selectedNotePlayed'),
-        onCheck: training.get('onCheck'),
         mode: training.get('mode')
     }
 }

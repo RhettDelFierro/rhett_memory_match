@@ -4,7 +4,7 @@ import { notes, tracker } from 'config/constants'
 import { loadNotes, makeNotesInfo } from 'utils/loadingNotes'
 import { locationChange } from 'redux/modules'
 import { push } from 'react-router-redux'
-import { checkMode } from 'utils/scoresFunctions'
+import { checkMode, setScores } from 'utils/scoresFunctions'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -22,12 +22,13 @@ const NOTE_MISSED = 'NOTE_MISSED'
 const COMPLETE_GUESS = 'COMPLETE_GUESS'
 const SET_MODE = 'SET_MODE'
 const RESET_TRAINING = 'RESET_TRAINING'
+const PROCEED = 'PROCEED'
 
 //make a thunk into setMode.
 export function setMode() {
     return async function(dispatch,getState){
-        console.log(getState().scores)
         const mode = checkMode(getState().scores)
+        dispatch({type: RESET_TRAINING})
         dispatch({type: SET_MODE, mode})
     }
 }
@@ -68,6 +69,15 @@ export function increaseCount({ targetNote, instrument, octave }) {
         targetNote,
         instrument,
         octave
+    }
+}
+
+export function proceed(){
+    return async function(dispatch, getState) {
+        const score = setScores({mode: getState().training.get('mode'),
+            state: getState()} )
+        //GET THE SCORE AND THE MODE THAT JUST PLAYED AND CALL THE APPROPRIATE SET SCORE FUNCTION FROM SCORES REDUCER.
+        dispatch({type: PROCEED})
     }
 }
 
@@ -302,6 +312,10 @@ export default function training(state = initialState, action) {
         case SET_MODE:
             return state.merge({
                 mode: action.mode
+            })
+        case PROCEED:
+            return state.merge({
+                completed: false
             })
         case RESET_TRAINING:
             return initialState
