@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import * as scoreActionCreators from 'redux/modules'
 import { container } from './styles.css'
 
 function ScoreMode(props) {
+    console.log('ScoreMode props', props)
     //maybe we need a container to help with navigation?
 
     //onclick should go to the next link or back to the same route but different mode.
@@ -32,8 +34,8 @@ ScoreMode.proptTypes = {
 function mapStateToProps({training}) {
     return {
         completed: training.get('completed'),
-        roundsCompleted: training.get('roundsCompleted'),
         mode: training.get('mode'),
+        //SHOULD BE THE SCORE FROM SCORES REDUCER?
         score: training.get('score')
     }
 }

@@ -5,7 +5,7 @@ import { container, start } from './styles.css'
 
 export default function NoteTraining(props) {
     //<NoteContainer />
-    return props.completed === true
+    return props.roundCompleted === true
         ? <Score {...props}/>
         : <Game />
 }
@@ -32,6 +32,5 @@ function Score(props){
 NoteTraining.propTypes = {
     start: PropTypes.bool.isRequired,
     mode: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-    roundsCompleted: PropTypes.number.isRequired
+    roundCompleted: PropTypes.bool.isRequired
 }

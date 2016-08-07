@@ -30,6 +30,8 @@ class NoteTrainingContainer extends Component {
                 this.props.noteMissed()
                 if(this.props.mode === 'training'){
                     this.props.playIncorrect()
+                } else {
+                    this.props.guessed()
                 }
             }
 
@@ -51,8 +53,7 @@ class NoteTrainingContainer extends Component {
         return (
             <NoteTraining start={this.props.start}
                           mode={this.props.mode}
-                          completed={this.props.completed}
-                          roundsCompleted={this.props.roundsCompleted}/>
+                          roundCompleted={this.props.roundCompleted}/>
         )
     }
 }
@@ -74,10 +75,8 @@ NoteTrainingContainer.propTypes = {
     guessed: PropTypes.func.isRequired,
     setMode: PropTypes.func.isRequired,
     mode: PropTypes.string.isRequired,
-    resetTraining: PropTypes.func.isRequired,
     tracker: PropTypes.instanceOf(List),
-    completed: PropTypes.bool.isRequired,
-    roundsCompleted: PropTypes.number.isRequired
+    roundCompleted: PropTypes.bool.isRequired
 }
 
 function mapStateToProps({training, volume}) {
@@ -91,8 +90,7 @@ function mapStateToProps({training, volume}) {
         selectedNotePlayed: training.get('selectedNotePlayed'),
         onCheck: training.get('onCheck'),
         mode: training.get('mode'),
-        completed: training.get('completed'),
-        roundsCompleted: training.get('roundsCompleted')
+        roundCompleted: training.get('roundCompleted')
     }
 }
 

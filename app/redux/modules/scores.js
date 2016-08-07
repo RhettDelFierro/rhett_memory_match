@@ -5,6 +5,9 @@ const SET_SCORE = 'SET_SCORE'
 export function setScoreReducer({mode, round, score}){
     return {
         type: SET_SCORE,
+        mode,
+        round,
+        score
     }
 }
 

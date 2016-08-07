@@ -24,15 +24,16 @@ const SET_MODE = 'SET_MODE'
 const RESET_TRAINING = 'RESET_TRAINING'
 const PROCEED = 'PROCEED'
 
-//make a thunk into setMode.
+//clears store, sets the mode.
 export function setMode() {
-    return async function(dispatch,getState){
+    return async function (dispatch, getState) {
         const mode = checkMode(getState().scores)
         dispatch({type: RESET_TRAINING})
         dispatch({type: SET_MODE, mode})
     }
 }
 
+//Redux storing the name of the note randomly chosen.
 export function targetNoteChosen(targetNote) {
     return {
         type: TARGET_NOTE_CHOSEN,
@@ -40,6 +41,7 @@ export function targetNoteChosen(targetNote) {
     }
 }
 
+//Redux storing the name of the note chosen by user.
 export function selectedNoteChosen(selectedNote) {
     return {
         type: SELECTED_NOTE_CHOSEN,
@@ -47,22 +49,27 @@ export function selectedNoteChosen(selectedNote) {
     }
 }
 
+//Clears Redux store of both targetNote and selectedNote.
+//Also sets onCheck to false.
 export function completeGuess() {
     return {type: COMPLETE_GUESS}
 }
 
+//attempts +1, boolean check, sets onCheck to true.
 export function checkCorrect() {
     return {
         type: CHECK_CORRECT
     }
 }
 
+//adds to List of notes chosen incorrectly.
 export function noteMissed() {
     return {
         type: NOTE_MISSED
     }
 }
 
+//increases count on tracker.
 export function increaseCount({ targetNote, instrument, octave }) {
     return {
         type: INCREASE_COUNT,
@@ -72,21 +79,20 @@ export function increaseCount({ targetNote, instrument, octave }) {
     }
 }
 
-export function proceed(){
-    return async function(dispatch, getState) {
-        const score = setScores({mode: getState().training.get('mode'),
-            state: getState()} )
-        //GET THE SCORE AND THE MODE THAT JUST PLAYED AND CALL THE APPROPRIATE SET SCORE FUNCTION FROM SCORES REDUCER.
-        dispatch({type: PROCEED})
-    }
-}
-
+//called when chooseRandomNote() returns ''
 export function completeRound() {
     return {type: COMPLETE_ROUND}
 }
 
-export function resetTraining() {
-    return {type: RESET_TRAINING}
+export function proceed() {
+    return async function (dispatch, getState) {
+        const score = setScores({
+            mode: getState().training.get('mode'),
+            state: getState()
+        })
+        //GET THE SCORE AND THE MODE THAT JUST PLAYED AND CALL THE APPROPRIATE SET SCORE FUNCTION FROM SCORES REDUCER.
+        dispatch({type: PROCEED})
+    }
 }
 
 export function startGame() {
@@ -115,7 +121,6 @@ export function playIncorrect() {
     return async function (dispatch, getState) {
         try {
             const note = getState().training.get('targetNote')
-            const targetNoteVolume = getState().volume.get('targetNoteVolume')
             const notesBuffer = getState().training.get('notesBuffer')
 
             //I also want to dispatch to handle the rendering of missed note.
@@ -123,14 +128,11 @@ export function playIncorrect() {
                 note,
                 octave: 'four',
                 instrument: 'piano',
-                volume: targetNoteVolume,
+                volume: getState().volume.get('targetNoteVolume'),
                 notesBuffer,
                 masking: true
             })
             dispatch(guessed())
-            //.then((result) => {
-            //    dispatch(guessed())
-            //})
         } catch (error) {
             Error('error in playNote thunk', error)
         }
@@ -143,7 +145,6 @@ export function guessed() {
         try {
             const currentTracker = getState().training.get('tracker')
             const randomMaskingNotes = maskingNotes(currentTracker)
-            const maskingNotesVolume = getState().volume.get('maskingNotesVolume')
             const noiseVolume = getState().volume.get('noiseVolume')
             const notesBuffer = getState().training.get('notesBuffer')
 
@@ -152,14 +153,15 @@ export function guessed() {
             const maskingNotesArray = await Promise.all(randomMaskingNotes.map((value) => playNotes({
                 note: value,
                 time: 2000,
-                volume: maskingNotesVolume,
+                volume: getState().volume.get('maskingNotesVolume'),
                 notesBuffer,
                 masking: true
             })))
-            //dispatch other action creators to reset.
+
             dispatch(completeGuess())
-            //maskingNotes is a resolved promise. Not going to do anything with it.
+
             dispatch(chooseRandomNote())
+
         } catch (error) {
             Error('error in buffer', error)
         }
@@ -188,26 +190,11 @@ export function chooseRandomNote() {
 
         if (randomNote === '') {
             const mode = getState().training.get('mode')
-            //instead of roundsCompleted in training, maybe just get the length of the state in scores reducer.
-            const roundsCompleted = getState().scores.get('training').size
-            //complete round should update a property that notetraining container decides what component should render:
-            //scoremode or more training.
             dispatch({type: COMPLETE_ROUND})
 
-            switch (mode) {
-                case 'training':
-                    //record score in users reducer.
-                    if (roundsCompletes < 2) {
-                        dispatch(push({pathname: '/perfect_pitch_posttest'}))
-                    }
-                    break
-                case 'posttest':
-                    //post test-generalization
-                    dispatch({type: SET_DATE_COMPLETE})
-                    break
-                case 'pretest':
-                    break
-            }
+            //move this possible to type: PROCEED.
+            dispatch({type: SET_DATE_COMPLETE})
+
         } else {
             //chooses next target note
             dispatch(targetNoteThunk({
@@ -240,8 +227,7 @@ const initialState = fromJS({
     tracker: tracker,
     score: 0,
     dateComplete: '',
-    completed: false,
-    roundsCompleted: 0,
+    sessionCompleted: false,
     start: false,
     notesMissed: [],
     targetNote: "",
@@ -305,7 +291,6 @@ export default function training(state = initialState, action) {
             })
         case COMPLETE_ROUND:
             return state.merge({
-                roundsCompleted: state.get('roundsCompleted') + 1,
                 roundCompleted: true,
                 score: Math.floor(((60 - state.get('notesMissed').size) / 60) * 100) + '%'
             })
