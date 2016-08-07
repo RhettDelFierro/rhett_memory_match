@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as scoreActionCreators from 'redux/modules'
+import * as scoreActionCreators from 'redux/modules/scores'
+import * as trainingActionCreators from 'redux/modules/training'
 import { container } from './styles.css'
 
 function ScoreMode(props) {
@@ -21,19 +22,15 @@ function ScoreMode(props) {
 }
 
 ScoreMode.proptTypes = {
-    completed: PropTypes.bool.isRequired,
     roundsCompleted: PropTypes.number.isRequired,
     mode: PropTypes.string.isRequired,
     score: PropTypes.string.isRequired,
-    setPretest: PropTypes.func.isRequired,
-    setTraining: PropTypes.func.isRequired,
-    setPosttest: PropTypes.func.isRequired,
     proceed: PropTypes.func.isRequired
 }
 
-function mapStateToProps({training}) {
+function mapStateToProps({training, scores}) {
     return {
-        completed: training.get('completed'),
+        roundCompleted: training.get('roundCompleted'),
         mode: training.get('mode'),
         //SHOULD BE THE SCORE FROM SCORES REDUCER?
         score: training.get('score')
@@ -41,7 +38,7 @@ function mapStateToProps({training}) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators(scoreActionCreators, dispatch)
+    return bindActionCreators({...scoreActionCreators, ...trainingActionCreators}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScoreMode)

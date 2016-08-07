@@ -11,10 +11,10 @@ class NoteTrainingContainer extends Component {
         super()
     }
 
-    componentWillMount() {
-        //instead of set-mode, check the scoring reducer/store to see where we're at.
-        this.props.setMode()
-    }
+    //componentWillMount() {
+    //    //instead of set-mode, check the scoring reducer/store to see where we're at.
+    //    this.props.setMode()
+    //}
 
     componentWillReceiveProps(newProps) {
         //remember, we're accessing a store.

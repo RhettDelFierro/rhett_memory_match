@@ -11,6 +11,10 @@ class NoteContainer extends Component {
         this.handleSelect = this.handleSelect.bind(this)
     }
 
+    componentWillMount() {
+        this.props.setMode()
+    }
+
     handleSelect(note) {
         if (this.props.targetNotePlayed) {
             this.props.selectedNoteChosen(note)
@@ -32,7 +36,8 @@ NoteContainer.propTypes = {
     onCheck: PropTypes.bool.isRequired,
     selectedNoteChosen: PropTypes.func.isRequired,
     targetNotePlayed: PropTypes.bool.isRequired,
-    mode: PropTypes.string.isRequired
+    mode: PropTypes.string.isRequired,
+    setMode: PropTypes.func.isRequired
 }
 
 function mapStateToProps({training}) {
