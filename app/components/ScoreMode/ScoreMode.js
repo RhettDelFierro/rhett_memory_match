@@ -12,9 +12,9 @@ function ScoreMode(props) {
     //onclick should go to the next link or back to the same route but different mode.
     //maybe do that in a thunk?
     return (
-        <div className={container} onClick={this.props.proceed}>
-            <h3>Here is your score: <span>{this.props.score}</span></h3>
-            <p>You are currently in {this.props.mode}</p>
+        <div className={container} onClick={props.proceed}>
+            <h3>Here is your score: <span>{props.score}</span></h3>
+            <p>You are currently in {props.mode}</p>
             <p>Note most missed: </p>
             <h2>Click Here To Proceed</h2>
         </div>
@@ -22,7 +22,6 @@ function ScoreMode(props) {
 }
 
 ScoreMode.proptTypes = {
-    roundsCompleted: PropTypes.number.isRequired,
     mode: PropTypes.string.isRequired,
     score: PropTypes.string.isRequired,
     proceed: PropTypes.func.isRequired

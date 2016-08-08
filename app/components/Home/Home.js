@@ -4,7 +4,6 @@ import { container } from './styles.css'
 
 
 function Home() {
-    console.log("are we getting this?")
     return (
         <div className={container}>
             <Link to="/note_memory">

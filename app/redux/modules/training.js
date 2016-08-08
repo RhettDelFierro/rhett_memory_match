@@ -2,9 +2,10 @@ import { Map, List, fromJS } from 'immutable'
 import { randomNotes, playNotes, maskingNotes, handleIncorrect, buffer, makeNoise } from 'utils/noteTestingFunctions'
 import { notes, tracker } from 'config/constants'
 import { loadNotes, makeNotesInfo } from 'utils/loadingNotes'
-import { locationChange } from 'redux/modules'
+//import { locationChange } from 'redux/modules'
 import { push } from 'react-router-redux'
 import { checkMode, setScores } from 'utils/scoresFunctions'
+import { setScoreAction } from 'redux/modules/scores'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -90,7 +91,7 @@ export function proceed() {
             mode: getState().training.get('mode'),
             state: getState()
         })
-        //GET THE SCORE AND THE MODE THAT JUST PLAYED AND CALL THE APPROPRIATE SET SCORE FUNCTION FROM SCORES REDUCER.
+        dispatch(setScoreAction({mode: score.gameMode, round: score.round, score: score.score}))
         dispatch({type: PROCEED})
     }
 }
@@ -193,7 +194,7 @@ export function chooseRandomNote() {
             dispatch({type: COMPLETE_ROUND})
 
             //move this possible to type: PROCEED.
-            dispatch({type: SET_DATE_COMPLETE})
+            //dispatch({type: SET_DATE_COMPLETE})
 
         } else {
             //chooses next target note
@@ -300,7 +301,7 @@ export default function training(state = initialState, action) {
             })
         case PROCEED:
             return state.merge({
-                completed: false
+                roundCompleted: false
             })
         case RESET_TRAINING:
             return initialState

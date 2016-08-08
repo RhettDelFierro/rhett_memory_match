@@ -7,7 +7,7 @@ export default function NoteTraining(props) {
     //<NoteContainer />
     return props.roundCompleted === true
         ? <Score {...props}/>
-        : <Game />
+        : <Game {...props}/>
 }
 
 function Game(props){
@@ -22,6 +22,7 @@ function Game(props){
 }
 
 function Score(props){
+    console.log('score',props)
     return (
         <div className={container}>
             <ScoreMode />
