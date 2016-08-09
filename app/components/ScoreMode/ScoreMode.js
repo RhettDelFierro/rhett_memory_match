@@ -6,11 +6,7 @@ import * as trainingActionCreators from 'redux/modules/training'
 import { container } from './styles.css'
 
 function ScoreMode(props) {
-    console.log('ScoreMode props', props)
-    //maybe we need a container to help with navigation?
 
-    //onclick should go to the next link or back to the same route but different mode.
-    //maybe do that in a thunk?
     return (
         <div className={container} onClick={props.proceed}>
             <h3>Here is your score: <span>{props.score}</span></h3>

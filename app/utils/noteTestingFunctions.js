@@ -5,22 +5,34 @@ let newNotes = notes;
 
 //Redux
 //take counter array and return a random targetNote if it hasn't been played 5 times.
-export function randomNotes({ tracker, mode }) {
+export function randomNotes({ tracker, mode, round }) {
 
-    let instrument;
-    let octave;
-    let count = 1;
+    //let instrument;
+    //let octave;
+    //let count = 1;
+    //let availableNotes = List();
+    //
+    //if (mode !== 'posttest') {
+    //    instrument = 'piano'
+    //    octave = 'four'
+    //    count = 5;
+    //    availableNotes = tracker.filter((item) => item.getIn([instrument, octave]) < count)
+    //} else {
+    //    return filterList({tracker, count: count})
+    //}
+
+    let instrument = 'piano'
+    let octave = 'four'
+    let count = 5;
     let availableNotes = List();
 
-    if (mode !== 'posttest') {
-        instrument = 'piano'
-        octave = 'four'
+    if (mode === 'posttest' && round === 2) {
         count = 1;
-        availableNotes = tracker.filter((item) => item.getIn([instrument, octave]) < count)
-    } else {
         return filterList({tracker, count: count})
+    } else if(mode === 'posttest' && round === 1) {
+        count = 4
     }
-
+    availableNotes = tracker.filter((item) => item.getIn([instrument, octave]) < count)
     //maybe an object/map also stating the instrument and octave
     //in this case piano and four. Unless you plan to have separate Redux stores.
     return availableNotes.size > 0

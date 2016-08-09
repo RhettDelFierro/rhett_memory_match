@@ -187,7 +187,8 @@ export function chooseRandomNote() {
     return function (dispatch, getState) {
         const currentTracker = getState().training.get('tracker')
         const currentMode = getState().training.get('mode')
-        const randomNote = randomNotes({tracker: currentTracker, mode: currentMode})
+        const round = getState().scores.get(currentMode).size + 1
+        const randomNote = randomNotes({tracker: currentTracker, mode: currentMode, round})
 
         if (randomNote === '') {
             const mode = getState().training.get('mode')
@@ -293,7 +294,7 @@ export default function training(state = initialState, action) {
         case COMPLETE_ROUND:
             return state.merge({
                 roundCompleted: true,
-                score: Math.floor(((60 - state.get('notesMissed').size) / 60) * 100) + '%'
+                score: Math.floor(((state.get('attempts') - state.get('notesMissed').size) / state.get('attempts')) * 100) + '%'
             })
         case SET_MODE:
             return state.merge({
