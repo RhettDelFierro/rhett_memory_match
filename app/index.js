@@ -8,12 +8,13 @@ import { Provider } from 'react-redux'
 import * as reducers from 'redux/modules'
 import { routerReducer, syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
 import { hashHistory } from 'react-router'
+import {reducer as formReducer} from 'redux-form'
 import { toJS } from 'immutable'
 
 const routermiddle = routerMiddleware(hashHistory)
 
 const store = createStore(
-    combineReducers({...reducers, routing: routerReducer}),
+    combineReducers({...reducers, routing: routerReducer, form: formReducer}),
     compose(
         applyMiddleware(thunk, routermiddle),
         window.devToolsExtension ? window.devToolsExtension() : (f) => f

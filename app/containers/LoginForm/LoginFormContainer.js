@@ -1,6 +1,10 @@
-import React, { Component } from "react"
-import { LoginForm } from "components"
-import { loginUser } from "../../utils/userFunctions"
+import React, { PropTypes, Component } from "react"
+import { NoteTraining } from "components"
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { makeNotesObject } from 'utils/noteTestingFunctions'
+import * as trainingActionCreators from 'redux/modules/training'
+import { Map, OrderedMap, List } from 'immutable'
 
 class LoginFormContainer extends Component {
     //don't forget to go to the logged in route.
