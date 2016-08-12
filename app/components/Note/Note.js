@@ -2,17 +2,7 @@ import React, { PropTypes } from 'react'
 import { keyboardContainer, container, keys, minorKeys, incorrect } from './styles.css'
 import { Map, List, OrderedMap } from 'immutable'
 
-//function Keys({name, key, onnote}) {
-//    let keyClass = keys
-//    if (name[1] === 'b') {
-//        keyClass = minorKeys;
-//    }
-//
-//    return <div className={keyClass} onClick={onnote}><p>{name}</p></div>
-//}
-
 export default function Note(props) {
-
     return (
         <div className={container}>
             {props.tracker.map((note) => {
@@ -24,7 +14,6 @@ export default function Note(props) {
                 if (!props.correct && props.targetNote === note.get('name') && props.onCheck && props.mode === 'training') {
                     keyClass = `${keyClass} ${incorrect}`
                 }
-
 
                 return (
                     <div

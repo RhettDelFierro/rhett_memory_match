@@ -1,4 +1,4 @@
-import React from "react"
+import React, { PropTypes } from "react"
 import { Navbar, Nav, FormGroup, FormControl, Button, NavItem, MenuItem, NavDropdown } from "react-bootstrap"
 
 const styles = {

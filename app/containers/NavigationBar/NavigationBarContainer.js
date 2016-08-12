@@ -1,5 +1,9 @@
 import React, { PropTypes, Component } from "react"
 import { NavigationBar } from "components"
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as userActionCreators from 'redux/modules/users'
+import { Map, OrderedMap, List } from 'immutable'
 
 class NavigationBarContainer extends Component {
     constructor() {
@@ -8,17 +12,15 @@ class NavigationBarContainer extends Component {
 
     render() {
         return (
-            <NavigationBar isLoggedIn={this.props.isLoggedIn}
-                           user={this.props.user}
-                           onUpdateLogin={this.props.onUpdateLogin}/>
+            <NavigationBar isAuthed={this.props.isAuthed}
+                           authID={this.props.authID} />
         )
     }
 }
 
 NavigationBarContainer.propTypes = {
-    isLoggedIn: PropTypes.bool.isRequired,
-    onUpdateLogin: PropTypes.func.isRequired,
-    user: PropTypes.string
+    authID: PropTypes.string,
+    isAuthed: PropTypes.bool.isRequired
 };
 
 export default NavigationBarContainer;

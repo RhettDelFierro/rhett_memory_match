@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/RhettDelFierro/rhett_memory_match#readme",
   "dependencies": {
+    "axios": "^0.13.1",
     "firebase": "^3.0.5",
     "immutable": "^3.8.1",
     "lodash": "^4.13.1",
