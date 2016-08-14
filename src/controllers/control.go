@@ -7,30 +7,24 @@ import (
 	"bufio"
 	"github.com/gorilla/mux"
 	//"github.com/codegangsta/negroni"
+	"github.com/codegangsta/negroni"
 )
 
 //this is pretty much where all the route handlers are.
 func Inject(tmpl *template.Template) {
-
-	//I think we can kill the templating?
-
-	//dispensing the ReactJS
-	hc := new(homeController)
-	hc.template = tmpl.Lookup("index.html") //may need to use the full path
-
 	router := mux.NewRouter()
-	router.HandleFunc("/", hc.get)
+
 
 	//private
 	//wrapping middleware to provide authentication for create and delete operations.
-	//router.PathPrefix("/api/delete/{id}").Handler(
-	//	negroni.New(
-	//		negroni.HandlerFunc(AuthorizeToken),
-	//		negroni.Wrap(http.HandlerFunc(deleteGrade))))
-	//router.PathPrefix("/api/add").Handler(
-	//	negroni.New(
-	//	negroni.HandlerFunc(AuthorizeToken),
-	//	negroni.Wrap(http.HandlerFunc(postStudent))))
+	router.PathPrefix("/api/delete/{id}").Handler(
+		negroni.New(
+			negroni.HandlerFunc(AuthorizeToken),
+			negroni.Wrap(http.HandlerFunc(deleteGrade))))
+	router.PathPrefix("/api/add").Handler(
+		negroni.New(
+		negroni.HandlerFunc(AuthorizeToken),
+		negroni.Wrap(http.HandlerFunc(postStudent))))
 
 	http.Handle("/", router)
 

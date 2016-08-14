@@ -2,31 +2,20 @@ package main
 
 import (
 	"net/http"
-	"html/template"
-	"log"
-	"github.com/RhettDelFierro/GolangPHP/src/controllers"
+	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 )
 
-var tmpl *template.Template
+const (
+	dbKey = "src/keys/config.sys"
+)
 
-//parse the html template files
-func init() {
-	var err error
-	tmpl, err = template.ParseFiles("public/dist/index.html")
-	if err != nil {
-		log.Fatalln(err)
-	}
+
+func homePage(res http.ResponseWriter, req *http.Request) {
+	http.ServeFile(res, req, "index.html")
 }
 
-//the HandlerFunc inject() was defined here.
-
-
-//Inject is pretty much where all the route handling takes place.
-//Don't know if we need the http.ListenAndServe function in main.
 func main() {
-	//http.HandleFunc("/", inject)
-	controllers.Inject(tmpl)
-	fs := http.FileServer(http.Dir("public"))
-	http.Handle("/public/", http.StripPrefix("/public/", fs))
-	http.ListenAndServe(":8080", nil)
+	common.Start()
+	http.HandleFunc("/", homePage)
+	http.ListenAndServe(":8000", nil)
 }

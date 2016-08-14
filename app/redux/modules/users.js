@@ -35,7 +35,7 @@ export function fetchingUserSuccess({uid, user, timestamp, token}) {
     }
 }
 
-export function registerUser({email, username, password}) {
+export function register({email, username, password}) {
     return async function (dispatch) {
         try {
             dispatch(fetchingUser())

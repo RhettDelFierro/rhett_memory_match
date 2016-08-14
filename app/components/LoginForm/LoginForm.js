@@ -1,7 +1,7 @@
-import React, { PropTypes } from "react"
+import React, { Component,PropTypes } from "react"
 import { reduxForm } from 'redux-form'
 import { error } from './styles.css'
-import * as userFunctions from 'redux/modules/users'
+import * as userActions from 'redux/modules/users'
 import { push } from 'react-router-redux'
 
 function userForm({userValidation}) {
@@ -15,6 +15,7 @@ function userForm({userValidation}) {
 }
 
 class Login extends Component {
+
     handleFormSubmit(formProps){
 
     }
@@ -39,10 +40,10 @@ class Login extends Component {
 
 class SignUp extends Component {
     async handleSubmit(formProps) {
-        const register = await this.props.registerUser(formProps)
+        const registerUser = await this.props.register(formProps)
         //go back to where the user was before they visit the link (get it off the state)
         //get the username from register and send it as a query/route param also:
-        dispatch(push({pathname: `/${register.route}`, query: {uid: register.uid }}))
+        dispatch(push({pathname: `/${registerUser.route}`, query: {uid: registerUser.uid }}))
     }
 
     render() {
@@ -118,13 +119,13 @@ async function asyncValidate(values, dispatch) {
                 }
             }); //dispatch
     }); //promise
-};
+}
 
 
 export default reduxForm({
     form: 'login',
     fields: ['loginInfo', 'password']
-})(Login)
+}, userActions)(Login)
 
 export default reduxForm({
     form: 'signup',
