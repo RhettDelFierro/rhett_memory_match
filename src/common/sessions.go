@@ -1,4 +1,6 @@
-package controllers
+//this file used to be in /controllers
+
+package common
 
 import (
 	"net/http"
