@@ -1,10 +1,16 @@
 package controllers
 
+import (
+	"github.com/RhettDelFierro/rhett_memory_match/src/models"
+)
+
 type (
 	//For Post - /user/register
-	UserControllerStruct struct {
-		Username	string `json:"username"`
-		Email		string	`json:"email"`
-		Password	string	`json:"password"`
+	UserResource struct {
+		Data models.User `json:"data"`
+	}
+	AuthUserModel struct {
+		User  models.User `json:"user"`
+		Token string      `json:"token"`
 	}
 )

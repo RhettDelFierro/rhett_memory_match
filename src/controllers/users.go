@@ -3,54 +3,53 @@ package controllers
 import (
 	"net/http"
 	"fmt"
-	"golang.org/x/crypto/bcrypt"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
-	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 	"encoding/json"
+	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 )
 
 
-func RegisterUser(w http.ResponseWriter, r *http.Request) (err error) {
+func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
-	var usr UserControllerStruct
-
-	err = json.NewDecoder(r.Body).Decode(&usr)
-	if err != nil {
-		fmt.Println("error in jsonDecode in controllers.RegisterUser")
-		return
-	}
-
-	models.RegisterUser(usr)
-
-	hashpw, err := bcrypt.GenerateFromPassword([]byte(usr.Password), bcrypt.DefaultCost)
-	if err != nil {
-		fmt.Println("error generating hashpw")
-		panic(err)
-	}
-	&usr.HashPassword = hashpw
-	//so we don't store the unhashed pw
-	&usr.Password = ""
-
-	var query = "INSERT INTO users (username,email,password) VALUES (?,?,?)"
-
-	stmt, err := tx.Prepare(query)
-	if err != nil {
-		return
-	}
-
-	defer func() {
-		if err == nil {
-			fmt.Println("Commit Item")
-			tx.Commit()
-		} else {
-			fmt.Println("Rollback Item")
-			tx.Rollback()
+	var usr UserResource
+	var responseUser AuthUserModel
+	if r.Method == "POST" {
+		err := json.NewDecoder(r.Body).Decode(&usr)
+		if err != nil {
+			fmt.Println("error in jsonDecode in controllers.RegisterUser")
+			return
 		}
-		stmt.Close()
-	}()
+	}
 
-	_, err = stmt.Exec(usr.Username, usr.Email, usr.Password)
+	user := &usr.Data
 
+	cleanUser := models.PrepareRegisterUser(user)
+	if cleanUser {
+		result, err := models.RegisterUser(*user)
+		if err == nil {
+			responseUser.User = result
+			responseUser.Token, err = common.GenerateToken(result.Username, "user")
+			if err != nil {
+				fmt.Println("error in controllers.RegisterUser > common.GenerateToken")
+				return
+			}
+		} else {
+			fmt.Println("error in controllers.RegisterUser > models.RegisterUser")
+			return
+		}
+	} else {
+		fmt.Println("there is a duplicate error")
+		return
+	}
+
+	if j, err := json.Marshal(responseUser); err != nil {
+		fmt.Println("error in controllers.RegisterUser json.Marshal")
+		return
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(j)
+	}
 	return
 }
 
