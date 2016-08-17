@@ -6,14 +6,14 @@ import (
 
 type (
 	User struct {
-		Id           string        `json:"id"`
-		FirstName    string        `json:"username"`
+		User_ID      int           `json:"user_id"`
+		Username     string        `json:"username"`
 		Email        string        `json:"email"`
-		Password     string        `json:"password,omitempty"`
+		Password     string        `json:"password"`
 		HashPassword []byte        `json:"hashpassword,omitempty"`
 	}
 	Score struct {
-		Id          string	  `json:"id"`
+		Score_ID    int           `json:"score_id"`
 		CreatedBy   string        `json:"createdby"`
 		Name        string        `json:"name"`
 		Description string        `json:"description"`

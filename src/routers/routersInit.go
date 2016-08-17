@@ -1,4 +1,4 @@
-package main
+package routers
 
 import (
 	"io"
@@ -20,7 +20,7 @@ type Route struct {
 
 type Routes []Route
 
-func NewRouter(db DataHandler) *mux.Router {
+func Router() *mux.Router {
 	fe := FrontEnd{DataHandler: db}
 
 	router := mux.NewRouter().StrictSlash(true)
