@@ -26,24 +26,28 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	user := &usr.Data
 
 	context := NewContext();
-	defer context.Close()
-	_, err := context.DbTable("users", user.Username, user.Email)
+	//defer context.Close()
 
-	if err !=nil && err != sql.ErrNoRows{
+	match, err := context.DbUserTable(user.Username, user.Email)
+
+	//DB error
+	if err != nil && err != sql.ErrNoRows{
+		fmt.Println(err)
 		fmt.Println("error in registering student")
 		return
 	}
 
+	//entry is not duplicate:
 	if err == sql.ErrNoRows {
-		//prepare statement:
 		stmt, err := context.PrepareRegisterStudent()
+		defer stmt.Close()
 		if err != nil {
 			fmt.Println("error context.PrepareRegisterStudent()")
 			log.Fatal(err)
 		}
-		//Execute statement and insert the rows.
+
+		//Store then Execute Prepare statement and update DB.
 		repo := &data.UserRepository{S: stmt}
-		//repo := &data.UserRepository{R: rows}
 		user_id, err := repo.CreateUser(user)
 		if err != nil {
 			fmt.Println("error context.CreateUser")
@@ -51,7 +55,14 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		}
 		user.User_ID = user_id
 		user.HashPassword = nil
+	} else {
+		//write that it's a duplicate. Do not add to db.
+		fmt.Println("this already exists:", match)
+		return
 	}
+
+	//double checking the password the user entered is not sent:
+	user.Password = ""
 
 	//now generate the jwt token
 	token, err = common.GenerateToken(user.Username, "user")
@@ -72,39 +83,4 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(j)
 	}
-
-
-
-
-	//cleanUser := models.PrepareRegisterUser(user)
-	//if cleanUser {
-	//	result, err := models.RegisterUser(*user)
-	//	if err == nil {
-	//		responseUser.User = result
-	//		responseUser.Token, err = common.GenerateToken(result.Username, "user")
-	//		if err != nil {
-	//			fmt.Println("error in controllers.RegisterUser > common.GenerateToken")
-	//			return
-	//		}
-	//	} else {
-	//		fmt.Println("error in controllers.RegisterUser > models.RegisterUser")
-	//		return
-	//	}
-	//} else {
-	//	fmt.Println("there is a duplicate error")
-	//	return
-	//}
-	//
-	//if j, err := json.Marshal(responseUser); err != nil {
-	//	fmt.Println("error in controllers.RegisterUser json.Marshal")
-	//	return
-	//} else {
-	//	w.Header().Set("Content-Type", "application/json")
-	//	w.WriteHeader(http.StatusOK)
-	//	w.Write(j)
-	//}
 }
-
-//func LoginUser(w http.ResponseWriter, req *http.Request){
-//
-//}
