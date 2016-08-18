@@ -4,8 +4,6 @@ import(
 	"io/ioutil"
 	"time"
 	"github.com/dgrijalva/jwt-go"
-	//"github.com/dgrijalva/jwt-go/request"
-	//"fmt"
 	"crypto/rsa"
 	"log"
 )
@@ -32,7 +30,7 @@ var (
 )
 
 //call this also on start.
-func InitKeys() {
+func initKeys() {
 
 	signBytes, err := ioutil.ReadFile(privKeyPath)
 	if err != nil {

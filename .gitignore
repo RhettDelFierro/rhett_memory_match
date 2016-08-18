@@ -2,4 +2,4 @@ src/keys
 node_modules
 .DS_Store
 dist
-src/main/config.json
+src/common/config.json
