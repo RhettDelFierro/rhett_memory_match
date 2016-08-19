@@ -21,7 +21,8 @@ export async function verifyName(user) {
 
 export async function registerUser({username, email, password}) {
     try {
-        const response = await axios.post("/users/register", {data: {username, email, password}});
+        const response = await axios.post("http://localhost:8000/users/register", {data: {username, email, password}});
+        console.log(response)
         return response.data
     } catch (error) {
         console.log(error);

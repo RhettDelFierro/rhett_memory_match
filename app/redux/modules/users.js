@@ -62,6 +62,23 @@ export function loginUser({email, user, password}) {
     }
 }
 
+const userInitialState = fromJS({
+    info: {
+        name: '',
+        uid: '',
+        avatar: ''
+    }
+})
+
+function user(state = userInitialState, action) {
+    switch(action.type) {
+        case FETCHING_USER_SUCCESS:
+            return state.merge({
+                info: action.user
+            })
+    }
+}
+
 
 const initialState = fromJS({
     isAuthed: false,
@@ -73,6 +90,15 @@ const initialState = fromJS({
 
 export default function users(state = initialState, action) {
     switch (action.type) {
+        case AUTH_USER:
+            return state.merge({
+                isAuthed: true,
+                authId: action.uid
+            })
+        case FETCHING_USER_SUCCESS:
+            return state.merge({
+                [action.uid]: user(state.get(action.uid), action)
+            })
         default:
             return state
     }

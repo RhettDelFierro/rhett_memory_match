@@ -2,7 +2,7 @@ import React, { PropTypes } from "react"
 import { Link } from "react-router"
 import { Nav, Navbar, NavItem } from "react-bootstrap"
 import { LoginFormContainer } from "containers"
-import { RegisterModalContainer } from "containers"
+import { ModalContainer } from "containers"
 import { container, navContainer, link } from './styles.css'
 
 
@@ -14,7 +14,7 @@ function RegisterToggle({UpdateLogin}) {
     )
 }
 
-function NavigationLinks({isAuthed}){
+function NavigationLinks({isAuthed, openModal}){
     return isAuthed === true
     ? <ul>
         <li><Link to="/" className={link}>{'Home'}</Link></li>
@@ -26,11 +26,11 @@ function NavigationLinks({isAuthed}){
     </ul>
         :<ul>
         <li><Link to='/' className={link}>{'Home'}</Link></li>
-        <li><Link to='/login' className={link}>{'Login'}</Link></li>
+        <li><ModalContainer/></li>
     </ul>
 }
 
-function NavigationBar({isAuthed, onUpdateLogin, user}) {
+function NavigationBar({isAuthed, authID, user, openModal}) {
     return (
         <div className={container}>
             <nav className={navContainer}>
@@ -42,7 +42,8 @@ function NavigationBar({isAuthed, onUpdateLogin, user}) {
 
 NavigationBar.propTypes = {
     isAuthed: PropTypes.bool.isRequired,
-    user: PropTypes.string
+    user: PropTypes.string,
+
 };
 
 export default NavigationBar

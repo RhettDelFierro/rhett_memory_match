@@ -1,0 +1,12 @@
+.newDuckTop {
+    background: #fff;
+    padding: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #1877E6;
+}
+
+.pointer {
+    cursor: pointer;
+}
