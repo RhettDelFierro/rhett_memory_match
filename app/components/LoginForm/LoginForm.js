@@ -51,5 +51,5 @@ async function asyncValidate(values, dispatch) {
 export default reduxForm({
     form: 'login',
     fields: ['loginInfo', 'password']
-}, userActions)(Login)
+}, null, userActions)(Login)
 

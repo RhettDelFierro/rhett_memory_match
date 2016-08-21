@@ -36,6 +36,7 @@ export function fetchingUserSuccess({uid, user, timestamp, token}) {
 }
 
 export function register({email, username, password}) {
+    console.log("register users.js", username, email, password)
     return async function (dispatch) {
         try {
             dispatch(fetchingUser())

@@ -5,9 +5,10 @@ import * as userActions from 'redux/modules/users'
 import { push } from 'react-router-redux'
 
 class RegisterForm extends Component {
-    async handleSubmit(formProps) {
+    async handleFormSubmit(formProps) {
+        //console.log('handleFormSubmit is called', formProps)
         const registerUser = await this.props.register(formProps)
-
+        console.log(registerUser)
         //go back to where the user was before they visit the link (get it off the state)
         //get the username from register and send it as a query/route param also:
         //dispatch(push({pathname: `/${registerUser.route}`, query: {uid: registerUser.uid }}))
@@ -16,28 +17,28 @@ class RegisterForm extends Component {
     render() {
         const {fields: {email, username, password, passwordConfirm}, handleSubmit} = this.props;
         return (
-            <form onSubmit={handleSubmit(this.handleFormSubmit).bind(this)}>
-                <div>
+            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+                <fieldset className="form-group">
                     <label>Email</label>
-                    <input type="email" placeholder="First Name" {...email}/>
+                    <input className="form-control" type="email" placeholder="First Name" {...email}/>
                     <div className="error">{email.touched ? email.error : ''}</div>
-                </div>
-                <div>
+                </fieldset>
+                <fieldset className="form-group">
                     <label>username</label>
-                    <input type="text" placeholder="First Name" {...username}/>
+                    <input className="form-control" type="text" placeholder="First Name" {...username}/>
                     <div className="error">{username.touched ? username.error : ''}</div>
-                </div>
-                <div>
+                </fieldset>
+                <fieldset className="form-group">
                     <label>Password</label>
-                    <input type="password" placeholder="Last Name" {...password}/>
+                    <input className="form-control" type="password" placeholder="Last Name" {...password}/>
                     <div className="error">{password.touched ? password.error : ''}</div>
-                </div>
-                <div>
+                </fieldset>
+                <fieldset className="form-group">
                     <label>Confirm Password</label>
-                    <input type="password" placeholder="Email" {...passwordConfirm}/>
+                    <input className="form-control" type="password" placeholder="Email" {...passwordConfirm}/>
                     <div className="error">{passwordConfirm.touched ? passwordConfirm.error : ''}</div>
-                </div>
-                <button type="submit">Submit</button>
+                </fieldset>
+                <button action="submit" type="submit">Submit</button>
             </form>
         );
     }
@@ -50,17 +51,17 @@ function validate(formProps) {
         errors.email = 'Please enter an email'
     }
 
-    if (!formProps.username || formProps.username.trim() === '') {
-        errors.username = 'Please enter an username'
-    }
-
-    if (!formProps.password || formProps.password.trim() === '') {
-        errors.password = 'Please enter a password'
-    }
-
-    if (!formProps.passwordConfirm || formProps.passwordConfirm.trim() === '') {
-        errors.email = 'Please confirm your password'
-    }
+    //if (!formProps.username || formProps.username.trim() === '') {
+    //    errors.username = 'Please enter an username'
+    //}
+    //
+    //if (!formProps.password || formProps.password.trim() === '') {
+    //    errors.password = 'Please enter a password'
+    //}
+    //
+    //if (!formProps.passwordConfirm || formProps.passwordConfirm.trim() === '') {
+    //    errors.email = 'Please confirm your password'
+    //}
 
     //if (formProps.passwordConfirm > formProps.password && formProps.password !== formProps.passwordConfirm) {
     //    errors.password = 'Passwords must match'
@@ -89,22 +90,12 @@ async function asyncValidate(values, dispatch) {
 }
 
 export default reduxForm({
-    form: 'signup',
-    fields: ['email', 'username', 'password'],
+    form: 'register',
+    fields: ['email', 'username', 'password', 'passwordConfirm'],
     validate
 }, null, userActions)(RegisterForm)
 
 
 RegisterForm.propTypes = {
-    onUpdateUser: PropTypes.func,
-    onSubmitUser: PropTypes.func,
-    user: PropTypes.string,
-    onUpdateEmail: PropTypes.func,
-    onUpdatePassword: PropTypes.func,
-    email: PropTypes.string,
-    password: PropTypes.string,
-    duplicate: PropTypes.bool.isRequired,
-    helpBlock: PropTypes.string.isRequired
+    register: PropTypes.func.isRequired
 };
-
-export default RegisterForm

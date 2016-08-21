@@ -24,7 +24,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := &usr.Data
-
+	fmt.Println(user)
 	context := NewContext();
 	//defer context.Close()
 
