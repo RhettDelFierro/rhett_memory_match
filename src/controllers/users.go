@@ -8,6 +8,7 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 	"log"
 	"database/sql"
+	"time"
 )
 
 
@@ -24,7 +25,8 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := &usr.Data
-	fmt.Println(user)
+
+
 	context := NewContext();
 	//defer context.Close()
 
@@ -70,15 +72,24 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("error in controllers.RegisterUser > common.GenerateToken")
 		return
 	}
+	//set jwt to Cookie:
+	cookie := http.Cookie{
+		Name: "Auth",
+		Value: token,
+		Expires: time.Now().Add(time.Minute * 24),
+		HttpOnly: true,
+	}
+
 	//set the responseUser data:
 	responseUser := RegisterAuthUserModel{
 		User: user,
-		Token: token,
 	}
+
 	if j, err := json.Marshal(RegisterAuthUserResource{Data: responseUser}); err != nil {
 		fmt.Println("error in controllers.RegisterUser json.Marshal")
 		return
 	} else {
+		http.SetCookie(w, &cookie)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(j)
