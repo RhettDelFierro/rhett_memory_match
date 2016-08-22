@@ -8,7 +8,6 @@ class RegisterForm extends Component {
     async handleFormSubmit(formProps) {
         //console.log('handleFormSubmit is called', formProps)
         const registerUser = await this.props.register(formProps)
-        console.log(registerUser)
         //go back to where the user was before they visit the link (get it off the state)
         //get the username from register and send it as a query/route param also:
         //dispatch(push({pathname: `/${registerUser.route}`, query: {uid: registerUser.uid }}))

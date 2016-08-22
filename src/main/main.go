@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"github.com/RhettDelFierro/rhett_memory_match/src/routers"
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
+	"github.com/rs/cors"
 )
 
 // Reads config.json and decode into AppConfig
@@ -15,6 +16,6 @@ func main() {
 	//move this to portable DBConfig (proably in dbAbstraction.go
 
 	router := routers.Router()
-
-	http.ListenAndServe(":8080", router)
+	handler := cors.Default().Handler(router)
+	http.ListenAndServe(":8000", handler)
 }
