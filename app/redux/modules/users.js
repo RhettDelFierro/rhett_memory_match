@@ -1,5 +1,6 @@
 import { fromJS } from 'immutable'
 import { registerUser } from 'utils/userFunctions'
+import { closeModal } from 'redux/modules/modal'
 
 const AUTH_USER = 'AUTH_USER'
 const UNAUTH_USER = 'UNAUTH_USER'
@@ -25,10 +26,10 @@ function fetchingUser() {
     }
 }
 
-export function fetchingUserSuccess({uid, user, timestamp, token}) {
+export function fetchingUserSuccess({user_id, user, timestamp, token}) {
     return {
         type: FETCHING_USER_SUCCESS,
-        uid,
+        user_id,
         user,
         timestamp,
         token
@@ -36,16 +37,18 @@ export function fetchingUserSuccess({uid, user, timestamp, token}) {
 }
 
 export function register({email, username, password}) {
-    console.log("register users.js", username, email, password)
     return async function (dispatch) {
         try {
             dispatch(fetchingUser())
             const data = await registerUser({username, email, password})
-            const uid = data.uid
+            console.log(data)
+            const user_id = data.user.user_id
             const user = data.user
             const token = data.token
-            dispatch(fetchingUserSuccess({uid, user, timestampe: Date.now(), token}))
-            dispatch(authUser(uid))
+            console.log("register thunk coming back from userFunctions.registerUser:", user)
+            dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now(), token}))
+            dispatch(closeModal())
+            dispatch(authUser(user_id))
             return uid
         } catch (error) {
             Error('error in registerUser', error)
@@ -59,15 +62,16 @@ export function loginUser({email, user, password}) {
         const data = await registerUser({user, email, password})
         const user = data.user
         const token = data.token
-        return dispatch(fetchingUserSuccess({uid, user, timestampe: Date.now(), token}))
+        return dispatch(fetchingUserSuccess({uid, user, timestamp: Date.now(), token}))
     }
 }
 
 const userInitialState = fromJS({
     info: {
-        name: '',
-        uid: '',
-        avatar: ''
+        username: '',
+        user_id: '',
+        avatar: '',
+        email:''
     }
 })
 
@@ -98,7 +102,7 @@ export default function users(state = initialState, action) {
             })
         case FETCHING_USER_SUCCESS:
             return state.merge({
-                [action.uid]: user(state.get(action.uid), action)
+                [action.user_id]: user(state.get(action.user_id), action)
             })
         default:
             return state

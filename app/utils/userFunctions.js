@@ -13,18 +13,16 @@ function cookieFinder(name) {
 export async function verifyName(user) {
     try {
         const response = axios.post("/username", {data: {username: user}});
-        return response.data;
+        return response.data
     } catch (error){
         console.log(error);
     }
 }
 
 export async function registerUser({username, email, password}) {
-    console.log("registerUser userFunctions.js", username, email, password)
     try {
         const response = await axios.post("http://localhost:8000/users/register", {data: {username, email, password}});
-        console.log(response)
-        return response.data
+        return response.data.data
     } catch (error) {
         console.log(error);
     }
