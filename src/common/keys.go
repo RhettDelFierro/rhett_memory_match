@@ -80,7 +80,7 @@ func GenerateToken(name, role string) (string, error) {
 }
 
 //middleware to validate jwt:
-func validate(protectedPage http.HandlerFunc) http.HandlerFunc {
+func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		// If no Auth cookie is set then return a 404 not found

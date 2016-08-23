@@ -19,7 +19,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		err := json.NewDecoder(r.Body).Decode(&usr)
 		if err != nil {
-			fmt.Println("error in jsonDecode in controllers.RegisterUser")
+			common.DisplayAppError(w, err, "Invalid User data", 500)
 			return
 		}
 	}
@@ -93,5 +93,18 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(j)
+	}
+}
+
+func LoginUser(w http.ResponseWriter, r *http.Request) {
+	var usr LoginResource
+	var token string
+
+	if r.Method == "POST" {
+		err := json.NewDecoder(r.Body).Decode(&usr)
+		if err != nil {
+			common.DisplayAppError(w, err, "Invalid Login data", 500)
+			return
+		}
 	}
 }
