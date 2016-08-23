@@ -56,7 +56,7 @@ type (
 	}
 	//Model for a ScoreNote
 	NoteModel struct {
-		ScoreId      string `json:"Scoreid"`
+		ScoreId     string `json:"Scoreid"`
 		Description string `json:"description"`
 	}
 )

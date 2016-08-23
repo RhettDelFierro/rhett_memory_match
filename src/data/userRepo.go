@@ -6,7 +6,6 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
 	_ "github.com/go-sql-driver/mysql"
 	"database/sql"
-	"log"
 )
 
 type UserRepository struct {
@@ -14,7 +13,7 @@ type UserRepository struct {
 	S *sql.Stmt
 }
 
-func (r *UserRepository) CreateUser(user *models.User) (int64, error) {
+func (r *UserRepository) CreateUser(user *models.User) (user_id int64,err error) {
 
 	hpass := cleanPassword(user.Password)
 	user.HashPassword = hpass
@@ -26,9 +25,9 @@ func (r *UserRepository) CreateUser(user *models.User) (int64, error) {
 	//now insert:
 	result, err := r.S.Exec(user.Username, user.Email, user.HashPassword)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
-	user_id, err := result.LastInsertId()
+	user_id, err = result.LastInsertId()
 	return user_id, err
 }
 
@@ -41,16 +40,18 @@ func cleanPassword(password string) []byte {
 	return hpass
 }
 
-//func (r *UserRepository) Login(user models.User) (u models.User, err error) {
-//
-//	err = r.C.Find(bson.M{"email": user.Email}).One(&u)
-//	if err != nil {
-//		return
-//	}
-//	// Validate password
-//	err = bcrypt.CompareHashAndPassword(u.HashPassword, []byte(user.Password))
-//	if err != nil {
-//		u = models.User{}
-//	}
-//	return
-//}
+func (r *UserRepository) Login(user models.User) (u models.User, err error) {
+
+	err = r.S.QueryRow(user.Email).Scan(&u.User_ID,&u.Username,&u.Email, &u.HashPassword)
+	if err != nil {
+		return
+	}
+	// Validate password
+	err = bcrypt.CompareHashAndPassword(u.HashPassword, []byte(user.Password))
+	if err != nil {
+		u = models.User{}
+	} else {
+		u.HashPassword = nil
+	}
+	return
+}

@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strings"
 	"fmt"
-	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gorilla/context"
 )
 
@@ -90,6 +89,7 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
+		fmt.Println(cookie)
 		// The token is concatenated with its key Auth=token
 		// We remove the Auth= part by splitting the cookie in two
 		splitCookie := strings.Split(cookie.String(), "Auth=")
@@ -99,7 +99,7 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 			func(token *jwt.Token) (interface{}, error) {
 
 				// Prevents a known exploit
-				if _, ok := token.Method.(*jwt.SigningMethodRS256); !ok {
+				if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 					return nil, fmt.Errorf("Unexpected signing method %v", token.Header["alg"])
 				}
 				return verifyKey, nil

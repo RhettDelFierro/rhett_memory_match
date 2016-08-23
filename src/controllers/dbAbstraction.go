@@ -52,8 +52,12 @@ func (c *Context) DbUserTable(user, address  string) (string, error) {
 
 
 //prepares the insert statement.
-func (c *Context) PrepareRegisterStudent() (*sql.Stmt, error) {
+func (c *Context) PrepareRegisterUser() (*sql.Stmt, error) {
 	return c.SQLAbstraction.Prepare("INSERT INTO users(username,email,password) VALUES(?,?,?)")
+}
+
+func (c *Context) PrepareLoginUser() (*sql.Stmt, error) {
+	return c.SQLAbstraction.Prepare("SELECT user_id,username,email,password FROM users WHERE email = ?")
 }
 
 // NewContext creates a new Context object for EACH HTTP request
