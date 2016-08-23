@@ -1,11 +1,16 @@
 package common
 
-import(
+import (
 	"io/ioutil"
 	"time"
 	"github.com/dgrijalva/jwt-go"
 	"crypto/rsa"
 	"log"
+	"net/http"
+	"strings"
+	"fmt"
+	"github.com/dgrijalva/jwt-go/request"
+	"github.com/gorilla/context"
 )
 
 // AppClaims provides custom claim for JWT
@@ -53,7 +58,7 @@ func initKeys() {
 	}
 }
 
-//generating the token to
+//generating the jwt:
 func GenerateToken(name, role string) (string, error) {
 
 	claims := AppClaims{
@@ -74,63 +79,65 @@ func GenerateToken(name, role string) (string, error) {
 	return signedTokenString, nil
 }
 
-//Validate the tokens on each route that needs them
-//func AuthorizeToken(w http.ResponseWriter, req *http.Request, next http.HandlerFunc){
-//
-//	//this is thoriwng a 400 error and fields are getting to api/add empty.
-//	//check := req.Body
-//	//
-//	//record := Record{}
-//	//errorDecode := json.NewDecoder(check).Decode(&record)
-//	//if errorDecode != nil {
-//	//	fmt.Println(errorDecode)
-//	//}
-//
-//	//checking the token from the request.
-//	//make sure to put Authorization: Bearer <token info> in header on front end.
-//	token, err := jwt.ParseFromRequest(req, func(token *jwt.Token) (interface{}, error){
-//		return verifyKey, nil
-//	})
-//
-//	if err != nil {
-//		switch err.(type) {
-//		//write the error during validation
-//		case *jwt.ValidationError:
-//			vErr := err.(*jwt.ValidationError)
-//			//time from Claims expired.
-//			switch vErr.Errors {
-//			case jwt.ValidationErrorExpired:
-//				w.WriteHeader(401)
-//				w.Write([]byte("jwt has expired"))
-//				return
-//
-//			default:
-//				w.WriteHeader(500)
-//				w.Write([]byte("error parsing access Token"))
-//				return
-//			}
-//
-//		default:
-//			w.WriteHeader(500)
-//			return
-//		}
-//	}
-//	if token.Valid {
-//		//check := token.Claims["UserInfo"].(map[string]interface{})["Name"]
-//		//if check == record.User {
-//		//	next(w, req)
-//		//} else {
-//		//	w.WriteHeader(401)
-//		//	w.Write([]byte("You're not the same logged in user"))
-//		//}
-//
-//		//call back on the HandlerFunc because this is a wrapping function on middleware.
-//		//will use with negroni:
-//		next(w, req)
-//	} else {
-//		w.WriteHeader(401)
-//		w.Write([]byte("Invalid Access Token"))
-//	}
-//}
+//middleware to validate jwt:
+func validate(protectedPage http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-//wrap AuthorizeToken on every Update/Add/Delete CRUD method.
+		// If no Auth cookie is set then return a 404 not found
+		cookie, err := r.Cookie("Auth")
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+
+		// The token is concatenated with its key Auth=token
+		// We remove the Auth= part by splitting the cookie in two
+		splitCookie := strings.Split(cookie.String(), "Auth=")
+
+		// Parse, validate and return a token.
+		token, err := jwt.ParseWithClaims(splitCookie[1], &AppClaims{},
+			func(token *jwt.Token) (interface{}, error) {
+
+				// Prevents a known exploit
+				if _, ok := token.Method.(*jwt.SigningMethodRS256); !ok {
+					return nil, fmt.Errorf("Unexpected signing method %v", token.Header["alg"])
+				}
+				return verifyKey, nil
+			})
+
+		if err != nil {
+			switch err.(type) {
+
+			case *jwt.ValidationError: // JWT validation error
+				vErr := err.(*jwt.ValidationError)
+
+				switch vErr.Errors {
+				//JWT expired
+				case jwt.ValidationErrorExpired:
+					DisplayAppError(w, err, "Access Token is expired, get a new Token", 401)
+					return
+
+				default:
+					DisplayAppError(w, err, "Error while parsing the Access Token!", 500)
+					return
+				}
+
+			default:
+				DisplayAppError(w, err, "Error while parsing Access Token!", 500)
+				return
+			}
+
+		}
+
+		// Validate the token and save the token's claims to a context
+		if claims, ok := token.Claims.(*AppClaims); ok && token.Valid {
+			context.Set(r, "Claims", claims)
+		} else {
+			DisplayAppError(w, err, "Invalid Access Token", 401,
+			)
+		}
+
+		// If everything is valid then call the original protected handler
+		protectedPage(w, r)
+	})
+}
