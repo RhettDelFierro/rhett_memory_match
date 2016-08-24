@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { default as ReactModal } from 'react-modal'
 import {
     modalHeader, modalBody, pointer,
-    newDuckInput, submitDuckBtn, darkBtn } from './styles.css'
+    newDuckInput, submitDuckBtn, darkBtn, registerForm, loginForm } from './styles.css'
 import { Map } from 'immutable'
 import { LoginForm, RegisterForm } from 'components'
 
@@ -16,11 +16,11 @@ const modalStyles = {
         padding: 0
     },
     overlay: {
-        backgroundColor   : 'rgba(0, 0, 0, 0.75)'
+        backgroundColor: 'rgba(0, 0, 0, 0.75)'
     }
 }
 
-export default function Modal (props) {
+export default function Modal(props) {
 
     return (
         <span className={darkBtn} onClick={props.openModal}>
@@ -31,7 +31,12 @@ export default function Modal (props) {
                     <span onClick={props.closeModal} className={pointer}>{'X'}</span>
                 </div>
                 <div className={modalBody}>
-                    <RegisterForm />
+                    <div className={loginForm}>
+                        <LoginForm />
+                    </div>
+                    <div className={registerForm}>
+                        <RegisterForm />
+                    </div>
                 </div>
             </ReactModal>
     </span>

@@ -13,13 +13,11 @@ type (
 		HashPassword []byte        `json:"hashpassword,omitempty"`
 	}
 	Score struct {
-		Score_ID    int           `json:"score_id"`
-		CreatedBy   string        `json:"createdby"`
-		Name        string        `json:"name"`
-		Description string        `json:"description"`
-		CreatedOn   time.Time     `json:"createdon,omitempty"`
-		Due         time.Time     `json:"due,omitempty"`
-		Status      string        `json:"status,omitempty"`
-		Tags        []string      `json:"tags,omitempty"`
+		Score_ID      int64           `json:"score_id"`
+		User_ID       int64        `json:"user_id"`
+		Game_mode     string        `json:"mode"`
+		Date_Complete time.Time     `json:"date_completed,omitempty"`
+		Due           time.Time     `json:"due,omitempty"`
+		Attempts      int            `json:"rounds_completed"`
 	}
 )

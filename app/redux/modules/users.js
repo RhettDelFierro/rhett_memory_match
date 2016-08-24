@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable'
-import { registerUser } from 'utils/userFunctions'
+import { registerUser, loginUser } from 'utils/userFunctions'
 import { closeModal } from 'redux/modules/modal'
 
 const AUTH_USER = 'AUTH_USER'
@@ -41,28 +41,33 @@ export function register({email, username, password}) {
         try {
             dispatch(fetchingUser())
             const data = await registerUser({username, email, password})
-            console.log(data)
             const user_id = data.user.user_id
             const user = data.user
-            const token = data.token
             console.log("register thunk coming back from userFunctions.registerUser:", user)
-            dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now(), token}))
+            dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
             dispatch(authUser(user_id))
-            return uid
+            return user_id
         } catch (error) {
             Error('error in registerUser', error)
         }
     }
 }
 
-export function loginUser({email, user, password}) {
+export function login({email, password}) {
     return async function (dispatch) {
-        dispatch(fetchingUser())
-        const data = await registerUser({user, email, password})
-        const user = data.user
-        const token = data.token
-        return dispatch(fetchingUserSuccess({uid, user, timestamp: Date.now(), token}))
+        try {
+            dispatch(fetchingUser())
+            const data = await loginUser({email, password})
+            const user = data.user
+            const user_id = data.user.user_id
+            dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
+            dispatch(closeModal())
+            dispatch(authUser(user_id))
+            return user_id
+        } catch (error) {
+            Error('error in loginUser', error)
+        }
     }
 }
 
@@ -70,7 +75,7 @@ const userInitialState = fromJS({
     info: {
         username: '',
         user_id: '',
-        avatar: '',
+        //avatar: '',
         email:''
     }
 })
@@ -89,8 +94,7 @@ const initialState = fromJS({
     isAuthed: false,
     isFetching: false,
     error: false,
-    authId: '',
-    userInfo: {}
+    authId: ''
 })
 
 export default function users(state = initialState, action) {

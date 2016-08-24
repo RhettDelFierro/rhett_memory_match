@@ -5,23 +5,27 @@ import * as userActions from 'redux/modules/users'
 
 class Login extends Component {
 
-    handleFormSubmit(formProps){
-
+    async handleFormSubmit(formProps) {
+        //console.log('handleFormSubmit is called', formProps)
+        const loginUser = await this.props.login(formProps)
+        //go back to where the user was before they visit the link (get it off the state)
+        //get the username from register and send it as a query/route param also:
+        //dispatch(push({pathname: `/${registerUser.route}`, query: {uid: registerUser.uid }}))
     }
 
     render() {
-        const {fields: {loginInfo, password}, handleSubmit} = this.props;
+        const {fields: {email, password}, handleSubmit} = this.props;
         return (
-            <form onSubmit={handleSubmit(this.handleFormSubmit).bind(this)}>
-                <div>
-                    <label>Username or Email</label>
-                    <input type="text" placeholder="First Name" {...loginInfo}/>
-                </div>
-                <div>
+            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+                <fieldset className="form-group">
+                    <label>Email</label>
+                    <input className="form-control" type="email" placeholder="Email" {...email}/>
+                </fieldset>
+                <fieldset className="form-group">
                     <label>Password</label>
-                    <input type="password" placeholder="Email" {...password}/>
-                </div>
-                <button type="submit">Submit</button>
+                    <input className="form-control" type="password" placeholder="Password" {...password}/>
+                </fieldset>
+                <button action="submit" type="submit">Submit</button>
             </form>
         );
     }
@@ -50,6 +54,6 @@ async function asyncValidate(values, dispatch) {
 
 export default reduxForm({
     form: 'login',
-    fields: ['loginInfo', 'password']
+    fields: ['email', 'password']
 }, null, userActions)(Login)
 
