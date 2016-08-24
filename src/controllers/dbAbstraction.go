@@ -50,6 +50,16 @@ func (c *Context) DbUserTable(user, address  string) (string, error) {
 	return "", err
 }
 
+func (c *Context) DbModeTable(mode string) (round_id int64,err error) {
+
+	var round_id int64
+	var q = "SELECT round_id FROM rounds WHERE mode_name=?"
+
+	err = c.SQLAbstraction.QueryRow(q, mode).Scan(&round_id)
+
+	return
+}
+
 
 //prepares the insert statement.
 func (c *Context) PrepareRegisterUser() (*sql.Stmt, error) {
@@ -59,6 +69,11 @@ func (c *Context) PrepareRegisterUser() (*sql.Stmt, error) {
 func (c *Context) PrepareLoginUser() (*sql.Stmt, error) {
 	return c.SQLAbstraction.Prepare("SELECT user_id,username,email,password FROM users WHERE email = ?")
 }
+
+func (c *Context) PrepareInsertScore() (*sql.Stmt, error) {
+	return c.SQLAbstraction.Prepare("INSERT INTO scores(round_id,score,user_id) VALUES(?,?,?)")
+}
+
 
 // NewContext creates a new Context object for EACH HTTP request
 func NewContext() *Context {

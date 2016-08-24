@@ -47,12 +47,12 @@ type (
 	//Model for authorized user with access token
 	AuthUserModel struct {
 		User  models.User `json:"user"`
-		Token string      `json:"token"`
+		Token string      `json:"token,omitempty"`
 	}
 	//Model for authorized user after registration:
 	RegisterAuthUserModel struct {
 		User  *models.User `json:"user"`
-		Token string      `json:"token"`
+		Token string      `json:"token,omitempty"`
 	}
 	//Model for a ScoreNote
 	NoteModel struct {

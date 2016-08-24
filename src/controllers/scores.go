@@ -2,38 +2,41 @@ package controllers
 
 import (
 	"net/http"
-	//"fmt"
-	//"encoding/json"
-	//"github.com/RhettDelFierro/rhett_memory_match/src/common"
-	//"github.com/RhettDelFierro/rhett_memory_match/src/data"
-	//"log"
-	//"database/sql"
-	//"time"
-	//"github.com/gorilla/mux"
+	"fmt"
+	"encoding/json"
+	"github.com/RhettDelFierro/rhett_memory_match/src/common"
+	"github.com/RhettDelFierro/rhett_memory_match/src/data"
+	"log"
+	"database/sql"
+	"time"
+	"github.com/gorilla/mux"
+	"os/user"
 )
 
 func Scores(w http.ResponseWriter, r *http.Request) {
 
-	//vars := mux.Vars(r)
-	//game_mode := vars["mode"]
-	//
-	//var score ScoreResource
-	//var token string
-	//
-	//if r.Method == "POST" {
-	//	err := json.NewDecoder(r.Body).Decode(&score)
-	//	if err != nil {
-	//		common.DisplayAppError(w, err, "Invalid User data", 500)
-	//		return
-	//	}
-	//}
-	//
-	//user := score.Data
-	//
-	//context := NewContext();
-	////defer context.Close()
-	//
-	//match, err := context.DbUserTable(user.Username, user.Email)
+	vars := mux.Vars(r)
+	game_mode := vars["mode"]
+
+	var score ScoreResource
+	var token string
+
+	if r.Method == "POST" {
+		err := json.NewDecoder(r.Body).Decode(&score)
+		if err != nil {
+			common.DisplayAppError(w, err, "Invalid Score data", 500)
+			return
+		}
+	}
+
+	scoreData := score.Data
+
+	context := NewContext();
+	//defer context.Close()
+
+
+	match, err := context.DbModeTable(game_mode)
+
 	//
 	////DB error
 	//if err != nil && err != sql.ErrNoRows {

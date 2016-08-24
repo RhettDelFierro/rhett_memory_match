@@ -6,6 +6,7 @@ import { loadNotes, makeNotesInfo } from 'utils/loadingNotes'
 import { push } from 'react-router-redux'
 import { checkMode, setScores } from 'utils/scoresFunctions'
 import { setScoreAction } from 'redux/modules/scores'
+import { setScoresAPI } from 'utils/scoresAPI'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -87,10 +88,22 @@ export function completeRound() {
 
 export function proceed() {
     return async function (dispatch, getState) {
+        const user_id = getState.users.get('authID')
         const score = setScores({
             mode: getState().training.get('mode'),
             state: getState()
         })
+
+        const data = await setScoresAPI({
+            mode: `${score.mode}${score.round}`,
+            score: score.score,
+            user_id,
+            round: score.round,
+            gamemode: score.mode
+        })
+
+        console.log(data)
+        //set the following dispatches from data instead of what you have.
         dispatch(setScoreAction({mode: score.gameMode, round: score.round, score: score.score}))
         dispatch({type: PROCEED})
     }

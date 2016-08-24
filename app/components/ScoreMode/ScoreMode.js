@@ -17,7 +17,7 @@ function ScoreMode(props) {
     )
 }
 
-ScoreMode.proptTypes = {
+ScoreMode.propTypes = {
     mode: PropTypes.string.isRequired,
     score: PropTypes.string.isRequired,
     proceed: PropTypes.func.isRequired

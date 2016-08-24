@@ -3,7 +3,7 @@ import { reduxForm } from 'redux-form'
 import { error } from './styles.css'
 import * as userActions from 'redux/modules/users'
 
-class Login extends Component {
+class LoginForm extends Component {
 
     async handleFormSubmit(formProps) {
         //console.log('handleFormSubmit is called', formProps)
@@ -55,5 +55,8 @@ async function asyncValidate(values, dispatch) {
 export default reduxForm({
     form: 'login',
     fields: ['email', 'password']
-}, null, userActions)(Login)
+}, null, userActions)(LoginForm)
 
+LoginForm.propTypes = {
+    login: PropTypes.func.isRequired
+}

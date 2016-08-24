@@ -21,18 +21,6 @@ const store = createStore(
     )
 )
 
-//const createSelectLocationState = () => {
-//    let prevRoutingState, prevRoutingStateJS;
-//    return (state) => {
-//        const routingState = state.routing
-//        if (typeof prevRoutingState === 'undefined' || prevRoutingState !== routingState) {
-//            prevRoutingState = routingState;
-//            prevRoutingStateJS = routingState;
-//        }
-//        return prevRoutingStateJS;
-//    };
-//};
-
 export const history = syncHistoryWithStore(hashHistory, store)
 
 ReactDOM.render(
