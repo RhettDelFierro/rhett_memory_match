@@ -88,21 +88,21 @@ export function completeRound() {
 
 export function proceed() {
     return async function (dispatch, getState) {
-        const user_id = getState.users.get('authID')
+        const user_id = getState().users.get('authId')
+
         const score = setScores({
             mode: getState().training.get('mode'),
             state: getState()
         })
 
         const data = await setScoresAPI({
-            mode: `${score.mode}${score.round}`,
+            mode: `${score.gameMode}${score.round}`,
             score: score.score,
             user_id,
             round: score.round,
-            gamemode: score.mode
+            gamemode: score.gameMode
         })
 
-        console.log(data)
         //set the following dispatches from data instead of what you have.
         dispatch(setScoreAction({mode: score.gameMode, round: score.round, score: score.score}))
         dispatch({type: PROCEED})

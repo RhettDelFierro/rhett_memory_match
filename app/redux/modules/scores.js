@@ -3,7 +3,6 @@ import { fromJS } from 'immutable'
 const SET_SCORE = 'SET_SCORE'
 
 export function setScoreAction({mode, round, score}){
-    console.log(mode, round, score)
     return {
         type: SET_SCORE,
         mode,
@@ -23,7 +22,6 @@ const initialState = fromJS({
 export default function scores(state = initialState, action) {
     switch(action.type){
         case SET_SCORE:
-            console.log(action)
             return state.merge({
                 [action.mode]: state.get(action.mode).set(action.round, action.score)
             })

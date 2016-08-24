@@ -51,12 +51,7 @@ func (c *Context) DbUserTable(user, address  string) (string, error) {
 }
 
 func (c *Context) DbModeTable(mode string) (round_id int64,err error) {
-
-	var round_id int64
-	var q = "SELECT round_id FROM rounds WHERE mode_name=?"
-
-	err = c.SQLAbstraction.QueryRow(q, mode).Scan(&round_id)
-
+	err = c.SQLAbstraction.QueryRow("SELECT round_id FROM rounds WHERE mode_name=?", mode).Scan(&round_id)
 	return
 }
 

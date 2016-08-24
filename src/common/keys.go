@@ -81,14 +81,12 @@ func GenerateToken(name, role string) (string, error) {
 //middleware to validate jwt:
 func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		// If no Auth cookie is set then return a 404 not found
 		cookie, err := r.Cookie("Auth")
 		if err != nil {
 			http.NotFound(w, r)
 			return
 		}
-
 		fmt.Println(cookie)
 		// The token is concatenated with its key Auth=token
 		// We remove the Auth= part by splitting the cookie in two

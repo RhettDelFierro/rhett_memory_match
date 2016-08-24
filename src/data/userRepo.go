@@ -13,13 +13,7 @@ type UserRepository struct {
 	S *sql.Stmt
 }
 
-func (r *UserRepository) CreateUser(user *models.User) (user_id int64,err error) {
-
-	hpass := cleanPassword(user.Password)
-	user.HashPassword = hpass
-	//clear the incoming text password
-	user.Password = ""
-
+func (r *UserRepository) CreateUser(user *models.User) (user_id int64, err error) {
 
 	//we have the rows object in r.R
 	//now insert:
@@ -28,7 +22,7 @@ func (r *UserRepository) CreateUser(user *models.User) (user_id int64,err error)
 		return
 	}
 	user_id, err = result.LastInsertId()
-	return user_id, err
+	return
 }
 
 func cleanPassword(password string) []byte {

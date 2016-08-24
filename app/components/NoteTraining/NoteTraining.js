@@ -22,7 +22,6 @@ function Game(props){
 }
 
 function Score(props){
-    console.log('score',props)
     return (
         <div className={container}>
             <ScoreMode />
