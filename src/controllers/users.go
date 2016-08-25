@@ -126,14 +126,19 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	//getting jwt for cookie:
 	cookie, err := common.GenerateCookieToken(userInfo.Username, "user", userInfo.User_ID)
 	if err != nil {
-		common.DisplayAppError(w, err, "Error while generating the access token", 500)
+		common.DisplayAppError(w, err, "Error while generating the access token for cookie", 500)
 		return
 	}
 
 	//generate token for response:
-
+	token, err = common.GenerateToken(userInfo.Username, "user", userInfo.User_ID)
+	if err != nil {
+		common.DisplayAppError(w, err, "Error while generating the access token for sessions", 500)
+		return
+	}
 	//set the responseUser data:
 	responseUser := AuthUserModel{User: userInfo, Token: token}
+
 	if j, err := json.Marshal(AuthUserResource{Data: responseUser}); err != nil {
 		common.DisplayAppError(w, err, "An unexpected error has occurred", 500)
 		return

@@ -33,7 +33,7 @@ export async function loginUser({email, password}) {
     try {
         const response = await axios.post("http://localhost:8000/users/login",
             {data: {email, password}});
-        console.log('loginresponse', response)
+        window.sessionStorage.setItem('token', response.data.data.token)
         return response.data.data
     } catch (error) {
         console.log(error)

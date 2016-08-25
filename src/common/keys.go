@@ -78,11 +78,12 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	signedToken, err := token.SignedString([]byte(AppConfig.Secret))
+
 	return http.Cookie{Name: "Auth", Value: signedToken, Expires: expireCookie, HttpOnly: true}, err
 }
 
 //generating the jwt for the CSRF:
-func GenerateToken(name, role string, id int64) (string, error) {
+func GenerateToken(name, role string, id int64) (signedTokenString string,err error) {
 
 	claims := AppClaims{
 		name,
@@ -96,11 +97,9 @@ func GenerateToken(name, role string, id int64) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
-	signedTokenString, err := token.SignedString(signKey)
-	if err != nil {
-		return "", err
-	}
-	return signedTokenString, nil
+	signedTokenString, err = token.SignedString(signKey)
+
+	return
 }
 
 //middleware to validate jwt:
