@@ -14,7 +14,7 @@ export async function verifyName(user) {
     try {
         const response = axios.post("/username", {data: {username: user}});
         return response.data
-    } catch (error){
+    } catch (error) {
         console.log(error);
     }
 }
@@ -31,9 +31,13 @@ export async function registerUser({username, email, password}) {
 
 export async function loginUser({email, password}) {
     try {
-        const response = await axios.post("http://localhost:8000/users/login", {data: {email, password}});
+        const response = await axios.post("http://localhost:8000/users/login",
+            {data: {email, password}}, {
+                withCredentials: true
+            });
+        console.log('loginresponse', response)
         return response.data.data
-    } catch (error){
+    } catch (error) {
         console.log(error)
     }
 }

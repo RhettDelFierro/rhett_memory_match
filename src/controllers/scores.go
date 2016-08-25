@@ -6,6 +6,7 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 	"github.com/gorilla/mux"
+	reqcontext "github.com/gorilla/context"
 )
 
 func Scores(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +27,9 @@ func Scores(w http.ResponseWriter, r *http.Request) {
 	scoreData := score.Data
 
 	context := NewContext();
+	claims := reqcontext.Get(r, "Claims").(*common.AppClaims)
+	context.User = claims.UserName
+	context.ID = claims.ID
 	//defer context.Close()
 
 	round_id, err := context.DbModeTable(game_mode)
@@ -47,5 +51,6 @@ func Scores(w http.ResponseWriter, r *http.Request) {
 		common.DisplayAppError(w, err, "Unexpected error in Scores DB", 500)
 		return
 	}
+
 	w.WriteHeader(http.StatusNoContent)
 }

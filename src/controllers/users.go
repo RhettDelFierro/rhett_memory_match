@@ -66,7 +66,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	user.Password = ""
 
 	//now generate the jwt token
-	token, err = common.GenerateToken(user.Username, "user")
+	token, err = common.GenerateToken(user.Username, "user", user.User_ID)
 	if err != nil {
 		fmt.Println("error in controllers.RegisterUser > common.GenerateToken")
 		return
@@ -124,7 +124,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//getting jwt:
-	token, err = common.GenerateToken(userInfo.Username, "user")
+	token, err = common.GenerateToken(userInfo.Username, "user", userInfo.User_ID)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error while generating the access token", 500)
 		return
@@ -143,6 +143,8 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		http.SetCookie(w, &cookie)
+		//w.Header().Set("Access-Control-Allow-Origin", "http://localhost:8080")
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(j)

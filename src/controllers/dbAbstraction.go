@@ -10,6 +10,7 @@ import (
 type Context struct {
 	SQLAbstraction *sql.DB
 	User           string
+	ID             int64
 }
 
 //this means, that context is a UserDataHandler interface.
@@ -50,7 +51,7 @@ func (c *Context) DbUserTable(user, address  string) (string, error) {
 	return "", err
 }
 
-func (c *Context) DbModeTable(mode string) (round_id int64,err error) {
+func (c *Context) DbModeTable(mode string) (round_id int64, err error) {
 	err = c.SQLAbstraction.QueryRow("SELECT round_id FROM rounds WHERE mode_name=?", mode).Scan(&round_id)
 	return
 }

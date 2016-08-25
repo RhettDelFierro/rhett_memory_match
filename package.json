@@ -29,6 +29,7 @@
     "motion-ui": "^1.2.2",
     "react": "^15.2.0",
     "react-bootstrap": "^0.29.5",
+    "react-cookie": "^0.4.8",
     "react-dom": "^15.0.1",
     "react-icons": "^2.0.1",
     "react-modal": "^1.4.0",

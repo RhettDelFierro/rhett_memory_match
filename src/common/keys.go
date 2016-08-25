@@ -16,6 +16,7 @@ import (
 type AppClaims struct {
 	UserName string `json:"username"`
 	Role     string `json:"role"`
+	ID	 int64 	 `json:"user_id"`
 	jwt.StandardClaims
 }
 
@@ -58,11 +59,12 @@ func initKeys() {
 }
 
 //generating the jwt:
-func GenerateToken(name, role string) (string, error) {
+func GenerateToken(name, role string, id int64) (string, error) {
 
 	claims := AppClaims{
 		name,
 		role,
+		id,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Minute * 20).Unix(),
 			Issuer:    "admin",
@@ -81,13 +83,15 @@ func GenerateToken(name, role string) (string, error) {
 //middleware to validate jwt:
 func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		fmt.Println("in validate")
+		fmt.Println(r)
 		// If no Auth cookie is set then return a 404 not found
 		cookie, err := r.Cookie("Auth")
 		if err != nil {
 			http.NotFound(w, r)
 			return
 		}
-		fmt.Println(cookie)
 		// The token is concatenated with its key Auth=token
 		// We remove the Auth= part by splitting the cookie in two
 		splitCookie := strings.Split(cookie.String(), "Auth=")

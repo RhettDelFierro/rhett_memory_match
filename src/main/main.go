@@ -17,5 +17,13 @@ func main() {
 
 	router := routers.Router()
 	handler := cors.Default().Handler(router)
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:8080"},
+		AllowCredentials: true,
+		AllowedHeaders: []string{"Content-Type"},
+	})
+
+	// Insert the middleware
+	handler = c.Handler(handler)
 	http.ListenAndServe(":8000", handler)
 }
