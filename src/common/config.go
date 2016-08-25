@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-var DBConfig configuration
+var AppConfig configuration
 
 type (
 	appError struct {
@@ -21,13 +21,13 @@ type (
 	}
 
 	configuration struct {
-		Server, DBHost, DBUser, DBPwd, Database string
+		Server, DBHost, DBUser, DBPwd, Database, Secret string
 	}
 )
 
 func InitAll(){
 	initKeys()
-	loadDBConfig()
+	loadAppConfig()
 	createDbSession()
 }
 
@@ -39,7 +39,7 @@ func DisplayAppError(w http.ResponseWriter, handlerError error, message string, 
 		HttpStatus: code,
 	}
 	//log.Printf("AppError]: %s\n", handlerError)
-	fmt.Println("AppError]: %s\n", handlerError)
+	fmt.Printf("AppError: %s\n", handlerError)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(code)
 	if j, err := json.Marshal(errorResource{Data: errObj}); err == nil {
@@ -47,16 +47,16 @@ func DisplayAppError(w http.ResponseWriter, handlerError error, message string, 
 	}
 }
 
-//loads the fields for the DB and sets them to DBConfig.
-func loadDBConfig() {
+//loads the fields for the DB/jwtsecret and sets them to AppConfig.
+func loadAppConfig() {
 	file, err := os.Open("src/common/config.json")
 	defer file.Close()
 	if err != nil {
 		fmt.Printf("loadAppConfig error: %s\n", err)
 	}
 	decoder := json.NewDecoder(file)
-	DBConfig = configuration{}
-	err = decoder.Decode(&DBConfig)
+	AppConfig = configuration{}
+	err = decoder.Decode(&AppConfig)
 	if err != nil {
 		fmt.Printf("loadAppConfigError: %s\n", err)
 	}

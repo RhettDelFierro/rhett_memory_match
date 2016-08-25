@@ -123,21 +123,17 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		common.DisplayAppError(w, err, "Invalid login credentials", 401)
 	}
 
-	//getting jwt:
-	token, err = common.GenerateToken(userInfo.Username, "user", userInfo.User_ID)
+	//getting jwt for cookie:
+	cookie, err := common.GenerateCookieToken(userInfo.Username, "user", userInfo.User_ID)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error while generating the access token", 500)
 		return
 	}
-	cookie := http.Cookie{
-		Name: "Auth",
-		Value: token,
-		Expires: time.Now().Add(time.Minute * 20),
-		HttpOnly: true,
-	}
+
+	//generate token for response:
 
 	//set the responseUser data:
-	responseUser := AuthUserModel{User: userInfo}
+	responseUser := AuthUserModel{User: userInfo, Token: token}
 	if j, err := json.Marshal(AuthUserResource{Data: responseUser}); err != nil {
 		common.DisplayAppError(w, err, "An unexpected error has occurred", 500)
 		return

@@ -22,7 +22,7 @@ func GetDB() *sql.DB {
 
 func createDbSession() {
 	var err error
-	setup := fmt.Sprintf("%s:%s@tcp(%s)/%s", DBConfig.DBUser, DBConfig.DBPwd, DBConfig.DBHost, DBConfig.Database)
+	setup := fmt.Sprintf("%s:%s@tcp(%s)/%s", AppConfig.DBUser, AppConfig.DBPwd, AppConfig.DBHost, AppConfig.Database)
 	db, err = sql.Open("mysql", setup)
 	if err != nil {
 		log.Fatalf("[createDBSession]: %s\n", err)

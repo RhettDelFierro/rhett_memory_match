@@ -32,9 +32,7 @@ export async function registerUser({username, email, password}) {
 export async function loginUser({email, password}) {
     try {
         const response = await axios.post("http://localhost:8000/users/login",
-            {data: {email, password}}, {
-                withCredentials: true
-            });
+            {data: {email, password}});
         console.log('loginresponse', response)
         return response.data.data
     } catch (error) {

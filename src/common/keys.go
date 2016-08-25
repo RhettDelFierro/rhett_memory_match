@@ -16,7 +16,7 @@ import (
 type AppClaims struct {
 	UserName string `json:"username"`
 	Role     string `json:"role"`
-	ID	 int64 	 `json:"user_id"`
+	ID       int64         `json:"user_id"`
 	jwt.StandardClaims
 }
 
@@ -56,9 +56,32 @@ func initKeys() {
 	if err != nil {
 		log.Fatalf("[initKeys]: %s\n", err)
 	}
+
 }
 
-//generating the jwt:
+//generating the jwt for the cookie:
+func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
+
+	expireToken := time.Now().Add(time.Minute * 20).Unix()
+	expireCookie := time.Now().Add(time.Minute * 20)
+
+	claims := AppClaims{
+		name,
+		role,
+		id,
+		jwt.StandardClaims{
+			ExpiresAt: expireToken,
+			Issuer:    "admin",
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	signedToken, err := token.SignedString([]byte(AppConfig.Secret))
+	return http.Cookie{Name: "Auth", Value: signedToken, Expires: expireCookie, HttpOnly: true}, err
+}
+
+//generating the jwt for the CSRF:
 func GenerateToken(name, role string, id int64) (string, error) {
 
 	claims := AppClaims{
@@ -84,8 +107,6 @@ func GenerateToken(name, role string, id int64) (string, error) {
 func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		fmt.Println("in validate")
-		fmt.Println(r)
 		// If no Auth cookie is set then return a 404 not found
 		cookie, err := r.Cookie("Auth")
 		if err != nil {
