@@ -68,8 +68,6 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 	//expireCookie := 25*60
 	expireCookie := time.Now().Add(time.Minute * 30)
 
-	//if time.Now()
-
 	claims := AppClaims{
 		name,
 		role,
@@ -99,7 +97,7 @@ func GenerateToken(name, role string, id int64) (signedTokenString string,err er
 		role,
 		id,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute * 20).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 30).Unix(),
 			Issuer:    "admin",
 		},
 	}
@@ -116,26 +114,18 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		//cookie, err := r.Cookie("Auth")
-		//if err == nil {
-		//	cookie.Expires = time.Date(2016, time.August, 10, 23, 0, 0, 0, time.UTC)
-		//	http.SetCookie(w, cookie)
-		//	w.Header().Set("Content-Type", "application/json")
-		//	return
-		//}
-
-		//grabbing the cookie:
-		//splitCookie, err := PullCookie(r,"Auth")
 		//if err != nil {
 		//	DisplayAppError(w, err, "no Auth cookie found", 404)
 		//	return
 		//}
+		//splitCookie := strings.Split(cookie.String(), "Auth=")
 
-		cookie, err := r.Cookie("Auth")
+		splitCookie, err := PullCookie(r, "Auth")
 		if err != nil {
 			DisplayAppError(w, err, "no Auth cookie found", 404)
 			return
 		}
-		splitCookie := strings.Split(cookie.String(), "Auth=")
+
 		// Parse, validate and return a token.
 		cookieToken, err := cookieHandler(splitCookie)
 		if err != nil {
