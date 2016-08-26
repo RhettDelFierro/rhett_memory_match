@@ -14,7 +14,7 @@ function RegisterToggle({UpdateLogin}) {
     )
 }
 
-function NavigationLinks({isAuthed, openModal}){
+function NavigationLinks({isAuthed, logout}){
     return isAuthed === true
     ? <ul>
         <li><Link to="/" className={link}>{'Home'}</Link></li>
@@ -23,6 +23,7 @@ function NavigationLinks({isAuthed, openModal}){
         <li><Link to="/scoreboard" className={link}>{'High Scores'}</Link></li>
         <li><Link to="/profile" className={link}>{'Profile'}</Link></li>
         <li><Link to="/practice" className={link}>{'Practice'}</Link></li>
+        <li><span onClick={logout}>{'LogOut'}</span></li>
     </ul>
         :<ul>
         <li><Link to='/' className={link}>{'Home'}</Link></li>
@@ -30,11 +31,11 @@ function NavigationLinks({isAuthed, openModal}){
     </ul>
 }
 
-function NavigationBar({isAuthed, authID, user, openModal}) {
+function NavigationBar({isAuthed, authID, user, openModal, logout}) {
     return (
         <div className={container}>
             <nav className={navContainer}>
-                <NavigationLinks isAuthed={isAuthed}/>
+                <NavigationLinks isAuthed={isAuthed} logout={logout}/>
             </nav>
         </div>
     )
@@ -43,7 +44,7 @@ function NavigationBar({isAuthed, authID, user, openModal}) {
 NavigationBar.propTypes = {
     isAuthed: PropTypes.bool.isRequired,
     user: PropTypes.string,
-
+    logout: PropTypes.func.isRequired
 };
 
 export default NavigationBar

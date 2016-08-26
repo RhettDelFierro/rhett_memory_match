@@ -1,11 +1,12 @@
 import { fromJS } from 'immutable'
-import { registerUser, loginUser } from 'utils/userFunctions'
+import { registerUser, loginUser, logoutUser } from 'utils/userFunctions'
 import { closeModal } from 'redux/modules/modal'
 
 const AUTH_USER = 'AUTH_USER'
 const UNAUTH_USER = 'UNAUTH_USER'
 const FETCHING_USER = 'FETCHING_USER'
 const FETCHING_USER_SUCCESS = 'FETCHING_USER_SUCCESS'
+const LOGOUT_USER = 'LOGOUT_USER'
 
 export function authUser(uid) {
     return {
@@ -71,6 +72,14 @@ export function login({email, password}) {
     }
 }
 
+export function logout(){
+    return async function (dispatch) {
+        let response = await logoutUser()
+        console.log(response)
+        dispatch({type: LOGOUT_USER})
+    }
+}
+
 const userInitialState = fromJS({
     info: {
         username: '',
@@ -107,6 +116,13 @@ export default function users(state = initialState, action) {
         case FETCHING_USER_SUCCESS:
             return state.merge({
                 [action.user_id]: user(state.get(action.user_id), action)
+            })
+        case LOGOUT_USER:
+            return state.merge({
+                isAuthed: false,
+                isFecthing: false,
+                authId: ''
+                //should get rid of [action.user_id]: as well.
             })
         default:
             return state

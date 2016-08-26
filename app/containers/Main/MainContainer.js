@@ -1,5 +1,6 @@
-import React, { Component } from "react"
+import React, { PropTypes,Component } from "react"
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import * as userActionCreators from 'redux/modules/users'
 import { NavigationBar } from 'components'
 import { container } from './styles.css'
@@ -12,11 +13,15 @@ class MainContainer extends Component {
     render() {
         return (
             <div className={container}>
-                <NavigationBar isAuthed={this.props.isAuthed} />
+                <NavigationBar isAuthed={this.props.isAuthed} logout={this.props.logout}/>
                 {this.props.children}
             </div>
         )
     }
+}
+
+MainContainer.propTypes = {
+    logout: PropTypes.func.isRequired
 }
 
 function mapStateToProps({users}) {
@@ -26,9 +31,9 @@ function mapStateToProps({users}) {
     }
 }
 
-function MapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch){
     return bindActionCreators(userActionCreators, dispatch)
 }
 
 
-export default connect(({users}) => ({isAuthed: users.get('isAuthed')}))(MainContainer)
+export default connect(({users}) => ({isAuthed: users.get('isAuthed')}), mapDispatchToProps)(MainContainer)

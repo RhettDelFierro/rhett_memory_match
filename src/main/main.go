@@ -20,7 +20,7 @@ func main() {
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:8080"},
 		AllowCredentials: true,
-		AllowedHeaders: []string{"Content-Type","Cookie"},
+		AllowedHeaders: []string{"Authorization","Content-Type", "Cookie"},
 	})
 
 	// Insert the middleware

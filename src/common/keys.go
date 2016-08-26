@@ -10,6 +10,8 @@ import (
 	"strings"
 	"fmt"
 	"github.com/gorilla/context"
+	"errors"
+	"github.com/dgrijalva/jwt-go/request"
 )
 
 // AppClaims provides custom claim for JWT
@@ -62,8 +64,11 @@ func initKeys() {
 //generating the jwt for the cookie:
 func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 
-	expireToken := time.Now().Add(time.Minute * 20).Unix()
-	expireCookie := time.Now().Add(time.Minute * 20)
+	expireToken := time.Now().Add(time.Minute * 30).Unix()
+	//expireCookie := 25*60
+	expireCookie := time.Now().Add(time.Minute * 30)
+
+	//if time.Now()
 
 	claims := AppClaims{
 		name,
@@ -79,7 +84,7 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 
 	signedToken, err := token.SignedString([]byte(AppConfig.Secret))
 
-	return http.Cookie{Name: "Auth", Value: signedToken, Expires: expireCookie, HttpOnly: true}, err
+	return http.Cookie{Name: "Auth", Value: signedToken, HttpOnly: true, Expires: expireCookie}, err
 }
 
 //generating the jwt for the CSRF:
@@ -106,60 +111,127 @@ func GenerateToken(name, role string, id int64) (signedTokenString string,err er
 func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		// If no Auth cookie is set then return a 404 not found
+		//cookie, err := r.Cookie("Auth")
+		//if err == nil {
+		//	cookie.Expires = time.Date(2016, time.August, 10, 23, 0, 0, 0, time.UTC)
+		//	http.SetCookie(w, cookie)
+		//	w.Header().Set("Content-Type", "application/json")
+		//	return
+		//}
+
+		//grabbing the cookie:
+		//splitCookie, err := PullCookie(r,"Auth")
+		//if err != nil {
+		//	DisplayAppError(w, err, "no Auth cookie found", 404)
+		//	return
+		//}
+
 		cookie, err := r.Cookie("Auth")
 		if err != nil {
-			http.NotFound(w, r)
+			DisplayAppError(w, err, "no Auth cookie found", 404)
 			return
 		}
-		// The token is concatenated with its key Auth=token
-		// We remove the Auth= part by splitting the cookie in two
 		splitCookie := strings.Split(cookie.String(), "Auth=")
-
 		// Parse, validate and return a token.
-		token, err := jwt.ParseWithClaims(splitCookie[1], &AppClaims{},
-			func(token *jwt.Token) (interface{}, error) {
-
-				// Prevents a known exploit
-				if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
-					return nil, fmt.Errorf("Unexpected signing method %v", token.Header["alg"])
-				}
-				return verifyKey, nil
-			})
-
+		cookieToken, err := cookieHandler(splitCookie)
 		if err != nil {
-			switch err.(type) {
-
-			case *jwt.ValidationError: // JWT validation error
-				vErr := err.(*jwt.ValidationError)
-
-				switch vErr.Errors {
-				//JWT expired
-				case jwt.ValidationErrorExpired:
-					DisplayAppError(w, err, "Access Token is expired, get a new Token", 401)
-					return
-
-				default:
-					DisplayAppError(w, err, "Error while parsing the Access Token!", 500)
-					return
-				}
-
-			default:
-				DisplayAppError(w, err, "Error while parsing Access Token!", 500)
-				return
-			}
-
+			errorString,errorCode := jwtError(err)
+			cookieErrorString := "[Cookie]: " + errorString
+			DisplayAppError(w,err,cookieErrorString,errorCode)
+			return
 		}
 
+
+
+		sessionToken, err := sessionTokenParse(r)
+		if err != nil {
+			errorString,errorCode := jwtError(err)
+			sessionErrorString := "[SessionToken]: " + errorString
+			DisplayAppError(w,err,sessionErrorString,errorCode)
+			return
+		}
+
+
 		// Validate the token and save the token's claims to a context
-		if claims, ok := token.Claims.(*AppClaims); ok && token.Valid {
+		if claims, ok := cookieToken.Claims.(*AppClaims); ok && cookieToken.Valid &&sessionToken.Valid{
 			context.Set(r, "Claims", claims)
+			//go go to the protected controller:
+			protectedPage(w, r)
 		} else {
 			DisplayAppError(w, err, "Invalid Access Token", 401,
 			)
 		}
-
-		// If everything is valid then call the original protected handler
-		protectedPage(w, r)
 	})
+}
+
+//pull the cookie from the request:
+func PullCookie(r *http.Request,name string) ([]string,error){
+	cookie, err := r.Cookie(name)
+	splitString := name + "="
+	return strings.Split(cookie.String(), splitString), err
+}
+
+//validates the jwt in the Cookie:
+func cookieHandler(cookie []string) (token *jwt.Token,err error) {
+	fmt.Println(cookie[1])
+
+	token, err = jwt.ParseWithClaims(cookie[1], &AppClaims{},
+		func(token *jwt.Token) (interface{}, error) {
+			// Prevents a known exploit
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("Unexpected signing method %v", token.Header["alg"])
+			}
+			return []byte(AppConfig.Secret), nil
+		})
+	return
+}
+
+//takes the jwt from the client's session storage:
+func sessionTokenParse(r *http.Request) (token *jwt.Token, err error){
+	token, err = request.ParseFromRequestWithClaims(r, request.OAuth2Extractor, &AppClaims{}, func(token *jwt.Token) (interface{}, error) {
+		// since we only use the one private key to sign the tokens,
+		// we also only use its public counter part to verify
+		return verifyKey, nil
+	})
+
+	return
+}
+
+func jwtError(err error) (errorString string, errorCode int) {
+	switch err.(type) {
+
+	case *jwt.ValidationError: // JWT validation error
+		vErr := err.(*jwt.ValidationError)
+
+		switch vErr.Errors {
+		//JWT expired
+		case jwt.ValidationErrorExpired:
+			errorString = "Access Token is expired, get a new Token"
+			errorCode = 401
+			return
+
+		default:
+			errorString= "Error while parsing the Access Token!"
+			errorCode = 500
+			return
+		}
+
+	default:
+		errorString = "Error while parsing Access Token!"
+		errorCode = 500
+		return
+	}
+}
+
+
+//pulls the jwt sent from the sessions storage in the Authorization Header:
+func TokenFromAuthHeader(r *http.Request) (string, error) {
+	// Look for an Authorization header
+	if ah := r.Header.Get("Authorization"); ah != "" {
+		// Should be a bearer token
+		if len(ah) > 6 && strings.ToUpper(ah[0:6]) == "BEARER" {
+			return ah[7:], nil
+		}
+	}
+	return "", errors.New("No token in the HTTP request")
 }

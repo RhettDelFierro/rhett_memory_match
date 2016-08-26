@@ -6,7 +6,7 @@ import { loadNotes, makeNotesInfo } from 'utils/loadingNotes'
 import { push } from 'react-router-redux'
 import { checkMode, setScores } from 'utils/scoresFunctions'
 import { setScoreAction } from 'redux/modules/scores'
-import { setScoresAPI } from 'utils/scoresAPI'
+import { setScoresAPI } from 'utils/userFunctions'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'

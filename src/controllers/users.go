@@ -8,7 +8,6 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 	"log"
 	"database/sql"
-	"time"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
 )
 
@@ -25,7 +24,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := &usr.Data
-
+	fmt.Println(*user)
 	context := NewContext();
 	//defer context.Close()
 
@@ -65,22 +64,21 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	//double checking the password the user entered is not sent:
 	user.Password = ""
 
-	//now generate the jwt token
-	token, err = common.GenerateToken(user.Username, "user", user.User_ID)
+	cookie, err := common.GenerateCookieToken(user.Username, "user", user.User_ID)
 	if err != nil {
-		fmt.Println("error in controllers.RegisterUser > common.GenerateToken")
+		common.DisplayAppError(w, err, "Error while generating the access token for cookie", 500)
 		return
 	}
-	//set jwt to Cookie:
-	cookie := http.Cookie{
-		Name: "Auth",
-		Value: token,
-		Expires: time.Now().Add(time.Minute * 20),
-		HttpOnly: true,
+
+	//generate token for response:
+	token, err = common.GenerateToken(user.Username, "user", user.User_ID)
+	if err != nil {
+		common.DisplayAppError(w, err, "Error while generating the access token for sessions", 500)
+		return
 	}
 
 	//set the responseUser data:
-	responseUser := RegisterAuthUserModel{User: user}
+	responseUser := RegisterAuthUserModel{User: user, Token: token}
 
 	if j, err := json.Marshal(RegisterAuthUserResource{Data: responseUser}); err != nil {
 		fmt.Println("error in controllers.RegisterUser json.Marshal")
@@ -94,6 +92,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginUser(w http.ResponseWriter, r *http.Request) {
+
 	var usr LoginResource
 	var token string
 
@@ -144,10 +143,19 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		http.SetCookie(w, &cookie)
-		//w.Header().Set("Access-Control-Allow-Origin", "http://localhost:8080")
-
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(j)
 	}
+}
+
+func LogOut(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("Auth")
+	if err != nil {
+		common.DisplayAppError(w, err, "Error logging out", 500)
+	}
+	cookie.MaxAge = -100
+
+	http.SetCookie(w, cookie)
+	w.Header().Set("Content-Type", "application/json")
 }

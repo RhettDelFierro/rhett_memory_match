@@ -15,7 +15,8 @@ type UserRepository struct {
 
 func (r *UserRepository) CreateUser(user *models.User) (user_id int64, err error) {
 
-	//we have the rows object in r.R
+	user.HashPassword = cleanPassword(user.Password)
+
 	//now insert:
 	result, err := r.S.Exec(user.Username, user.Email, user.HashPassword)
 	if err != nil {

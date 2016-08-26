@@ -32,9 +32,20 @@ export async function registerUser({username, email, password}) {
 export async function loginUser({email, password}) {
     try {
         const response = await axios.post("http://localhost:8000/users/login",
-            {data: {email, password}});
+            {data: {email, password}}, {withCredentials: true});
         window.sessionStorage.setItem('token', response.data.data.token)
+        console.log(response)
         return response.data.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function logoutUser() {
+    try {
+        const response = await axios.post("http://localhost:8000/users/logout", {data: {value: 'some value'}}, {withCredentials: true});
+        console.log(response)
+        return response
     } catch (error) {
         console.log(error)
     }
@@ -48,4 +59,24 @@ export async function loginPassword(user) {
         console.log(error);
     }
 
+}
+
+export async function setScoresAPI({mode, score, user_id, gamemode, round}) {
+    try {
+        const response = await axios.post(`http://localhost:8000/scores/${mode}`, {
+            data: {
+                user_id,
+                score,
+                gamemode,
+                round
+            }
+        }, {
+            headers: {
+                'Authorization': 'Bearer ' + window.sessionStorage.getItem('token')
+            }, withCredentials: true});
+        console.log(response)
+        return response.data
+    } catch (error) {
+        Error('Error in setScoresAPI', error)
+    }
 }
