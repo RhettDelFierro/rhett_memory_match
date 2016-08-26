@@ -84,7 +84,11 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 
 	signedToken, err := token.SignedString([]byte(AppConfig.Secret))
 
-	return http.Cookie{Name: "Auth", Value: signedToken, HttpOnly: true, Expires: expireCookie}, err
+	return http.Cookie{Name: "Auth",
+		Value: signedToken,
+		HttpOnly: true,
+		Expires: expireCookie,
+		Path: "/"}, err
 }
 
 //generating the jwt for the CSRF:
