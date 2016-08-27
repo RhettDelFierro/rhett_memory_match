@@ -4,15 +4,26 @@ import { bindActionCreators } from 'redux'
 import * as scoreActionCreators from 'redux/modules/scores'
 import * as trainingActionCreators from 'redux/modules/training'
 import { container } from './styles.css'
+import { Map } from 'immutable'
 
-function ScoreMode(props) {
+export default function ScoreMode(props) {
 
     return (
         <div className={container} onClick={props.proceed}>
             <h3>Here is your score: <span>{props.score}</span></h3>
             <p>You are currently in {props.mode}</p>
-            <p>Note most missed: </p>
+            <Tally notesMissed={props.notesMissed}/>
             <h2>Click Here To Proceed</h2>
+        </div>
+    )
+}
+
+function Tally({notesMissed}) {
+    return (
+        <div>
+            {notesMissed.valueSeq().map((count,note) => {
+                return <p key={note}><span>{note}</span>    {count}</p>
+            })}
         </div>
     )
 }
@@ -20,20 +31,6 @@ function ScoreMode(props) {
 ScoreMode.propTypes = {
     mode: PropTypes.string.isRequired,
     score: PropTypes.string.isRequired,
-    proceed: PropTypes.func.isRequired
+    proceed: PropTypes.func.isRequired,
+    notesMissed: PropTypes.instanceOf(Map).isRequired
 }
-
-function mapStateToProps({training, scores}) {
-    return {
-        roundCompleted: training.get('roundCompleted'),
-        mode: training.get('mode'),
-        //SHOULD BE THE SCORE FROM SCORES REDUCER?
-        score: training.get('score')
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({...scoreActionCreators, ...trainingActionCreators}, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ScoreMode)

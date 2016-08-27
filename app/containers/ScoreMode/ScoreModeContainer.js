@@ -3,7 +3,8 @@ import { ScoreMode } from "components"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { makeNotesObject } from 'utils/noteTestingFunctions'
-import * as scoreModeActionCreators from 'redux/modules'
+import * as scoreActionCreators from 'redux/modules/scores'
+import * as trainingActionCreators from 'redux/modules/training'
 import { Map } from 'immutable'
 
 class ScoreModeContainer extends Component {
@@ -11,47 +12,41 @@ class ScoreModeContainer extends Component {
         super()
     }
 
-    proceed(){
-        //method to handle navigation.
-        //this.props.navigate() -> is a dispatch to .push()
-
-        //maybe just a dispatch to set completed back to false, that way will load Notetraining container again.
-        //do we really need this ScoreMode container?
+    componentWillMount() {
+        //call the .reduce here.
+        this.props.tally()
     }
-
+    //
     render() {
         return (
-            <ScoreMode />
+            <ScoreMode {...this.props}/>
         )
     }
 }
 
+//don't need alot of these:
 ScoreModeContainer.propTypes = {
-    chooseRandomNote: PropTypes.func.isRequired,
     start: PropTypes.bool.isRequired,
-    selectedNote: PropTypes.string,
-    correct: PropTypes.bool.isRequired,
-    targetNote: PropTypes.string,
-    attempts: PropTypes.number.isRequired,
-    checkCorrect: PropTypes.func.isRequired,
-    noteMissed: PropTypes.func.isRequired,
-    selectedNotePlayed: PropTypes.bool.isRequired,
-    onCheck: PropTypes.bool.isRequired,
-    completeGuess: PropTypes.func.isRequired,
-    playIncorrect: PropTypes.func.isRequired,
-    guessed: PropTypes.func.isRequired,
-    setMode: PropTypes.func.isRequired,
-    resetTraining: PropTypes.func.isRequired
+    tally: PropTypes.func.isRequired,
+    mode: PropTypes.string.isRequired,
+    score: PropTypes.string.isRequired,
+    proceed: PropTypes.func.isRequired,
+    roundCompleted: PropTypes.bool.isRequired,
+    notesMissed: PropTypes.instanceOf(Map).isRequired
 }
 
-function mapStateToProps({training, scores, volume}) {
+function mapStateToProps({training, scores}) {
     return {
-        mode: training.get('mode')
+        roundCompleted: training.get('roundCompleted'),
+        mode: training.get('mode'),
+        //SHOULD BE THE SCORE FROM SCORES REDUCER?
+        score: training.get('score'),
+        notesMissed: scores.get('notesMissed')
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators(scoreModeActionCreators, dispatch)
+    return bindActionCreators({...scoreActionCreators, ...trainingActionCreators}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScoreModeContainer)

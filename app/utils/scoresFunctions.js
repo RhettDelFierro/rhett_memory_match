@@ -1,3 +1,5 @@
+import { fromJS } from 'immutable'
+
 export function checkMode(state) {
 
     if (state.get('pretest').size === 0) {
@@ -41,3 +43,18 @@ export function setScores({ mode, state }) {
     }
 }
 
+export function tallyCount({ notesMissed }) {
+    const initialValue = {}
+    const reducer = function(tally,note) {
+        if(!tally[note]) {
+            tally[note] = 1
+        } else {
+            tally[note] = tally[note] + 1
+        }
+        return tally
+    }
+    const result = notesMissed.reduce(reducer,initialValue)
+    const mapResult = fromJS(result)
+
+    return mapResult.sortBy((value) => value)
+}

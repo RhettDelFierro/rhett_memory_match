@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from "react"
-import { NoteContainer, CounterContainer, VolumeControlContainer } from 'containers'
-import { ScoreMode } from 'components'
+import { NoteContainer, CounterContainer, VolumeControlContainer, ScoreModeContainer } from 'containers'
 import { container, start } from './styles.css'
 
 export default function NoteTraining(props) {
@@ -24,7 +23,7 @@ function Game(props){
 function Score(props){
     return (
         <div className={container}>
-            <ScoreMode />
+            <ScoreModeContainer />
         </div>
     )
 }
