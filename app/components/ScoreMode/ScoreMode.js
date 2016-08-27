@@ -21,7 +21,7 @@ export default function ScoreMode(props) {
 function Tally({notesMissed}) {
     return (
         <div>
-            {notesMissed.valueSeq().map((count,note) => {
+            {notesMissed.entrySeq().map((note,count) => {
                 return <p key={note}><span>{note}</span>    {count}</p>
             })}
         </div>
