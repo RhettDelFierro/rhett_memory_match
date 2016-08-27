@@ -7,6 +7,7 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 	"github.com/gorilla/mux"
 	reqcontext "github.com/gorilla/context"
+	"fmt"
 )
 
 func Scores(w http.ResponseWriter, r *http.Request) {
@@ -27,9 +28,11 @@ func Scores(w http.ResponseWriter, r *http.Request) {
 	scoreData := score.Data
 
 	context := NewContext();
-	claims := reqcontext.Get(r, "Claims").(*common.AppClaims)
-	context.User = claims.UserName
-	context.ID = claims.ID
+	//getting the username and id from gorilla/context request context:
+	//claims := reqcontext.Get(r, "Claims").(*common.AppClaims)
+	//fmt.Println(claims.UserName)
+	//context.User = claims.UserName
+	//context.ID = claims.ID
 	//defer context.Close()
 
 	round_id, err := context.DbModeTable(game_mode)
@@ -38,7 +41,8 @@ func Scores(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	scoreData.Round_ID = round_id
-	stmt, err := context.PrepareInsertScore()
+	query := "INSERT INTO scores(round_id,score,user_id) VALUES(?,?,?)"
+	stmt, err := context.Prepare(query)
 	defer stmt.Close()
 	if err != nil {
 		common.DisplayAppError(w, err, "Unexpected error in Scores DB", 500)
@@ -51,6 +55,6 @@ func Scores(w http.ResponseWriter, r *http.Request) {
 		common.DisplayAppError(w, err, "Unexpected error in Scores DB", 500)
 		return
 	}
-
+	reqcontext.Clear(r)
 	w.WriteHeader(http.StatusNoContent)
 }

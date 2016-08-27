@@ -18,7 +18,7 @@ import (
 type AppClaims struct {
 	UserName string `json:"username"`
 	Role     string `json:"role"`
-	ID       int64         `json:"user_id"`
+	ID       int         `json:"user_id"`
 	jwt.StandardClaims
 }
 
@@ -90,7 +90,7 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 }
 
 //generating the jwt for the CSRF:
-func GenerateToken(name, role string, id int64) (signedTokenString string,err error) {
+func GenerateToken(name, role string, id int64) (signedTokenString string, err error) {
 
 	claims := AppClaims{
 		name,
@@ -129,26 +129,24 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 		// Parse, validate and return a token.
 		cookieToken, err := cookieHandler(splitCookie)
 		if err != nil {
-			errorString,errorCode := jwtError(err)
+			errorString, errorCode := jwtError(err)
 			cookieErrorString := "[Cookie]: " + errorString
-			DisplayAppError(w,err,cookieErrorString,errorCode)
+			DisplayAppError(w, err, cookieErrorString, errorCode)
 			return
 		}
 
-
-
 		sessionToken, err := sessionTokenParse(r)
 		if err != nil {
-			errorString,errorCode := jwtError(err)
+			errorString, errorCode := jwtError(err)
 			sessionErrorString := "[SessionToken]: " + errorString
-			DisplayAppError(w,err,sessionErrorString,errorCode)
+			DisplayAppError(w, err, sessionErrorString, errorCode)
 			return
 		}
 
 
 		// Validate the token and save the token's claims to a context
-		if claims, ok := cookieToken.Claims.(*AppClaims); ok && cookieToken.Valid &&sessionToken.Valid{
-			context.Set(r, "Claims", claims)
+		if claims, ok := cookieToken.Claims.(*AppClaims); ok && cookieToken.Valid &&sessionToken.Valid {
+			context.Set(r, "Claims", claims.ID)
 			//go go to the protected controller:
 			protectedPage(w, r)
 		} else {
@@ -159,14 +157,14 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 }
 
 //pull the cookie from the request:
-func PullCookie(r *http.Request,name string) ([]string,error){
+func PullCookie(r *http.Request, name string) ([]string, error) {
 	cookie, err := r.Cookie(name)
 	splitString := name + "="
 	return strings.Split(cookie.String(), splitString), err
 }
 
 //validates the jwt in the Cookie:
-func cookieHandler(cookie []string) (token *jwt.Token,err error) {
+func cookieHandler(cookie []string) (token *jwt.Token, err error) {
 	fmt.Println(cookie[1])
 
 	token, err = jwt.ParseWithClaims(cookie[1], &AppClaims{},
@@ -181,7 +179,7 @@ func cookieHandler(cookie []string) (token *jwt.Token,err error) {
 }
 
 //takes the jwt from the client's session storage:
-func sessionTokenParse(r *http.Request) (token *jwt.Token, err error){
+func sessionTokenParse(r *http.Request) (token *jwt.Token, err error) {
 	token, err = request.ParseFromRequestWithClaims(r, request.OAuth2Extractor, &AppClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// since we only use the one private key to sign the tokens,
 		// we also only use its public counter part to verify
@@ -205,7 +203,7 @@ func jwtError(err error) (errorString string, errorCode int) {
 			return
 
 		default:
-			errorString= "Error while parsing the Access Token!"
+			errorString = "Error while parsing the Access Token!"
 			errorCode = 500
 			return
 		}

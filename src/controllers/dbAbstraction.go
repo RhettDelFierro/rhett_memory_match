@@ -10,7 +10,7 @@ import (
 type Context struct {
 	SQLAbstraction *sql.DB
 	User           string
-	ID             int64
+	ID             int
 }
 
 //this means, that context is a UserDataHandler interface.
@@ -56,18 +56,8 @@ func (c *Context) DbModeTable(mode string) (round_id int64, err error) {
 	return
 }
 
-
-//prepares the insert statement.
-func (c *Context) PrepareRegisterUser() (*sql.Stmt, error) {
-	return c.SQLAbstraction.Prepare("INSERT INTO users(username,email,password) VALUES(?,?,?)")
-}
-
-func (c *Context) PrepareLoginUser() (*sql.Stmt, error) {
-	return c.SQLAbstraction.Prepare("SELECT user_id,username,email,password FROM users WHERE email = ?")
-}
-
-func (c *Context) PrepareInsertScore() (*sql.Stmt, error) {
-	return c.SQLAbstraction.Prepare("INSERT INTO scores(round_id,score,user_id) VALUES(?,?,?)")
+func (c *Context) Prepare(q string) (*sql.Stmt, error) {
+	return c.SQLAbstraction.Prepare(q)
 }
 
 

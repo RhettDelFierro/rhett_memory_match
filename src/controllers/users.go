@@ -39,10 +39,11 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	//entry is not duplicate:
 	if err == sql.ErrNoRows {
-		stmt, err := context.PrepareRegisterUser()
+		query := "INSERT INTO users(username,email,password) VALUES(?,?,?)"
+		stmt, err := context.Prepare(query)
 		defer stmt.Close()
 		if err != nil {
-			fmt.Println("error context.PrepareRegisterStudent()")
+			fmt.Println("error context.Prepare() for RegisterUser()")
 			log.Fatal(err)
 		}
 
@@ -110,7 +111,8 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		Password: user.Password,
 	}
 	context := NewContext();
-	stmt, err := context.PrepareLoginUser()
+	query := "SELECT user_id,username,email,password FROM users WHERE email = ?"
+	stmt, err := context.Prepare(query)
 	defer stmt.Close()
 	if err != nil {
 		common.DisplayAppError(w, err, "Error in database query", 500)
