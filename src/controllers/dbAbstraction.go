@@ -10,7 +10,7 @@ import (
 type Context struct {
 	SQLAbstraction *sql.DB
 	User           string
-	ID             int
+	ID             int64
 }
 
 //this means, that context is a UserDataHandler interface.

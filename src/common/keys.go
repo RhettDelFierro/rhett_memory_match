@@ -18,7 +18,7 @@ import (
 type AppClaims struct {
 	UserName string `json:"username"`
 	Role     string `json:"role"`
-	ID       int         `json:"user_id"`
+	ID       int64         `json:"user_id"`
 	jwt.StandardClaims
 }
 
@@ -146,7 +146,8 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 
 		// Validate the token and save the token's claims to a context
 		if claims, ok := cookieToken.Claims.(*AppClaims); ok && cookieToken.Valid &&sessionToken.Valid {
-			context.Set(r, "Claims", claims.ID)
+			context.Set(r, "User", claims.UserName)
+			context.Set(r, "ID", claims.ID)
 			//go go to the protected controller:
 			protectedPage(w, r)
 		} else {
@@ -165,7 +166,7 @@ func PullCookie(r *http.Request, name string) ([]string, error) {
 
 //validates the jwt in the Cookie:
 func cookieHandler(cookie []string) (token *jwt.Token, err error) {
-	fmt.Println(cookie[1])
+
 
 	token, err = jwt.ParseWithClaims(cookie[1], &AppClaims{},
 		func(token *jwt.Token) (interface{}, error) {

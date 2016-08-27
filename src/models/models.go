@@ -14,12 +14,12 @@ type (
 	}
 	Score struct {
 		Score_ID      int64           `json:"score_id"`
-		User_ID       int        `json:"user_id"`
+		User_ID       int64
 		Round_ID      int64
 		Game_mode     string        `json:"gamemode"`
 		Round         int            `json:"round"`
 		Score         string            `json:"score"`
-		Date_Complete time.Time     `json:"date_completed,omitempty"`
+		Date_Complete time.Time     `json:"date_completed"`
 		Contact_date  time.Time     `json:"contact_date,omitempty"`
 		Attempts      int            `json:"rounds_completed"`
 	}
