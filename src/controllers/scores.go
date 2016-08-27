@@ -7,7 +7,6 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 	"github.com/gorilla/mux"
 	reqcontext "github.com/gorilla/context"
-	"fmt"
 )
 
 func Scores(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +34,6 @@ func Scores(w http.ResponseWriter, r *http.Request) {
 		context.ID = id.(int64)
 		scoreData.User_ID = id.(int64)
 	}
-	fmt.Println(context.ID)
 
 
 	round_id, err := context.DbModeTable(game_mode)
