@@ -3,30 +3,33 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scoreActionCreators from 'redux/modules/scores'
 import * as trainingActionCreators from 'redux/modules/training'
-import { container } from './styles.css'
+import { container, error } from './styles.css'
 import { Map } from 'immutable'
+import { TallyForm } from 'components'
+
 
 export default function ScoreMode(props) {
 
     return (
-        <div className={container} onClick={props.proceed}>
+        <div className={container}>
             <h3>Here is your score: <span>{props.score}</span></h3>
             <p>You are currently in {props.mode}</p>
-            <Tally notesMissed={props.notesMissed}/>
+            <TallyForm />
             <h2>Click Here To Proceed</h2>
+            <button onClick={props.proceed}>PROCEED</button>
         </div>
     )
 }
 
-function Tally({notesMissed}) {
-    return (
-        <div>
-            {notesMissed.entrySeq().map((note,count) => {
-                return <p key={note}><span>{note}</span>    {count}</p>
-            })}
-        </div>
-    )
-}
+//function Tally({notesMissed}) {
+//    return (
+//        <div>
+//            {notesMissed.entrySeq().map((note,count) => {
+//                return <p key={note}><span>{note}</span>    {count}</p>
+//            })}
+//        </div>
+//    )
+//}
 
 ScoreMode.propTypes = {
     mode: PropTypes.string.isRequired,

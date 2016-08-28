@@ -26,7 +26,6 @@ class ScoreModeContainer extends Component {
 
 //don't need alot of these:
 ScoreModeContainer.propTypes = {
-    start: PropTypes.bool.isRequired,
     tally: PropTypes.func.isRequired,
     mode: PropTypes.string.isRequired,
     score: PropTypes.string.isRequired,

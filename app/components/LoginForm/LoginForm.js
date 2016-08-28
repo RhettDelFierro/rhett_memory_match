@@ -25,6 +25,7 @@ let LoginForm = (props) => {
             <Field name="password" type="password" component={renderField} label="Password"/>
             <div>
                 <button type="submit" disabled={submitting}>Submit</button>
+                {' '}
                 <button type="button" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
             </div>
         </form>
@@ -32,54 +33,13 @@ let LoginForm = (props) => {
 }
 
 LoginForm = reduxForm({
-    form: 'login',  // a unique identifier for this form
+    form: 'login',
     validate
 })(LoginForm)
 
 LoginForm = connect(
     null,
-    userActions              // bind account loading action creator
+    userActions
 )(LoginForm)
 
 export default LoginForm
-
-
-
-//class LoginForm extends Component {
-//
-//    async handleFormSubmit(formProps) {
-//        //console.log('handleFormSubmit is called', formProps)
-//        const loginUser = await this.props.login(formProps)
-//        //go back to where the user was before they visit the link (get it off the state)
-//        //get the username from register and send it as a query/route param also:
-//        //dispatch(push({pathname: `/${registerUser.route}`, query: {uid: registerUser.uid }}))
-//    }
-//
-//    render() {
-//        const {fields: {email, password}, handleSubmit} = this.props;
-//        return (
-//            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-//                <fieldset className="form-group">
-//                    <label>Email</label>
-//                    <input className="form-control" type="email" placeholder="Email" {...email}/>
-//                </fieldset>
-//                <fieldset className="form-group">
-//                    <label>Password</label>
-//                    <input className="form-control" type="password" placeholder="Password" {...password}/>
-//                </fieldset>
-//                <button action="submit" type="submit">Submit</button>
-//            </form>
-//        );
-//    }
-//}
-//
-//
-//
-//export default reduxForm({
-//    form: 'login',
-//    fields: ['email', 'password']
-//}, null, userActions)(LoginForm)
-//
-//LoginForm.propTypes = {
-//    login: PropTypes.func.isRequired
-//}
