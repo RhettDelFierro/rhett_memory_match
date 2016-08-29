@@ -9,6 +9,8 @@ import (
 	"golang.org/x/oauth2"
 	"fmt"
 	"encoding/json"
+	"time"
+	"math/rand"
 )
 
 //gloabl variable that will contain credentials, httpClient and credentials.
@@ -23,6 +25,17 @@ type Test struct {
 	Uri 	string	`json:"uri"`
 }
 
+func RandomString(strlen int) string {
+	rand.Seed(time.Now().UTC().UnixNano())
+	const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+	result := make([]byte, strlen)
+	for i := 0; i < strlen; i++ {
+		result[i] = chars[rand.Intn(len(chars))]
+	}
+	return string(result)
+}
+
+
 
 func setup() string {
 	if client.Token != nil {
@@ -35,7 +48,7 @@ func setup() string {
 
 	redirectURL := "http://localhost:8000/callback"
 	scopes := []string{"user-read-private", "user-read-email", "user-library-read", "user-top-read", "streaming"}
-	state := "kjsadhflkjdsahfkjhdsalkfjhdsaljkfh"
+	state := RandomString(32)
 
 	return AuthorizationURL(credentials,redirectURL,scopes,state)
 
