@@ -12,6 +12,7 @@ export function getSongs({notesMissed}) {
 }
 
 export function spotifyLogin(){
+    console.log('spotifyLogin clicked')
     return async function (dispatch) {
         const userData = await spotifyAuth()
     }

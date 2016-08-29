@@ -11,7 +11,7 @@ function mapStateToProps ({modal}) {
     }
 }
 function mapDispatchToProps (dispatch) {
-    return bindActionCreators(modalActionCreators, dispatch)
+    return bindActionCreators({...modalActionCreators, spotifyLogin}, dispatch)
 }
 
 export default connect(
