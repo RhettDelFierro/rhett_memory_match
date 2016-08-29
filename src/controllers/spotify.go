@@ -13,10 +13,12 @@ import (
 	"math/rand"
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 	"strings"
+	"errors"
 )
 
 //gloabl variable that will contain credentials, httpClient and credentials.
 var client SpotifyClient
+//ch := make(chan *oauth2.Config)
 
 var Endpoint = oauth2.Endpoint{
 	AuthURL: "https://accounts.spotify.com/authorize",
@@ -36,11 +38,6 @@ func RandomString(strlen int) string {
 	}
 	return string(result)
 }
-
-<<<<<<< HEAD
-=======
-
->>>>>>> c54545f4beecda5542f539e7d5f7f46cb79dc1bd
 
 func setup() (string, http.Cookie) {
 	if client.Token != nil {
@@ -102,34 +99,37 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 
 	code := r.FormValue("code")
 	if code == "" {
-		err := error{"spotify: didn't get access code"}
+		err := errors.New("spotify: didn't get access code")
 		common.DisplayAppError(w, err, "No code in OAuth process", 500)
+		return
 	}
 
 	if err := r.URL.Query().Get("error"); err != "" {
+		err := errors.New("'error' query parameter sent back in SpotifyCallback")
 		common.DisplayAppError(w, err, "Sent back error in OAuth process", 500)
+		return
 	}
 
 	cookie, err := r.Cookie("Spotify_auth_user")
 	if err!= nil {
 		common.DisplayAppError(w, err, "Error logging out", 500)
+		return
 	}
 
 	splitString := "Spotify_auth_user="
 	splitCookie := strings.Split(cookie.String(), splitString)
 	storedState := splitCookie[1]
 
-	if (storedState == nil || storedState != state || state == "") {
+	if (storedState == "" || storedState != state || state == "") {
 		common.DisplayAppError(w, err, "Not valid Oauth in SpotifyCallback. The cookie doesn't match.", 500)
+		return
 	}
 
 	//all checks are accounted for. What's next?
+	//open new window with url on client (after /authLogin runs).
+	//when that closes, store the replaced url (localhost:8000/callback...) on the client and make an axios request here (which brings us to the start of this function).
+	//the functions runs and we get to here:
 
+	//we want that config variable of type oauth2.Config so we could use the .Exchange method on it and pass in "code" to get a token back.
 
-	//vars := mux.Vars(r)
-	//code := vars["code"]
-	//state := vars["state"]
-	//error := vars("error")
-
-	//check cookie to match the state from vars.
 }
