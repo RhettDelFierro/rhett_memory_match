@@ -11,8 +11,6 @@ import (
 	"fmt"
 	"time"
 	"math/rand"
-	//"github.com/gorilla/mux"
-	"net/url"
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 	"strings"
 )
@@ -39,6 +37,10 @@ func RandomString(strlen int) string {
 	return string(result)
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c54545f4beecda5542f539e7d5f7f46cb79dc1bd
 
 func setup() (string, http.Cookie) {
 	if client.Token != nil {
