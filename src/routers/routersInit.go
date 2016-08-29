@@ -15,5 +15,8 @@ func Router() *mux.Router {
 	router.HandleFunc("/users/login", controllers.LoginUser)
 	router.HandleFunc("/scores/{mode}", common.Validate(controllers.Scores))
 	router.HandleFunc("/users/logout", controllers.LogOut)
+
+	//spotify
+	router.HandleFunc("/login", controllers.SpotifyAuth)
 	return router
 }

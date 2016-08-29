@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
+	"golang.org/x/oauth2"
+	"net/http"
 )
 
 type (
@@ -58,5 +60,17 @@ type (
 	NoteModel struct {
 		ScoreId     string `json:"Scoreid"`
 		Description string `json:"description"`
+	}
+
+	//these are for spotify
+	Credentials struct {
+		Id     string
+		Secret string
+	}
+
+	SpotifyClient struct {
+		credentials Credentials
+		client      *http.Client
+		Token       *oauth2.Token
 	}
 )

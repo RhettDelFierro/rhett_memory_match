@@ -14,6 +14,7 @@ export async function getSongsAPI({notesChosen}) {
 export async function spotifyAuth(){
     try {
         const data = axios.get('http://localhost:8000/login')
+        console.log(data)
     } catch (error) {
         Error('Error in spotifyAuth', error)
     }
