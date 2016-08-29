@@ -17,6 +17,7 @@ func Router() *mux.Router {
 	router.HandleFunc("/users/logout", controllers.LogOut)
 
 	//spotify
-	router.HandleFunc("/login", controllers.SpotifyAuth)
+	router.HandleFunc("/authLogin", controllers.SpotifyAuthorization)
+	router.HandleFunc("/callback", controllers.SpotifyCallback)
 	return router
 }

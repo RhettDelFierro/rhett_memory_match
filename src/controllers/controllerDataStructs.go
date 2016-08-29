@@ -73,4 +73,11 @@ type (
 		client      *http.Client
 		Token       *oauth2.Token
 	}
+
+	UserProfileResponse struct {
+		Id    string `json:"id"`
+		Name  string `json:"display_name"`
+		Email string `json:"email"`
+		URI   string `json:"uri"`
+	}
 )
