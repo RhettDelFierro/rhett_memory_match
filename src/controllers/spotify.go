@@ -34,7 +34,7 @@ func setup() string {
 	credentials := Credentials{id, secret}
 
 	redirectURL := "http://localhost:8000/callback"
-	scopes := []string{"user-read-private", "user-read-email", "user-library-read", "user-top-read", "stremaing"}
+	scopes := []string{"user-read-private", "user-read-email", "user-library-read", "user-top-read", "streaming"}
 	state := "kjsadhflkjdsahfkjhdsalkfjhdsaljkfh"
 
 	return AuthorizationURL(credentials,redirectURL,scopes,state)
