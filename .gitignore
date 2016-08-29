@@ -3,3 +3,6 @@ node_modules
 .DS_Store
 dist
 src/common/config.json
+app/config/constants.js
+app/config/config.json
+.env

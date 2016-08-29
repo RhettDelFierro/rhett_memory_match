@@ -1,5 +1,6 @@
 import { fromJS, toOrderedMap } from 'immutable'
 import { tallyCount } from 'utils/scoresFunctions'
+import { spotifyAuth } from 'utils/songsAPI'
 
 const GET_SONGS = 'GET_SONGS'
 
@@ -7,6 +8,12 @@ export function getSongs({notesMissed}) {
     return function (dispatch) {
         const notesChosen = fromJS(notesMissed).keySeq()
         dispatch({type: GET_SONGS, notesChosen})
+    }
+}
+
+export function spotifyLogin(){
+    return async function (dispatch) {
+        const userData = await spotifyAuth()
     }
 }
 
