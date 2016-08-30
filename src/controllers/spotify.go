@@ -95,6 +95,7 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 }
 
 func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.Path)
 	state := r.FormValue("state")
 
 	code := r.FormValue("code")
