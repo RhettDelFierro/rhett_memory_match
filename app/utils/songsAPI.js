@@ -14,28 +14,18 @@ export async function getSongsAPI({notesChosen}) {
 export async function spotifyAuth() {
     try {
         const response = await axios.get('http://localhost:8000/authLogin')
-        console.log(response.data.uri)
-        const authRedirect = await login({ authURL: response.data.uri, redirectURL: "http://localhost:8000/callback"})
-        const loginInfo = await axios.get(authRedirect)
+        //maybe try dispatching this link
+        
+        //the following is not returning a promise:
+        login({ url: response.data.uri })
+        //in the auth url, we're going to authenticate.
+        //that will call to spotify in /callback.
     } catch (error) {
         Error('Error in spotifyAuth', error)
     }
 }
 
-function login({authURL, redirectURL}) {
-    var win = window.open(authURL, "authWindow", 'width=800, height=600');
-    console.log(win.document.URL)
-    var pollTimer = window.setInterval(function () {
-        try {
-            console.log(win.document.URL);
-            if (win.document.URL.indexOf(redirectURL) != -1) {
-                window.clearInterval(pollTimer);
-                var callBackUrl = win.document.URL;
-                win.close();
-                return callBackUrl
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    }, 100);
+
+function login({ url }) {
+    const popup = window.open(url, "authWindow", 'width=800, height=600')
 }

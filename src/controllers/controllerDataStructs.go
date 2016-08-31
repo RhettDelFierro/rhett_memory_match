@@ -69,8 +69,7 @@ type (
 	}
 
 	SpotifyClient struct {
-		credentials Credentials
-		client      *http.Client
+		http        *http.Client
 		Token       *oauth2.Token
 	}
 
