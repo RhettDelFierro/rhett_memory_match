@@ -1,24 +1,26 @@
 package controllers
 
 import (
-
-)
-import (
 	"net/http"
 	"os"
 	"golang.org/x/oauth2"
-	"encoding/json"
+	//"encoding/json"
 	"fmt"
 	"time"
 	"math/rand"
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
-	"strings"
 	"errors"
+	"github.com/gorilla/sessions"
+	"encoding/json"
 )
+
+var store = sessions.NewCookieStore([]byte(os.Getenv("G_SESSION")))
 
 //gloabl variable that will contain credentials, httpClient and credentials.
 var authClient AuthUser
 var client SpotifyClient
+var ch = make(chan *SpotifyClient)
+
 
 var Endpoint = oauth2.Endpoint{
 	AuthURL: "https://accounts.spotify.com/authorize",
@@ -31,7 +33,7 @@ type AuthUser struct {
 
 //the response
 type Test struct {
-	Uri 	string	`json:"uri"`
+	Uri string        `json:"uri"`
 }
 
 func RandomString(strlen int) string {
@@ -44,9 +46,9 @@ func RandomString(strlen int) string {
 	return string(result)
 }
 
-func setup() (string, http.Cookie) {
+func setup() (string, string) {
 	if client.Token != nil {
-		return "", http.Cookie{}
+		return "", ""
 	}
 
 	id := os.Getenv("SPOTIFY_ID")
@@ -57,17 +59,19 @@ func setup() (string, http.Cookie) {
 	scopes := []string{"user-read-private", "user-read-email", "user-library-read", "user-top-read", "streaming"}
 	state := RandomString(30)
 
-	return NewAuthedClient(credentials,redirectURL,scopes,state), createCookie(state)
+	return NewAuthedClient(credentials, redirectURL, scopes, state), state
 }
 
 func createCookie(state string) http.Cookie {
-	expireCookie := time.Now().Add(time.Minute * 1)
+	//expireCookie := time.Now().Add(time.Minute * 30)
+	expireCookie := time.Now().AddDate(-1, -2, -3)
+
 
 	return http.Cookie{Name: "Spotify_auth_state",
 		Value: state,
 		Expires: expireCookie,
 		HttpOnly: true,
-		Path: "/",
+		MaxAge: -100,
 	}
 }
 
@@ -85,8 +89,7 @@ func NewAuthedClient(credentials Credentials, redirectURL string, scopes []strin
 	return authClient.config.AuthCodeURL(state)
 }
 
-func(a *AuthUser) Token(state string, r *http.Request) (*oauth2.Token, error) {
-
+func (a *AuthUser) Token(state string, r *http.Request) (*oauth2.Token, error) {
 
 	code := r.FormValue("code")
 	if code == "" {
@@ -110,49 +113,61 @@ func (a *AuthUser) FinalAuth(token *oauth2.Token) SpotifyClient {
 }
 
 func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "spotify_auth_state")
+	if err != nil {
+		common.DisplayAppError(w, err, "Error getting session in SpotifyAuthorization", 500)
+		return
+	}
 
 	//run setup
-	url, cookie := setup()
+	url, state := setup()
 
-	//splitString := "https:"
-	//splitUrl := strings.Split(url, splitString)
+	session.Values["state_key"] = state
+	session.Save(r, w)
 	if j, err := json.Marshal(Test{Uri: url}); err != nil {
-		fmt.Println("error in controllers.SpotifyAuth json.Marshal")
+		fmt.Println("error in controllers.SpotifyAuthorization json.Marshal")
 		return
 	} else {
-		http.SetCookie(w, &cookie)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(j)
+
+
+		go func() {
+			client := <-ch
+			fmt.Println("client is here:", *client)
+		}()
 	}
 }
 
 func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
-	state := r.FormValue("state")
-
-
-	cookie, err := r.Cookie("Spotify_auth_user")
-	if err!= nil {
-		common.DisplayAppError(w, err, "Error getting cookie", 500)
+	session, err := store.Get(r, "spotify_auth_state")
+	if err != nil {
+		common.DisplayAppError(w, err, "Error getting session in SpotifyCallback", 500)
 		return
 	}
 
-	splitString := "Spotify_auth_user="
-	splitCookie := strings.Split(cookie.String(), splitString)
-	fmt.Println("splitcookie:", splitCookie[1])
-	storedState := splitCookie[1]
+	checkState := session.Values["state_key"]
 
-	if (storedState == "" || storedState != state || state == "") {
-		common.DisplayAppError(w, err, "Not valid Oauth in SpotifyCallback. The cookie doesn't match.", 500)
+	fmt.Println("here's checkState:", checkState)
+
+	state := r.FormValue("state")
+
+	if (checkState == "" || checkState != state || state == "") {
+		common.DisplayAppError(w, err, "Not valid Oauth state in SpotifyCallback. Browser identification issue.", 500)
 		return
 	}
 
 	//will return a token
-	token, err := authClient.Token(state,r)
+	token, err := authClient.Token(state, r)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error getting token", http.StatusForbidden)
 		return
 	}
-	
-	return authClient.FinalAuth(token)
+
+	client := authClient.FinalAuth(token)
+	ch <- &client
+	session.Save(r, w)
+
+	//also clear the cookie.
 }

@@ -13,9 +13,10 @@ export async function getSongsAPI({notesChosen}) {
 
 export async function spotifyAuth() {
     try {
-        const response = await axios.get('http://localhost:8000/authLogin')
+        const response = await axios.get('http://localhost:8000/authLogin',{withCredentials: true})
         //maybe try dispatching this link
-        
+        console.log(document.cookie)
+        console.log(response)
         //the following is not returning a promise:
         login({ url: response.data.uri })
         //in the auth url, we're going to authenticate.
