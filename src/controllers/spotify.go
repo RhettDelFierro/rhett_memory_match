@@ -119,6 +119,10 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	store.Options = &sessions.Options{
+		MaxAge:     60 * 2,
+	}
+
 	//run setup
 	url, state := setup()
 
@@ -131,7 +135,6 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write(j)
-
 
 		go func() {
 			client := <-ch
@@ -165,6 +168,7 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println("here's teh token:", token)
 	client := authClient.FinalAuth(token)
 	ch <- &client
 	session.Save(r, w)
