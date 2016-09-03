@@ -13,9 +13,9 @@ export async function getSongsAPI({notesChosen}) {
 
 export async function spotifyAuth(callback) {
     try {
-        const response = await axios.get('http://localhost:8000/authLogin',{withCredentials: true})
+        const response = await axios.get('http://localhost:8000/authLogin', {withCredentials: true})
         //const popup = window.open(response.data.uri, "authWindow", 'width=800, height=600')
-        login({ url: response.data.uri }, callback)
+        login({url: response.data.uri}, callback)
 
         //window.addEventListener('message',(event) => {
         //    if(~event.origin.indexOf('http://localhost:8000/')) return
@@ -33,11 +33,11 @@ export async function spotifyAuth(callback) {
 function login({ url }, callback) {
     const popup = window.open(url, "authWindow", 'width=800, height=600')
     const polltimer = window.setInterval(() => {
-        if (popup.document.URL.indexOf("http://localhost:8080/oauthfinished") != -1){
+        if (popup.document.URL.indexOf("http://localhost:8080/oauthfinished") != -1) {
             window.clearInterval(polltimer)
             var url = popup.location.search
             var queryString = url.substring(1);
-            const queryObject = parseQueryString({ queryString })
+            const queryObject = parseQueryString({queryString})
             console.log(queryObject)
             callback()
             popup.close()
@@ -46,15 +46,18 @@ function login({ url }, callback) {
 }
 
 //use .reduce instead.
-var parseQueryString = function({ queryString }) {
+var parseQueryString = function ({ queryString }) {
     console.log(queryString)
     const params = {}
     // Split into key/value pairs
-    const queries = queryString.split("&");
-    const queryPair = queries.map((entry) => entry.split('='))
-    console.log(queryPair)
-    const reducer = function(addition, item) {
-        return Object.assign(addition,{"item[0]": item[1]})
-    }
-    return queryPair.reduce(reducer, params)
+    return queryString.split("&").reduce((prev, c) => {
+        const arr = c.split('=')
+        console.log('arr:', arr)
+        console.log('prev:', prev)
+        console.log('params:', params)
+        //return Object.assign({...prev}, prev[arr[0]] = arr[1])
+
+        params[arr[0]] = arr[1]
+        return params
+    }, params)
 };
