@@ -11,6 +11,8 @@ import (
 	"errors"
 	"github.com/gorilla/sessions"
 	"encoding/json"
+	"github.com/RhettDelFierro/rhett_memory_match/src/models"
+	"net/url"
 )
 
 var store = sessions.NewCookieStore([]byte(os.Getenv("G_SESSION")))
@@ -137,6 +139,7 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 
 //handler for /callback
 func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.Host)
 	//check cookie:
 	session, err := store.Get(r, "spotify_auth_state")
 	if err != nil {
@@ -168,15 +171,21 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		common.DisplayAppError(w, err, "Error after User auth", 500)
 	}
-	if j, err := json.Marshal(AuthedUserInfo{Profile: user}); err != nil {
-		common.DisplayAppError(w, err, "error in controllers.SpotifyAuthorization json.Marshal AuthedUserInfo", 500)
-		return
-	} else {
-		http.Redirect(w,r,"http://localhost:8080/",302)
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		w.Write(j)
-	}
 
+	queryURL := queryMaker(user)
+	http.Redirect(w, r, queryURL, 302)
 	//also clear the cookie.
+}
+
+func queryMaker(user *models.SpotifyAuthedUserProfile) (backToReact string) {
+	backToReact = "http://localhost:8080/oauthfinished"
+	v := url.Values{}
+	v.Set("display_name", user.Display_name)
+	v.Set("id", user.ID)
+
+	if params := v.Encode(); params != "" {
+		backToReact += "?" + params
+		return
+	}
+	return ""
 }

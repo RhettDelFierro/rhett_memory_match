@@ -14,14 +14,14 @@ export async function getSongsAPI({notesChosen}) {
 export async function spotifyAuth(callback) {
     try {
         const response = await axios.get('http://localhost:8000/authLogin',{withCredentials: true})
-        const popup = window.open(response.data.uri, "authWindow", 'width=800, height=600')
-        //login({ url: response.data.uri })
+        //const popup = window.open(response.data.uri, "authWindow", 'width=800, height=600')
+        login({ url: response.data.uri }, callback)
 
-        window.addEventListener('message',(event) => {
-            if(~event.origin.indexOf('http://localhost:8000/')) return
-            window.clearInterval(event.data)
-            event.source.close()
-        }, false)
+        //window.addEventListener('message',(event) => {
+        //    if(~event.origin.indexOf('http://localhost:8000/')) return
+        //    window.clearInterval(event.data)
+        //    event.source.close()
+        //}, false)
         //in the auth url, we're going to authenticate.
         //that will call to spotify in /callback.
     } catch (error) {
@@ -30,9 +30,31 @@ export async function spotifyAuth(callback) {
 }
 
 
-function login({ url }) {
+function login({ url }, callback) {
     const popup = window.open(url, "authWindow", 'width=800, height=600')
     const polltimer = window.setInterval(() => {
-        popup.postMessage(polltimer, "http://localhost:8000")
+        if (popup.document.URL.indexOf("http://localhost:8080/oauthfinished") != -1){
+            window.clearInterval(polltimer)
+            var url = popup.location.search
+            var queryString = url.substring(1);
+            const queryObject = parseQueryString({ queryString })
+            console.log(queryObject)
+            callback()
+            popup.close()
+        }
     }, 100)
 }
+
+//use .reduce instead.
+var parseQueryString = function({ queryString }) {
+    console.log(queryString)
+    const params = {}
+    // Split into key/value pairs
+    const queries = queryString.split("&");
+    const queryPair = queries.map((entry) => entry.split('='))
+    console.log(queryPair)
+    const reducer = function(addition, item) {
+        return Object.assign(addition,{"item[0]": item[1]})
+    }
+    return queryPair.reduce(reducer, params)
+};
