@@ -1,6 +1,8 @@
 import { fromJS, toOrderedMap } from 'immutable'
 import { tallyCount } from 'utils/scoresFunctions'
 import { spotifyAuth } from 'utils/songsAPI'
+import { authUser } from 'redux/modules/users'
+import { closeModal } from './modal'
 
 const GET_SONGS = 'GET_SONGS'
 
@@ -12,10 +14,13 @@ export function getSongs({notesMissed}) {
 }
 
 export function spotifyLogin(){
-    return async function (dispatch) {
-        const userData = await spotifyAuth(() =>{
-            console.log('callback fired!')
-        })
+    return async function (dispatch,getState) {
+        //do NOT forget to throw in the error callback also.
+        spotifyAuth({callback: ({id}) =>{
+            dispatch(closeModal())
+            dispatch(authUser(id))
+            console.log('callback fired! id:',id)
+        }})
     }
 }
 

@@ -11,36 +11,32 @@ export async function getSongsAPI({notesChosen}) {
     }
 }
 
-export async function spotifyAuth(callback) {
+//do NOT forget the error callback.
+export async function spotifyAuth({callback}) {
     try {
         const response = await axios.get('http://localhost:8000/authLogin', {withCredentials: true})
-        //const popup = window.open(response.data.uri, "authWindow", 'width=800, height=600')
-        login({url: response.data.uri}, callback)
-
-        //window.addEventListener('message',(event) => {
-        //    if(~event.origin.indexOf('http://localhost:8000/')) return
-        //    window.clearInterval(event.data)
-        //    event.source.close()
-        //}, false)
-        //in the auth url, we're going to authenticate.
-        //that will call to spotify in /callback.
+        login({url: response.data.uri, callback})
     } catch (error) {
         Error('Error in spotifyAuth', error)
     }
 }
 
 
-function login({ url }, callback) {
+function login({ url,callback }) {
     const popup = window.open(url, "authWindow", 'width=800, height=600')
     const polltimer = window.setInterval(() => {
-        if (popup.document.URL.indexOf("http://localhost:8080/oauthfinished") != -1) {
-            window.clearInterval(polltimer)
-            var url = popup.location.search
-            var queryString = url.substring(1);
-            const queryObject = parseQueryString({queryString})
-            console.log(queryObject)
-            callback()
-            popup.close()
+        try {
+            if (popup.document.URL.indexOf("http://localhost:8080/oauthfinished") != -1) {
+                window.clearInterval(polltimer)
+                var url = popup.location.search
+                var queryString = url.substring(1);
+                const queryObject = parseQueryString({queryString})
+                callback({id: queryObject["id"]})
+                popup.close()
+                return queryObject
+            }
+        } catch (error) {
+            console.log(error)
         }
     }, 100)
 }

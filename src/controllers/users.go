@@ -92,6 +92,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func RegisterSpotify() {
+
+}
+
 func LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	var usr LoginResource

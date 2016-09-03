@@ -35,6 +35,10 @@ func cleanPassword(password string) []byte {
 	return hpass
 }
 
+func CreateSpotifyUser(user *models.SpotifyAuthedUserProfile) {
+
+}
+
 func (r *UserRepository) Login(user models.User) (u models.User, err error) {
 
 	err = r.S.QueryRow(user.Email).Scan(&u.User_ID,&u.Username,&u.Email, &u.HashPassword)
@@ -49,4 +53,8 @@ func (r *UserRepository) Login(user models.User) (u models.User, err error) {
 		u.HashPassword = nil
 	}
 	return
+}
+
+func LoginSpotifyUser(user *models.SpotifyAuthedUserProfile) {
+
 }
