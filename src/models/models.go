@@ -23,4 +23,11 @@ type (
 		Contact_date  time.Time     `json:"contact_date,omitempty"`
 		Attempts      int           `json:"rounds_completed"`
 	}
+
+	SpotifyAuthedUserProfile struct {
+		ID           string        `json:"id"`
+		Display_name string        `json:"display_name"`
+		Email        string        `json:"email"`
+		Avatar       string        `json:"images.url"`
+	}
 )

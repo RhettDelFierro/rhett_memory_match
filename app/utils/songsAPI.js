@@ -11,14 +11,17 @@ export async function getSongsAPI({notesChosen}) {
     }
 }
 
-export async function spotifyAuth() {
+export async function spotifyAuth(callback) {
     try {
         const response = await axios.get('http://localhost:8000/authLogin',{withCredentials: true})
-        //maybe try dispatching this link
-        console.log(document.cookie)
-        console.log(response)
-        //the following is not returning a promise:
-        login({ url: response.data.uri })
+        const popup = window.open(response.data.uri, "authWindow", 'width=800, height=600')
+        //login({ url: response.data.uri })
+
+        window.addEventListener('message',(event) => {
+            if(~event.origin.indexOf('http://localhost:8000/')) return
+            window.clearInterval(event.data)
+            event.source.close()
+        }, false)
         //in the auth url, we're going to authenticate.
         //that will call to spotify in /callback.
     } catch (error) {
@@ -29,4 +32,7 @@ export async function spotifyAuth() {
 
 function login({ url }) {
     const popup = window.open(url, "authWindow", 'width=800, height=600')
+    const polltimer = window.setInterval(() => {
+        popup.postMessage(polltimer, "http://localhost:8000")
+    }, 100)
 }

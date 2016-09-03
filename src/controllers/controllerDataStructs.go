@@ -63,20 +63,30 @@ type (
 	}
 
 	//these are for spotify
+
+	//for the environment variables:
 	Credentials struct {
 		Id     string
 		Secret string
 	}
 
-	SpotifyClient struct {
-		http        *http.Client
-		Token       *oauth2.Token
+	//setup to get Token
+	AuthUser struct {
+		config *oauth2.Config
 	}
 
-	UserProfileResponse struct {
-		Id    string `json:"id"`
-		Name  string `json:"display_name"`
-		Email string `json:"email"`
-		URI   string `json:"uri"`
+	//authorize access uri to be sent to front end:
+	AuthURI struct {
+		Uri string `json:"uri"`
+	}
+
+	//Authenticated client to make Spotify API requests:
+	SpotifyClient struct {
+		http  *http.Client
+		Token *oauth2.Token
+	}
+
+	AuthedUserInfo struct {
+		Profile *models.SpotifyAuthedUserProfile `json:"data"`
 	}
 )
