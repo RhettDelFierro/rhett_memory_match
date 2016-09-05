@@ -19,7 +19,6 @@ type AppClaims struct {
 	UserName string `json:"username"`
 	Role     string `json:"role"`
 	ID       int64         `json:"user_id"`
-	Key 	 string
 	jwt.StandardClaims
 }
 

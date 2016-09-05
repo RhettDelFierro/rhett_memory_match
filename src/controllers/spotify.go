@@ -202,7 +202,7 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//write cookie:
-
+	common.GenerateToken()
 
 	queryURL := queryMaker(user)
 	http.Redirect(w, r, queryURL, 302)

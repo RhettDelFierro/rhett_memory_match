@@ -14,6 +14,7 @@ import (
 	"crypto/rand"
 	"io"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
+	"github.com/dgrijalva/jwt-go/request"
 )
 
 type EncryptToken struct {
@@ -21,15 +22,28 @@ type EncryptToken struct {
 	Token *oauth2.Token
 }
 
+type SpotifyAppClaims struct {
+	Key      string `json:"key"`
+	UserName string `json:"username"`
+	Role     string `json:"role"`
+	jwt.StandardClaims
+}
+
 //will be to verify server-client is trusted:
-func GenerateSpotifyCookieToken(username, key string, id int64) (http.Cookie, error) {
+func(e EncryptToken) GenerateSpotifyCookieToken(username string) (http.Cookie, error) {
 
 	expireToken := time.Now().Add(time.Minute * 30).Unix()
 
-	claims := AppClaims{
-		key,
-		username,
-		id,
+	key := []byte(os.Getenv("SPOTIFY_OAUTH_KEY_COOKIE"))
+	encryptedKey,err := encrypt(key,e.Key)
+	if err != nil {
+		return http.Cookie{}, err
+	}
+
+	claims := SpotifyAppClaims{
+		Key: encryptedKey,
+		UserName: username,
+		Role: "Spotify user",
 		jwt.StandardClaims{
 			ExpiresAt: expireToken,
 			Issuer:    "admin",
@@ -40,6 +54,9 @@ func GenerateSpotifyCookieToken(username, key string, id int64) (http.Cookie, er
 
 	signedToken, err := token.SignedString([]byte(os.Getenv("SPOTIFY_COOKIE_CLIENT")))
 
+	//now encrypt the claims:
+
+
 	return http.Cookie{
 		Name: "Auth_Spotify",
 		Value: signedToken,
@@ -48,14 +65,20 @@ func GenerateSpotifyCookieToken(username, key string, id int64) (http.Cookie, er
 	}, err
 }
 
-func GenerateSpotifyTokenStorage(name, key string, id int64) (signedToken string, err error) {
+func(e EncryptToken) GenerateSpotifyTokenStorage(username string) (signedToken string, err error) {
 
 	expireToken := time.Now().Add(time.Minute * 30).Unix()
 
-	claims := AppClaims{
-		name,
-		key,
-		id,
+	key := []byte(os.Getenv("SPOTIFY_OAUTH_KEY_STORAGE"))
+	encryptedKey,err := encrypt(key,e.Key)
+	if err != nil {
+		return http.Cookie{}, err
+	}
+
+	claims := SpotifyAppClaims{
+		Key: encryptedKey,
+		UserName: username,
+		Role: "Spotify user",
 		jwt.StandardClaims{
 			ExpiresAt: expireToken,
 			Issuer:    "admin",
@@ -69,17 +92,18 @@ func GenerateSpotifyTokenStorage(name, key string, id int64) (signedToken string
 	return
 }
 
+//middleware for verifying spotify oauth decrypt keys:
 func ValidateSpotifyUser(protectedPage http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		splitCookie, err := PullCookie(r, "Spotify_user")
+		splitCookie, err := PullCookie(r, "Auth_Spotify")
 		if err != nil {
 			DisplayAppError(w, err, "no Auth cookie found", 404)
 			return
 		}
 
 		// Parse, validate and return a token.
-		cookieToken, err := cookieHandler(splitCookie)
+		cookieToken, err := spotifyCookieHandler(splitCookie)
 		if err != nil {
 			errorString, errorCode := jwtError(err)
 			cookieErrorString := "[Cookie]: " + errorString
@@ -87,7 +111,7 @@ func ValidateSpotifyUser(protectedPage http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		sessionToken, err := sessionTokenParse(r)
+		sessionToken, err := spotifySessionTokenParse(r)
 		if err != nil {
 			errorString, errorCode := jwtError(err)
 			sessionErrorString := "[SessionToken]: " + errorString
@@ -97,7 +121,7 @@ func ValidateSpotifyUser(protectedPage http.HandlerFunc) http.HandlerFunc {
 
 
 		// Validate the token and save the token's claims to a context
-		if claims, ok := cookieToken.Claims.(*AppClaims); ok && cookieToken.Valid &&sessionToken.Valid {
+		if claims, ok := cookieToken.Claims.(*SpotifyAppClaims); ok && cookieToken.Valid &&sessionToken.Valid {
 			context.Set(r, "User", claims.UserName)
 			//go go to the protected controller:
 			protectedPage(w, r)
@@ -107,6 +131,31 @@ func ValidateSpotifyUser(protectedPage http.HandlerFunc) http.HandlerFunc {
 		}
 	})
 }
+
+func spotifyCookieHandler(cookie []string) (token *jwt.Token, err error) {
+
+	token, err = jwt.ParseWithClaims(cookie[1], &SpotifyAppClaims{},
+		func(token *jwt.Token) (interface{}, error) {
+			// Prevents a known exploit
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("Unexpected signing method %v", token.Header["alg"])
+			}
+			return []byte(os.Getenv("SPOTIFY_COOKIE_CLIENT")), nil
+		})
+	return
+}
+
+func spotifySessionTokenParse(r *http.Request) (token *jwt.Token, err error) {
+	token, err = request.ParseFromRequestWithClaims(r, request.OAuth2Extractor, &SpotifyAppClaims{}, func(token *jwt.Token) (interface{}, error) {
+		// since we only use the one private key to sign the tokens,
+		// we also only use its public counter part to verify
+		return []byte(os.Getenv("SPOTIFY_STORAGE_CLIENT")), nil
+	})
+
+	return
+}
+
+
 
 func(e *EncryptToken) EncryptAccessToken() (dbToken models.Token,err error) {
 	//strings
