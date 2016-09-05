@@ -58,7 +58,7 @@ func (c *Context) DbSpotifyUserTable(query,id string) *sql.Row {
 
 func (c *Context) DbSpotifyTokenTable(query string) (spotify_id string, err error) {
 	err = c.SQLAbstraction.QueryRow(query, c.Spotify_id).Scan(&spotify_id)
-	return err
+	return
 }
 
 func (c *Context) DbModeTable(mode string) (round_id int64, err error) {

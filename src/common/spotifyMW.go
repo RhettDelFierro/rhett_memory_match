@@ -15,10 +15,11 @@ import (
 	"io"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
 	"github.com/dgrijalva/jwt-go/request"
+	"errors"
 )
 
 type EncryptToken struct {
-	Key string
+	Key   string
 	Token *oauth2.Token
 }
 
@@ -30,20 +31,20 @@ type SpotifyAppClaims struct {
 }
 
 //will be to verify server-client is trusted:
-func(e EncryptToken) GenerateSpotifyCookieToken(username string) (http.Cookie, error) {
+func (e EncryptToken) GenerateSpotifyCookieToken(username string) (http.Cookie, error) {
 
 	expireToken := time.Now().Add(time.Minute * 30).Unix()
 
 	key := []byte(os.Getenv("SPOTIFY_OAUTH_KEY_COOKIE"))
-	encryptedKey,err := encrypt(key,e.Key)
+	encryptedKey, err := encrypt(key, e.Key)
 	if err != nil {
 		return http.Cookie{}, err
 	}
 
 	claims := SpotifyAppClaims{
-		Key: encryptedKey,
-		UserName: username,
-		Role: "Spotify user",
+		encryptedKey,
+		username,
+		"Spotify user",
 		jwt.StandardClaims{
 			ExpiresAt: expireToken,
 			Issuer:    "admin",
@@ -54,9 +55,6 @@ func(e EncryptToken) GenerateSpotifyCookieToken(username string) (http.Cookie, e
 
 	signedToken, err := token.SignedString([]byte(os.Getenv("SPOTIFY_COOKIE_CLIENT")))
 
-	//now encrypt the claims:
-
-
 	return http.Cookie{
 		Name: "Auth_Spotify",
 		Value: signedToken,
@@ -65,20 +63,20 @@ func(e EncryptToken) GenerateSpotifyCookieToken(username string) (http.Cookie, e
 	}, err
 }
 
-func(e EncryptToken) GenerateSpotifyTokenStorage(username string) (signedToken string, err error) {
+func (e EncryptToken) GenerateSpotifySessionToken(username string) (signedToken string, err error) {
 
 	expireToken := time.Now().Add(time.Minute * 30).Unix()
 
 	key := []byte(os.Getenv("SPOTIFY_OAUTH_KEY_STORAGE"))
-	encryptedKey,err := encrypt(key,e.Key)
+	encryptedKey, err := encrypt(key, e.Key)
 	if err != nil {
-		return http.Cookie{}, err
+		return "", err
 	}
 
 	claims := SpotifyAppClaims{
-		Key: encryptedKey,
-		UserName: username,
-		Role: "Spotify user",
+		encryptedKey,
+		username,
+		"Spotify user",
 		jwt.StandardClaims{
 			ExpiresAt: expireToken,
 			Issuer:    "admin",
@@ -119,18 +117,43 @@ func ValidateSpotifyUser(protectedPage http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-
-		// Validate the token and save the token's claims to a context
-		if claims, ok := cookieToken.Claims.(*SpotifyAppClaims); ok && cookieToken.Valid &&sessionToken.Valid {
-			context.Set(r, "User", claims.UserName)
-			//go go to the protected controller:
-			protectedPage(w, r)
-		} else {
-			DisplayAppError(w, err, "Invalid Access Token", 401,
-			)
+		username, decryptedKey, err := checkBothJWT(cookieToken, sessionToken)
+		if err != nil {
+			DisplayAppError(w, err, "Invalid Access Token", 401)
+			return
 		}
+
+		context.Set(r, "User", username)
+		context.Set(r,"DecryptedKey",decryptedKey)
+		protectedPage(w,r)
 	})
 }
+
+func checkBothJWT(cookieToken, sessionToken *jwt.Token) (username, decryptedText string,err error) {
+	if cookieClaims, ok := cookieToken.Claims.(*SpotifyAppClaims); ok && cookieToken.Valid {
+		if sessionTokenClaims, ok := sessionToken.Claims.(*SpotifyAppClaims); ok {
+			if cookieClaims.UserName == sessionTokenClaims.UserName {
+				username = cookieClaims.UserName
+				decryptedText, err = checkJWTKey(cookieClaims)
+				return
+			}
+			err = errors.New("Spotify JWT sessions is invalid")
+		}
+		err = errors.New("Spotify JWT cookie is invalid")
+	}
+
+	return
+}
+
+func checkJWTKey(cookieClaims *SpotifyAppClaims) (decryptedText string, err error) {
+	checkKey := []byte(os.Getenv("SPOTIFY_OAUTH_KEY_COOKIE"))
+	encryptedKey := cookieClaims.Key
+
+	//now have decrypted key to unlock DB.
+	return Decrypt(checkKey,encryptedKey)
+
+}
+
 
 func spotifyCookieHandler(cookie []string) (token *jwt.Token, err error) {
 
@@ -156,16 +179,16 @@ func spotifySessionTokenParse(r *http.Request) (token *jwt.Token, err error) {
 }
 
 
-
-func(e *EncryptToken) EncryptAccessToken() (dbToken models.Token,err error) {
+//encrypt Spotify tokens before they store on DB.
+func (e *EncryptToken) EncryptAccessToken() (dbToken models.Token, err error) {
 	//strings
 	dbToken.Access = e.Token.AccessToken
 	dbToken.Refresh = e.Token.RefreshToken
 	dbToken.Type = e.Token.TokenType
 
 	//time.Time
-	dbToken.Expiry = e.Token.Expiry
-	dbToken.Expiry = dbToken.Expiry.String()
+	time := e.Token.Expiry
+	dbToken.Expiry = time.String()
 
 	key := []byte(e.Key)
 
@@ -191,16 +214,16 @@ func(e *EncryptToken) EncryptAccessToken() (dbToken models.Token,err error) {
 		return
 	}
 
-	//now upload dbToken struct to database.
 	return
 }
 
-func (e *EncryptToken) DecryptAccessToken() (dbToken models.Token,err error) {
-	// encrypt base64 crypto to original value.
-	//the key will be passed in from the token.
-	//text := decrypt(key, cryptoText)
-	//fmt.Printf(text)
-}
+//may not need this.
+//func (e *EncryptToken) DecryptAccessToken() (dbToken models.Token, err error) {
+//	// encrypt base64 crypto to original value.
+//	//the key will be passed in from the token.
+//	//text := decrypt(key, cryptoText)
+//	//fmt.Printf(text)
+//}
 
 //just basic example from Golang docs:
 func encrypt(key []byte, text string) (string, error) {
@@ -227,18 +250,19 @@ func encrypt(key []byte, text string) (string, error) {
 	return base64.URLEncoding.EncodeToString(ciphertext), nil
 }
 
-func decrypt(key []byte, cryptoText string) string {
+func Decrypt(key []byte, cryptoText string) (string, error) {
 	ciphertext, _ := base64.URLEncoding.DecodeString(cryptoText)
 
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	// The IV needs to be unique, but not secure. Therefore it's common to
 	// include it at the beginning of the ciphertext.
 	if len(ciphertext) < aes.BlockSize {
-		panic("ciphertext too short")
+		err := errors.New("ciphertext too short")
+		return "", err
 	}
 	iv := ciphertext[:aes.BlockSize]
 	ciphertext = ciphertext[aes.BlockSize:]
@@ -248,5 +272,6 @@ func decrypt(key []byte, cryptoText string) string {
 	// XORKeyStream can work in-place if the two arguments are the same.
 	stream.XORKeyStream(ciphertext, ciphertext)
 
-	return fmt.Sprintf("%s", ciphertext)
+	decryptedText := fmt.Sprintf("%s", ciphertext)
+	return decryptedText, nil
 }

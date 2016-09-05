@@ -13,9 +13,8 @@ import (
 	"encoding/json"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
 	"net/url"
-	"strings"
+	//"strings"
 	"database/sql"
-	"log"
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 )
 
@@ -202,9 +201,21 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//write cookie:
-	common.GenerateToken()
+	cookie, err := encryptToken.GenerateSpotifyCookieToken(user.ID)
+	if err != nil {
+		common.DisplayAppError(w, err, "Error Generating spotify jwt token", 500)
+		return
+	}
 
-	queryURL := queryMaker(user)
+	sessionToken, err := encryptToken.GenerateSpotifySessionToken(user.ID)
+	if err != nil {
+		common.DisplayAppError(w, err, "Error Generating spotify jwt token", 500)
+		return
+	}
+
+
+	http.SetCookie(w, &cookie)
+	queryURL := queryMaker(user, sessionToken)
 	http.Redirect(w, r, queryURL, 302)
 	//also clear the cookie.
 }
@@ -246,7 +257,7 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 		err = repo.StoreNewToken(dbToken,spotify_id)
 	}
 
-	return
+	return err
 }
 
 //look into Transactions for sql. Knock down the amount of prepare statements.
@@ -269,7 +280,7 @@ func spotifyUserStorage(user *models.SpotifyAuthedUserProfile) (err error) {
 	if err == sql.ErrNoRows {
 		//save as new user:
 		query := "INSERT INTO spotify_users(spotify_id,display_name) VALUES(?,?)"
-		stmt, err := context.Prepare(query)
+		stmt, err = context.Prepare(query)
 		defer stmt.Close()
 		if err != nil {
 			return
@@ -297,12 +308,12 @@ func spotifyUserStorage(user *models.SpotifyAuthedUserProfile) (err error) {
 	return
 }
 
-func queryMaker(user *models.SpotifyAuthedUserProfile) (backToReact string) {
+func queryMaker(user *models.SpotifyAuthedUserProfile, sessionToken string) (backToReact string) {
 	backToReact = "http://localhost:8080/oauthfinished"
 	v := url.Values{}
 	v.Set("display_name", user.Display_name)
 	v.Set("id", user.ID)
-
+	v.Set("token", sessionToken)
 	if params := v.Encode(); params != "" {
 		backToReact += "?" + params
 		return
@@ -311,13 +322,14 @@ func queryMaker(user *models.SpotifyAuthedUserProfile) (backToReact string) {
 }
 
 func SpotifyGetKeys(w http.ResponseWriter, r *http.Request) {
-	var songs []string
-	if notes := r.URL.Query().Get("notesChosen"); notes == "" {
-		fmt.Println("no notes missed")
-		return
-	} else {
-		notesChosen := strings.Split(notes, ",")
-		songs, _ = GetSongsByKey(notesChosen...)
-	}
-	fmt.Println(songs)
+	fmt.Println("we in SpotifyGetKeys Handler")
+	//var songs []string
+	//if notes := r.URL.Query().Get("notesChosen"); notes == "" {
+	//	fmt.Println("no notes missed")
+	//	return
+	//} else {
+	//	notesChosen := strings.Split(notes, ",")
+	//	songs, _ = GetSongsByKey(notesChosen...)
+	//}
+	//fmt.Println(songs)
 }

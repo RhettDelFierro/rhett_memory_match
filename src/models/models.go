@@ -28,7 +28,7 @@ type (
 		Access  string
 		Refresh string
 		Type    string
-		Expiry  time.Time
+		Expiry  string
 	}
 
 	SpotifyAuthedUserProfile struct {

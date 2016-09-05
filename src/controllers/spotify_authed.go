@@ -27,22 +27,22 @@ func (s *SpotifyClient) GetCurrentProfile() (user *models.SpotifyAuthedUserProfi
 	return
 }
 
-func (s *SpotifyClient) GetSongKeys(keys ...string) {
-
-}
+//func (s *SpotifyClient) GetSongKeys(keys ...string) {
+//
+//}
 
 //default is top 40:
-func (r *RegularClient) GetSongs() ([]string){
+//func (r *RegularClient) GetSongs() ([]string){
+//
+//	searchURL := searchEndpoint
+//
+//	resp, err := r.http.Get(searchURL)
+//}
 
-	searchURL := searchEndpoint
-
-	resp, err := r.http.Get(searchURL)
-}
-
-func GetSongsByKey(keys ...string) (songs []string, err error) {
-	client := &RegularClient{
-		http: new(http.Client),
-	}
-
-	client.GetSongs()
-}
+//func GetSongsByKey(keys ...string) (songs []string, err error) {
+//	client := &RegularClient{
+//		http: new(http.Client),
+//	}
+//
+//	client.GetSongs()
+//}

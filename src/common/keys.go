@@ -151,8 +151,7 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 			//go go to the protected controller:
 			protectedPage(w, r)
 		} else {
-			DisplayAppError(w, err, "Invalid Access Token", 401,
-			)
+			DisplayAppError(w, err, "Invalid Access Token", 401)
 		}
 	})
 }
