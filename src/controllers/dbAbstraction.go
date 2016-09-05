@@ -10,6 +10,7 @@ import (
 type Context struct {
 	SQLAbstraction *sql.DB
 	User           string
+	Spotify_id     string
 	ID             int64
 }
 
@@ -49,6 +50,15 @@ func (c *Context) DbUserTable(user, address  string) (string, error) {
 		}
 	}
 	return "", err
+}
+
+func (c *Context) DbSpotifyUserTable(query,id string) *sql.Row {
+	return c.SQLAbstraction.QueryRow(query, id)
+}
+
+func (c *Context) DbSpotifyTokenTable(query string) (spotify_id string, err error) {
+	err = c.SQLAbstraction.QueryRow(query, c.Spotify_id).Scan(&spotify_id)
+	return err
 }
 
 func (c *Context) DbModeTable(mode string) (round_id int64, err error) {

@@ -24,10 +24,23 @@ type (
 		Attempts      int           `json:"rounds_completed"`
 	}
 
+	Token struct {
+		Access  string
+		Refresh string
+		Type    string
+		Expiry  time.Time
+	}
+
 	SpotifyAuthedUserProfile struct {
 		ID           string        `json:"id"`
 		Display_name string        `json:"display_name"`
 		Email        string        `json:"email"`
 		Avatar       string        `json:"images.url"`
 	}
+
+	Keys struct {
+		Notes []string        `json:"notesChosen"`
+	}
+
+
 )

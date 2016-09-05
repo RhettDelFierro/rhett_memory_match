@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { List, OrderedMap } from 'immutable'
 import { Field, FieldArray, reduxForm } from 'redux-form/immutable'
 import * as userActionCreators from 'redux/modules/users'
 import * as songActionCreators from 'redux/modules/songs'
 import { error } from './styles.css'
-import { List, OrderedMap } from 'immutable'
-import { bindActionCreators } from 'redux'
 
 //define stateless component to render input and errors:
 const renderField = ({ input, label, type, id}) => (

@@ -19,5 +19,6 @@ func Router() *mux.Router {
 	//spotify
 	router.HandleFunc("/authLogin", controllers.SpotifyAuthorization)
 	router.HandleFunc("/callback", controllers.SpotifyCallback)
+	router.HandleFunc("/getKeys", controllers.SpotifyGetKeys)
 	return router
 }

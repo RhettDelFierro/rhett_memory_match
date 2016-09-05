@@ -8,6 +8,8 @@ import (
 
 var (
 	userEndpoint = "https://api.spotify.com/v1/me"
+	getSongsEndpoint = "https://api.spotify.com/v1/tracks/"
+	searchEndpoint = "https://api.spotify.com/v1/search"
 )
 
 func (s *SpotifyClient) GetCurrentProfile() (user *models.SpotifyAuthedUserProfile,err error) {
@@ -23,4 +25,24 @@ func (s *SpotifyClient) GetCurrentProfile() (user *models.SpotifyAuthedUserProfi
 		}
 	}
 	return
+}
+
+func (s *SpotifyClient) GetSongKeys(keys ...string) {
+
+}
+
+//default is top 40:
+func (r *RegularClient) GetSongs() ([]string){
+
+	searchURL := searchEndpoint
+
+	resp, err := r.http.Get(searchURL)
+}
+
+func GetSongsByKey(keys ...string) (songs []string, err error) {
+	client := &RegularClient{
+		http: new(http.Client),
+	}
+
+	client.GetSongs()
 }

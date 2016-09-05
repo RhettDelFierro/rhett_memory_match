@@ -4,8 +4,15 @@ import { List } from 'immutable'
 export async function getSongsAPI({notesChosen}) {
     const noteKeys = List(['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'])
     //then match the index of the notesChosen List to the index of the noteKeys List.
-    try {
+    const keys = notesChosen.map((value,key) => noteKeys.indexOf(value))
+    const url = 'http://localhost:8000/getKeys?notesChosen='
+    const query = keys.reduce((url,value) => {
+        url += `${value},`
+        return url
+    }, url)
 
+    try {
+        let songs = await axios.get(query.substring(0,query.length-1),{withCredentials: true})
     } catch (error) {
         Error('Error in getSongsAPI', error)
     }

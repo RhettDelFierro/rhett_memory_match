@@ -4,6 +4,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
+
 	_ "github.com/go-sql-driver/mysql"
 	"database/sql"
 )
@@ -35,13 +36,24 @@ func cleanPassword(password string) []byte {
 	return hpass
 }
 
-func CreateSpotifyUser(user *models.SpotifyAuthedUserProfile) {
+func (r *UserRepository) CreateSpotifyUser(user *models.SpotifyAuthedUserProfile) (error) {
 
+	_, err := r.S.Exec(user.ID, user.Display_name)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *UserRepository) InsertSpotifyUser(user *models.SpotifyAuthedUserProfile) (error) {
+	_, err := r.S.Exec(user.ID,user.Email)
+	return err
 }
 
 func (r *UserRepository) Login(user models.User) (u models.User, err error) {
 
-	err = r.S.QueryRow(user.Email).Scan(&u.User_ID,&u.Username,&u.Email, &u.HashPassword)
+	err = r.S.QueryRow(user.Email).Scan(&u.User_ID, &u.Username, &u.Email, &u.HashPassword)
 	if err != nil {
 		return
 	}
@@ -53,8 +65,4 @@ func (r *UserRepository) Login(user models.User) (u models.User, err error) {
 		u.HashPassword = nil
 	}
 	return
-}
-
-func LoginSpotifyUser(user *models.SpotifyAuthedUserProfile) {
-
 }

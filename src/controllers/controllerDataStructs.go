@@ -86,7 +86,18 @@ type (
 		Token *oauth2.Token
 	}
 
+	//Information on authed User
 	AuthedUserInfo struct {
 		Profile *models.SpotifyAuthedUserProfile `json:"data"`
+	}
+
+	//used for non-auth requests to spotify
+	RegularClient struct {
+		http *http.Client
+	}
+
+	//keys
+	SongKeysResource struct {
+		Data models.Keys `json:"data"`
 	}
 )

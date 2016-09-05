@@ -35,7 +35,6 @@ func Scores(w http.ResponseWriter, r *http.Request) {
 		scoreData.User_ID = id.(int64)
 	}
 
-
 	round_id, err := context.DbModeTable(game_mode)
 	if err != nil {
 		common.DisplayAppError(w, err, "Unexpected error in Scores DB", 500)
