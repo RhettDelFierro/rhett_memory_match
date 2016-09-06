@@ -11,7 +11,6 @@ import (
 	"errors"
 	"golang.org/x/oauth2"
 	"time"
-	"os"
 )
 
 func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyAuthedUserProfile) (error) {

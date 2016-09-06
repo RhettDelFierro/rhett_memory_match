@@ -11,7 +11,7 @@ var (
 	getSongsEndpoint = "https://api.spotify.com/v1/tracks/"
 	searchEndpoint = "https://api.spotify.com/v1/search"
 	viralEndpoint = "https://api.spotify.com/v1/users/spotify/playlists/5FJXhjdILmRA2z5bvz4nzf/tracks"
-	audioFeatureEndpoint = "https://api.spotify.com/v1/audio-features"
+	audioFeatureEndpoint = "https://api.spotify.com/v1/audio-features?ids="
 )
 
 type songContainer struct {
@@ -22,6 +22,7 @@ type song struct {
 	Name    string `json:"name"`
 	Artists []Artist `json:"artists"`
 	URI     string `json:"uri"`
+	Key int `json:"key"`
 }
 
 type playlist struct {
@@ -33,8 +34,19 @@ type Artist struct {
 	Name string `json:"name"`
 }
 
-type feature struct {
+type songWithKey struct {
+	Id string `json:"id"`
+	Key int `json:"key"`
+}
 
+type songFeatures struct {
+	features []songWithKey `json:"audio_features"`
+}
+
+type fullSong struct {
+	Key int `json:"key"`
+	Name string `json:"name"`
+	Artist []Artist `json:"artists"`
 }
 
 func (s SpotifyClient) GetCurrentProfile() (user *models.SpotifyAuthedUserProfile, err error) {
@@ -53,7 +65,7 @@ func (s SpotifyClient) GetCurrentProfile() (user *models.SpotifyAuthedUserProfil
 }
 
 //default are viral songs:
-func (s SpotifyClient) GetSongs() (songs []string, err error) {
+func (s SpotifyClient) GetSongs() (songs []song, err error) {
 	var playlist playlist
 	//get the playlist, then do a search on the playlist.
 	searchURL := viralEndpoint
@@ -67,38 +79,57 @@ func (s SpotifyClient) GetSongs() (songs []string, err error) {
 		}
 	}
 
-	songs = make([]string, len(playlist.songContainer))
-
 	for index, songContainer := range playlist.songContainer {
-		songs[index] = songContainer.Track.Id
+		songs[index] = songContainer.Track
 	}
 
 	return
 }
 
-func (s *SpotifyClient) GetSongKeys(songIds []string) (songs []string, err error) {
-	var songs feature
+func (s *SpotifyClient) GetSongKeys(songList []song) (songs []song, err error) {
+	var songfeatures songFeatures
 	searchURL := audioFeatureEndpoint
+	//add songIds:
+	for _, songInfo := range songList {
+		searchURL += songInfo.Id
+	}
 	resp, err := s.http.Get(searchURL)
 	if err != nil {
 		return songs, err
 	}
 	defer resp.Body.Close()
+
 	if resp.StatusCode == http.StatusOK {
-		err = json.NewDecoder(resp.Body).Decode(&playlist)
+		err = json.NewDecoder(resp.Body).Decode(&songfeatures)
 		if err != nil {
 			return
 		}
 	}
+
+	for index, song := range songfeatures.features {
+		id := song.Id
+		for _, songinfo := range songList {
+			if songinfo.Id == id {
+				songs[index] = fullSong{
+					Key: song.Key,
+					Name: songinfo.Name,
+					Artist: songinfo.Artists,
+				}
+			}
+		}
+	}
+
+	return
+
 }
 
-func GetSongsByKey(keys []string) (songs []string, err error) {
+func GetSongsByKey(keys []string) (fullSongs []fullSong, err error) {
 
-	songIds, err := client.GetSongs()
+	songs, err := client.GetSongs()
 	if err != nil {
 		return
 	}
-	songs, err = client.GetSongKeys(songIds)
-
+	fullSongs, err = client.GetSongKeys(songs)
+	//not yet returning, but get the songs by key that you wanted.
 	return
 }
