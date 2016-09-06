@@ -74,7 +74,6 @@ export async function setScoresAPI({mode, score, user_id, gamemode, round}) {
             headers: {
                 'Authorization': 'Bearer ' + window.sessionStorage.getItem('token')
             }, withCredentials: true});
-        console.log(response)
         return response.data
     } catch (error) {
         Error('Error in setScoresAPI', error)

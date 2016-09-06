@@ -223,6 +223,7 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyAuthedUserProfile) (error) {
 	var err error
 	var executeQuery string
+	var spotify_id string
 
 	context := NewContext();
 	context.Spotify_id = user.ID
@@ -234,14 +235,15 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 	}
 
 	query := "SELECT spotify_id FROM spotify_tokens WHERE spotify_id=?"
-	spotify_id, err := context.DbSpotifyTokenTable(query)
-	if err != nil {
+	spotify_id, err = context.DbSpotifyTokenTable(query)
+	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
-	if spotify_id != "" {
-		executeQuery = "UPDATE spotify_tokens SET access_token=?, refresh_token=?, token_type=?, expiry=? WHERE spotify_id=?"
+
+	if err == sql.ErrNoRows {
+		executeQuery = "INSERT INTO spotify_tokens(spotify_id,access_token,refresh_token,token_type,expiry) VALUES(?,?,?,?,?)"
 	} else {
-		executeQuery = "INSERT INTO spotify_tokens(spotify_id,access_token,refresh_token,token_type=?,expiry=?) VALUES(?,?,?,?,?)"
+		executeQuery = "UPDATE spotify_tokens SET access_token=?, refresh_token=?, token_type=?, expiry=? WHERE spotify_id=?"
 	}
 
 	stmt,err := context.Prepare(executeQuery)

@@ -4,15 +4,18 @@ import { List } from 'immutable'
 export async function getSongsAPI({notesChosen}) {
     const noteKeys = List(['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'])
     //then match the index of the notesChosen List to the index of the noteKeys List.
-    const keys = notesChosen.map((value,key) => noteKeys.indexOf(value))
+    const keys = notesChosen.map((value, key) => noteKeys.indexOf(value))
     const url = 'http://localhost:8000/getKeys?notesChosen='
-    const query = keys.reduce((url,value) => {
+    const query = keys.reduce((url, value) => {
         url += `${value},`
         return url
     }, url)
 
     try {
-        let songs = await axios.get(query.substring(0,query.length-1),{withCredentials: true})
+        let songs = await axios.get(query.substring(0, query.length - 1), {
+            headers: {
+                'Authorization': 'Bearer ' + window.sessionStorage.getItem('Spotify_token')
+            }, withCredentials: true})
     } catch (error) {
         Error('Error in getSongsAPI', error)
     }
@@ -38,6 +41,7 @@ function login({ url,callback }) {
                 var url = popup.location.search
                 var queryString = url.substring(1);
                 const queryObject = parseQueryString({queryString})
+                popup.opener.sessionStorage.setItem('Spotify_token', queryObject["token"])
                 callback({id: queryObject["id"]})
                 popup.close()
                 return queryObject
@@ -55,11 +59,6 @@ var parseQueryString = function ({ queryString }) {
     // Split into key/value pairs
     return queryString.split("&").reduce((prev, c) => {
         const arr = c.split('=')
-        console.log('arr:', arr)
-        console.log('prev:', prev)
-        console.log('params:', params)
-        //return Object.assign({...prev}, prev[arr[0]] = arr[1])
-
         params[arr[0]] = arr[1]
         return params
     }, params)
