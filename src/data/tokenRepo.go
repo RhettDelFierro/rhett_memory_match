@@ -14,7 +14,7 @@ type TokenRepository struct {
 
 func (r *TokenRepository) StoreNewToken(token models.Token, spotify_id string) (err error) {
 
-	_, err = r.S.Exec(spotify_id, token.Access, token.Refresh, token.Type, token.Expiry, )
+	_, err = r.S.Exec(spotify_id, token.Access, token.Refresh, token.Type, token.Expiry)
 
 	return
 }

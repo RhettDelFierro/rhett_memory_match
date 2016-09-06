@@ -256,7 +256,7 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 	if spotify_id != "" {
 		err = repo.UpdateToken(dbToken,spotify_id)
 	} else {
-		err = repo.StoreNewToken(dbToken,spotify_id)
+		err = repo.StoreNewToken(dbToken,context.Spotify_id)
 	}
 
 	return err
@@ -264,16 +264,17 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 
 //look into Transactions for sql. Knock down the amount of prepare statements.
 func spotifyUserStorage(user *models.SpotifyAuthedUserProfile) (err error) {
-	var spotifyUser string
 	context := NewContext();
 	context.Spotify_id = user.ID
-	query := "SELECT spotify_id FROM spotify_users WHERE spotify_id=?"
-	stmt, err := context.Prepare(query)
-	if err != nil {
-		return
-	}
+	//query := "SELECT spotify_id FROM spotify_users WHERE spotify_id=?"
+	//stmt, err := context.Prepare(query)
+	//defer stmt.Close()
+	//if err != nil {
+	//	return
+	//}
 
-	stmt.QueryRow(context.Spotify_id).Scan(&spotifyUser)
+	query := "SELECT spotify_id FROM spotify_users WHERE spotify_id=?"
+	_, err = context.DbSpotifyUserTable(query)
 	if err != nil && err != sql.ErrNoRows {
 		return
 	}
@@ -282,28 +283,28 @@ func spotifyUserStorage(user *models.SpotifyAuthedUserProfile) (err error) {
 	if err == sql.ErrNoRows {
 		//save as new user:
 		query := "INSERT INTO spotify_users(spotify_id,display_name) VALUES(?,?)"
-		stmt, err = context.Prepare(query)
+		stmt, err := context.Prepare(query)
 		defer stmt.Close()
 		if err != nil {
-			return
+			return err
 		}
 
 		repo := &data.UserRepository{S: stmt}
 		err = repo.CreateSpotifyUser(user)
 		if err != nil {
-			return
+			return err
 		}
 
 		query = "INSERT INTO users(username,email) VALUES(?,?)"
 		stmt, err = context.Prepare(query)
 		defer stmt.Close()
 		if err != nil {
-			return
+			return err
 		}
 		repo.S = stmt
-		err = repo.InsertSpotifyUser(user)
+		err = repo.InsertSpotifyIntoUsers(user)
 		if err != nil {
-			return
+			return err
 		}
 	}
 

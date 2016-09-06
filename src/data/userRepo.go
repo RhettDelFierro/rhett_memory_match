@@ -46,7 +46,7 @@ func (r *UserRepository) CreateSpotifyUser(user *models.SpotifyAuthedUserProfile
 	return nil
 }
 
-func (r *UserRepository) InsertSpotifyUser(user *models.SpotifyAuthedUserProfile) (error) {
+func (r *UserRepository) InsertSpotifyIntoUsers(user *models.SpotifyAuthedUserProfile) (error) {
 	_, err := r.S.Exec(user.ID,user.Email)
 	return err
 }
