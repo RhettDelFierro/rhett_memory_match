@@ -12,7 +12,6 @@ import (
 	"github.com/gorilla/sessions"
 	"encoding/json"
 	reqcontext "github.com/gorilla/context"
-	"strings"
 )
 
 var store = sessions.NewCookieStore([]byte(os.Getenv("G_SESSION")))
@@ -36,7 +35,8 @@ var (
 
 func setup() AuthUser {
 	if client.Token != nil {
-		return
+		fmt.Println("there is a client.Token")
+		return AuthUser{}
 	}
 
 	id := os.Getenv("SPOTIFY_ID")
@@ -125,9 +125,9 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//gets an AuthUser struct.
-	authUser := setup()
+	authClient = setup()
 	//uses AuthUser struct to get an auth url:
-	url, state := GetURL(authUser)
+	url, state := GetURL(authClient)
 
 	session.Values["state_key"] = state
 	session.Save(r, w)
@@ -144,7 +144,6 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 
 //handler for /callback
 func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Host)
 	//check cookie:
 	session, err := store.Get(r, "spotify_auth_state")
 	if err != nil {
@@ -216,7 +215,7 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 }
 
 func SpotifyGetKeys(w http.ResponseWriter, r *http.Request) {
-
+	authClient = setup()
 	token, err := pullToken(r)
 	if err != nil {
 		common.DisplayAppError(w,err,"error with pulling token, may need to re-auth",500)
@@ -226,17 +225,35 @@ func SpotifyGetKeys(w http.ResponseWriter, r *http.Request) {
 	//have our SpotifyClient here:
 	client := authClient.FinalAuth(token)
 
+	var keys IncomingKeys
 
-	var songs []string
-	if notes := r.URL.Query().Get("notesChosen"); notes == "" {
-		fmt.Println("no notes missed")
-		return
-	} else {
-		notesChosen := strings.Split(notes, ",")
-		songs, _ = GetSongsByKey(notesChosen)
+	if r.Method == "POST" {
+		err := json.NewDecoder(r.Body).Decode(&keys)
+		if err != nil {
+			common.DisplayAppError(w, err, "Invalid Keys data", 500)
+			return
+		}
 	}
 
-	fmt.Println(songs)
+	notesChosen := keys.Data.Keys
+	fmt.Println("notesChosen:", notesChosen)
+	//notesChosen := strings.Split(keyArray, ",")
+	//if notes := r.URL.Query().Get("notesChosen"); notes == "" {
+	//	fmt.Println("no notes missed")
+	//	return
+	//} else {
+	//	notesChosen := strings.Split(notes, ",")
+	//	songs, _ = GetSongsByKey(notesChosen,client)
+	//}
+	songs, _ := GetSongsByKey(notesChosen,client)
 
 	reqcontext.Clear(r)
+	if j, err := json.Marshal(SongKeysResource{Data: songs}); err != nil {
+		fmt.Println("error in controllers.SpotifyGetKeys json.Marshal")
+		return
+	} else {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write(j)
+	}
 }

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
+	"strconv"
 )
 
 var (
@@ -14,10 +15,10 @@ var (
 	audioFeatureEndpoint = "https://api.spotify.com/v1/audio-features?ids="
 )
 
-type songContainer struct {
-	Track song `json:"track"`
+type SongContainer struct {
+	Track Song `json:"track"`
 }
-type song struct {
+type Song struct {
 	Id      string `json:"id"`
 	Name    string `json:"name"`
 	Artists []Artist `json:"artists"`
@@ -26,7 +27,7 @@ type song struct {
 }
 
 type playlist struct {
-	songContainer []songContainer `json:"items"`
+	SongContainer []SongContainer `json:"items"`
 }
 
 type Artist struct {
@@ -34,16 +35,16 @@ type Artist struct {
 	Name string `json:"name"`
 }
 
-type songWithKey struct {
+type SongWithKey struct {
 	Id string `json:"id"`
 	Key int `json:"key"`
 }
 
-type songFeatures struct {
-	features []songWithKey `json:"audio_features"`
+type SongFeatures struct {
+	Features []SongWithKey `json:"audio_features"`
 }
 
-type fullSong struct {
+type FullSong struct {
 	Key int `json:"key"`
 	Name string `json:"name"`
 	Artist []Artist `json:"artists"`
@@ -65,7 +66,7 @@ func (s SpotifyClient) GetCurrentProfile() (user *models.SpotifyAuthedUserProfil
 }
 
 //default are viral songs:
-func (s SpotifyClient) GetSongs() (songs []song, err error) {
+func (s SpotifyClient) GetSongs() (songs []Song, err error) {
 	var playlist playlist
 	//get the playlist, then do a search on the playlist.
 	searchURL := viralEndpoint
@@ -79,19 +80,19 @@ func (s SpotifyClient) GetSongs() (songs []song, err error) {
 		}
 	}
 
-	for index, songContainer := range playlist.songContainer {
-		songs[index] = songContainer.Track
+	for _, songContainer := range playlist.SongContainer {
+		songs = append(songs, songContainer.Track)
 	}
 
 	return
 }
 
-func (s *SpotifyClient) GetSongKeys(songList []song) (songs []song, err error) {
-	var songfeatures songFeatures
+func (s SpotifyClient) GetSongKeys(songList []Song) (songs []FullSong, err error) {
+	var songfeatures SongFeatures
 	searchURL := audioFeatureEndpoint
 	//add songIds:
 	for _, songInfo := range songList {
-		searchURL += songInfo.Id
+		searchURL += songInfo.Id + ","
 	}
 	resp, err := s.http.Get(searchURL)
 	if err != nil {
@@ -105,16 +106,15 @@ func (s *SpotifyClient) GetSongKeys(songList []song) (songs []song, err error) {
 			return
 		}
 	}
-
-	for index, song := range songfeatures.features {
+	for _, song := range songfeatures.Features {
 		id := song.Id
 		for _, songinfo := range songList {
 			if songinfo.Id == id {
-				songs[index] = fullSong{
+				songs = append(songs,FullSong{
 					Key: song.Key,
 					Name: songinfo.Name,
 					Artist: songinfo.Artists,
-				}
+				})
 			}
 		}
 	}
@@ -123,13 +123,31 @@ func (s *SpotifyClient) GetSongKeys(songList []song) (songs []song, err error) {
 
 }
 
-func GetSongsByKey(keys []string) (fullSongs []fullSong, err error) {
+func GetSongsByKey(keys []int,client SpotifyClient) (songsWithKey map[string][]FullSong, err error) {
+
+	//may have to channel into here.
 
 	songs, err := client.GetSongs()
 	if err != nil {
 		return
 	}
-	fullSongs, err = client.GetSongKeys(songs)
-	//not yet returning, but get the songs by key that you wanted.
+
+	fullSongs, err := client.GetSongKeys(songs)
+	if err != nil {
+		return
+	}
+	songsWithKey = make(map[string][]FullSong)
+
+	for _,value := range keys {
+		//key, _ := strconv.Atoi(value)
+		key := strconv.Itoa(value)
+		for _,song := range fullSongs {
+			if value == song.Key {
+				//n := len(songsWithKey[key])
+				songsWithKey[key] = append(songsWithKey[key],song)
+			}
+		}
+	}
+
 	return
 }

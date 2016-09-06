@@ -1,21 +1,31 @@
 import axios from 'axios'
-import { List } from 'immutable'
+import { List,toJS } from 'immutable'
 
 export async function getSongsAPI({notesChosen}) {
     const noteKeys = List(['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'])
     //then match the index of the notesChosen List to the index of the noteKeys List.
     const keys = notesChosen.map((value, key) => noteKeys.indexOf(value))
-    const url = 'http://localhost:8000/getKeys?notesChosen='
-    const query = keys.reduce((url, value) => {
-        url += `${value},`
-        return url
-    }, url)
+    const songKeysArray = keys.toJS()
+    //const url = 'http://localhost:8000/getKeys?notesChosen='
+    //const query = keys.reduce((url, value) => {
+    //    url += `${value},`
+    //    return url
+    //}, url)
 
+    //try {
+    //    let songs = await axios.get(query.substring(0, query.length - 1), {
+    //        headers: {
+    //            'Authorization': 'Bearer ' + window.sessionStorage.getItem('Spotify_token')
+    //        }, withCredentials: true})
+    //} catch (error) {
+    //    Error('Error in getSongsAPI', error)
+    //}
     try {
-        let songs = await axios.get(query.substring(0, query.length - 1), {
+        let songs = await axios.post('http://localhost:8000/getKeys',{data: {songKeysArray}}, {
             headers: {
                 'Authorization': 'Bearer ' + window.sessionStorage.getItem('Spotify_token')
             }, withCredentials: true})
+        console.log(songs)
     } catch (error) {
         Error('Error in getSongsAPI', error)
     }

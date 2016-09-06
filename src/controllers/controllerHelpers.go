@@ -139,14 +139,14 @@ func pullToken(r *http.Request) (token *oauth2.Token, err error) {
 	query := "SELECT access_token,refresh_token,token_type,expiry FROM spotify_tokens WHERE spotify_id=?"
 	mToken, err = context.DbSpotifyGetToken(query)
 	if err != nil {
-		return err
+		return
 	}
 	//mToken is a models.Token with it's fields encrypted.
 
 	//get *oauth.Token and return it to handler.
 	token,err = getUserToken(decryptToken,mToken)
 	if err != nil {
-		return err
+		return
 	}
 
 	//verify the token:
@@ -164,23 +164,23 @@ func getUserToken(decryptToken string,mToken models.Token ) (*oauth2.Token, erro
 	token := new(oauth2.Token)
 	token.AccessToken, err = common.Decrypt([]byte(decryptToken), mToken.Access)
 	if err != nil {
-		return err
+		return token, err
 	}
 	token.RefreshToken, err = common.Decrypt([]byte(decryptToken), mToken.Refresh)
 	if err != nil {
-		return err
+		return token, err
 	}
 	token.TokenType, err = common.Decrypt([]byte(decryptToken), mToken.Type)
 	if err != nil {
-		return err
+		return token, err
 	}
 	timeString, err := common.Decrypt([]byte(decryptToken), mToken.Expiry)
 	if err != nil {
-		return err
+		return token, err
 	}
-	token.Expiry, err = time.Parse(time.Now().String(), timeString)
+	token.Expiry, err = time.Parse("2006-01-02 15:04:05.0000000 -0700 MST", timeString)
 	if err != nil {
-		return err
+		return token, err
 	}
 
 	return token, err

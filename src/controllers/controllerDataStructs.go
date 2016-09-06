@@ -97,7 +97,14 @@ type (
 	}
 
 	//keys
-	SongKeysResource struct {
-		Data models.Keys `json:"data"`
+	IncomingKeys struct {
+		Data Keys `json:"data"`
 	}
+	Keys struct {
+		Keys []int `json:"songKeysArray"`
+	}
+	SongKeysResource struct {
+		Data map[string][]FullSong `json:"data"`
+	}
+
 )

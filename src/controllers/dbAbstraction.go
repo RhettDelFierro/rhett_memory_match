@@ -5,8 +5,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
-	"fmt"
-	"go/token"
 )
 
 // Context used for maintaining HTTP Request Context
@@ -66,7 +64,6 @@ func (c *Context) DbSpotifyTokenTable(query string) (spotify_id string, err erro
 }
 
 func (c *Context) DbSpotifyGetToken(query string) (t models.Token, err error) {
-	var t models.Token
 	err = c.SQLAbstraction.QueryRow(query, c.Spotify_id).Scan(&t.Access,&t.Refresh,&t.Type,&t.Expiry)
 	return
 }

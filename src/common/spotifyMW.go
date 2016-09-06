@@ -188,8 +188,8 @@ func (e *EncryptToken) EncryptAccessToken() (dbToken models.Token, err error) {
 
 	//time.Time
 	time := e.Token.Expiry
-	dbToken.Expiry = time.String()
-
+	//dbToken.Expiry = time.String().Format(time.RFC3339)
+	dbToken.Expiry = time.Format("2006-01-02 15:04:05.0000000 -0700 MST")
 	key := []byte(e.Key)
 
 	// encrypt value to base64
