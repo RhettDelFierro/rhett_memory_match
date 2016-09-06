@@ -26,6 +26,7 @@ type EncryptToken struct {
 var (
 	authClient AuthUser
 	client SpotifyClient
+	regularClient RegularClient
 
 	Endpoint = oauth2.Endpoint{
 		AuthURL: "https://accounts.spotify.com/authorize",
@@ -33,8 +34,7 @@ var (
 	}
 )
 
-//setup a SpotifyClient and generates a random string for redirect_uri state:
-func setup() (authURL string, state string) {
+func setup() AuthUser {
 	if client.Token != nil {
 		return
 	}
@@ -46,10 +46,15 @@ func setup() (authURL string, state string) {
 	redirectURL := "http://localhost:8000/callback"
 	scopes := []string{"user-read-private", "user-read-email", "user-library-read", "user-top-read", "streaming"}
 
-	state = RandomString(30)
-	authURL = NewAuthedClient(credentials, redirectURL, scopes, state)
-
-	return
+	return AuthUser{
+		config: &oauth2.Config{
+			ClientID: credentials.Id,
+			ClientSecret: credentials.Secret,
+			Endpoint: Endpoint,
+			RedirectURL: redirectURL,
+			Scopes: scopes,
+		},
+	}
 }
 
 func createCookie(state string) http.Cookie {
@@ -75,19 +80,11 @@ func RandomString(strlen int) string {
 }
 
 //sets up AuthUser struct which is our request to spotify accounts service in /authLogin:
-func NewAuthedClient(credentials Credentials, redirectURL string, scopes []string, state string) string {
-	authClient = AuthUser{
-		config: &oauth2.Config{
-			ClientID: credentials.Id,
-			ClientSecret: credentials.Secret,
-			Endpoint: Endpoint,
-			RedirectURL: redirectURL,
-			Scopes: scopes,
-		},
-	}
+func GetURL(authUser AuthUser) (string, string) {
+	state := RandomString(30)
 
 	//.AuthCodeURL generates the url the user visits to authorize access to our app:
-	return authClient.config.AuthCodeURL(state)
+	return authUser.config.AuthCodeURL(state), state
 }
 
 func (a *AuthUser) Token(state string, r *http.Request) (*oauth2.Token, error) {
@@ -127,8 +124,10 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 		MaxAge:     60 * 2,
 	}
 
-	//runs setup() -> NewAuthedClient():
-	url, state := setup()
+	//gets an AuthUser struct.
+	authUser := setup()
+	//uses AuthUser struct to get an auth url:
+	url, state := GetURL(authUser)
 
 	session.Values["state_key"] = state
 	session.Save(r, w)
@@ -218,15 +217,25 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 
 func SpotifyGetKeys(w http.ResponseWriter, r *http.Request) {
 
-	client, err := pullToken(r)
+	token, err := pullToken(r)
+	if err != nil {
+		common.DisplayAppError(w,err,"error with pulling token, may need to re-auth",500)
+		return
+	}
+
+	//have our SpotifyClient here:
+	client := authClient.FinalAuth(token)
+
+
 	var songs []string
 	if notes := r.URL.Query().Get("notesChosen"); notes == "" {
 		fmt.Println("no notes missed")
 		return
 	} else {
 		notesChosen := strings.Split(notes, ",")
-		songs, _ = GetSongsByKey(notesChosen...)
+		songs, _ = GetSongsByKey(notesChosen)
 	}
+
 	fmt.Println(songs)
 
 	reqcontext.Clear(r)

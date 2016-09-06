@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"errors"
 	"golang.org/x/oauth2"
-	"go/token"
 	"time"
+	"os"
 )
 
 func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyAuthedUserProfile) (error) {
@@ -118,7 +118,7 @@ func queryMaker(user *models.SpotifyAuthedUserProfile, sessionToken string) (bac
 	return ""
 }
 
-func pullToken(r *http.Request) (err error) {
+func pullToken(r *http.Request) (token *oauth2.Token, err error) {
 	var decryptToken string
 	var mToken models.Token
 	context := NewContext()
@@ -145,22 +145,29 @@ func pullToken(r *http.Request) (err error) {
 	//mToken is a models.Token with it's fields encrypted.
 
 	//get *oauth.Token and return it to handler.
-	token,err := getUserToken(decryptToken,mToken)
+	token,err = getUserToken(decryptToken,mToken)
 	if err != nil {
 		return err
 	}
 
 	//verify the token:
+	if  !token.Valid() {
+		// if user token is expired
+		token = &oauth2.Token{ RefreshToken: token.RefreshToken }
+	}
+
+	return token, err
 }
 
+//put loops through this function instead of brute force:
 func getUserToken(decryptToken string,mToken models.Token ) (*oauth2.Token, error){
 	var err error
 	token := new(oauth2.Token)
-	token.AccessToken, err := common.Decrypt([]byte(decryptToken), mToken.Access)
+	token.AccessToken, err = common.Decrypt([]byte(decryptToken), mToken.Access)
 	if err != nil {
 		return err
 	}
-	token.RefreshToken, err := common.Decrypt([]byte(decryptToken), mToken.Refresh)
+	token.RefreshToken, err = common.Decrypt([]byte(decryptToken), mToken.Refresh)
 	if err != nil {
 		return err
 	}
