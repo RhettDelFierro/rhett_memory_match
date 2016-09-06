@@ -6,26 +6,21 @@ export async function getSongsAPI({notesChosen}) {
     //then match the index of the notesChosen List to the index of the noteKeys List.
     const keys = notesChosen.map((value, key) => noteKeys.indexOf(value))
     const songKeysArray = keys.toJS()
-    //const url = 'http://localhost:8000/getKeys?notesChosen='
-    //const query = keys.reduce((url, value) => {
-    //    url += `${value},`
-    //    return url
-    //}, url)
 
-    //try {
-    //    let songs = await axios.get(query.substring(0, query.length - 1), {
-    //        headers: {
-    //            'Authorization': 'Bearer ' + window.sessionStorage.getItem('Spotify_token')
-    //        }, withCredentials: true})
-    //} catch (error) {
-    //    Error('Error in getSongsAPI', error)
-    //}
     try {
-        let songs = await axios.post('http://localhost:8000/getKeys',{data: {songKeysArray}}, {
+        let songs = await axios.post('http://localhost:8000/getKeys', {data: {songKeysArray}}, {
             headers: {
                 'Authorization': 'Bearer ' + window.sessionStorage.getItem('Spotify_token')
-            }, withCredentials: true})
-        console.log(songs)
+            }, withCredentials: true
+        })
+        const tracks = songs.data.data
+
+        return tracks.map((key) => {
+            noteName = noteKeys.find((value,index) => (index === key))
+            return {
+                [noteName]: tracks[key]
+            }
+        })
     } catch (error) {
         Error('Error in getSongsAPI', error)
     }
