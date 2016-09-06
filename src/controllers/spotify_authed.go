@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
+
 )
 
 var (
@@ -27,22 +28,22 @@ func (s *SpotifyClient) GetCurrentProfile() (user *models.SpotifyAuthedUserProfi
 	return
 }
 
-//func (s *SpotifyClient) GetSongKeys(keys ...string) {
-//
-//}
+func (s *SpotifyClient) GetSongKeys(keys ...string) {
+
+}
 
 //default is top 40:
-//func (r *RegularClient) GetSongs() ([]string){
-//
-//	searchURL := searchEndpoint
-//
-//	resp, err := r.http.Get(searchURL)
-//}
+func (r *RegularClient) GetSongs() ([]string){
 
-//func GetSongsByKey(keys ...string) (songs []string, err error) {
-//	client := &RegularClient{
-//		http: new(http.Client),
-//	}
-//
-//	client.GetSongs()
-//}
+	searchURL := searchEndpoint
+
+	resp, err := r.http.Get(searchURL)
+}
+
+func GetSongsByKey(keys ...string) (songs []string, err error) {
+	client := &RegularClient{
+		http: new(http.Client),
+	}
+
+	client.GetSongs()
+}

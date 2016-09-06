@@ -11,11 +11,8 @@ import (
 	"errors"
 	"github.com/gorilla/sessions"
 	"encoding/json"
-	"github.com/RhettDelFierro/rhett_memory_match/src/models"
-	"net/url"
-	//"strings"
-	"database/sql"
-	"github.com/RhettDelFierro/rhett_memory_match/src/data"
+	reqcontext "github.com/gorilla/context"
+	"strings"
 )
 
 var store = sessions.NewCookieStore([]byte(os.Getenv("G_SESSION")))
@@ -29,7 +26,6 @@ type EncryptToken struct {
 var (
 	authClient AuthUser
 	client SpotifyClient
-	ch = make(chan *SpotifyClient)
 
 	Endpoint = oauth2.Endpoint{
 		AuthURL: "https://accounts.spotify.com/authorize",
@@ -220,119 +216,18 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 	//also clear the cookie.
 }
 
-func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyAuthedUserProfile) (error) {
-	var err error
-	var executeQuery string
-	var spotify_id string
-
-	context := NewContext();
-	context.Spotify_id = user.ID
-
-	//encrypt the token with it's methods.
-	dbToken, err := encryptToken.EncryptAccessToken()
-	if err != nil {
-		return err
-	}
-
-	query := "SELECT spotify_id FROM spotify_tokens WHERE spotify_id=?"
-	spotify_id, err = context.DbSpotifyTokenTable(query)
-	if err != nil && err != sql.ErrNoRows {
-		return err
-	}
-
-	if err == sql.ErrNoRows {
-		executeQuery = "INSERT INTO spotify_tokens(spotify_id,access_token,refresh_token,token_type,expiry) VALUES(?,?,?,?,?)"
-	} else {
-		executeQuery = "UPDATE spotify_tokens SET access_token=?, refresh_token=?, token_type=?, expiry=? WHERE spotify_id=?"
-	}
-
-	stmt,err := context.Prepare(executeQuery)
-	defer stmt.Close()
-	if err != nil {
-		return err
-	}
-
-	repo := &data.TokenRepository{S: stmt}
-	if spotify_id != "" {
-		err = repo.UpdateToken(dbToken,spotify_id)
-	} else {
-		err = repo.StoreNewToken(dbToken,context.Spotify_id)
-	}
-
-	return err
-}
-
-//look into Transactions for sql. Knock down the amount of prepare statements.
-func spotifyUserStorage(user *models.SpotifyAuthedUserProfile) (err error) {
-	context := NewContext();
-	context.Spotify_id = user.ID
-	//query := "SELECT spotify_id FROM spotify_users WHERE spotify_id=?"
-	//stmt, err := context.Prepare(query)
-	//defer stmt.Close()
-	//if err != nil {
-	//	return
-	//}
-
-	query := "SELECT spotify_id FROM spotify_users WHERE spotify_id=?"
-	_, err = context.DbSpotifyUserTable(query)
-	if err != nil && err != sql.ErrNoRows {
-		return
-	}
-
-	//new user through spotify:
-	if err == sql.ErrNoRows {
-		//save as new user:
-		query := "INSERT INTO spotify_users(spotify_id,display_name) VALUES(?,?)"
-		stmt, err := context.Prepare(query)
-		defer stmt.Close()
-		if err != nil {
-			return err
-		}
-
-		repo := &data.UserRepository{S: stmt}
-		err = repo.CreateSpotifyUser(user)
-		if err != nil {
-			return err
-		}
-
-		query = "INSERT INTO users(username,email) VALUES(?,?)"
-		stmt, err = context.Prepare(query)
-		defer stmt.Close()
-		if err != nil {
-			return err
-		}
-		repo.S = stmt
-		err = repo.InsertSpotifyIntoUsers(user)
-		if err != nil {
-			return err
-		}
-	}
-
-	return
-}
-
-func queryMaker(user *models.SpotifyAuthedUserProfile, sessionToken string) (backToReact string) {
-	backToReact = "http://localhost:8080/oauthfinished"
-	v := url.Values{}
-	v.Set("display_name", user.Display_name)
-	v.Set("id", user.ID)
-	v.Set("token", sessionToken)
-	if params := v.Encode(); params != "" {
-		backToReact += "?" + params
-		return
-	}
-	return ""
-}
-
 func SpotifyGetKeys(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("we in SpotifyGetKeys Handler")
-	//var songs []string
-	//if notes := r.URL.Query().Get("notesChosen"); notes == "" {
-	//	fmt.Println("no notes missed")
-	//	return
-	//} else {
-	//	notesChosen := strings.Split(notes, ",")
-	//	songs, _ = GetSongsByKey(notesChosen...)
-	//}
-	//fmt.Println(songs)
+
+	client, err := pullToken(r)
+	var songs []string
+	if notes := r.URL.Query().Get("notesChosen"); notes == "" {
+		fmt.Println("no notes missed")
+		return
+	} else {
+		notesChosen := strings.Split(notes, ",")
+		songs, _ = GetSongsByKey(notesChosen...)
+	}
+	fmt.Println(songs)
+
+	reqcontext.Clear(r)
 }

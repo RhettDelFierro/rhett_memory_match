@@ -123,7 +123,7 @@ func ValidateSpotifyUser(protectedPage http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		context.Set(r, "User", username)
+		context.Set(r, "UserID", username)
 		context.Set(r,"DecryptedKey",decryptedKey)
 		protectedPage(w,r)
 	})
