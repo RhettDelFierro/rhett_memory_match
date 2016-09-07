@@ -7,6 +7,8 @@ import { closeModal } from './modal'
 const GET_SONGS = 'GET_SONGS'
 const FETCHING_SONGS = 'FETCHING_SONGS'
 const FETCHING_SONGS_SUCCESS = 'FETCHING_SONGS_SUCCESS'
+const SELECT_TRACK = 'SELECT_TRACK'
+const PLAY_TRACK = 'PLAY_TRACK'
 
 export function getSongs({notesMissed}) {
     return async function (dispatch) {
@@ -34,9 +36,26 @@ export function spotifyLogin(){
     }
 }
 
+export function selectTrack(trackId){
+    return {
+        type: SELECT_TRACK,
+        trackId
+    }
+}
+
+//probably should be a thunk to get the track uri from spotify api.
+export function playTrack(){
+    return async function(dispatch,getState){
+        const trackId = getState().songs.get('selectedTrackId')
+
+    }
+}
+
 const initialState = fromJS({
     fetchingSongs: true,
-    notesSelected: {}
+    notesSelected: {},
+    selectedTrackId: "",
+    isPlaying: false
 })
 
 export default function songs(state = initialState, action) {
@@ -49,6 +68,14 @@ export default function songs(state = initialState, action) {
             return state.merge({
                 fetchingSongs: false,
                 notesSelected: action.songs
+            })
+        case SELECT_TRACK:
+            return state.merge({
+                selectedTrackId: action.trackId
+            })
+        case PLAY_TRACK:
+            return state.merge({
+
             })
         default:
             return state

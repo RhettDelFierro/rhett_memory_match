@@ -9,8 +9,12 @@
     padding-left: 2%;
 }
 
+.noteGroup:hover {
+    cursor: hand;
+}
+
 /*can't :focus list items. Do this by adding classes instead.*/
-/*.noteGroup > li:focus {*/
-    /*background-color: #03A9F4;*/
-    /*color: #d9edf7;*/
-/*}*/
+.noteGroup > li.selected {
+    background-color: #03A9F4;
+    color: #d9edf7;
+}

@@ -10,7 +10,7 @@ export default function SongList (props) {
                 return (
                     <ul className={noteGroup}>{key}
                         {value.map((track) => {
-                           return <Songs trackInfo={track}/>
+                           return <Songs trackInfo={track} onSelectTrack={props.onSelectTrack}/>
                         })}
                     </ul>
                 )
@@ -19,21 +19,16 @@ export default function SongList (props) {
     )
 }
 
-function Songs({trackInfo}) {
+function Songs({trackInfo,onSelectTrack}) {
     const name = trackInfo.get('name')
     const artistsArray = trackInfo.get('artists').map((artist) => artist.get('name'))
     const artists = artistsArray.join(', ')
-    return <li>{name} - {artists}</li>
+    const id = trackInfo.get('id')
 
+    return <li key={id} onClick={() => onSelectTrack(id)}>{name} - {artists}</li>
 }
 
 SongList.propTypes = {
-    notesSelected: PropTypes.instanceOf(Map).isRequired
+    notesSelected: PropTypes.instanceOf(Map).isRequired,
+    onSelectTrack: PropTypes.func.isRequired
 }
-
-
-//function mapDispatchToProps(dispatch) {
-//    return bindActionCreators(songActionCreators, dispatch)
-//}
-//
-//export default connect(mapStateToProps, mapDispatchToProps)(SongListContainer)

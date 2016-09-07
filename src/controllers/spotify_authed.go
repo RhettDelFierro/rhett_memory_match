@@ -48,6 +48,7 @@ type FullSong struct {
 	Key int `json:"key"`
 	Name string `json:"name"`
 	Artist []Artist `json:"artists"`
+	Id string `json:"id"`
 }
 
 func (s SpotifyClient) GetCurrentProfile() (user *models.SpotifyAuthedUserProfile, err error) {
@@ -114,6 +115,7 @@ func (s SpotifyClient) GetSongKeys(songList []Song) (songs []FullSong, err error
 					Key: song.Key,
 					Name: songinfo.Name,
 					Artist: songinfo.Artists,
+					Id: songinfo.Id,
 				})
 			}
 		}
