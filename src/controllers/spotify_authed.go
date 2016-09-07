@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
-	"strconv"
+	//"strconv"
 )
 
 var (
@@ -126,6 +126,20 @@ func (s SpotifyClient) GetSongKeys(songList []Song) (songs []FullSong, err error
 func GetSongsByKey(keys []int,client SpotifyClient) (songsWithKey map[string][]FullSong, err error) {
 
 	//may have to channel into here.
+	noteMap := map[int]string{
+		0: "C",
+		1: "Db",
+		2: "D",
+		3: "Eb",
+		4: "E",
+		5: "F",
+		6: "Gb",
+		7: "G",
+		8: "Ab",
+		9: "A",
+		10: "Bb",
+		11: "B",
+	}
 
 	songs, err := client.GetSongs()
 	if err != nil {
@@ -140,11 +154,11 @@ func GetSongsByKey(keys []int,client SpotifyClient) (songsWithKey map[string][]F
 
 	for _,value := range keys {
 		//key, _ := strconv.Atoi(value)
-		key := strconv.Itoa(value)
+		//key := strconv.Itoa(value)
 		for _,song := range fullSongs {
 			if value == song.Key {
 				//n := len(songsWithKey[key])
-				songsWithKey[key] = append(songsWithKey[key],song)
+				songsWithKey[noteMap[value]] = append(songsWithKey[noteMap[value]],song)
 			}
 		}
 	}

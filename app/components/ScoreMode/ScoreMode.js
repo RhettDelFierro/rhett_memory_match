@@ -6,6 +6,7 @@ import * as trainingActionCreators from 'redux/modules/training'
 import { container, error } from './styles.css'
 import { Map } from 'immutable'
 import { TallyForm } from 'components'
+import { SongListContainer } from 'containers'
 
 
 export default function ScoreMode(props) {
@@ -14,7 +15,10 @@ export default function ScoreMode(props) {
         <div className={container}>
             <h3>Here is your score: <span>{props.score}</span></h3>
             <p>You are currently in {props.mode}</p>
-            <TallyForm />
+            {!props.fetchingSongs
+                ? <SongListContainer />
+                : <TallyForm />
+            }
             <h2>Click Here To Proceed</h2>
             <button onClick={props.proceed}>PROCEED</button>
         </div>

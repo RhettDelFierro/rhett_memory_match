@@ -16,6 +16,10 @@ class ScoreModeContainer extends Component {
         //call the .reduce here.
         this.props.tally()
     }
+
+    componentWillReceiveProps(newProps) {
+
+    }
     //
     render() {
         return (
@@ -34,13 +38,15 @@ ScoreModeContainer.propTypes = {
     notesMissed: PropTypes.instanceOf(Map).isRequired
 }
 
-function mapStateToProps({training, scores}) {
+function mapStateToProps({training, scores, songs}) {
     return {
         roundCompleted: training.get('roundCompleted'),
         mode: training.get('mode'),
         //SHOULD BE THE SCORE FROM SCORES REDUCER?
         score: training.get('score'),
-        notesMissed: scores.get('notesMissed')
+        notesMissed: scores.get('notesMissed'),
+        fetchingSongs: songs.get('fetchingSongs'),
+        notesSelected: songs.get('notesSelected')
     }
 }
 

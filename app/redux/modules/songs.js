@@ -5,14 +5,22 @@ import { authUser } from 'redux/modules/users'
 import { closeModal } from './modal'
 
 const GET_SONGS = 'GET_SONGS'
+const FETCHING_SONGS = 'FETCHING_SONGS'
+const FETCHING_SONGS_SUCCESS = 'FETCHING_SONGS_SUCCESS'
 
 export function getSongs({notesMissed}) {
     return async function (dispatch) {
+        dispatch({type: GET_SONGS})
         const notesChosen = fromJS(notesMissed).keySeq()
         const songs = await getSongsAPI({notesChosen})
+        dispatch(fetchingSongsSuccess(songs))
+    }
+}
 
-        //ignore for now.
-        dispatch({type: GET_SONGS, songs})
+export function fetchingSongsSuccess(songs){
+    return {
+        type: FETCHING_SONGS_SUCCESS,
+        songs
     }
 }
 
@@ -22,20 +30,25 @@ export function spotifyLogin(){
         spotifyAuth({callback: ({id}) =>{
             dispatch(closeModal())
             dispatch(authUser(id))
-            console.log('callback fired! id:',id)
         }})
     }
 }
 
 const initialState = fromJS({
-    notesSelected: []
+    fetchingSongs: true,
+    notesSelected: {}
 })
 
 export default function songs(state = initialState, action) {
     switch (action.type) {
         case GET_SONGS:
             return state.merge({
-                notesSelected: state.get('notesSelected').concat(action.notesChosen)
+                fetchingSongs: true
+            })
+        case FETCHING_SONGS_SUCCESS:
+            return state.merge({
+                fetchingSongs: false,
+                notesSelected: action.songs
             })
         default:
             return state

@@ -47,9 +47,11 @@ let TallyForm = (props) => {
     )
 }
 
-function mapStateToProps({scores}) {
+function mapStateToProps({scores,songs}) {
     return {
-        notesMissed: scores.get('notesMissed')
+        notesMissed: scores.get('notesMissed'),
+        notesSelected: songs.get('notesSelected'),
+        fetchingSongs: songs.get('fetchingSongs')
     }
 }
 
