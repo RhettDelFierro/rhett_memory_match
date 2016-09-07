@@ -1,0 +1,16 @@
+.songContainer {
+    overflow-y: auto;
+    background-color: #d9edf7;
+    max-height: 60%;
+}
+
+.noteGroup {
+    list-style: none;
+    padding-left: 2%;
+}
+
+/*can't :focus list items. Do this by adding classes instead.*/
+/*.noteGroup > li:focus {*/
+    /*background-color: #03A9F4;*/
+    /*color: #d9edf7;*/
+/*}*/

@@ -1,13 +1,14 @@
 import React, { PropTypes, Component } from "react"
 import * as songActionCreators from 'redux/modules/songs'
 import { Map, OrderedMap, List } from 'immutable'
+import { songContainer, noteGroup } from './styles.css'
 
 export default function SongList (props) {
     return (
-        <div>
+        <div className={songContainer}>
             {props.notesSelected.map((value,key) => {
                 return (
-                    <ul>
+                    <ul className={noteGroup}>{key}
                         {value.map((track) => {
                            return <Songs trackInfo={track}/>
                         })}
@@ -19,11 +20,9 @@ export default function SongList (props) {
 }
 
 function Songs({trackInfo}) {
-    console.log(trackInfo)
     const name = trackInfo.get('name')
     const artistsArray = trackInfo.get('artists').map((artist) => artist.get('name'))
     const artists = artistsArray.join(', ')
-    console.log(name,artists)
     return <li>{name} - {artists}</li>
 
 }
