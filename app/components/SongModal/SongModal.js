@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import { default as ReactModal } from 'react-modal'
 import { modalHeader, modalBody, pointer, playBtn } from './styles.css'
 import { Map } from 'immutable'
+import { SpotifyWidgetContainer } from 'containers'
 
 const modalStyles = {
     content: {
@@ -31,8 +32,7 @@ export default function SongModal(props) {
                     {'Web Audio Graphics Here'}
                 </div>
                 <div>
-                    //onPlayTrack() that was on the span, will now be on componentwillmount in spotify widget.
-                    {'Spotify Widget Here'}
+                    <SpotifyWidgetContainer />
                 </div>
             </div>
         </ReactModal>
