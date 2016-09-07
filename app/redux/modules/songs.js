@@ -3,6 +3,7 @@ import { tallyCount } from 'utils/scoresFunctions'
 import { spotifyAuth, getSongsAPI, getTrackURI } from 'utils/songsAPI'
 import { authUser } from 'redux/modules/users'
 import { closeModal } from './modal'
+import { openSongModal } from './songModal'
 
 const GET_SONGS = 'GET_SONGS'
 const FETCHING_SONGS = 'FETCHING_SONGS'
@@ -44,20 +45,13 @@ export function selectTrack(trackId) {
     }
 }
 
-//export function setTrackURI({trackURI}) {
-//    return {
-//        type: SET_TRACK_URI,
-//        trackURI
-//    }
-//}
-
 //probably should be a thunk to get the track uri from spotify api.
 export function playTrack(){
     return async function(dispatch,getState){
         const trackId = getState().songs.get('selectedTrackId')
         let trackURI = await getTrackURI({trackId})
         dispatch({ type: PLAY_TRACK, trackURI })
-        dispatch()
+        dispatch(openSongModal())
     }
 }
 

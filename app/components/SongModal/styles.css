@@ -1,0 +1,30 @@
+.modalHeader {
+    background: #fff;
+    padding: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #1877E6;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.modalBody {
+    display: flex;
+    align-items: stretch;
+}
+
+.playBtn {
+    display: none;
+    background-color: #1ED760;
+    color: black;
+    height: 2em;
+}
+
+.selected > .playBtn {
+    /*inherit inherits the property from it's parent.
+    In this case the parent is an <li> which is a block-level element*/
+    display: inherit;
+}

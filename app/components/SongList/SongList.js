@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from "react"
 import * as songActionCreators from 'redux/modules/songs'
 import { Map, OrderedMap, List } from 'immutable'
 import { songContainer, noteGroup, selected, playBtn } from './styles.css'
+import { SongModalContainer } from 'containers'
 
 export default function SongList(props) {
     return (
@@ -16,13 +17,12 @@ export default function SongList(props) {
                 )
 
             })}
-            <button className={playBtn} onClick={() => props.onPlayTrack()}>Play</button>
         </div>
     )
 }
 
 function Songs(props) {
-    const { trackInfo,onSelectTrack,selectedTrackId,trackSelected,onPlayTrack } = props
+    const { trackInfo,onSelectTrack,selectedTrackId,openSongModal } = props
 
     const name = trackInfo.get('name')
     const artistsArray = trackInfo.get('artists').map((artist) => artist.get('name'))
@@ -30,19 +30,16 @@ function Songs(props) {
     const id = trackInfo.get('id')
 
     const liStyle = selectedTrackId === id ? selected : ''
-
+    //<span className={playBtn} onClick={() => props.onPlayTrack()}>Play</span>
     return <li className={liStyle} key={id} onClick={() => onSelectTrack(id)}>{name} - {artists}
-        <span className={playBtn} onClick={() => props.onPlayTrack()}>Play</span>
-    </li>
+        <span className={playBtn} onClick={props.openSongModal}><SongModalContainer /></span></li>
 }
 
 SongList.propTypes = {
     onSelectTrack: PropTypes.func.isRequired,
-    onPlayTrack: PropTypes.func.isRequired,
     notesSelected: PropTypes.instanceOf(Map).isRequired,
-    playTrack: PropTypes.func.isRequired,
     fetchingSongs: PropTypes.bool.isRequired,
     trackSelected: PropTypes.bool.isRequired,
     selectedTrackId: PropTypes.string.isRequired,
-    isPlaying: PropTypes.bool.isRequired
+    openSongModal: PropTypes.func.isRequired
 }

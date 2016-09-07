@@ -4,28 +4,22 @@ import { bindActionCreators } from 'redux'
 import * as songActionCreators from 'redux/modules/songs'
 import { Map, OrderedMap, List } from 'immutable'
 import { SongList } from 'components'
+import { openSongModal } from 'redux/modules/songModal'
 
 class SongListContainer extends Component {
     constructor() {
         super()
 
-        this.handlePlayTrack = this.handlePlayTrack.bind(this)
         this.handleSelectTrack = this.handleSelectTrack.bind(this)
     }
 
-    //this component will also handle the play on Spotify.
     handleSelectTrack(trackId) {
         this.props.selectTrack(trackId)
-    }
-
-    handlePlayTrack() {
-        this.props.playTrack()
     }
 
     render() {
         return (
             <SongList onSelectTrack={this.handleSelectTrack}
-                      onPlayTrack={this.handlePlayTrack}
                       {...this.props} />
         )
     }
@@ -33,12 +27,11 @@ class SongListContainer extends Component {
 
 SongListContainer.propTypes = {
     notesSelected: PropTypes.instanceOf(Map).isRequired,
-    playTrack: PropTypes.func.isRequired,
     selectTrack: PropTypes.func.isRequired,
     fetchingSongs: PropTypes.bool.isRequired,
     trackSelected: PropTypes.bool.isRequired,
     selectedTrackId: PropTypes.string.isRequired,
-    isPlaying: PropTypes.bool.isRequired
+    openSongModal: PropTypes.func.isRequired
 }
 
 function mapStateToProps({songs}) {
@@ -46,13 +39,12 @@ function mapStateToProps({songs}) {
         notesSelected: songs.get('notesSelected'),
         fetchingSongs: songs.get('fetchingSongs'),
         trackSelected: songs.get('trackSelected'),
-        selectedTrackId: songs.get('selectedTrackId'),
-        isPlaying: songs.get('isPlaying')
+        selectedTrackId: songs.get('selectedTrackId')
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators(songActionCreators, dispatch)
+    return bindActionCreators({...songActionCreators, openSongModal}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SongListContainer)
