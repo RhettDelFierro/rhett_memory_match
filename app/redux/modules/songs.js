@@ -1,6 +1,6 @@
 import { fromJS, toOrderedMap } from 'immutable'
 import { tallyCount } from 'utils/scoresFunctions'
-import { spotifyAuth, getSongsAPI } from 'utils/songsAPI'
+import { spotifyAuth, getSongsAPI, getTrackURI } from 'utils/songsAPI'
 import { authUser } from 'redux/modules/users'
 import { closeModal } from './modal'
 
@@ -9,6 +9,7 @@ const FETCHING_SONGS = 'FETCHING_SONGS'
 const FETCHING_SONGS_SUCCESS = 'FETCHING_SONGS_SUCCESS'
 const SELECT_TRACK = 'SELECT_TRACK'
 const PLAY_TRACK = 'PLAY_TRACK'
+const SET_TRACK_URI = 'SET_TRACK_URI'
 
 export function getSongs({notesMissed}) {
     return async function (dispatch) {
@@ -36,25 +37,36 @@ export function spotifyLogin(){
     }
 }
 
-export function selectTrack(trackId){
+export function selectTrack(trackId) {
     return {
         type: SELECT_TRACK,
         trackId
     }
 }
 
+//export function setTrackURI({trackURI}) {
+//    return {
+//        type: SET_TRACK_URI,
+//        trackURI
+//    }
+//}
+
 //probably should be a thunk to get the track uri from spotify api.
 export function playTrack(){
     return async function(dispatch,getState){
         const trackId = getState().songs.get('selectedTrackId')
-
+        let trackURI = await getTrackURI({trackId})
+        dispatch({ type: PLAY_TRACK, trackURI })
+        dispatch()
     }
 }
 
 const initialState = fromJS({
     fetchingSongs: true,
     notesSelected: {},
-    selectedTrackId: "",
+    trackSelected: false,
+    selectedTrackId: '',
+    selectedTrackURI: '',
     isPlaying: false
 })
 
@@ -71,11 +83,12 @@ export default function songs(state = initialState, action) {
             })
         case SELECT_TRACK:
             return state.merge({
+                trackSelected: true,
                 selectedTrackId: action.trackId
             })
         case PLAY_TRACK:
             return state.merge({
-
+                selectedTrackURI: action.trackURI
             })
         default:
             return state

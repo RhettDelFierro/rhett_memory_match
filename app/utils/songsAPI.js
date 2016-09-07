@@ -17,6 +17,16 @@ export async function getSongsAPI({notesChosen}) {
     }
 }
 
+export async function getTrackURI({trackId}) {
+    try {
+        const spotifyUrl = `https://api.spotify.com/v1/tracks/${trackId}`
+        let trackURI = await axios.get(spotifyUrl)
+        return trackURI.data.uri
+    } catch (error) {
+        Error('Error in getTrackURI', error)
+    }
+}
+
 //do NOT forget the error callback.
 export async function spotifyAuth({callback}) {
     try {

@@ -14,7 +14,25 @@
 }
 
 /*can't :focus list items. Do this by adding classes instead.*/
-.noteGroup > li.selected {
+/*.noteGroup > li.selected {*/
+    /*background-color: #03A9F4;*/
+    /*color: #d9edf7;*/
+/*}*/
+
+.selected {
     background-color: #03A9F4;
     color: #d9edf7;
+}
+
+.playBtn {
+    display: none;
+    background-color: #1ED760;
+    color: black;
+    height: 2em;
+}
+
+.selected > .playBtn {
+    /*inherit inherits the property from it's parent.
+    In this case the parent is an <li> which is a block-level element*/
+    display: inherit;
 }

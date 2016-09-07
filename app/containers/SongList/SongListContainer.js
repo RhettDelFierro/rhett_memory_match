@@ -8,20 +8,25 @@ import { SongList } from 'components'
 class SongListContainer extends Component {
     constructor() {
         super()
+
+        this.handlePlayTrack = this.handlePlayTrack.bind(this)
+        this.handleSelectTrack = this.handleSelectTrack.bind(this)
     }
 
     //this component will also handle the play on Spotify.
-    handleSelectSong(id) {
-        this.props.selectTrack(id)
+    handleSelectTrack(trackId) {
+        this.props.selectTrack(trackId)
     }
 
-    handlePlayTrack(id) {
-        this.props.playTrack(id)
+    handlePlayTrack() {
+        this.props.playTrack()
     }
 
     render() {
         return (
-            <SongList notesSelected={this.props.notesSelected} onSelectTrack={this.handleSelectTrack}/>
+            <SongList onSelectTrack={this.handleSelectTrack}
+                      onPlayTrack={this.handlePlayTrack}
+                      {...this.props} />
         )
     }
 }
@@ -31,6 +36,7 @@ SongListContainer.propTypes = {
     playTrack: PropTypes.func.isRequired,
     selectTrack: PropTypes.func.isRequired,
     fetchingSongs: PropTypes.bool.isRequired,
+    trackSelected: PropTypes.bool.isRequired,
     selectedTrackId: PropTypes.string.isRequired,
     isPlaying: PropTypes.bool.isRequired
 }
@@ -39,7 +45,8 @@ function mapStateToProps({songs}) {
     return {
         notesSelected: songs.get('notesSelected'),
         fetchingSongs: songs.get('fetchingSongs'),
-        selectedTrackId: songs.get('selectredTrackId'),
+        trackSelected: songs.get('trackSelected'),
+        selectedTrackId: songs.get('selectedTrackId'),
         isPlaying: songs.get('isPlaying')
     }
 }
