@@ -2,8 +2,19 @@
     border: 1px solid mediumspringgreen;
     width: 300px;
     height: 500px;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .error {
     color: red;
+}
+
+.proceed {
+    background-color: #c4e3f3;
+    color: black;
+    font-weight: bold;
+    align-content: center;
 }

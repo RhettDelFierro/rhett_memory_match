@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scoreActionCreators from 'redux/modules/scores'
 import * as trainingActionCreators from 'redux/modules/training'
-import { container, error } from './styles.css'
+import { container, proceed, error } from './styles.css'
 import { Map } from 'immutable'
 import { TallyForm } from 'components'
 import { SongListContainer } from 'containers'
@@ -19,21 +19,10 @@ export default function ScoreMode(props) {
                 ? <SongListContainer />
                 : <TallyForm />
             }
-            <h2>Click Here To Proceed</h2>
-            <button onClick={props.proceed}>PROCEED</button>
+            <div className={proceed} onClick={props.proceed}>PROCEED</div>
         </div>
     )
 }
-
-//function Tally({notesMissed}) {
-//    return (
-//        <div>
-//            {notesMissed.entrySeq().map((note,count) => {
-//                return <p key={note}><span>{note}</span>    {count}</p>
-//            })}
-//        </div>
-//    )
-//}
 
 ScoreMode.propTypes = {
     mode: PropTypes.string.isRequired,

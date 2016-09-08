@@ -17,10 +17,6 @@ class ScoreModeContainer extends Component {
         this.props.tally()
     }
 
-    componentWillReceiveProps(newProps) {
-
-    }
-    //
     render() {
         return (
             <ScoreMode {...this.props}/>

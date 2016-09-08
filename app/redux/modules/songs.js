@@ -49,9 +49,10 @@ export function selectTrack(trackId) {
 export function playTrack(){
     return async function(dispatch,getState){
         const trackId = getState().songs.get('selectedTrackId')
-        let trackURI = await getTrackURI({trackId})
-        dispatch({ type: PLAY_TRACK, trackURI })
-        dispatch(openSongModal())
+        let track = await getTrackURI({trackId})
+        let trackURI = track.uri
+        let previewURL = track.preview_url
+        dispatch({ type: PLAY_TRACK, trackURI, previewURL })
     }
 }
 
@@ -60,7 +61,8 @@ const initialState = fromJS({
     notesSelected: {},
     trackSelected: false,
     selectedTrackId: '',
-    selectedTrackURI: '',
+    selectedTrackURI: 'spotify:track:1kiNatIrwDusOZfR29W0LJ',
+    selectedTrackPreview: '',
     isPlaying: false
 })
 
@@ -82,7 +84,8 @@ export default function songs(state = initialState, action) {
             })
         case PLAY_TRACK:
             return state.merge({
-                selectedTrackURI: action.trackURI
+                selectedTrackURI: action.trackURI,
+                selectedTrackPreview: action.previewURL
             })
         default:
             return state

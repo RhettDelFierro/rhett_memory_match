@@ -11,15 +11,21 @@ class SongListContainer extends Component {
         super()
 
         this.handleSelectTrack = this.handleSelectTrack.bind(this)
+        this.handlePlayTrack = this.handlePlayTrack.bind(this)
     }
 
     handleSelectTrack(trackId) {
         this.props.selectTrack(trackId)
     }
 
+    handlePlayTrack() {
+        this.props.playTrack()
+    }
+
     render() {
         return (
             <SongList onSelectTrack={this.handleSelectTrack}
+                      onPlayTrack={this.handlePlayTrack}
                       {...this.props} />
         )
     }

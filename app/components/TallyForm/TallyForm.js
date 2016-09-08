@@ -5,7 +5,7 @@ import { List, OrderedMap } from 'immutable'
 import { Field, FieldArray, reduxForm } from 'redux-form/immutable'
 import * as userActionCreators from 'redux/modules/users'
 import * as songActionCreators from 'redux/modules/songs'
-import { error } from './styles.css'
+import { error, container } from './styles.css'
 
 //define stateless component to render input and errors:
 const renderField = ({ input, label, type, id}) => (
@@ -35,7 +35,7 @@ let TallyForm = (props) => {
     const { handleSubmit, pristine, reset, submitting, notesMissed, getSongs } = props
 
     return (
-        <form onSubmit={handleSubmit(getSongs.bind(this))}>
+        <form className={container} onSubmit={handleSubmit(getSongs.bind(this))}>
 
             <FieldArray name="notesMissed" component={renderNotes} notesCount={notesMissed}/>
             <div>

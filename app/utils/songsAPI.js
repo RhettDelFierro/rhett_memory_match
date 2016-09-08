@@ -21,7 +21,7 @@ export async function getTrackURI({trackId}) {
     try {
         const spotifyUrl = `https://api.spotify.com/v1/tracks/${trackId}`
         let trackURI = await axios.get(spotifyUrl)
-        return trackURI.data.uri
+        return trackURI.data
     } catch (error) {
         Error('Error in getTrackURI', error)
     }

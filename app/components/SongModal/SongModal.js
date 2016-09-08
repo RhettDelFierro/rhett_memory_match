@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { default as ReactModal } from 'react-modal'
 import { modalHeader, modalBody, pointer, playBtn } from './styles.css'
 import { Map } from 'immutable'
-import { SpotifyWidgetContainer } from 'containers'
+import { SpotifyWidgetContainer, SongGraphicsContainer } from 'containers'
 
 const modalStyles = {
     content: {
@@ -29,7 +29,7 @@ export default function SongModal(props) {
             </div>
             <div className={modalBody}>
                 <div>
-                    {'Web Audio Graphics Here'}
+                    <SongGraphics />
                 </div>
                 <div>
                     <SpotifyWidgetContainer />
