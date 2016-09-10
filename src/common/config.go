@@ -25,6 +25,7 @@ type (
 	}
 )
 
+//
 func InitAll(){
 	initKeys()
 	loadAppConfig()
@@ -54,11 +55,35 @@ func loadAppConfig() {
 	if err != nil {
 		fmt.Printf("loadAppConfig error: %s\n", err)
 	}
+
 	decoder := json.NewDecoder(file)
+
 	AppConfig = configuration{}
 	err = decoder.Decode(&AppConfig)
 	if err != nil {
 		fmt.Printf("loadAppConfigError: %s\n", err)
 	}
 
+}
+
+func getAppConfig() (AppConfig configuration,err error) {
+
+	var AppConfig configuration
+
+	file, err := os.Open("src/common/config.json")
+	defer file.Close()
+	if err != nil {
+		return
+		fmt.Printf("loadAppConfig error: %s\n", err)
+	}
+
+	decoder := json.NewDecoder(file)
+
+	err = decoder.Decode(&AppConfig)
+	if err != nil {
+		return
+		fmt.Printf("loadAppConfigError: %s\n", err)
+	}
+
+	return
 }
