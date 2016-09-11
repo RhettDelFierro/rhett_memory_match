@@ -66,24 +66,20 @@ func loadAppConfig() {
 
 }
 
-func getAppConfig() (AppConfig configuration,err error) {
+func getAppConfig() (AppConfig configuration) {
 
-	var AppConfig configuration
+	server := os.Getenv("localhost:8000")
+	dbHost := os.Getenv("PERFECT_PITCH_DATABASE_HOST")
+	dbUser := os.Getenv("PERFECT_PITCH_DATABASE_USER")
+	dbPwd := os.Getenv("PERFECT_PITCH_DATABASE_PWD")
+	db := os.Getenv("DATABASE_PP")
 
-	file, err := os.Open("src/common/config.json")
-	defer file.Close()
-	if err != nil {
-		return
-		fmt.Printf("loadAppConfig error: %s\n", err)
+	AppConfig = configuration{
+		Server: server,
+		DBHost: dbHost,
+		DBUser: dbUser,
+		DBPwd: dbPwd,
+		Database: db,
 	}
-
-	decoder := json.NewDecoder(file)
-
-	err = decoder.Decode(&AppConfig)
-	if err != nil {
-		return
-		fmt.Printf("loadAppConfigError: %s\n", err)
-	}
-
 	return
 }
