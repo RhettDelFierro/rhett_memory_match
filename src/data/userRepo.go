@@ -46,11 +46,6 @@ func (r *UserRepository) CreateSpotifyUser(user *models.SpotifyAuthedUserProfile
 	return nil
 }
 
-func (r *UserRepository) InsertSpotifyIntoUsers(user *models.SpotifyAuthedUserProfile) (error) {
-	_, err := r.S.Exec(user.ID,user.Email)
-	return err
-}
-
 func (r *UserRepository) Login(user models.User) (u models.User, err error) {
 
 	err = r.S.QueryRow(user.Email).Scan(&u.User_ID, &u.Username, &u.Email, &u.HashPassword)

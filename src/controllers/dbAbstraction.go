@@ -13,7 +13,7 @@ type Env struct {
 type DBQueries interface {
 	CloseDB()
 	PrepareQuery(q string) (*sql.Stmt, error)
-	Search(query string,arg string) (result interface{},err error)
+	Search(query string,args ...interface{}) (result interface{},err error)
 	FindUser(user, address  string) (string, error)
 	DbSpotifyGetToken(query, s_id string) (t models.Token, err error)
 }
@@ -48,8 +48,8 @@ func (db *DB) FindUser(user, address string) (string, error) {
 
 }
 
-func (db *DB) Search(query string,arg string) (result interface{},err error) {
-	err = db.QueryRow(query,arg).Scan(&result)
+func (db *DB) Search(query string,args ...interface{}) (result interface{},err error) {
+	err = db.QueryRow(query,args...).Scan(&result)
 	return
 }
 
