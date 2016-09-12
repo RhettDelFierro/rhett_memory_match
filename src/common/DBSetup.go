@@ -11,19 +11,20 @@ import (
 
 
 //checks if DB is still
-func GetDB() (*sql.DB,error) {
+func GetDB() (*sql.DB, error) {
 
-	err := db.Ping()
-
-	if err != nil || db == nil {
-		newDB, err := CreateDbSession()
-		return newDB,err
+	newDB, err := CreateDbSession()
+	if err != nil {
+		return nil, err
+	}
+	if err = newDB.Ping(); err != nil {
+		return nil, err
 	}
 
-	return db, err
+	return newDB, err
 }
 
-func CreateDbSession() (db *sql.DB,err error){
+func CreateDbSession() (db *sql.DB, err error) {
 	var AppConfig configuration
 
 	AppConfig = getDBConfig()
@@ -31,8 +32,11 @@ func CreateDbSession() (db *sql.DB,err error){
 	setup := fmt.Sprintf("%s:%s@tcp(%s)/%s", AppConfig.DBUser, AppConfig.DBPwd, AppConfig.DBHost, AppConfig.Database)
 	db, err = sql.Open("mysql", setup)
 	if err != nil {
-		return
-		log.Fatalf("[createDBSession]: %s\n", err)
+		return nil,err
+	}
+
+	if err = db.Ping(); err != nil {
+		return nil, err
 	}
 
 	return

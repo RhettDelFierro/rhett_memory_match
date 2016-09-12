@@ -217,14 +217,6 @@ func (e *EncryptToken) EncryptAccessToken() (dbToken models.Token, err error) {
 	return
 }
 
-//may not need this.
-//func (e *EncryptToken) DecryptAccessToken() (dbToken models.Token, err error) {
-//	// encrypt base64 crypto to original value.
-//	//the key will be passed in from the token.
-//	//text := decrypt(key, cryptoText)
-//	//fmt.Printf(text)
-//}
-
 //just basic example from Golang docs:
 func encrypt(key []byte, text string) (string, error) {
 	// key := []byte(keyText)

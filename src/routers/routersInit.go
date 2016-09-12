@@ -7,14 +7,14 @@ import (
 
 )
 
-func Router(env controllers.DBQueries) *mux.Router {
+func Router(env controllers.Env) *mux.Router {
 
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/users/register", controllers.RegisterUser)
 	//router.HandleFunc("/users/login", common.Validate(controllers.LoginUser))
 	router.HandleFunc("/users/login", controllers.LoginUser)
-	router.HandleFunc("/scores/{mode}", common.Validate(controllers.Scores))
+	router.HandleFunc("/scores/{mode}", common.Validate(env.Scores))
 	router.HandleFunc("/users/logout", controllers.LogOut)
 
 	//spotify

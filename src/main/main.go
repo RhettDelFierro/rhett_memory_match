@@ -8,11 +8,9 @@ import (
 	"github.com/gorilla/context"
 	"github.com/RhettDelFierro/rhett_memory_match/src/controllers"
 	"log"
+	"github.com/RhettDelFierro/rhett_memory_match/src/routers"
 )
 
-type Env struct {
-	db controllers.DBQueries
-}
 
 
 //Entry point of the program
@@ -24,9 +22,9 @@ func main() {
 		log.Panic(err)
 	}
 
-	env := &Env{db}
+	env := &controllers.Env{db}
 
-	router := Router(env)
+	router := routers.Router(env)
 	handler := cors.Default().Handler(router)
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:8080", "https://accounts.spotify.com", "*"},
