@@ -38,7 +38,7 @@ func cleanPassword(password string) []byte {
 
 func (r *UserRepository) CreateSpotifyUser(user *models.SpotifyAuthedUserProfile) (error) {
 
-	_, err := r.S.Exec(user.ID, user.Display_name)
+	_, err := r.S.Exec(user.ID, user.Display_name, user.Email)
 
 	if err != nil {
 		return err
