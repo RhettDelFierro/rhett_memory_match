@@ -214,9 +214,9 @@ func(env *Env) SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 	//also clear the cookie.
 }
 
-func SpotifyGetKeys(w http.ResponseWriter, r *http.Request) {
+func(env *Env) SpotifyGetKeys(w http.ResponseWriter, r *http.Request) {
 	authClient = setup()
-	token, err := pullToken(r)
+	token, err := pullToken(r,env)
 	if err != nil {
 		common.DisplayAppError(w,err,"error with pulling token, may need to re-auth",500)
 		return
@@ -236,15 +236,7 @@ func SpotifyGetKeys(w http.ResponseWriter, r *http.Request) {
 	}
 
 	notesChosen := keys.Data.Keys
-	fmt.Println("notesChosen:", notesChosen)
-	//notesChosen := strings.Split(keyArray, ",")
-	//if notes := r.URL.Query().Get("notesChosen"); notes == "" {
-	//	fmt.Println("no notes missed")
-	//	return
-	//} else {
-	//	notesChosen := strings.Split(notes, ",")
-	//	songs, _ = GetSongsByKey(notesChosen,client)
-	//}
+
 	songs, _ := GetSongsByKey(notesChosen,client)
 
 	reqcontext.Clear(r)

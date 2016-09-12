@@ -108,13 +108,13 @@ func queryMaker(user *models.SpotifyAuthedUserProfile, sessionToken string) (bac
 	return ""
 }
 
-func pullToken(r *http.Request) (token *oauth2.Token, err error) {
+func pullToken(r *http.Request, env *Env) (token *oauth2.Token, err error) {
 	var decryptToken string
 	var mToken models.Token
-	context := NewContext()
+	var spotify_id string
 
 	if id, ok := reqcontext.GetOk(r, "UserID"); ok {
-		context.Spotify_id = id.(string)
+		spotify_id = id.(string)
 	} else {
 		err = errors.New("can not get gorilla context variable UserID")
 	}
@@ -128,7 +128,7 @@ func pullToken(r *http.Request) (token *oauth2.Token, err error) {
 
 	//now make a call to the database and get the tokens.
 	query := "SELECT access_token,refresh_token,token_type,expiry FROM spotify_tokens WHERE spotify_id=?"
-	mToken, err = context.DbSpotifyGetToken(query)
+	mToken, err = env.DB.DbSpotifyGetToken(query,spotify_id)
 	if err != nil {
 		return
 	}

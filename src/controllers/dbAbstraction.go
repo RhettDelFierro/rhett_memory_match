@@ -20,6 +20,7 @@ type DBQueries interface {
 	DbUserTable(user, address  string) (string, error)
 	DbSpotifyUserTable(query string) (spotify_id string,err error)
 	DbSpotifyTokenTable(query string) (spotify_id string, err error)
+	DbSpotifyGetToken(query, s_id string) (t models.Token, err error)
 	DbModeTable(mode string) (round_id int64, err error)
 	Prepare(q string) (*sql.Stmt, error)
 }
