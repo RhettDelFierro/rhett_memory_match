@@ -3,7 +3,6 @@ package common
 import (
 	"fmt"
 	"encoding/json"
-	"os"
 	"net/http"
 )
 
@@ -28,8 +27,6 @@ type (
 //
 func InitAll(){
 	initKeys()
-	loadAppConfig()
-	createDbSession()
 }
 
 //handle app errors
@@ -46,40 +43,4 @@ func DisplayAppError(w http.ResponseWriter, handlerError error, message string, 
 	if j, err := json.Marshal(errorResource{Data: errObj}); err == nil {
 		w.Write(j)
 	}
-}
-
-//loads the fields for the DB/jwtsecret and sets them to AppConfig.
-func loadAppConfig() {
-	file, err := os.Open("src/common/config.json")
-	defer file.Close()
-	if err != nil {
-		fmt.Printf("loadAppConfig error: %s\n", err)
-	}
-
-	decoder := json.NewDecoder(file)
-
-	AppConfig = configuration{}
-	err = decoder.Decode(&AppConfig)
-	if err != nil {
-		fmt.Printf("loadAppConfigError: %s\n", err)
-	}
-
-}
-
-func getAppConfig() (AppConfig configuration) {
-
-	server := os.Getenv("localhost:8000")
-	dbHost := os.Getenv("PERFECT_PITCH_DATABASE_HOST")
-	dbUser := os.Getenv("PERFECT_PITCH_DATABASE_USER")
-	dbPwd := os.Getenv("PERFECT_PITCH_DATABASE_PWD")
-	db := os.Getenv("DATABASE_PP")
-
-	AppConfig = configuration{
-		Server: server,
-		DBHost: dbHost,
-		DBUser: dbUser,
-		DBPwd: dbPwd,
-		Database: db,
-	}
-	return
 }

@@ -1,13 +1,13 @@
-package routers
+package main
 
 import (
-"github.com/gorilla/mux"
-"github.com/RhettDelFierro/rhett_memory_match/src/controllers"
-"github.com/RhettDelFierro/rhett_memory_match/src/common"
+	"github.com/gorilla/mux"
+	"github.com/RhettDelFierro/rhett_memory_match/src/controllers"
+	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 
 )
 
-func Router(env controllers.DBQueries) *mux.Router {
+func Router(env Env) *mux.Router {
 
 	router := mux.NewRouter().StrictSlash(true)
 

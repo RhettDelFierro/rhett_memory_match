@@ -15,23 +15,21 @@ type Context struct {
 	ID             int64
 }
 
-//this means, that context is a UserDataHandler interface.
-//it'll also be one for Scores as well.
-//the repos for users and scores will use the methods from here to establish the tables.
-//the data from the tables will be CRUDed from repos methods.
-//but you want the *sql.DB abstraction here so they all can access this SAME db.
-
-//in summary, the statements and rows are all from Context.SQLAbstraction
-//the interface so I can pass this into functions. May not need the interface though.
-type UserDataHandler interface {
-	DbTable(table, username, email  string) (*sql.Rows, error)
-	PrepareRegisterStudent() (*sql.Stmt, error)
+type DBQueries interface {
+	Close()
+	DbUserTable(user, address  string) (string, error)
+	DbSpotifyUserTable(query string) (spotify_id string,err error)
+	DbSpotifyTokenTable(query string) (spotify_id string, err error)
+	DbModeTable(mode string) (round_id int64, err error)
+	Prepare(q string) (*sql.Stmt, error)
 }
 
 // Close *sql.DB
 func (c *Context) Close() {
 	c.SQLAbstraction.Close()
 }
+
+//pretty much Context is a type DBQueries interface.
 
 // DbUserTable returns a query to the users table for duplicates.
 func (c *Context) DbUserTable(user, address  string) (string, error) {
@@ -80,7 +78,7 @@ func (c *Context) Prepare(q string) (*sql.Stmt, error) {
 
 // NewContext creates a new Context object for EACH HTTP request
 func NewContext() *Context {
-	db := common.GetDB()
+	db,_ := common.GetDB()
 	context := &Context{
 		SQLAbstraction: db,
 	}
