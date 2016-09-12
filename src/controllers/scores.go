@@ -32,7 +32,7 @@ func(env *Env) Scores(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query := "SELECT round_id FROM rounds WHERE mode_name=?"
-	round_id, err := env.Db.DbModeTable(game_mode)
+	round_id, err := env.Db.Search(query,game_mode)
 	round_id = round_id.(int64)
 	if err != nil {
 		common.DisplayAppError(w, err, "Unexpected error in Scores DB", 500)

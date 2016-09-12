@@ -13,11 +13,9 @@ type Env struct {
 type DBQueries interface {
 	CloseDB()
 	PrepareQuery(q string) (*sql.Stmt, error)
+	Search(query string, args ...string) (result interface{},err error)
 	FindUser(user, address  string) (string, error)
-	DbSpotifyUserTable(query,s_id string) (spotify_id string,err error)
-	DbSpotifyTokenTable(query,s_id string) (spotify_id string, err error)
 	DbSpotifyGetToken(query, s_id string) (t models.Token, err error)
-	DbModeTable(mode string) (round_id int64, err error)
 }
 
 type DB struct {
@@ -47,28 +45,18 @@ func (db *DB) FindUser(user, address  string) (string, error) {
 			return email, nil
 		}
 	}
+
 	return "", err
 
 }
 
-func (db *DB) GetOneValue(query string, args ...string) (result interface{},err error) {
+func (db *DB) Search(query string, args ...string) (result interface{},err error) {
 	err = db.QueryRow(query,args).Scan(&result)
 	return
 }
 
-func (db *DB) DbSpotifyUserTable(query,s_id string) (spotify_id string,err error) {
-	err = db.QueryRow(query, s_id).Scan(&spotify_id)
-	return
-}
-
-func (db *DB) DbSpotifyTokenTable(query, s_id string) (spotify_id string, err error) {
-	err = db.QueryRow(query, s_id).Scan(&spotify_id)
-	return
-}
-
-func (db *DB) DbModeTable(query, mode string) (round_id int64, err error) {
-	err = db.QueryRow("SELECT round_id FROM rounds WHERE mode_name=?", query, mode).Scan(&round_id)
-	return
+func (db *DB) PrepareQuery(q string) (*sql.Stmt, error) {
+	return db.Prepare(q)
 }
 
 func (db *DB) DbSpotifyGetToken(query, s_id string) (t models.Token, err error) {
@@ -76,8 +64,3 @@ func (db *DB) DbSpotifyGetToken(query, s_id string) (t models.Token, err error) 
 	return
 }
 
-
-
-func (db *DB) PrepareQuery(q string) (*sql.Stmt, error) {
-	return db.Prepare(q)
-}

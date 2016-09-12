@@ -16,7 +16,6 @@ import (
 func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyAuthedUserProfile, env *Env) (error) {
 	var err error
 	var executeQuery string
-	var spotify_id string
 
 
 	//encrypt the token with it's methods.
@@ -26,7 +25,8 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 	}
 
 	query := "SELECT spotify_id FROM spotify_tokens WHERE spotify_id=?"
-	spotify_id, err = env.Db.DbSpotifyTokenTable(query,user.ID)
+	spotify_id, err := env.Db.Search(query,user.ID)
+	spotify_id = spotify_id.(string)
 	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
@@ -57,13 +57,14 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 func spotifyUserStorage(user *models.SpotifyAuthedUserProfile, env *Env) (err error) {
 
 	query := "SELECT spotify_id FROM spotify_users WHERE spotify_id=?"
-	_, err = env.Db.DbSpotifyUserTable(query,user.ID)
+	spotify_id, err := env.Db.Search(query,user.ID)
+	spotify_id = spotify_id.(string)
 	if err != nil && err != sql.ErrNoRows {
 		return
 	}
 
 	//new user through spotify:
-	if err == sql.ErrNoRows {
+	if err == sql.ErrNoRows || spotify_id == "" {
 		//save as new user:
 		query := "INSERT INTO spotify_users(spotify_id,display_name) VALUES(?,?)"
 		stmt, err := env.Db.PrepareQuery(query)
