@@ -51,8 +51,9 @@ func (db *DB) FindUser(user, address  string) (string, error) {
 
 }
 
-func (db *DB) GetOneValue(args ...string) (result interface{},err error) {
-
+func (db *DB) GetOneValue(query string, args ...string) (result interface{},err error) {
+	err = db.QueryRow(query,args).Scan(&result)
+	return
 }
 
 func (db *DB) DbSpotifyUserTable(query,s_id string) (spotify_id string,err error) {
