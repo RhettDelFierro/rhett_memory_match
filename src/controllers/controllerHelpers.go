@@ -11,6 +11,7 @@ import (
 	"errors"
 	"golang.org/x/oauth2"
 	"time"
+	"fmt"
 )
 
 func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyAuthedUserProfile, env *Env) (error) {
@@ -25,13 +26,12 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 	}
 
 	query := "SELECT spotify_id FROM spotify_tokens WHERE spotify_id=?"
-	spotify_id, err := env.Db.Search(query,user.ID)
-	spotify_id = spotify_id.(string)
+	id, err := env.Db.Search(query,user.ID)
 	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
 
-	if err == sql.ErrNoRows {
+	if id == nil || err == sql.ErrNoRows {
 		executeQuery = "INSERT INTO spotify_tokens(spotify_id,access_token,refresh_token,token_type,expiry) VALUES(?,?,?,?,?)"
 	} else {
 		executeQuery = "UPDATE spotify_tokens SET access_token=?, refresh_token=?, token_type=?, expiry=? WHERE spotify_id=?"
@@ -44,7 +44,8 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 	}
 
 	repo := &data.TokenRepository{S: stmt}
-	if spotify_id != "" {
+	if id != nil {
+		spotify_id := id.(string)
 		err = repo.UpdateToken(dbToken, spotify_id)
 	} else {
 		err = repo.StoreNewToken(dbToken, user.ID)
@@ -57,25 +58,26 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 func spotifyUserStorage(user *models.SpotifyAuthedUserProfile, env *Env) (err error) {
 
 	query := "SELECT spotify_id FROM spotify_users WHERE spotify_id=?"
-	spotify_id, err := env.Db.Search(query,user.ID)
-	spotify_id = spotify_id.(string)
+	_, err = env.Db.Search(query,user.ID)
 	if err != nil && err != sql.ErrNoRows {
 		return
 	}
 
 	//new user through spotify:
-	if err == sql.ErrNoRows || spotify_id == "" {
+	if err == sql.ErrNoRows {
 		//save as new user:
 		query := "INSERT INTO spotify_users(spotify_id,display_name) VALUES(?,?)"
 		stmt, err := env.Db.PrepareQuery(query)
 		defer stmt.Close()
 		if err != nil {
+			fmt.Println("error0")
 			return err
 		}
 
 		repo := &data.UserRepository{S: stmt}
 		err = repo.CreateSpotifyUser(user)
 		if err != nil {
+			fmt.Println("here's the error1")
 			return err
 		}
 
@@ -83,11 +85,13 @@ func spotifyUserStorage(user *models.SpotifyAuthedUserProfile, env *Env) (err er
 		stmt, err = env.Db.PrepareQuery(query)
 		defer stmt.Close()
 		if err != nil {
+			fmt.Println("errora")
 			return err
 		}
 		repo.S = stmt
 		err = repo.InsertSpotifyIntoUsers(user)
 		if err != nil {
+			fmt.Println("here's the error2")
 			return err
 		}
 	}
