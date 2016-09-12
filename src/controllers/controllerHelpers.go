@@ -45,7 +45,9 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 
 	repo := &data.TokenRepository{S: stmt}
 	if id != nil {
-		spotify_id := id.(string)
+		//no idea why id is being stored/pull as []uint8
+		byte_id,_ := id.([]uint8)
+		spotify_id := string(byte_id)
 		err = repo.UpdateToken(dbToken, spotify_id)
 	} else {
 		err = repo.StoreNewToken(dbToken, user.ID)
