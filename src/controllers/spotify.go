@@ -5,10 +5,7 @@ import (
 	"os"
 	"golang.org/x/oauth2"
 	"fmt"
-	"time"
-	"math/rand"
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
-	"errors"
 	"github.com/gorilla/sessions"
 	"encoding/json"
 	reqcontext "github.com/gorilla/context"
@@ -32,85 +29,6 @@ var (
 		TokenURL: "https://accounts.spotify.com/api/token",
 	}
 )
-
-func setup() AuthUser {
-	if client.Token != nil {
-		fmt.Println("there is a client.Token")
-		return AuthUser{}
-	}
-
-	id := os.Getenv("SPOTIFY_ID")
-	secret := os.Getenv("SPOTIFY_SECRET")
-	credentials := Credentials{id, secret}
-
-	redirectURL := "http://localhost:8000/callback"
-	scopes := []string{"user-read-private", "user-read-email", "user-library-read", "user-top-read", "streaming"}
-
-	return AuthUser{
-		config: &oauth2.Config{
-			ClientID: credentials.Id,
-			ClientSecret: credentials.Secret,
-			Endpoint: Endpoint,
-			RedirectURL: redirectURL,
-			Scopes: scopes,
-		},
-	}
-}
-
-func createCookie(state string) http.Cookie {
-
-	//expireCookie := time.Now().Add(time.Minute * 30)
-	expireCookie := time.Now().AddDate(-1, -2, -3)
-
-	return http.Cookie{Name: "Spotify_auth_state",
-		Value: state,
-		Expires: expireCookie,
-		HttpOnly: true,
-		MaxAge: -100,
-	}
-}
-
-func RandomString(strlen int) string {
-	rand.Seed(time.Now().UTC().UnixNano())
-	const chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	result := make([]byte, strlen)
-	for i := 0; i < strlen; i++ {
-		result[i] = chars[rand.Intn(len(chars))]
-	}
-	return string(result)
-}
-
-//sets up AuthUser struct which is our request to spotify accounts service in /authLogin:
-func GetURL(authUser AuthUser) (string, string) {
-	state := RandomString(30)
-
-	//.AuthCodeURL generates the url the user visits to authorize access to our app:
-	return authUser.config.AuthCodeURL(state), state
-}
-
-func (a *AuthUser) Token(state string, r *http.Request) (*oauth2.Token, error) {
-
-	code := r.FormValue("code")
-	if code == "" {
-		err := errors.New("spotify: didn't get access code")
-		return nil, err
-	}
-
-	if err := r.URL.Query().Get("error"); err != "" {
-		err := errors.New("'error' query parameter sent back in SpotifyCallback")
-		return nil, err
-	}
-
-	return a.config.Exchange(oauth2.NoContext, code)
-}
-
-//complete Auth process. Gets an *http.Client and sets on SpotifyClien.
-func (a *AuthUser) FinalAuth(token *oauth2.Token) SpotifyClient {
-	return SpotifyClient{
-		http: a.config.Client(oauth2.NoContext, token),
-		Token: token,
-	}
-}
 
 //handler for /authLogin
 func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
