@@ -91,7 +91,7 @@ func(env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func LoginUser(w http.ResponseWriter, r *http.Request) {
+func(env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	var usr LoginResource
 	var token string
@@ -109,9 +109,9 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		Email:    user.Email,
 		Password: user.Password,
 	}
-	context := NewContext();
+
 	query := "SELECT user_id,username,email,password FROM users WHERE email = ?"
-	stmt, err := context.Prepare(query)
+	stmt, err := env.DB.Prepare(query)
 	defer stmt.Close()
 	if err != nil {
 		common.DisplayAppError(w, err, "Error in database query", 500)
