@@ -58,6 +58,7 @@ func setup() AuthUser {
 }
 
 func createCookie(state string) http.Cookie {
+
 	//expireCookie := time.Now().Add(time.Minute * 30)
 	expireCookie := time.Now().AddDate(-1, -2, -3)
 

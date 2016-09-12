@@ -22,7 +22,9 @@ func main() {
 		log.Panic(err)
 	}
 
-	env := &controllers.Env{db}
+	DB := &controllers.DB{db}
+
+	env := &controllers.Env{DB}
 
 	router := routers.Router(env)
 	handler := cors.Default().Handler(router)

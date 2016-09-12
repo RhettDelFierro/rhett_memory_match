@@ -7,7 +7,7 @@ import (
 )
 
 type Env struct {
-	DB DBQueries
+	Db DBQueries
 }
 
 
@@ -16,31 +16,31 @@ type DB struct {
 	*sql.DB
 }
 type DBQueries interface {
-	Close()
+	CloseDB()
 	DbUserTable(user, address  string) (string, error)
-	DbSpotifyUserTable(query string) (spotify_id string,err error)
-	DbSpotifyTokenTable(query string) (spotify_id string, err error)
+	DbSpotifyUserTable(query,s_id string) (spotify_id string,err error)
+	DbSpotifyTokenTable(query,s_id string) (spotify_id string, err error)
 	DbSpotifyGetToken(query, s_id string) (t models.Token, err error)
 	DbModeTable(mode string) (round_id int64, err error)
 	Prepare(q string) (*sql.Stmt, error)
 }
 
 // Close *sql.DB
-func (DB *DB) Close() {
-	DB.Close()
+func (db *DB) CloseDB() {
+	db.Close()
 }
 
 //pretty much Context is a type DBQueries interface.
 
 // DbUserTable returns a query to the users table for duplicates.
-func (DB *DB) DbUserTable(user, address  string) (string, error) {
+func (db *DB) DbUserTable(user, address  string) (string, error) {
 
 	var user_id int64
 	var username string
 	var email string
 	var q = "SELECT user_id, email, username FROM users WHERE username=? || email=?"
 
-	err := DB.QueryRow(q, user, address).Scan(&user_id, &email, &username)
+	err := db.QueryRow(q, user, address).Scan(&user_id, &email, &username)
 
 	if err == nil {
 		if user == username {
@@ -52,28 +52,28 @@ func (DB *DB) DbUserTable(user, address  string) (string, error) {
 	return "", err
 }
 
-func (DB *DB) DbSpotifyUserTable(query,s_id string) (spotify_id string,err error) {
-	err = DB.QueryRow(query, s_id).Scan(&spotify_id)
+func (db *DB) DbSpotifyUserTable(query,s_id string) (spotify_id string,err error) {
+	err = db.QueryRow(query, s_id).Scan(&spotify_id)
 	return
 }
 
-func (DB *DB) DbSpotifyTokenTable(query, s_id string) (spotify_id string, err error) {
-	err = DB.QueryRow(query, s_id).Scan(&spotify_id)
+func (db *DB) DbSpotifyTokenTable(query, s_id string) (spotify_id string, err error) {
+	err = db.QueryRow(query, s_id).Scan(&spotify_id)
 	return
 }
 
-func (DB *DB) DbSpotifyGetToken(query, s_id string) (t models.Token, err error) {
-	err = DB.QueryRow(query, s_id).Scan(&t.Access,&t.Refresh,&t.Type,&t.Expiry)
+func (db *DB) DbSpotifyGetToken(query, s_id string) (t models.Token, err error) {
+	err = db.QueryRow(query, s_id).Scan(&t.Access,&t.Refresh,&t.Type,&t.Expiry)
 	return
 }
 
-func (DB *DB) DbModeTable(mode string) (round_id int64, err error) {
-	err = DB.QueryRow("SELECT round_id FROM rounds WHERE mode_name=?", mode).Scan(&round_id)
+func (db *DB) DbModeTable(mode string) (round_id int64, err error) {
+	err = db.QueryRow("SELECT round_id FROM rounds WHERE mode_name=?", mode).Scan(&round_id)
 	return
 }
 
-func (DB *DB) Prepare(q string) (*sql.Stmt, error) {
-	return DB.Prepare(q)
+func (db *DB) Prepare(q string) (*sql.Stmt, error) {
+	return db.Prepare(q)
 }
 
 

@@ -27,7 +27,7 @@ func(env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	//defer context.Close()
 
-	match, err := env.DB.DbUserTable(user.Username, user.Email)
+	match, err := env.Db.DbUserTable(user.Username, user.Email)
 
 	//DB error
 	if err != nil && err != sql.ErrNoRows {
@@ -39,7 +39,7 @@ func(env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	//entry is not duplicate:
 	if err == sql.ErrNoRows {
 		query := "INSERT INTO users(username,email,password) VALUES(?,?,?)"
-		stmt, err := env.DB.Prepare(query)
+		stmt, err := env.Db.Prepare(query)
 		defer stmt.Close()
 		if err != nil {
 			fmt.Println("error context.Prepare() for RegisterUser()")
@@ -111,7 +111,7 @@ func(env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query := "SELECT user_id,username,email,password FROM users WHERE email = ?"
-	stmt, err := env.DB.Prepare(query)
+	stmt, err := env.Db.Prepare(query)
 	defer stmt.Close()
 	if err != nil {
 		common.DisplayAppError(w, err, "Error in database query", 500)

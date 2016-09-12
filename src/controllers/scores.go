@@ -31,7 +31,7 @@ func(env *Env) Scores(w http.ResponseWriter, r *http.Request) {
 		scoreData.User_ID = id.(int64)
 	}
 
-	round_id, err := env.DB.DbModeTable(game_mode)
+	round_id, err := env.Db.DbModeTable(game_mode)
 	if err != nil {
 		common.DisplayAppError(w, err, "Unexpected error in Scores DB", 500)
 		return
@@ -41,7 +41,7 @@ func(env *Env) Scores(w http.ResponseWriter, r *http.Request) {
 
 	//scoreData.Date_Complete = timeStamp
 	query := "INSERT INTO scores(round_id,score,user_id) VALUES(?,?,?)"
-	stmt, err := env.DB.Prepare(query)
+	stmt, err := env.Db.Prepare(query)
 	defer stmt.Close()
 	if err != nil {
 		common.DisplayAppError(w, err, "Unexpected error in Scores DB", 500)

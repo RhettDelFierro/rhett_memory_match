@@ -11,7 +11,6 @@ import (
 	"errors"
 	"golang.org/x/oauth2"
 	"time"
-	"golang.org/x/net/context"
 )
 
 func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyAuthedUserProfile, env *Env) (error) {
@@ -27,7 +26,7 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 	}
 
 	query := "SELECT spotify_id FROM spotify_tokens WHERE spotify_id=?"
-	spotify_id, err = env.DB.DbSpotifyTokenTable(query,user.ID)
+	spotify_id, err = env.Db.DbSpotifyTokenTable(query,user.ID)
 	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
@@ -38,7 +37,7 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 		executeQuery = "UPDATE spotify_tokens SET access_token=?, refresh_token=?, token_type=?, expiry=? WHERE spotify_id=?"
 	}
 
-	stmt, err := env.DB.Prepare(executeQuery)
+	stmt, err := env.Db.Prepare(executeQuery)
 	defer stmt.Close()
 	if err != nil {
 		return err
@@ -58,7 +57,7 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 func spotifyUserStorage(user *models.SpotifyAuthedUserProfile, env *Env) (err error) {
 
 	query := "SELECT spotify_id FROM spotify_users WHERE spotify_id=?"
-	_, err = env.DB.DbSpotifyUserTable(query,user.ID)
+	_, err = env.Db.DbSpotifyUserTable(query,user.ID)
 	if err != nil && err != sql.ErrNoRows {
 		return
 	}
@@ -67,7 +66,7 @@ func spotifyUserStorage(user *models.SpotifyAuthedUserProfile, env *Env) (err er
 	if err == sql.ErrNoRows {
 		//save as new user:
 		query := "INSERT INTO spotify_users(spotify_id,display_name) VALUES(?,?)"
-		stmt, err := env.DB.Prepare(query)
+		stmt, err := env.Db.Prepare(query)
 		defer stmt.Close()
 		if err != nil {
 			return err
@@ -80,7 +79,7 @@ func spotifyUserStorage(user *models.SpotifyAuthedUserProfile, env *Env) (err er
 		}
 
 		query = "INSERT INTO users(username,email) VALUES(?,?)"
-		stmt, err = env.DB.Prepare(query)
+		stmt, err = env.Db.Prepare(query)
 		defer stmt.Close()
 		if err != nil {
 			return err
@@ -128,7 +127,7 @@ func pullToken(r *http.Request, env *Env) (token *oauth2.Token, err error) {
 
 	//now make a call to the database and get the tokens.
 	query := "SELECT access_token,refresh_token,token_type,expiry FROM spotify_tokens WHERE spotify_id=?"
-	mToken, err = env.DB.DbSpotifyGetToken(query,spotify_id)
+	mToken, err = env.Db.DbSpotifyGetToken(query,spotify_id)
 	if err != nil {
 		return
 	}
