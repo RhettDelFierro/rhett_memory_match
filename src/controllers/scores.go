@@ -7,7 +7,6 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 	"github.com/gorilla/mux"
 	reqcontext "github.com/gorilla/context"
-	"golang.org/x/net/context"
 )
 
 func(env *Env) Scores(w http.ResponseWriter, r *http.Request) {

@@ -11,7 +11,7 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
 )
 
-func RegisterUser(w http.ResponseWriter, r *http.Request) {
+func(env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	var usr UserResource
 	var token string
@@ -25,10 +25,9 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	user := &usr.Data
 
-	context := NewContext();
 	//defer context.Close()
 
-	match, err := context.DbUserTable(user.Username, user.Email)
+	match, err := env.DB.DbUserTable(user.Username, user.Email)
 
 	//DB error
 	if err != nil && err != sql.ErrNoRows {
@@ -40,7 +39,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	//entry is not duplicate:
 	if err == sql.ErrNoRows {
 		query := "INSERT INTO users(username,email,password) VALUES(?,?,?)"
-		stmt, err := context.Prepare(query)
+		stmt, err := env.DB.Prepare(query)
 		defer stmt.Close()
 		if err != nil {
 			fmt.Println("error context.Prepare() for RegisterUser()")
@@ -90,10 +89,6 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(j)
 	}
-}
-
-func RegisterSpotify() {
-
 }
 
 func LoginUser(w http.ResponseWriter, r *http.Request) {
