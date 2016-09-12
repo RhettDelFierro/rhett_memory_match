@@ -143,7 +143,7 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 }
 
 //handler for /callback
-func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
+func(env *Env) SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 	//check cookie:
 	session, err := store.Get(r, "spotify_auth_state")
 	if err != nil {
@@ -182,13 +182,13 @@ func SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//check and register if new:
-	err = spotifyUserStorage(user)
+	err = spotifyUserStorage(user, env)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error in spotifyUserStorage", 500)
 		return
 	}
 	//store token in DB
-	err = spotifyTokenStorage(encryptToken, user)
+	err = spotifyTokenStorage(encryptToken, user, env)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error in spotifyTokenStorage", 500)
 		return
