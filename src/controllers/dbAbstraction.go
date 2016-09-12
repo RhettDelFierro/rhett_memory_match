@@ -10,30 +10,28 @@ type Env struct {
 	Db DBQueries
 }
 
-
-// Context used for maintaining HTTP Request Context
-type DB struct {
-	*sql.DB
-}
 type DBQueries interface {
 	CloseDB()
-	DbUserTable(user, address  string) (string, error)
+	PrepareQuery(q string) (*sql.Stmt, error)
+	FindUser(user, address  string) (string, error)
 	DbSpotifyUserTable(query,s_id string) (spotify_id string,err error)
 	DbSpotifyTokenTable(query,s_id string) (spotify_id string, err error)
 	DbSpotifyGetToken(query, s_id string) (t models.Token, err error)
 	DbModeTable(mode string) (round_id int64, err error)
-	Prepare(q string) (*sql.Stmt, error)
 }
+
+type DB struct {
+	*sql.DB
+}
+
 
 // Close *sql.DB
 func (db *DB) CloseDB() {
 	db.Close()
 }
 
-//pretty much Context is a type DBQueries interface.
-
-// DbUserTable returns a query to the users table for duplicates.
-func (db *DB) DbUserTable(user, address  string) (string, error) {
+//FindUser returns a query to the users table for duplicates.
+func (db *DB) FindUser(user, address  string) (string, error) {
 
 	var user_id int64
 	var username string
@@ -50,6 +48,11 @@ func (db *DB) DbUserTable(user, address  string) (string, error) {
 		}
 	}
 	return "", err
+
+}
+
+func (db *DB) GetOneValue(args ...string) (result interface{},err error) {
+
 }
 
 func (db *DB) DbSpotifyUserTable(query,s_id string) (spotify_id string,err error) {
@@ -62,30 +65,18 @@ func (db *DB) DbSpotifyTokenTable(query, s_id string) (spotify_id string, err er
 	return
 }
 
+func (db *DB) DbModeTable(query, mode string) (round_id int64, err error) {
+	err = db.QueryRow("SELECT round_id FROM rounds WHERE mode_name=?", query, mode).Scan(&round_id)
+	return
+}
+
 func (db *DB) DbSpotifyGetToken(query, s_id string) (t models.Token, err error) {
 	err = db.QueryRow(query, s_id).Scan(&t.Access,&t.Refresh,&t.Type,&t.Expiry)
 	return
 }
 
-func (db *DB) DbModeTable(mode string) (round_id int64, err error) {
-	err = db.QueryRow("SELECT round_id FROM rounds WHERE mode_name=?", mode).Scan(&round_id)
-	return
-}
 
-func (db *DB) Prepare(q string) (*sql.Stmt, error) {
+
+func (db *DB) PrepareQuery(q string) (*sql.Stmt, error) {
 	return db.Prepare(q)
 }
-
-
-// NewContext creates a new Context object for EACH HTTP request
-//func NewContext() (*DB,error) {
-//	var context Context
-//	newDB,err := common.GetDB()
-//	if err != nil {
-//		return context, err
-//	}
-//	context = &Context{
-//		SQLAbstraction: newDB,
-//	}
-//	return context,err
-//}

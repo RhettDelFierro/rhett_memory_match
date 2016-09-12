@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/context"
 	"errors"
 	"github.com/dgrijalva/jwt-go/request"
+	"os"
 )
 
 // AppClaims provides custom claim for JWT
@@ -79,8 +80,8 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	signedToken, err := token.SignedString([]byte(AppConfig.Secret))
+	tokenSecret :=os.Getenv("COOKIE_JWT_USER_SECRET")
+	signedToken, err := token.SignedString([]byte(tokenSecret))
 
 	return http.Cookie{Name: "Auth",
 		Value: signedToken,
@@ -89,7 +90,7 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 		Path: "/"}, err
 }
 
-//generating the jwt for the CSRF:
+//generating the jwt for CSRF:
 func GenerateToken(name, role string, id int64) (signedTokenString string, err error) {
 
 	claims := AppClaims{
@@ -166,6 +167,8 @@ func PullCookie(r *http.Request, name string) ([]string, error) {
 //validates the jwt in the Cookie:
 func cookieHandler(cookie []string) (token *jwt.Token, err error) {
 
+	tokenSecret :=os.Getenv("COOKIE_JWT_USER_SECRET")
+
 
 	token, err = jwt.ParseWithClaims(cookie[1], &AppClaims{},
 		func(token *jwt.Token) (interface{}, error) {
@@ -173,7 +176,7 @@ func cookieHandler(cookie []string) (token *jwt.Token, err error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("Unexpected signing method %v", token.Header["alg"])
 			}
-			return []byte(AppConfig.Secret), nil
+			return []byte(tokenSecret), nil
 		})
 	return
 }

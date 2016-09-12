@@ -8,21 +8,6 @@ import (
 	"os"
 )
 
-
-//checks if DB is still
-func GetDB() (*sql.DB, error) {
-
-	newDB, err := CreateDbSession()
-	if err != nil {
-		return nil, err
-	}
-	if err = newDB.Ping(); err != nil {
-		return nil, err
-	}
-
-	return newDB, err
-}
-
 func CreateDbSession() (db *sql.DB, err error) {
 	var AppConfig configuration
 

@@ -7,20 +7,6 @@ let newNotes = notes;
 //take counter array and return a random targetNote if it hasn't been played 5 times.
 export function randomNotes({ tracker, mode, round }) {
 
-    //let instrument;
-    //let octave;
-    //let count = 1;
-    //let availableNotes = List();
-    //
-    //if (mode !== 'posttest') {
-    //    instrument = 'piano'
-    //    octave = 'four'
-    //    count = 5;
-    //    availableNotes = tracker.filter((item) => item.getIn([instrument, octave]) < count)
-    //} else {
-    //    return filterList({tracker, count: count})
-    //}
-
     let instrument = 'piano'
     let octave = 'four'
     let count = 5;
@@ -139,19 +125,8 @@ export async function buffer({ randomMaskingNotes, maskingNotesVolume, noiseVolu
 //this is the api call:
 export async function playNotes({ note, instrument = 'piano', octave = 'four', time = 1000,
     volume = 1, notesBuffer, masking = true }) {
-    //maybe have to make a Map()?
-    //return new Promise((resolve, reject) => {
+
     const source = context.createBufferSource();
-    // source.buffer = notes[note].buffer
-
-    //code for the volume
-    //notes[note].gainNode = context.createGain()
-    //source.connect(notes[note].gainNode)
-    //notes[note].volume = volume
-    //notes[note].gainNode.gain.value = notes[note].volume
-    //notes[note].gainNode.connect(context.destination)
-
-    //get a copy of the note:
 
     let noteBuffer = await notesBuffer.get(note)[instrument][octave]
     source.buffer = noteBuffer

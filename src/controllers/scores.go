@@ -41,7 +41,7 @@ func(env *Env) Scores(w http.ResponseWriter, r *http.Request) {
 
 	//scoreData.Date_Complete = timeStamp
 	query := "INSERT INTO scores(round_id,score,user_id) VALUES(?,?,?)"
-	stmt, err := env.Db.Prepare(query)
+	stmt, err := env.Db.PrepareQuery(query)
 	defer stmt.Close()
 	if err != nil {
 		common.DisplayAppError(w, err, "Unexpected error in Scores DB", 500)

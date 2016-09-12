@@ -37,7 +37,7 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 		executeQuery = "UPDATE spotify_tokens SET access_token=?, refresh_token=?, token_type=?, expiry=? WHERE spotify_id=?"
 	}
 
-	stmt, err := env.Db.Prepare(executeQuery)
+	stmt, err := env.Db.PrepareQuery(executeQuery)
 	defer stmt.Close()
 	if err != nil {
 		return err
@@ -66,7 +66,7 @@ func spotifyUserStorage(user *models.SpotifyAuthedUserProfile, env *Env) (err er
 	if err == sql.ErrNoRows {
 		//save as new user:
 		query := "INSERT INTO spotify_users(spotify_id,display_name) VALUES(?,?)"
-		stmt, err := env.Db.Prepare(query)
+		stmt, err := env.Db.PrepareQuery(query)
 		defer stmt.Close()
 		if err != nil {
 			return err
@@ -79,7 +79,7 @@ func spotifyUserStorage(user *models.SpotifyAuthedUserProfile, env *Env) (err er
 		}
 
 		query = "INSERT INTO users(username,email) VALUES(?,?)"
-		stmt, err = env.Db.Prepare(query)
+		stmt, err = env.Db.PrepareQuery(query)
 		defer stmt.Close()
 		if err != nil {
 			return err
