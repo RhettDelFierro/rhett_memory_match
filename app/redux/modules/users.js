@@ -7,12 +7,24 @@ const UNAUTH_USER = 'UNAUTH_USER'
 const FETCHING_USER = 'FETCHING_USER'
 const FETCHING_USER_SUCCESS = 'FETCHING_USER_SUCCESS'
 const LOGOUT_USER = 'LOGOUT_USER'
+const SPOTIFY_AUTH = 'SPOTIFY_AUTH'
+const FORM_LOGIN = 'FORM_LOGIN'
 
 export function authUser(uid) {
     return {
         type: AUTH_USER,
         uid
     }
+}
+
+export function spotifyAuth(){
+    return {
+        type: SPOTIFY_AUTH
+    }
+}
+
+export function formLogin(){
+    type: FORM_LOGIN
 }
 
 function unauthUser() {
@@ -47,6 +59,7 @@ export function register({email, username, password}) {
             console.log("register thunk coming back from userFunctions.registerUser:", user)
             dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
+            dispatch(formLogin())
             dispatch(authUser(user_id))
             return user_id
         } catch (error) {
@@ -64,6 +77,7 @@ export function login({email, password}) {
             const user_id = data.user.user_id
             dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
+            dispatch(formLogin())
             dispatch(authUser(user_id))
             return user_id
         } catch (error) {
@@ -103,7 +117,9 @@ const initialState = fromJS({
     isAuthed: false,
     isFetching: false,
     error: false,
-    authId: ''
+    authId: '',
+    spotifyAuth: false,
+    formLogin: false
 })
 
 export default function users(state = initialState, action) {
@@ -117,12 +133,21 @@ export default function users(state = initialState, action) {
             return state.merge({
                 [action.user_id]: user(state.get(action.user_id), action)
             })
+        case FORM_LOGIN:
+            return state.merge({
+                formLogin: true
+            })
+        case SPOTIFY_AUTH:
+            return state.merge({
+                spotifyAuth: true
+            })
         case LOGOUT_USER:
             return state.merge({
                 isAuthed: false,
                 isFecthing: false,
-                authId: ''
-                //should get rid of [action.user_id]: as well.
+                authId: '',
+                spotifyAuth: false,
+                formLogin: false
             })
         default:
             return state

@@ -1,7 +1,7 @@
 import { fromJS, toOrderedMap } from 'immutable'
 import { tallyCount } from 'utils/scoresFunctions'
 import { spotifyAuth, getSongsAPI, getTrackURI } from 'utils/songsAPI'
-import { authUser } from 'redux/modules/users'
+import { authUser,spotifyAuth } from 'redux/modules/users'
 import { closeModal } from './modal'
 import { openSongModal } from './songModal'
 
@@ -33,6 +33,7 @@ export function spotifyLogin(){
         //do NOT forget to throw in the error callback also.
         spotifyAuth({callback: ({id}) =>{
             dispatch(closeModal())
+            dispatch(spotifyAuth())
             dispatch(authUser(id))
         }})
     }

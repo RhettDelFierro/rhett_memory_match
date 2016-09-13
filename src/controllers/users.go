@@ -93,8 +93,6 @@ func (env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
-
 	//getting jwt for cookie:
 	cookie, err := common.GenerateCookieToken(loginUser.Username, "user", userInfo.User_ID)
 	if err != nil {
