@@ -17,7 +17,7 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 )
 
 let RegisterForm = (props) => {
-
+    //could also user handleSubmit(() => register)
     const { handleSubmit, pristine, reset, submitting, register } = props
     return (
         <form onSubmit={handleSubmit(register.bind(this))}>

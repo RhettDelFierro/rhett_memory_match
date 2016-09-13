@@ -28,12 +28,12 @@ export async function getTrackURI({trackId}) {
 }
 
 //do NOT forget the error callback.
-export async function spotifyAuth({callback}) {
+export async function spotifyAuthAPI({callback}) {
     try {
         const response = await axios.get('http://localhost:8000/authLogin', {withCredentials: true})
         login({url: response.data.uri, callback})
     } catch (error) {
-        Error('Error in spotifyAuth', error)
+        Error('Error in spotifyAuthAPI', error)
     }
 }
 

@@ -24,7 +24,9 @@ export function spotifyAuth(){
 }
 
 export function formLogin(){
-    type: FORM_LOGIN
+    return {
+        type: FORM_LOGIN
+    }
 }
 
 function unauthUser() {
@@ -112,14 +114,13 @@ function user(state = userInitialState, action) {
     }
 }
 
-
 const initialState = fromJS({
     isAuthed: false,
     isFetching: false,
     error: false,
     authId: '',
-    spotifyAuth: false,
-    formLogin: false
+    spotifyAuthed: false,
+    appLogin: false
 })
 
 export default function users(state = initialState, action) {
@@ -135,19 +136,19 @@ export default function users(state = initialState, action) {
             })
         case FORM_LOGIN:
             return state.merge({
-                formLogin: true
+                appLogin: true
             })
         case SPOTIFY_AUTH:
             return state.merge({
-                spotifyAuth: true
+                spotifyAuthed: true
             })
         case LOGOUT_USER:
             return state.merge({
                 isAuthed: false,
                 isFecthing: false,
                 authId: '',
-                spotifyAuth: false,
-                formLogin: false
+                spotifyAuthed: false,
+                appLogin: false
             })
         default:
             return state

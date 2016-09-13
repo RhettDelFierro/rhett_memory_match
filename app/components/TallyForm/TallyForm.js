@@ -5,7 +5,7 @@ import { List, OrderedMap } from 'immutable'
 import { Field, FieldArray, reduxForm } from 'redux-form/immutable'
 import * as userActionCreators from 'redux/modules/users'
 import * as songActionCreators from 'redux/modules/songs'
-import { error, container } from './styles.css'
+import { error, container, spotify } from './styles.css'
 
 //define stateless component to render input and errors:
 const renderField = ({ input, label, type, id}) => (
@@ -32,14 +32,16 @@ const renderNotes = ({ fields, notesCount, meta: { error } }) => (
 
 let TallyForm = (props) => {
 
-    const { handleSubmit, pristine, reset, submitting, notesMissed, getSongs } = props
+    const { handleSubmit, pristine, reset, submitting, notesMissed, getSongs, spotifyAuthed, spotifyLogin } = props
 
     return (
         <form className={container} onSubmit={handleSubmit(getSongs.bind(this))}>
 
             <FieldArray name="notesMissed" component={renderNotes} notesCount={notesMissed}/>
             <div>
-                <button type="submit" disabled={submitting}>Submit</button>
+                {spotifyAuthed === true
+                    ? <button type="submit" disabled={submitting}>Submit</button>
+                    : <button type="button" className={spotify} onClick={spotifyLogin}>Sign In Spotify</button>}
                 {' '}
                 <button type="button" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
             </div>
@@ -47,11 +49,12 @@ let TallyForm = (props) => {
     )
 }
 
-function mapStateToProps({scores,songs}) {
+function mapStateToProps({scores,songs,users}) {
     return {
         notesMissed: scores.get('notesMissed'),
         notesSelected: songs.get('notesSelected'),
-        fetchingSongs: songs.get('fetchingSongs')
+        fetchingSongs: songs.get('fetchingSongs'),
+        spotifyAuthed: users.get('spotifyAuthed')
     }
 }
 
@@ -60,7 +63,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 TallyForm.propTypes = {
-    notesMissed: PropTypes.instanceOf(OrderedMap).isRequired
+    notesMissed: PropTypes.instanceOf(OrderedMap).isRequired,
+    spotifyAuthed: PropTypes.bool.isRequired,
+    spotifyLogin: PropTypes.func.isRequired
 }
 
 TallyForm = reduxForm({

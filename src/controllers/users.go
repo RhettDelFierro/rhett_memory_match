@@ -94,7 +94,7 @@ func (env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//getting jwt for cookie:
-	cookie, err := common.GenerateCookieToken(loginUser.Username, "user", userInfo.User_ID)
+	cookie, err := common.GenerateCookieToken(userInfo.Username, "user", userInfo.User_ID)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error while generating the access token for cookie", 500)
 		return
