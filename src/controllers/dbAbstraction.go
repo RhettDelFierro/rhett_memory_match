@@ -11,6 +11,7 @@ type Env struct {
 }
 
 type DBQueries interface {
+	BeginTx() (tx *sql.Tx,err error)
 	CloseDB()
 	PrepareQuery(q string) (*sql.Stmt, error)
 	Search(query string,args ...interface{}) (result interface{},err error)
@@ -20,6 +21,14 @@ type DBQueries interface {
 
 type DB struct {
 	*sql.DB
+}
+
+func (db *DB) BeginTx() (tx *sql.Tx,err error) {
+	tx, err = db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	return tx
 }
 
 func (db *DB) CloseDB() {
@@ -45,6 +54,11 @@ func (db *DB) FindUser(user, address string) (string, error) {
 	}
 
 	return "", err
+
+}
+
+/////////DON'T FORGET TO ADD TO INTERFACE
+func (db *DB) RegisterUser() () {
 
 }
 

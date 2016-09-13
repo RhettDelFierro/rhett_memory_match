@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
-	"log"
 	"database/sql"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
 )
@@ -25,44 +24,13 @@ func(env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	user := &usr.Data
 
-	//defer context.Close()
-
-	match, err := env.Db.FindUser(user.Username, user.Email)
-
+	err := RegisterUserDB(user,env)
 	//DB error
-	if err != nil && err != sql.ErrNoRows {
-		fmt.Println(err)
-		fmt.Println("error in registering student")
+	if err != nil{
+		//maybe make an error stuct to tell whether it was the username or email duplicate.
+		common.DisplayAppError(w,err,"User could not be registered.",500)
 		return
 	}
-
-	//entry is not duplicate:
-	if err == sql.ErrNoRows {
-		query := "INSERT INTO users(username,email,password) VALUES(?,?,?)"
-		stmt, err := env.Db.PrepareQuery(query)
-		defer stmt.Close()
-		if err != nil {
-			fmt.Println("error context.PrepareQuery() for RegisterUser()")
-			log.Fatal(err)
-		}
-
-		//Store then Execute Prepare statement and update DB.
-		repo := &data.UserRepository{S: stmt}
-		user_id, err := repo.CreateUser(user)
-		if err != nil {
-			fmt.Println("error context.CreateUser")
-			log.Fatal(err)
-		}
-		user.User_ID = user_id
-		user.HashPassword = nil
-	} else {
-		//write that it's a duplicate. Do not add to db.
-		fmt.Println("this already exists:", match)
-		return
-	}
-
-	//double checking the password the user entered is not sent:
-	user.Password = ""
 
 	cookie, err := common.GenerateCookieToken(user.Username, "user", user.User_ID)
 	if err != nil {

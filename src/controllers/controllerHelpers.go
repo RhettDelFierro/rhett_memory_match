@@ -235,3 +235,75 @@ func getUserToken(decryptToken string,mToken models.Token ) (*oauth2.Token, erro
 
 	return token, err
 }
+
+func RegisterUserDB(user *models.User, env *Env) (err error){
+	var user_id int64
+	var username string
+	var email string
+	var stmt *sql.Stmt
+
+	query := "SELECT user_id, email, username FROM users WHERE username=? || email=?"
+	tx,err := env.Db.BeginTx()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	err = tx.QueryRow(query, user.User_ID, user.Email).Scan(user_id,username,email)
+	if err != nil && err != sql.ErrNoRows{
+		return err
+	}
+
+	if err == nil {
+		if user.Username == username {
+			err = errors.New(fmt.Sprintf("Username %s already taken", username))
+			return err
+		} else if user.Email == email {
+			err = errors.New(fmt.Sprintf("Email %s already taken", email))
+			return err
+		}
+	}
+
+	//store user and password into DB:
+	if err == sql.ErrNoRows {
+		query := "INSERT INTO users(username,email) VALUES(?,?)"
+		stmt, err = tx.Prepare(query)
+		if err != nil {
+			err = errors.New("error in tx.Prepare()")
+			return err
+		}
+
+		repo := &data.UserRepository{S: stmt}
+		user_id, err = repo.CreateUser(user)
+		if err != nil {
+			err = errors.New("error in repo.CreateUser()")
+			return err
+		}
+
+		query = "INSERT INTO passwords(user_id,password) VALUES(?,?)"
+		stmt, err = tx.Prepare(query)
+		if err != nil {
+			err = errors.New("error in tx.Prepare()")
+			return err
+		}
+
+		repo = &data.UserRepository{S: stmt}
+		user_id, err = repo.InsertPassword(user)
+		if err != nil {
+			err = errors.New("error in repo.CreateUser()")
+			return err
+		}
+
+		err = tx.Commit()
+		if err != nil {
+			return err
+		}
+		stmt.Close()
+	}
+
+	//just to make sure:
+	user.User_ID = user_id
+	user.HashPassword = nil
+	user.Password = ""
+
+	return
+}

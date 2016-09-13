@@ -14,12 +14,36 @@ type UserRepository struct {
 	S *sql.Stmt
 }
 
-func (r *UserRepository) CreateUser(user *models.User) (user_id int64, err error) {
+func (r *UserRepository) CreateSpotifyUser(user *models.SpotifyAuthedUserProfile) (error) {
 
+	_, err := r.S.Exec(user.ID, user.Display_name, user.Email)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *UserRepository) InsertPassword(user *models.User)  error {
 	user.HashPassword = cleanPassword(user.Password)
 
+	_,err := r.S.Exec(user.HashPassword)
+
+	if err != nil {
+		return err
+	}
+
+	user.HashPassword = nil
+	user.Password = ""
+
+	return err
+}
+
+
+func (r *UserRepository) CreateUser(user *models.User) (user_id int64, err error) {
+
 	//now insert:
-	result, err := r.S.Exec(user.Username, user.Email, user.HashPassword)
+	result, err := r.S.Exec(user.Username, user.Email)
 	if err != nil {
 		return
 	}
@@ -34,16 +58,6 @@ func cleanPassword(password string) []byte {
 	}
 
 	return hpass
-}
-
-func (r *UserRepository) CreateSpotifyUser(user *models.SpotifyAuthedUserProfile) (error) {
-
-	_, err := r.S.Exec(user.ID, user.Display_name, user.Email)
-
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func (r *UserRepository) Login(user models.User) (u models.User, err error) {
