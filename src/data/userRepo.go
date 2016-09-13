@@ -63,7 +63,7 @@ func cleanPassword(password string) []byte {
 
 func (r *UserRepository) Login(user models.User) (u models.User, err error) {
 
-	err = r.S.QueryRow(user.Email).Scan(&u.User_ID, &u.Username, &u.Email, &u.HashPassword)
+	err = r.S.QueryRow(user.User_ID).Scan(&u.HashPassword)
 	if err != nil {
 		return
 	}

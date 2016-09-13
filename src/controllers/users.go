@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"encoding/json"
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
-	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func(env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
+func (env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	var usr UserResource
 	var token string
@@ -23,11 +23,11 @@ func(env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	user := &usr.Data
 
-	err := RegisterUserDB(user,env)
+	err := RegisterUserDB(user, env)
 	//DB error
-	if err != nil{
+	if err != nil {
 		//maybe make an error stuct to tell whether it was the username or email duplicate.
-		common.DisplayAppError(w,err,"User could not be registered.",500)
+		common.DisplayAppError(w, err, "User could not be registered.", 500)
 		return
 	}
 
@@ -58,7 +58,7 @@ func(env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func(env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
+func (env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	var usr LoginResource
 	var token string
@@ -77,34 +77,47 @@ func(env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 		Password: user.Password,
 	}
 
-	query := "SELECT user_id,username,email,password FROM users WHERE email = ?"
-	stmt, err := env.Db.PrepareQuery(query)
-	defer stmt.Close()
+	//login logic robust enough to be done inline:
+	query := "SELECT passwords.password,users.user_id FROM passwords INNER JOIN users ON passwords.user_id = users.user_id WHERE users.email=?"
+	hash_password, err := env.Db.Search(query,loginUser.Email)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error in database query", 500)
 		return
 	}
-	repo := &data.UserRepository{S: stmt}
-	userInfo, err := repo.Login(loginUser)
-	if err != nil {
-		common.DisplayAppError(w, err, "Invalid login credentials", 401)
-	}
+	fmt.Println(hash_password)
+	loginUser.HashPassword = hash_password.([]byte)
 
+	err = bcrypt.CompareHashAndPassword(loginUser.HashPassword, []byte(loginUser.Password))
+	if err != nil {
+		loginUser = models.User{}
+		common.DisplayAppError(w, err, "Invalid login credentials", 401)
+		return
+	} else {
+		loginUser.Password = ""
+		loginUser.HashPassword = nil
+	}
+	query = "SELECT user_id FROM users WHERE email=?"
+	id, err := env.Db.Search(query,loginUser.Email)
+	if err != nil {
+		common.DisplayAppError(w, err, "Error in database query", 500)
+		return
+	}
+	loginUser.User_ID = id.(int64)
 	//getting jwt for cookie:
-	cookie, err := common.GenerateCookieToken(userInfo.Username, "user", userInfo.User_ID)
+	cookie, err := common.GenerateCookieToken(loginUser.Username, "user", loginUser.User_ID)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error while generating the access token for cookie", 500)
 		return
 	}
 
 	//generate token for response:
-	token, err = common.GenerateToken(userInfo.Username, "user", userInfo.User_ID)
+	token, err = common.GenerateToken(loginUser.Username, "user", loginUser.User_ID)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error while generating the access token for sessions", 500)
 		return
 	}
 	//set the responseUser data:
-	responseUser := AuthUserModel{User: userInfo, Token: token}
+	responseUser := AuthUserModel{User: loginUser, Token: token}
 
 	if j, err := json.Marshal(AuthUserResource{Data: responseUser}); err != nil {
 		common.DisplayAppError(w, err, "An unexpected error has occurred", 500)
