@@ -276,6 +276,7 @@ func RegisterUserDB(user *models.User, env *Env) (err error) {
 			err = errors.New("error in repo.CreateUser()")
 			return err
 		}
+		user.User_ID = user_id
 
 		query = "INSERT INTO passwords(user_id,password) VALUES(?,?)"
 		stmt, err = tx.Prepare(query)
