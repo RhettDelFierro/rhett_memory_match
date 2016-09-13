@@ -7,6 +7,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"database/sql"
+	"fmt"
 )
 
 type UserRepository struct {
@@ -27,9 +28,10 @@ func (r *UserRepository) CreateSpotifyUser(user *models.SpotifyAuthedUserProfile
 func (r *UserRepository) InsertPassword(user *models.User)  error {
 	user.HashPassword = cleanPassword(user.Password)
 
-	_,err := r.S.Exec(user.HashPassword)
+	_,err := r.S.Exec(user.User_ID,user.HashPassword)
 
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 
@@ -41,7 +43,6 @@ func (r *UserRepository) InsertPassword(user *models.User)  error {
 
 
 func (r *UserRepository) CreateUser(user *models.User) (user_id int64, err error) {
-
 	//now insert:
 	result, err := r.S.Exec(user.Username, user.Email)
 	if err != nil {

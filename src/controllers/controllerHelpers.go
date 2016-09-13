@@ -82,7 +82,6 @@ func (a *AuthUser) FinalAuth(token *oauth2.Token) SpotifyClient {
 	}
 }
 
-
 func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyAuthedUserProfile, env *Env) (error) {
 	var err error
 	var executeQuery string
@@ -95,7 +94,7 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 	}
 
 	query := "SELECT spotify_id FROM spotify_tokens WHERE spotify_id=?"
-	id, err := env.Db.Search(query,user.ID)
+	id, err := env.Db.Search(query, user.ID)
 	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
@@ -115,7 +114,7 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 	repo := &data.TokenRepository{S: stmt}
 	if id != nil {
 		//no idea why id is being stored/pull as []uint8
-		byte_id,_ := id.([]uint8)
+		byte_id, _ := id.([]uint8)
 		spotify_id := string(byte_id)
 		err = repo.UpdateToken(dbToken, spotify_id)
 	} else {
@@ -129,7 +128,7 @@ func spotifyTokenStorage(encryptToken common.EncryptToken, user *models.SpotifyA
 func spotifyUserStorage(user *models.SpotifyAuthedUserProfile, env *Env) (err error) {
 
 	query := "SELECT spotify_id FROM spotify_users WHERE spotify_id=?"
-	_, err = env.Db.Search(query,user.ID)
+	_, err = env.Db.Search(query, user.ID)
 	if err != nil && err != sql.ErrNoRows {
 		return
 	}
@@ -187,29 +186,29 @@ func pullToken(r *http.Request, env *Env) (token *oauth2.Token, err error) {
 
 	//now make a call to the database and get the tokens.
 	query := "SELECT access_token,refresh_token,token_type,expiry FROM spotify_tokens WHERE spotify_id=?"
-	mToken, err = env.Db.DbSpotifyGetToken(query,spotify_id)
+	mToken, err = env.Db.DbSpotifyGetToken(query, spotify_id)
 	if err != nil {
 		return
 	}
 	//mToken is a models.Token with it's fields encrypted.
 
 	//get *oauth.Token and return it to handler.
-	token,err = getUserToken(decryptToken,mToken)
+	token, err = getUserToken(decryptToken, mToken)
 	if err != nil {
 		return
 	}
 
 	//verify the token:
-	if  !token.Valid() {
+	if !token.Valid() {
 		// if user token is expired
-		token = &oauth2.Token{ RefreshToken: token.RefreshToken }
+		token = &oauth2.Token{RefreshToken: token.RefreshToken }
 	}
 
 	return token, err
 }
 
 //put loops through this function instead of brute force:
-func getUserToken(decryptToken string,mToken models.Token ) (*oauth2.Token, error){
+func getUserToken(decryptToken string, mToken models.Token) (*oauth2.Token, error) {
 	var err error
 	token := new(oauth2.Token)
 	token.AccessToken, err = common.Decrypt([]byte(decryptToken), mToken.Access)
@@ -236,29 +235,28 @@ func getUserToken(decryptToken string,mToken models.Token ) (*oauth2.Token, erro
 	return token, err
 }
 
-func RegisterUserDB(user *models.User, env *Env) (err error){
+func RegisterUserDB(user *models.User, env *Env) (err error) {
 	var user_id int64
 	var username string
 	var email string
 	var stmt *sql.Stmt
 
 	query := "SELECT user_id, email, username FROM users WHERE username=? || email=?"
-	tx,err := env.Db.BeginTx()
+	tx, err := env.Db.BeginTx()
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
-	err = tx.QueryRow(query, user.User_ID, user.Email).Scan(user_id,username,email)
-	if err != nil && err != sql.ErrNoRows{
+	err = tx.QueryRow(query, user.Username, user.Email).Scan(&user_id, &username, &email)
+	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
 
 	if err == nil {
 		if user.Username == username {
-			err = errors.New(fmt.Sprintf("Username %s already taken", username))
+			err = errors.New(fmt.Sprintf("Username %s already taken", user.Username))
 			return err
 		} else if user.Email == email {
-			err = errors.New(fmt.Sprintf("Email %s already taken", email))
+			err = errors.New(fmt.Sprintf("Email %s already taken", user.Username))
 			return err
 		}
 	}
@@ -289,21 +287,24 @@ func RegisterUserDB(user *models.User, env *Env) (err error){
 		repo = &data.UserRepository{S: stmt}
 		err = repo.InsertPassword(user)
 		if err != nil {
-			err = errors.New("error in repo.CreateUser()")
+			err = errors.New("error in repo.CreateUser() -> repo.InsertPassword()")
 			return err
 		}
-
-		err = tx.Commit()
-		if err != nil {
-			return err
-		}
-		stmt.Close()
 	}
 
 	//just to make sure:
 	user.User_ID = user_id
 	user.HashPassword = nil
 	user.Password = ""
+
+	defer func() {
+		if err == nil {
+			tx.Commit()
+		} else {
+			tx.Rollback()
+		}
+		stmt.Close()
+	}()
 
 	return
 }
