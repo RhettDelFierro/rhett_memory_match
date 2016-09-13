@@ -287,7 +287,7 @@ func RegisterUserDB(user *models.User, env *Env) (err error){
 		}
 
 		repo = &data.UserRepository{S: stmt}
-		user_id, err = repo.InsertPassword(user)
+		err = repo.InsertPassword(user)
 		if err != nil {
 			err = errors.New("error in repo.CreateUser()")
 			return err

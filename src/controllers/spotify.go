@@ -24,12 +24,11 @@ var (
 	client SpotifyClient
 	regularClient RegularClient
 
+	Endpoint = oauth2.Endpoint{
+		AuthURL: "https://accounts.spotify.com/authorize",
+		TokenURL: "https://accounts.spotify.com/api/token",
+	}
 )
-
-const Endpoint = oauth2.Endpoint{
-	AuthURL: "https://accounts.spotify.com/authorize",
-	TokenURL: "https://accounts.spotify.com/api/token",
-}
 
 //handler for /authLogin
 func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
