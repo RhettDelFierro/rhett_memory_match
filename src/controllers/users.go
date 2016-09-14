@@ -33,14 +33,14 @@ func (env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie, err := common.GenerateCookieToken(user.Username, "user", user.User_ID)
+	cookie, err := common.GenerateCookieToken(user.Username, "app", user.User_ID)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error while generating the access token for cookie", 500)
 		return
 	}
 
 	//generate token for response:
-	token, err = common.GenerateToken(user.Username, "user", user.User_ID)
+	token, err = common.GenerateToken(user.Username, "app", user.User_ID)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error while generating the access token for sessions", 500)
 		return
@@ -96,14 +96,14 @@ func (env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//getting jwt for cookie:
-	cookie, err := common.GenerateCookieToken(userInfo.Username, "user", userInfo.User_ID)
+	cookie, err := common.GenerateCookieToken(userInfo.Username, "app", userInfo.User_ID)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error while generating the access token for cookie", 500)
 		return
 	}
 
 	//generate token for response:
-	token, err = common.GenerateToken(userInfo.Username, "user", userInfo.User_ID)
+	token, err = common.GenerateToken(userInfo.Username, "app", userInfo.User_ID)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error while generating the access token for sessions", 500)
 		return
@@ -131,17 +131,18 @@ func LogOut(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		cookie.Expires,_ = time.Parse("2006-01-02 15:04:05.0000000 -0700 MST", "2006-01-02 15:04:05.0000000 -0700 MST")
 		cookie.MaxAge = -1
+		http.SetCookie(w, cookie)
 	}
 
-	//spotifyCookie, err := r.Cookie("Spotify_Auth")
-	//if err != nil {
-	//	err := errors.New("Error logging out (Spotify_Auth)")
-	//	common.DisplayAppError(w, err, "Error logging out", 500)
-	//}
-	//if err == nil {
-	//	spotifyCookie.MaxAge = -1
-	//}
+	spotifyCookie, err := r.Cookie("Spotify_Auth")
+	if err != nil {
+		err := errors.New("Error logging out (Spotify_Auth)")
+		common.DisplayAppError(w, err, "Error logging out", 500)
+	}
+	if err == nil {
+		spotifyCookie.MaxAge = -1
+		http.SetCookie(w, spotifyCookie)
+	}
 
-	http.SetCookie(w, cookie)
 	w.Header().Set("Content-Type", "application/json")
 }

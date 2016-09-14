@@ -10,5 +10,5 @@ type ScoresRepository struct {
 }
 
 func (r *ScoresRepository) InsertScore(score *models.Score) (interface{}, error) {
-	return r.S.Exec(score.Round_ID, score.Score, score.User_ID)
+	return r.S.Exec(score.Round_ID, score.Score, score.User_ID || score.Spotify_ID)
 }

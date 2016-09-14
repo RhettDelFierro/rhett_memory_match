@@ -15,6 +15,8 @@ type (
 	Score struct {
 		Score_ID      int64         `json:"score_id"`
 		User_ID       int64
+		Spotify_ID    string	    `json:"spotify_id"`
+		Login_Type    string
 		Round_ID      int64
 		Game_mode     string        `json:"gamemode"`
 		Round         int           `json:"round"`

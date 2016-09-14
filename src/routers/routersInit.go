@@ -20,5 +20,6 @@ func Router(env *controllers.Env) *mux.Router {
 	router.HandleFunc("/authLogin", controllers.SpotifyAuthorization)
 	router.HandleFunc("/callback", env.SpotifyCallback)
 	router.HandleFunc("/getKeys", common.ValidateSpotifyUser(env.SpotifyGetKeys))
+	router.HandleFunc("/spotifyscores/{mode}", common.ValidateSpotifyUser(env.Scores))
 	return router
 }
