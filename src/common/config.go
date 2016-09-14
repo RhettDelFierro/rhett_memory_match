@@ -6,8 +6,6 @@ import (
 	"net/http"
 )
 
-var AppConfig configuration
-
 type (
 	appError struct {
 		Error      string `json:"error"`

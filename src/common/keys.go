@@ -67,7 +67,7 @@ func GenerateCookieToken(name, loginType string, id int64) (http.Cookie, error) 
 
 	expireToken := time.Now().Add(time.Minute * 30).Unix()
 	//expireCookie := 25*60
-	expireCookie := time.Now().Add(time.Minute * 30)
+	//expireCookie := time.Now().Add(time.Minute * 30)
 
 	claims := AppClaims{
 		name,
@@ -86,7 +86,7 @@ func GenerateCookieToken(name, loginType string, id int64) (http.Cookie, error) 
 	return http.Cookie{Name: "Auth",
 		Value: signedToken,
 		HttpOnly: true,
-		Expires: expireCookie,
+		MaxAge: 30*60,
 		Path: "/"}, err
 }
 
@@ -121,7 +121,7 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 		//}
 		//splitCookie := strings.Split(cookie.String(), "Auth=")
 
-		splitCookie, err := PullCookie(r, "Auth")
+		splitCookie, err := PullCookie(r, "Auth" || "Spotify_Auth")
 		if err != nil {
 			DisplayAppError(w, err, "no Auth cookie found", 404)
 			return
@@ -149,6 +149,7 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 		if claims, ok := cookieToken.Claims.(*AppClaims); ok && cookieToken.Valid &&sessionToken.Valid {
 			context.Set(r, "User", claims.UserName)
 			context.Set(r, "ID", claims.ID)
+			context.Set(r, "LoginType", claims.LoginType)
 			//go go to the protected controller:
 			protectedPage(w, r)
 		} else {

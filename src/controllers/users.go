@@ -7,6 +7,7 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/common"
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
+	"errors"
 )
 
 func (env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
@@ -123,9 +124,19 @@ func (env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 func LogOut(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("Auth")
 	if err != nil {
+		err := errors.New("Error logging out (Auth)")
 		common.DisplayAppError(w, err, "Error logging out", 500)
+		return
 	}
 	cookie.MaxAge = -100
+
+	spotifyCookie, err := r.Cookie("Spotify_Auth")
+	if err != nil {
+		err := errors.New("Error logging out (Spotify_Auth)")
+		common.DisplayAppError(w, err, "Error logging out", 500)
+		return
+	}
+	spotifyCookie.MaxAge = -100
 
 	http.SetCookie(w, cookie)
 	w.Header().Set("Content-Type", "application/json")
