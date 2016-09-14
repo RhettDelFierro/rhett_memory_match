@@ -88,7 +88,7 @@ export function completeRound() {
 
 export function proceed() {
     return async function (dispatch, getState) {
-        const user_id = getState().users.get('authId')
+        const appLogin = getState().users.get('appLogin')
 
         const score = setScores({
             mode: getState().training.get('mode'),
@@ -98,7 +98,7 @@ export function proceed() {
         const data = await setScoresAPI({
             mode: `${score.gameMode}${score.round}`,
             score: score.score,
-            user_id,
+            appLogin,
             round: score.round,
             gamemode: score.gameMode
         })

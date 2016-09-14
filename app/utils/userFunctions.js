@@ -61,7 +61,7 @@ export async function loginPassword(user) {
 
 }
 
-export async function setScoresAPI({mode, score, userType, gamemode, round}) {
+export async function setScoresAPI({mode, score, appLogin, gamemode, round}) {
     try {
         const scoresType = appLogin ? 'scores' : 'spotifyscores'
         const tokenType = appLogin ? 'token' : 'Spotify_token'
