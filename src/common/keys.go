@@ -121,7 +121,7 @@ func Validate(protectedPage http.HandlerFunc) http.HandlerFunc {
 		//}
 		//splitCookie := strings.Split(cookie.String(), "Auth=")
 
-		splitCookie, err := PullCookie(r, "Auth" || "Spotify_Auth")
+		splitCookie, err := PullCookie(r, "Auth")
 		if err != nil {
 			DisplayAppError(w, err, "no Auth cookie found", 404)
 			return

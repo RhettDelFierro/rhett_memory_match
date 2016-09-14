@@ -8,6 +8,7 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/models"
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 	"errors"
+	"time"
 )
 
 func (env *Env) RegisterUser(w http.ResponseWriter, r *http.Request) {
@@ -80,7 +81,7 @@ func (env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	//login logic robust enough to be done inline:
 	query := "SELECT passwords.password,users.user_id FROM passwords INNER JOIN users ON passwords.user_id = users.user_id WHERE users.email=?"
-	stmt,err := env.Db.PrepareQuery(query)
+	stmt, err := env.Db.PrepareQuery(query)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error in database query", 500)
 		return
@@ -126,17 +127,20 @@ func LogOut(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		err := errors.New("Error logging out (Auth)")
 		common.DisplayAppError(w, err, "Error logging out", 500)
-		return
 	}
-	cookie.MaxAge = -100
+	if err == nil {
+		cookie.Expires,_ = time.Parse("2006-01-02 15:04:05.0000000 -0700 MST", "2006-01-02 15:04:05.0000000 -0700 MST")
+		cookie.MaxAge = -1
+	}
 
-	spotifyCookie, err := r.Cookie("Spotify_Auth")
-	if err != nil {
-		err := errors.New("Error logging out (Spotify_Auth)")
-		common.DisplayAppError(w, err, "Error logging out", 500)
-		return
-	}
-	spotifyCookie.MaxAge = -100
+	//spotifyCookie, err := r.Cookie("Spotify_Auth")
+	//if err != nil {
+	//	err := errors.New("Error logging out (Spotify_Auth)")
+	//	common.DisplayAppError(w, err, "Error logging out", 500)
+	//}
+	//if err == nil {
+	//	spotifyCookie.MaxAge = -1
+	//}
 
 	http.SetCookie(w, cookie)
 	w.Header().Set("Content-Type", "application/json")
