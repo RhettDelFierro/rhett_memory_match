@@ -24,9 +24,9 @@ type EncryptToken struct {
 }
 
 type SpotifyAppClaims struct {
-	Key      string `json:"key"`
-	UserName string `json:"username"`
-	Role     string `json:"role"`
+	Key       string `json:"key"`
+	UserName  string `json:"username"`
+	LoginType string `json:"logintype"`
 	jwt.StandardClaims
 }
 
@@ -44,7 +44,7 @@ func (e EncryptToken) GenerateSpotifyCookieToken(username string) (http.Cookie, 
 	claims := SpotifyAppClaims{
 		encryptedKey,
 		username,
-		"Spotify user",
+		"Spotify",
 		jwt.StandardClaims{
 			ExpiresAt: expireToken,
 			Issuer:    "admin",
@@ -76,7 +76,7 @@ func (e EncryptToken) GenerateSpotifySessionToken(username string) (signedToken 
 	claims := SpotifyAppClaims{
 		encryptedKey,
 		username,
-		"Spotify user",
+		"Spotify",
 		jwt.StandardClaims{
 			ExpiresAt: expireToken,
 			Issuer:    "admin",
@@ -124,12 +124,12 @@ func ValidateSpotifyUser(protectedPage http.HandlerFunc) http.HandlerFunc {
 		}
 
 		context.Set(r, "UserID", username)
-		context.Set(r,"DecryptedKey",decryptedKey)
-		protectedPage(w,r)
+		context.Set(r, "DecryptedKey", decryptedKey)
+		protectedPage(w, r)
 	})
 }
 
-func checkBothJWT(cookieToken, sessionToken *jwt.Token) (username, decryptedText string,err error) {
+func checkBothJWT(cookieToken, sessionToken *jwt.Token) (username, decryptedText string, err error) {
 	if cookieClaims, ok := cookieToken.Claims.(*SpotifyAppClaims); ok && cookieToken.Valid {
 		if sessionTokenClaims, ok := sessionToken.Claims.(*SpotifyAppClaims); ok {
 			if cookieClaims.UserName == sessionTokenClaims.UserName {
@@ -150,10 +150,9 @@ func checkJWTKey(cookieClaims *SpotifyAppClaims) (decryptedText string, err erro
 	encryptedKey := cookieClaims.Key
 
 	//now have decrypted key to unlock DB.
-	return Decrypt(checkKey,encryptedKey)
+	return Decrypt(checkKey, encryptedKey)
 
 }
-
 
 func spotifyCookieHandler(cookie []string) (token *jwt.Token, err error) {
 

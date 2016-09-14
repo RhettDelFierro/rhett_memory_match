@@ -17,9 +17,9 @@ import (
 
 // AppClaims provides custom claim for JWT
 type AppClaims struct {
-	UserName string `json:"username"`
-	Role     string `json:"role"`
-	ID       int64         `json:"user_id"`
+	UserName  string `json:"username"`
+	LoginType string `json:"logintype"`
+	ID        int64  `json:"user_id"`
 	jwt.StandardClaims
 }
 
@@ -63,7 +63,7 @@ func initKeys() {
 }
 
 //generating the jwt for the cookie:
-func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
+func GenerateCookieToken(name, loginType string, id int64) (http.Cookie, error) {
 
 	expireToken := time.Now().Add(time.Minute * 30).Unix()
 	//expireCookie := 25*60
@@ -71,7 +71,7 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 
 	claims := AppClaims{
 		name,
-		role,
+		loginType,
 		id,
 		jwt.StandardClaims{
 			ExpiresAt: expireToken,
@@ -80,7 +80,7 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenSecret :=os.Getenv("COOKIE_JWT_USER_SECRET")
+	tokenSecret := os.Getenv("COOKIE_JWT_USER_SECRET")
 	signedToken, err := token.SignedString([]byte(tokenSecret))
 
 	return http.Cookie{Name: "Auth",
@@ -91,11 +91,11 @@ func GenerateCookieToken(name, role string, id int64) (http.Cookie, error) {
 }
 
 //generating the jwt for CSRF:
-func GenerateToken(name, role string, id int64) (signedTokenString string, err error) {
+func GenerateToken(name, loginType string, id int64) (signedTokenString string, err error) {
 
 	claims := AppClaims{
 		name,
-		role,
+		loginType,
 		id,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Minute * 30).Unix(),
@@ -167,8 +167,7 @@ func PullCookie(r *http.Request, name string) ([]string, error) {
 //validates the jwt in the Cookie:
 func cookieHandler(cookie []string) (token *jwt.Token, err error) {
 
-	tokenSecret :=os.Getenv("COOKIE_JWT_USER_SECRET")
-
+	tokenSecret := os.Getenv("COOKIE_JWT_USER_SECRET")
 
 	token, err = jwt.ParseWithClaims(cookie[1], &AppClaims{},
 		func(token *jwt.Token) (interface{}, error) {
