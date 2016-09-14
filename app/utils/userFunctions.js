@@ -61,18 +61,19 @@ export async function loginPassword(user) {
 
 }
 
-export async function setScoresAPI({mode, score, user_id, gamemode, round}) {
+export async function setScoresAPI({mode, score, userType, gamemode, round}) {
     try {
-        const response = await axios.post(`http://localhost:8000/scores/${mode}`, {
+        const scoresType = appLogin ? 'scores' : 'spotifyscores'
+        const tokenType = appLogin ? 'token' : 'Spotify_token'
+        const response = await axios.post(`http://localhost:8000/${scoresType}/${mode}`, {
             data: {
-                user_id,
                 score,
                 gamemode,
                 round
             }
         }, {
             headers: {
-                'Authorization': 'Bearer ' + window.sessionStorage.getItem('token')
+                'Authorization': 'Bearer ' + window.sessionStorage.getItem(tokenType)
             }, withCredentials: true});
         return response.data
     } catch (error) {
