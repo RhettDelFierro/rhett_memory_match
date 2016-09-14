@@ -39,7 +39,7 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 		common.DisplayAppError(w, err, "Error getting session in SpotifyAuthorization", 500)
 		return
 	}
-	store.Options = &sessions.Options{
+	session.Options = &sessions.Options{
 		MaxAge:     60 * 2,
 	}
 
@@ -88,6 +88,9 @@ func(env *Env) SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 	client := authClient.FinalAuth(token)
 	//clear state:
 	session.Values["state_key"] = ""
+	session.Options = &sessions.Options{
+		MaxAge:     -1,
+	}
 	session.Save(r, w)
 
 	encryptToken := common.EncryptToken{
