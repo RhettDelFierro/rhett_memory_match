@@ -7,6 +7,7 @@ import (
 	"github.com/RhettDelFierro/rhett_memory_match/src/data"
 	"github.com/gorilla/mux"
 	reqcontext "github.com/gorilla/context"
+	"fmt"
 )
 
 func(env *Env) Scores(w http.ResponseWriter, r *http.Request) {
@@ -55,6 +56,7 @@ func(env *Env) Scores(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	fmt.Println(scoreData.Spotify_ID)
 	//scoreData.Date_Complete = timeStamp
 	stmt, err := env.Db.PrepareQuery(query)
 	defer stmt.Close()
