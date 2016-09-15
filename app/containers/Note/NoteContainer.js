@@ -12,7 +12,13 @@ class NoteContainer extends Component {
     }
 
     componentWillMount() {
-        this.props.setMode()
+        if (!this.props.sessionCompleted) {
+            this.props.setMode()
+        }
+
+        //else {
+        //    //go to the scoreboard/another link/pop modal.
+        //}
     }
 
     handleSelect(note) {
@@ -37,7 +43,8 @@ NoteContainer.propTypes = {
     selectedNoteChosen: PropTypes.func.isRequired,
     targetNotePlayed: PropTypes.bool.isRequired,
     mode: PropTypes.string.isRequired,
-    setMode: PropTypes.func.isRequired
+    setMode: PropTypes.func.isRequired,
+    sessionCompleted: PropTypes.bool.isRequired
 }
 
 function mapStateToProps({training}) {
@@ -47,7 +54,8 @@ function mapStateToProps({training}) {
         tracker: training.get('tracker'),
         onCheck: training.get('onCheck'),
         targetNotePlayed: training.get('targetNotePlayed'),
-        mode: training.get('mode')
+        mode: training.get('mode'),
+        sessionCompleted: training.get('sessionCompleted')
     }
 }
 

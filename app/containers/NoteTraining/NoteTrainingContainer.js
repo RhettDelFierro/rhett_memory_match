@@ -18,6 +18,9 @@ class NoteTrainingContainer extends Component {
 
     componentWillReceiveProps(newProps) {
         //remember, we're accessing a store.
+        if (newProps.sessionCompleted) {
+            //dispatch modal.
+        }
         if (newProps.start) {
             //user has guessed:
             if (newProps.selectedNotePlayed && !newProps.onCheck) {
@@ -79,7 +82,7 @@ NoteTrainingContainer.propTypes = {
     roundCompleted: PropTypes.bool.isRequired
 }
 
-function mapStateToProps({training, volume}) {
+function mapStateToProps({ training, volume }) {
     return {
         targetNote: training.get('targetNote'),
         correct: training.get('correct'),
@@ -90,7 +93,8 @@ function mapStateToProps({training, volume}) {
         selectedNotePlayed: training.get('selectedNotePlayed'),
         onCheck: training.get('onCheck'),
         mode: training.get('mode'),
-        roundCompleted: training.get('roundCompleted')
+        roundCompleted: training.get('roundCompleted'),
+        sessionCompleted: training.get('sessionComplete')
     }
 }
 

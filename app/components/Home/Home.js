@@ -1,14 +1,16 @@
 import React from "react"
 import { Link } from "react-router"
-import { container } from './styles.css'
+import { container, header, slider, engage } from './styles.css'
 
 
+//remember to use refs you must use a container component, it will not take a functional component.
 function Home() {
+
     return (
         <div className={container}>
-            <Link to="/note_memory">
-                <button type="button" className="btn btn-lg btn-primary">Note Memory</button>
-            </Link>
+            <div className={header}>
+                <a className={engage} href=""/>
+            </div>
         </div>
     )
 

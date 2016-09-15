@@ -7,21 +7,21 @@ import { Provider } from 'react-redux'
 //import { checkIfAuthed } from 'helpers/auth'
 import * as reducers from 'redux/modules'
 import { routerReducer, syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
-import { hashHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 import {reducer as formReducer} from 'redux-form'
 import { toJS } from 'immutable'
 
-const routermiddle = routerMiddleware(hashHistory)
+const routermiddle = routerMiddleware(browserHistory)
 
 const store = createStore(
     combineReducers({...reducers, routing: routerReducer, form: formReducer}),
     compose(
-        applyMiddleware(thunk, routermiddle),
+        applyMiddleware(routermiddle, thunk),
         window.devToolsExtension ? window.devToolsExtension() : (f) => f
     )
 )
 
-export const history = syncHistoryWithStore(hashHistory, store)
+export const history = syncHistoryWithStore(browserHistory, store)
 
 ReactDOM.render(
     <Provider store={store}>

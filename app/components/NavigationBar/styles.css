@@ -1,7 +1,10 @@
 .container {
+    position: fixed;
     width: 100%;
-    color: #4a90e2;
+    color: #655659;
     font-size: 18px;
+    background-color: black;
+    z-index: 10000;
 }
 
 .navContainer {
@@ -31,5 +34,5 @@
 }
 
 .link:hover {
-    color: #1877E6;
+    color: #655659;
 }

@@ -25,6 +25,7 @@ const COMPLETE_GUESS = 'COMPLETE_GUESS'
 const SET_MODE = 'SET_MODE'
 const RESET_TRAINING = 'RESET_TRAINING'
 const PROCEED = 'PROCEED'
+const COMPLETE_SESSION = 'COMPLETE_SESSION'
 
 //clears store, sets the mode.
 export function setMode() {
@@ -84,6 +85,12 @@ export function increaseCount({ targetNote, instrument, octave }) {
 //called when chooseRandomNote() returns ''
 export function completeRound() {
     return {type: COMPLETE_ROUND}
+}
+
+export function completeSession(){
+    return {
+        type: SESSION_COMPLETED
+    }
 }
 
 export function proceed() {
@@ -308,6 +315,10 @@ export default function training(state = initialState, action) {
             return state.merge({
                 roundCompleted: true,
                 score: Math.floor(((state.get('attempts') - state.get('notesMissed').size) / state.get('attempts')) * 100) + '%'
+            })
+        case COMPLETE_SESSION:
+            return state.merge({
+                sessionCompleted: true
             })
         case SET_MODE:
             return state.merge({
