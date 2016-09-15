@@ -9,7 +9,6 @@ function Home() {
     return (
         <div className={container}>
             <div className={header}>
-                <a className={engage} href=""/>
             </div>
         </div>
     )

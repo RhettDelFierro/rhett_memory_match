@@ -6,7 +6,7 @@
     align-items: center;
     height: 5000px;
     width: 100%;
-    background: darkgray;
+    background: #283062 url(../../assets/images/colurfulnote.png);
 }
 
 .header {
