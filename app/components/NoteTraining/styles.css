@@ -6,7 +6,7 @@
     height: 100%;
     width: 100%;
     background-repeat: no-repeat;
-    background-image: url(../../assets/images/coachella.jpg);
+    background-image: url('../../assets/images/coachella.jpg');
     background-size: cover;
     background-color: darkgray;
     background-blend-mode: normal;

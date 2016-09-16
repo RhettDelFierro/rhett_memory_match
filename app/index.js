@@ -1,16 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-//import routes from 'config/routes'
+import { toJS } from 'immutable'
+
 import thunk from 'redux-thunk'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-//import { checkIfAuthed } from 'helpers/auth'
 import * as reducers from 'redux/modules'
-import { routerReducer, syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
-import { hashHistory } from 'react-router'
+
 import {reducer as formReducer} from 'redux-form'
-import { toJS } from 'immutable'
+
+//react-router
+//import routes from 'config/routes'
 import { routes } from 'config/routes'
+import { hashHistory, applyRouterMiddleware, useRouterHistory } from 'react-router'
+import { routerReducer, syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
+import createHashHistory from 'history/lib/createHashHistory'
+import { useScroll } from 'react-router-scroll'
 
 const routermiddle = routerMiddleware(hashHistory)
 
