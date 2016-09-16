@@ -28,7 +28,7 @@
     /*background-color: #c1ddff;*/
     /*background-color: #a9aeff;*/
     /*background-blend-mode: multiply;*/
-    z-index: 1000000001;
+    z-index: 700;
 }
 
 .content {
@@ -53,7 +53,7 @@
 }
 
 .examplea {
-    margin-top: 1000px;
+    margin-top: 5000px;
     height: 500px;
     width: 730px;
     background-color: #a9aeff;

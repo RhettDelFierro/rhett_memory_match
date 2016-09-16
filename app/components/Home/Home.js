@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router"
-import { HomeBackgroundContainer } from 'containers'
+import { HomeBackgroundContainer, HomeImagesContainer } from 'containers'
 import { container, header, background,example, example2, examplea, content } from './styles.css'
 import { Parallax, Background } from 'react-parallax'
 
@@ -17,6 +17,7 @@ function Home() {
                 <h1>blah</h1>
                 <div className={example2}>Blah haha!</div>
             </div>
+            <HomeImagesContainer />
         </div>
     )
 

@@ -1,0 +1,25 @@
+.container {
+    position: fixed;
+    background-size: cover;
+    z-index: 1;
+    height: 330px;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    top: 2000px;
+}
+
+.showDiv {
+    display: flex;
+}
+
+.hideDiv {
+    display: none;
+}
+
+.picture1 {
+    background: url('../../assets/images/Perfect_Pitch_training.png') top center;
+    background-size: cover;
+    width: 310px;
+}
