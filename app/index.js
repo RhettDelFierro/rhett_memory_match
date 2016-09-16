@@ -18,6 +18,7 @@ import createHashHistory from 'history/lib/createHashHistory'
 import { useScroll } from 'react-router-scroll'
 
 const routermiddle = routerMiddleware(hashHistory)
+const render = applyRouterMiddleware(useScroll())
 
 const store = createStore(
     combineReducers({...reducers, routing: routerReducer, form: formReducer}),
@@ -27,10 +28,12 @@ const store = createStore(
     )
 )
 
+
+
 export const history = syncHistoryWithStore(hashHistory, store)
 
 ReactDOM.render(
     <Provider store={store}>
-        {routes(history)}
+        {routes(history,render)}
     </Provider>,
     document.getElementById('app'))

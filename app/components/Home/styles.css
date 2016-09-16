@@ -4,9 +4,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 5000px;
     width: 100%;
-    background: #1C1D3B url('../../assets/images/colorfulnote.png');
 }
 
 .header {
@@ -25,6 +23,42 @@
     /*background-color: #c1ddff;*/
     background-color: #a9aeff;
     background-blend-mode: multiply;
+    z-index: 1000000001;
+}
+
+/*.background {*/
+    /*position: fixed;*/
+    /*height: 5000px;*/
+    /*width: 100%;*/
+    /*background: url('../../assets/images/backgroundnotes-clear.jpg');*/
+    /*background-size: cover;*/
+/*}*/
+.background {
+    position: fixed;
+    height: 10000px;
+    width: 100%;
+    background-repeat: repeat;
+}
+
+.example {
+    height: 500px;
+    width: 730px;
+    background-color: #a9aeff;
+}
+
+.example2 {
+    margin-top: 2000px;
+    height: 500px;
+    width: 730px;
+    background-color: #a9aeff;
+    margin-bottom: 1000px;
+}
+
+.examplea {
+    margin-top: 1000px;
+    height: 500px;
+    width: 730px;
+    background-color: #a9aeff;
 }
 
 .engage {

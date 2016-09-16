@@ -8,6 +8,9 @@ class HomeContainer extends Component {
         super()
     }
 
+    //handle the scrolling here:
+
+
     render() {
         return (
             <Home />

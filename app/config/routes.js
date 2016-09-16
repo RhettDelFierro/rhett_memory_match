@@ -5,9 +5,9 @@ import { MainContainer, HomeContainer, PerfectPitchContainer,
 import { syncHistoryWithStore } from 'react-router-redux'
 //import { history } from 'index'
 
-export function routes(history) {
+export function routes(history,render) {
     return (
-        <Router history={history}>
+        <Router history={history} render={render}>
             <Route path="/" component={MainContainer}>
                 <IndexRoute component={HomeContainer}/>
                 <Route path="perfect_pitch" component={PerfectPitchContainer}/>
