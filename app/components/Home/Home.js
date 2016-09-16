@@ -6,7 +6,7 @@ import { Parallax } from 'react-parallax'
 
 //remember to use refs you must use a container component, it will not take a functional component.
 function Home() {
-    const img = require('../../assets/images/backgroundnotes-clear.jpg')
+    const img = require('../../assets/images/backgroundattempt2.jpg')
     return (
         <div className={container}>
             <Parallax className={background} bgHeight="5000px" bgImage={img} strength={200}>

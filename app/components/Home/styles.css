@@ -18,7 +18,13 @@
     /*http://i.giphy.com/jhBMUwiySFOg0.gif*/
     /*http://i.giphy.com/pk58i4Fw4L9bG.gif*/
     /*http://i.giphy.com/533FbUP4hGQxO.gif*/
-    background: url("http://i.giphy.com/533FbUP4hGQxO.gif");
+    background-image: url("http://i.giphy.com/533FbUP4hGQxO.gif"),
+    linear-gradient(
+            to top,
+            rgba(0,0,0,1),
+            rgba(0,0,0,0) 30%
+    );
+
     background-size: 100% 100%;
     /*background-color: #c1ddff;*/
     background-color: #a9aeff;
