@@ -24,26 +24,11 @@
             rgba(0,0,0,1),
             rgba(0,0,0,0) 30%
     );
-
     background-size: 100% 100%;
     /*background-color: #c1ddff;*/
-    background-color: #a9aeff;
-    background-blend-mode: multiply;
+    /*background-color: #a9aeff;*/
+    /*background-blend-mode: multiply;*/
     z-index: 1000000001;
-}
-
-/*.background {*/
-    /*position: fixed;*/
-    /*height: 5000px;*/
-    /*width: 100%;*/
-    /*background: url('../../assets/images/backgroundnotes-clear.jpg');*/
-    /*background-size: cover;*/
-/*}*/
-.background {
-    position: fixed;
-    height: 10000px;
-    width: 100%;
-    background-repeat: repeat;
 }
 
 .example {
