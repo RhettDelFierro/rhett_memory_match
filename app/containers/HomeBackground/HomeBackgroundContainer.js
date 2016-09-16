@@ -12,10 +12,6 @@ class HomeBackgroundContainer extends Component {
         this.parallax = this.parallax.bind(this)
     }
 
-    componentWillMount() {
-
-    }
-
     componentDidMount() {
         window.addEventListener('scroll',this.parallax);
     }

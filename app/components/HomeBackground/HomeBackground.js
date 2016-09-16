@@ -1,5 +1,5 @@
 import React, { PropTypes } from "react"
-import { container, header, background,example, example2, examplea } from './styles.css'
+import { container } from './styles.css'
 
 
 //remember to use refs you must use a container component, it will not take a functional component.
