@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
+import { container, showDiv, hideDiv, picture1 } from './styles.css'
 
 class HomeImagesContainer extends Component {
     constructor() {
@@ -16,10 +17,16 @@ class HomeImagesContainer extends Component {
     }
 
     componentWillReceiveProps(newProps) {
+        console.log('imageContainer:', this.imageContainer.offsetTop)
+        console.log('window', newProps.windowPositionY)
         //the offsetparent will be the top of the browser
-        if (newProps.windowPositionY + 300 == this.imageContainer.offsetTop) {
+        if (window.scrollY > this.imageContainer.offsetTop) {
             this.setState({
                 showComponent: true
+            })
+        } else {
+            this.setState({
+                showComponent: false
             })
         }
     }
@@ -34,10 +41,12 @@ class HomeImagesContainer extends Component {
     //}
 
     render() {
+        const styles = this.state.showComponent ? `${container} animate zoomIn` : `${hideDiv}`
+        //<HomeImages windowPositionY={this.props.windowPositionY}
+        //            showComponent={this.state.showComponent}/>
         return (
-            <div ref={(ref) => this.imageContainer = ref}>
-                <HomeImages windowPositionY={this.props.windowPositionY}
-                            showComponent={this.state.showComponent}/>
+            <div ref={(ref) => this.imageContainer = ref} className={styles}>
+                <div className={picture1}></div>
             </div>
         )
     }

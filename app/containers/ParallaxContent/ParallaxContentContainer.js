@@ -27,19 +27,21 @@ class ParallaxContentContainer extends Component {
 
     render() {
         return (
-            <ParallaxContent positionY={this.props.parallaxContentPositionY}/>
+            <ParallaxContent positionY={this.props.parallaxContentPositionY} windowPositionY={this.props.windowPositionY}/>
         )
     }
 }
 
 const { number, func } = PropTypes
 ParallaxContentContainer.propTypes = {
+    windowPositionY: number.isRequired,
     parallaxContentPositionY: number.isRequired,
     calculateParallaxContentPositionY: func.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
+        windowPositionY: scroll.get('windowPositionY'),
         parallaxContentPositionY: scroll.get('parallaxContentPositionY')
     }
 }

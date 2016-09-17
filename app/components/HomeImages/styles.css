@@ -2,7 +2,6 @@
     display: flex;
     position: fixed;
     background-size: cover;
-    z-index: 1;
     height: 330px;
     width: 100%;
     flex-direction: row;
@@ -12,11 +11,11 @@
 }
 
 .showDiv {
-    visibility: visible;
+    display: flex;
 }
 
 .hideDiv {
-    visibility: hidden
+    display: none;
 }
 
 .picture1 {

@@ -18,6 +18,7 @@ function ParallaxContent({ positionY }) {
 
 const { number } = PropTypes
 ParallaxContent.propTypes = {
+    windowPositionY: number.isRequired,
     positionY: number.isRequired
 }
 
