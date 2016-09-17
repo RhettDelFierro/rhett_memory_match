@@ -13,11 +13,11 @@ class HomeContainer extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('scroll', this.scrollPosition);
+        window.addEventListener('scroll',this.scrollPosition);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.scrollPosition);
+        window.removeEventListener('scroll',this.scrollPosition);
 
     }
 

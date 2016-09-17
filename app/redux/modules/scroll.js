@@ -1,8 +1,9 @@
 import { fromJS, toOrderedMap } from 'immutable'
 
-const SET_HOME_BACKGROUND_POSITION_Y = 'SET_HOME_BACKGROUND_POSITION_Y'
+const SET_BACKGROUND_TOP = 'SET_BACKGROUND_TOP'
 const GET_WINDOW_POSITION_Y = 'GET_WINDOW_POSITION_Y'
 const SET_HOME_PARALLAX_CONTENT_POSITION_Y = 'SET_HOME_PARALLAX_CONTENT_POSITION_Y'
+const SET_HOME_IMAGES_TOP = 'SET_HOME_IMAGES_TOP'
 
 export function getWindowPositionY({ fromTop }){
     return {
@@ -11,10 +12,10 @@ export function getWindowPositionY({ fromTop }){
     }
 }
 
-export function setHomeBackgroundPositionY({ homeBackgroundPositionY }) {
+export function setBgTop({ bgTop }) {
     return {
-        type: SET_HOME_BACKGROUND_POSITION_Y,
-        homeBackgroundPositionY
+        type: SET_BACKGROUND_TOP,
+        bgTop
     }
 }
 
@@ -25,10 +26,10 @@ export function setParallaxContentPositionY({ parallaxContentPositionY }) {
     }
 }
 
-export function calculateHomeBackgroundPositionY(){
+export function calcBgTop({ fromTop }){
     return function (dispatch, getState) {
-        const homeBackgroundPositionY = (0 - (getState().scroll.get('windowPositionY') *.3))
-        dispatch(setHomeBackgroundPositionY({homeBackgroundPositionY }))
+        const bgTop = (0 - (fromTop *.3))
+        dispatch(setBgTop({ bgTop }))
     }
 }
 
@@ -39,10 +40,18 @@ export function calculateParallaxContentPositionY() {
     }
 }
 
+export function setTopHomeImages({ homeImagesTop }) {
+    return {
+        type: SET_HOME_IMAGES_TOP,
+        homeImagesTop
+    }
+}
+
 const initialState = fromJS({
     windowPositionY: 0,
-    homeBackgroundPositionY: 0,
-    parallaxContentPositionY: 0
+    bgTop: 0,
+    parallaxContentPositionY: 0,
+    homeImagesTop: 0
 })
 
 export default function scroll(state = initialState, action) {
@@ -51,13 +60,17 @@ export default function scroll(state = initialState, action) {
             return state.merge({
                 windowPositionY: action.fromTop
             })
-        case SET_HOME_BACKGROUND_POSITION_Y:
+        case SET_BACKGROUND_TOP:
             return state.merge({
-                homeBackgroundPositionY: action.homeBackgroundPositionY
+                bgTop: action.bgTop
             })
         case SET_HOME_PARALLAX_CONTENT_POSITION_Y:
             return state.merge({
                 parallaxContentPositionY: action.parallaxContentPositionY
+            })
+        case SET_HOME_IMAGES_TOP:
+            return state.merge({
+                homeImagesTop: action.homeImagesTop
             })
         default:
             return state

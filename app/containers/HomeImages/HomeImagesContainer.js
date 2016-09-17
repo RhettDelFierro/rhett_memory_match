@@ -17,10 +17,8 @@ class HomeImagesContainer extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        console.log('imageContainer:', this.imageContainer.offsetTop)
-        console.log('window', newProps.windowPositionY)
         //the offsetparent will be the top of the browser
-        if (window.scrollY > this.imageContainer.offsetTop) {
+        if (window.scrollY > this.props.homeImagesTop) {
             this.setState({
                 showComponent: true
             })
@@ -45,9 +43,7 @@ class HomeImagesContainer extends Component {
         //<HomeImages windowPositionY={this.props.windowPositionY}
         //            showComponent={this.state.showComponent}/>
         return (
-            <div ref={(ref) => this.imageContainer = ref} className={styles}>
-                <div className={picture1}></div>
-            </div>
+            <HomeImages showComponent={this.state.showComponent}/>
         )
     }
 }
@@ -55,13 +51,15 @@ class HomeImagesContainer extends Component {
 const { number, func } = PropTypes
 HomeImagesContainer.propTypes = {
     windowPositionY: number.isRequired,
-    homeBackgroundPositionY: number.isRequired
+    homeBackgroundPositionY: number.isRequired,
+    homeImagesTop: number.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
         windowPositionY: scroll.get('windowPositionY'),
-        homeBackgroundPositionY: scroll.get('homeBackgroundPositionY')
+        homeBackgroundPositionY: scroll.get('homeBackgroundPositionY'),
+        homeImagesTop: scroll.get('homeImagesTop')
     }
 }
 

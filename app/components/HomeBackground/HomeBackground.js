@@ -3,9 +3,9 @@ import { container } from './styles.css'
 
 
 //remember to use refs you must use a container component, it will not take a functional component.
-function HomeBackground({ positionY }) {
+function HomeBackground({ bgTop }) {
     const divStyle = {
-        top : `${positionY}px`
+        top : `${bgTop}px`
     }
     return (
         <div className={container} style={divStyle}>
@@ -16,7 +16,7 @@ function HomeBackground({ positionY }) {
 
 const { number } = PropTypes
 HomeBackground.propTypes = {
-    positionY: number.isRequired
+    bgTop: number.isRequired
 }
 
 export default HomeBackground
