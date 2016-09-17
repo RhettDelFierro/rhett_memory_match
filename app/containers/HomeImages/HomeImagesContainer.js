@@ -29,15 +29,6 @@ class HomeImagesContainer extends Component {
         }
     }
 
-    //componentDidMount() {
-    //    window.addEventListener('scroll',this.displayComponent);
-    //}
-    //
-    //componentWillUnmount() {
-    //    window.removeEventListener('scroll',this.displayComponent);
-    //
-    //}
-
     render() {
         const styles = this.state.showComponent ? `${container} animate zoomIn` : `${hideDiv}`
         //<HomeImages windowPositionY={this.props.windowPositionY}
@@ -51,14 +42,14 @@ class HomeImagesContainer extends Component {
 const { number, func } = PropTypes
 HomeImagesContainer.propTypes = {
     windowPositionY: number.isRequired,
-    homeBackgroundPositionY: number.isRequired,
+    bgTop: number.isRequired,
     homeImagesTop: number.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
         windowPositionY: scroll.get('windowPositionY'),
-        homeBackgroundPositionY: scroll.get('homeBackgroundPositionY'),
+        bgTop: scroll.get('bgTop'),
         homeImagesTop: scroll.get('homeImagesTop')
     }
 }

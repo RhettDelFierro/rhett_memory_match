@@ -11,13 +11,13 @@ function Home() {
         <div className={container}>
             <div className={header}></div>
             <HomeBackgroundContainer />
+            <ParallaxContentContainer />
             <div className={content}>
                 <h1>blah</h1>
                 <div className={examplea}>Blah haaha!</div>
                 <h1>blah</h1>
                 <div className={example2}>Blah haha!</div>
             </div>
-            <ParallaxContentContainer />
             <div className={showImages}></div>
         </div>
     )

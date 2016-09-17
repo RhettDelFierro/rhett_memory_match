@@ -1,9 +1,5 @@
 .container {
        position: fixed;
-       display: flex;
-       flex-direction: column;
-       justify-content: space-between;
-       align-items: center;
        height: 10000px;
        width: 100%;
        background: url('../../assets/images/backgroundnotes-clear.jpg') top center;

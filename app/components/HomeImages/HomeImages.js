@@ -28,13 +28,14 @@ const { number, bool, func } = PropTypes
 HomeImages.propTypes = {
     windowPositionY: number.isRequired,
     showComponent: bool.isRequired,
-    setTopHomeImages: func.isRequired
+    setTopHomeImages: func.isRequired,
+    bgTop: number.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
         windowPositionY: scroll.get('windowPositionY'),
-        homeBackgroundPositionY: scroll.get('homeBackgroundPositionY')
+        bgTop: scroll.get('bgTop')
     }
 }
 

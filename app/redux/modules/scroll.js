@@ -12,7 +12,8 @@ export function getWindowPositionY({ fromTop }){
     }
 }
 
-export function setBgTop({ bgTop }) {
+export function setBgTop({ fromTop }) {
+    const bgTop = (0 - (fromTop *.3))
     return {
         type: SET_BACKGROUND_TOP,
         bgTop
@@ -26,12 +27,11 @@ export function setParallaxContentPositionY({ parallaxContentPositionY }) {
     }
 }
 
-export function calcBgTop({ fromTop }){
-    return function (dispatch, getState) {
-        const bgTop = (0 - (fromTop *.3))
-        dispatch(setBgTop({ bgTop }))
-    }
-}
+//export function calcBgTop({ fromTop }){
+//        console.log('calcBgTop')
+//        const bgTop = (0 - (fromTop *.3))
+//        setBgTop({ bgTop })
+//}
 
 export function calculateParallaxContentPositionY() {
     return function (dispatch,getState) {
