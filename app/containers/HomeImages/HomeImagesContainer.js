@@ -16,9 +16,8 @@ class HomeImagesContainer extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        console.log(this.imageContainer.offsetTop)
         //the offsetparent will be the top of the browser
-        if (newProps.windowPositionY + 400 > this.imageContainer.offsetTop) {
+        if (newProps.windowPositionY + 300 == this.imageContainer.offsetTop) {
             this.setState({
                 showComponent: true
             })

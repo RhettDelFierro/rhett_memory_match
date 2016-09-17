@@ -1,12 +1,12 @@
 import React, { PropTypes, Component } from "react"
-import { HomeBackground } from "components"
+import { ParallaxContent } from "components"
 import update from "react-addons-update"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
 
-class HomeBackgroundContainer extends Component {
+class ParallaxContentContainer extends Component {
     constructor() {
         super()
         this.parallax = this.parallax.bind(this)
@@ -22,25 +22,25 @@ class HomeBackgroundContainer extends Component {
     }
 
     parallax() {
-        this.props.calculateHomeBackgroundPositionY()
+        this.props.calculateParallaxContentPositionY()
     }
 
     render() {
         return (
-            <HomeBackground positionY={this.props.homeBackgroundPositionY}/>
+            <ParallaxContent positionY={this.props.parallaxContentPositionY}/>
         )
     }
 }
 
 const { number, func } = PropTypes
-HomeBackgroundContainer.propTypes = {
-    homeBackgroundPositionY: number.isRequired,
-    calculateHomeBackgroundPositionY: func.isRequired
+ParallaxContentContainer.propTypes = {
+    parallaxContentPositionY: number.isRequired,
+    calculateParallaxContentPositionY: func.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
-        homeBackgroundPositionY: scroll.get('homeBackgroundPositionY')
+        parallaxContentPositionY: scroll.get('parallaxContentPositionY')
     }
 }
 
@@ -48,4 +48,4 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(scrollActionCreators, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeBackgroundContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(ParallaxContentContainer)
