@@ -35,13 +35,13 @@ export function setParallaxTop({ parallaxTop }) {
 
 export function calcParallaxTop() {
     return function (dispatch, getState) {
-        const parallaxTop = (0 - (getState().scroll.get('windowPositionY') * .3))
+        const parallaxTop = (0 - (getState().scroll.get('windowPositionY') * .5))
         dispatch(setParallaxTop({ parallaxTop }))
     }
 }
 
 
-export function setTopHomeImages({ homeImagesTop }) {
+export function setHomeImagesTop({ homeImagesTop }) {
     return {
         type: SET_HOME_IMAGES_TOP,
         homeImagesTop
