@@ -6,12 +6,12 @@ import { Parallax, Background } from 'react-parallax'
 
 
 //remember to use refs you must use a container component, it will not take a functional component.
-function Home() {
+function Home({windowPositionY}) {
     return (
         <div className={container}>
             <div className={header}></div>
-            <HomeBackgroundContainer />
-            <ParallaxContentContainer />
+            <HomeBackgroundContainer windowPositionY={windowPositionY}/>
+            <ParallaxContentContainer windowPositionY={windowPositionY}/>
             <div className={content}>
                 <h1>blah</h1>
                 <div className={examplea}>Blah haaha!</div>

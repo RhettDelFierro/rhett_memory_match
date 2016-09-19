@@ -10,6 +10,9 @@ class HomeBackgroundContainer extends Component {
     constructor() {
         super()
         this.parallax = this.parallax.bind(this)
+        this.state = {
+            bgTop: 0
+        }
     }
 
     componentDidMount() {
@@ -23,13 +26,17 @@ class HomeBackgroundContainer extends Component {
     }
 
     parallax() {
+        console.log(this.props.windowPositionY)
         console.log('homebackgroundotnainer scrolling!')
-        this.props.calcBgTop()
+        const bgTop = (0 - (this.props.windowPositionY * .3))
+        this.setState({
+            bgTop
+        })
     }
 
     render() {
         return (
-            <HomeBackground bgTop={this.props.bgTop}/>
+            <HomeBackground bgTop={this.state.bgTop}/>
         )
     }
 }
@@ -37,14 +44,12 @@ class HomeBackgroundContainer extends Component {
 const { number, func } = PropTypes
 HomeBackgroundContainer.propTypes = {
     windowPositionY: number.isRequired,
-    bgTop: number.isRequired,
-    calcBgTop: func.isRequired
+    //bgTop: number.isRequired,
+    //calcBgTop: func.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
-        windowPositionY: scroll.get('windowPositionY'),
-        bgTop: scroll.get('bgTop')
     }
 }
 

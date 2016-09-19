@@ -11,7 +11,7 @@ class HomeContainer extends Component {
         super()
         this.scrollPosition = this.scrollPosition.bind(this)
         this.state = {
-            windowY: 0
+            windowPositionY: 0
         }
     }
 
@@ -32,7 +32,7 @@ class HomeContainer extends Component {
 
     render() {
         return (
-            <Home />
+            <Home windowPositionY={this.state.windowPositionY}/>
         )
     }
 }
