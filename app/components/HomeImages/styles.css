@@ -1,13 +1,14 @@
 .container {
     display: flex;
-    position: fixed;
+    position: absolute;
     background-size: cover;
     height: 330px;
     width: 100%;
     flex-direction: row;
     justify-content: space-around;
     align-items: stretch;
-    top: 8000px;
+    top: 1000px;
+    z-index: 2;
 }
 
 .showDiv {
