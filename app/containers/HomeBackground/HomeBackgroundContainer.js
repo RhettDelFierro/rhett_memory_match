@@ -22,7 +22,7 @@ class HomeBackgroundContainer extends Component {
     }
 
     parallax() {
-        this.props.setBgTop({ fromTop: window.scrollY })
+        this.props.setBgTop({ fromTop: this.props.windowPositionY })
     }
 
     render() {
@@ -34,12 +34,14 @@ class HomeBackgroundContainer extends Component {
 
 const { number, func } = PropTypes
 HomeBackgroundContainer.propTypes = {
+    windowPositionY: number.isRequired,
     bgTop: number.isRequired,
     setBgTop: func.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
+        windowPositionY: scroll.get('windowPositionY'),
         bgTop: scroll.get('bgTop')
     }
 }

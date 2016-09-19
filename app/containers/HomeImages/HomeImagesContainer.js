@@ -17,6 +17,7 @@ class HomeImagesContainer extends Component {
     }
 
     componentWillReceiveProps(newProps) {
+        console.log(this.imageContainerParent.refs.imageContainer)
         //the offsetparent will be the top of the browser
         if (window.scrollY > this.props.homeImagesTop) {
             this.setState({

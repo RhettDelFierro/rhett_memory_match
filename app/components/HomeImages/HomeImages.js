@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
-import { zoomIn } from 'animate.css'
+import { zoomIn, slideInLeft } from 'animate.css'
 import { container, showDiv, hideDiv, picture1 } from './styles.css'
 
 
@@ -11,16 +11,16 @@ import { container, showDiv, hideDiv, picture1 } from './styles.css'
 class HomeImages extends Component {
 
     componentDidMount() {
-        console.log(this.imageContainer.offsetTop)
+        //console.log(this.imageContainer.offsetTop)
         this.props.setTopHomeImages({ homeImagesTop: this.imageContainer.offsetTop })
     }
 
     render() {
 
-        const styles = this.props.showComponent ? `${container} ${zoomIn}` : `${hideDiv}`
+        const styles = this.props.showComponent ? `${container} ${slideInLeft}` : `${hideDiv}`
         return (
             <div className={styles} ref={(ref) => this.imageContainer = ref}>
-                <div className={picture1}></div>
+                <div  className={picture1}></div>
             </div>
         )
     }
