@@ -13,6 +13,7 @@ class HomeBackgroundContainer extends Component {
     }
 
     componentDidMount() {
+        console.log('homebackgroundconatiner mounted!')
         window.addEventListener('scroll',this.parallax);
     }
 
@@ -22,6 +23,7 @@ class HomeBackgroundContainer extends Component {
     }
 
     parallax() {
+        console.log('homebackgroundotnainer scrolling!')
         this.props.calcBgTop()
     }
 

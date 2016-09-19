@@ -10,6 +10,9 @@ class HomeContainer extends Component {
     constructor() {
         super()
         this.scrollPosition = this.scrollPosition.bind(this)
+        this.state = {
+            windowY: 0
+        }
     }
 
     componentDidMount() {
@@ -22,7 +25,9 @@ class HomeContainer extends Component {
     }
 
     scrollPosition() {
-        this.props.getWindowPositionY({fromTop: window.scrollY})
+        this.setState({
+            windowPositionY: window.scrollY
+        })
     }
 
     render() {
@@ -34,13 +39,10 @@ class HomeContainer extends Component {
 
 const { number, func } = PropTypes
 HomeContainer.propTypes = {
-    windowPositionY: number.isRequired,
-    getWindowPositionY: func.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
-        windowPositionY: scroll.get('windowPositionY')
     }
 }
 
