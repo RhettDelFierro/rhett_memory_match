@@ -33,17 +33,29 @@ class HomeImagesContainer extends Component {
 
     showHomeImages() {
         // && (this.props.windowPositionY < this.props.homeImagesBottom))
-        if (((this.props.windowPositionY > this.props.homeImagesTop)
-            || (this.props.windowPositionY < this.props.homeImagesBottom))
-            && (this.props.windowPositionY < this.props.homeImagesBottom)) {
+        if (((window.ScrollY > this.props.homeImagesTop)
+            || (window.scrollY < this.props.homeImagesBottom))
+            && (window.scrollY < this.props.homeImagesBottom)) {
             this.setState({showComponent: true})
+            this.imageNode.scrollIntoView()
         } else {
             this.setState({showComponent: false})
         }
     }
 
+    //showHomeImages() {
+    //    if ((window.scrollY > this.imageNode.offsetTop
+    //        || window.scrollY < this.imageNode.offsetTop + this.imageNode.offsetheight)
+    //    && window.scrollY < this.imageNode.) {
+    //
+    //    }
+    //}
+
     componentDidMount() {
         window.addEventListener('scroll', this.showHomeImages);
+        this.props.setHomeImagesTop({homeImagesTop: this.imageNode.offsetTop})
+        this.props.setHomeImagesBottom({homeImagesBottom: this.imageNode.offsetTop + this.imageNode.offsetHeight})
+
     }
 
     componentWillUnmount() {
@@ -52,7 +64,7 @@ class HomeImagesContainer extends Component {
 
     render() {
         return (
-            <HomeImages showComponent={this.state.showComponent}/>
+            <HomeImages imageRef={(node) => this.imageNode = node} showComponent={this.state.showComponent}/>
         )
     }
 }
@@ -62,7 +74,9 @@ HomeImagesContainer.propTypes = {
     windowPositionY: number.isRequired,
     bgTop: number.isRequired,
     homeImagesTop: number.isRequired,
-    homeImagesBottom: number.isRequired
+    homeImagesBottom: number.isRequired,
+    setHomeImagesTop: func.isRequired,
+    setHomeImagesBottom: func.isRequired,
 }
 
 function mapStateToProps({ scroll }) {

@@ -32,7 +32,7 @@ class HomeImages extends Component {
         //</div>
         //    : <div></div>
         return (
-            <div ref={(ref) => this.imageContainer = ref} className={container}>
+            <div ref={(ref) => this.props.imageRef} className={container}>
                 {this.props.showComponent
                     ?
                     <div className={appPicture1}></div>
@@ -44,13 +44,14 @@ class HomeImages extends Component {
     }
 }
 
-const { number, func } = PropTypes
+const { number, func, node } = PropTypes
 HomeImages.propTypes = {
     windowPositionY: number.isRequired,
     bgTop: number.isRequired,
     homeImagesTop: number.isRequired,
     setHomeImagesTop: func.isRequired,
-    setHomeImagesBottom: func.isRequired
+    setHomeImagesBottom: func.isRequired,
+    imageRef: node.isRequired
 }
 
 function mapStateToProps({ scroll }) {
