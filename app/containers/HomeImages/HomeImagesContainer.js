@@ -33,11 +33,11 @@ class HomeImagesContainer extends Component {
 
     showHomeImages() {
         // && (this.props.windowPositionY < this.props.homeImagesBottom))
-        if (((window.ScrollY > this.props.homeImagesTop)
+        if (((window.scrollY > this.props.homeImagesTop)
             || (window.scrollY < this.props.homeImagesBottom))
             && (window.scrollY < this.props.homeImagesBottom)) {
             this.setState({showComponent: true})
-            this.imageNode.scrollIntoView()
+            //this.imageNode.scrollIntoView()
         } else {
             this.setState({showComponent: false})
         }
@@ -53,8 +53,9 @@ class HomeImagesContainer extends Component {
 
     componentDidMount() {
         window.addEventListener('scroll', this.showHomeImages);
-        this.props.setHomeImagesTop({homeImagesTop: this.imageNode.offsetTop})
-        this.props.setHomeImagesBottom({homeImagesBottom: this.imageNode.offsetTop + this.imageNode.offsetHeight})
+        //console.log(this.imageNode)
+        //this.props.setHomeImagesTop({homeImagesTop: this.imageNode().offsetTop})
+        //this.props.setHomeImagesBottom({homeImagesBottom: this.imageNode().offsetTop + this.imageNode().offsetHeight})
 
     }
 
@@ -76,7 +77,7 @@ HomeImagesContainer.propTypes = {
     homeImagesTop: number.isRequired,
     homeImagesBottom: number.isRequired,
     setHomeImagesTop: func.isRequired,
-    setHomeImagesBottom: func.isRequired,
+    setHomeImagesBottom: func.isRequired
 }
 
 function mapStateToProps({ scroll }) {

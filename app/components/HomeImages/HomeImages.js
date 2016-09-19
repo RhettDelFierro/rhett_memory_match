@@ -8,21 +8,24 @@ import { container, showDiv, hideDiv, appPicture1 } from './styles.css'
 class HomeImages extends Component {
     constructor() {
         super()
-        this.scroll = this.scroll.bind(this)
+        //this.scroll = this.scroll.bind(this)
     }
+
     //const styles = showComponent ? `${container} ${animate} ${slideInLeft}` : `${hideDiv}
 
 
-    scroll() {
-        this.props.setHomeImagesTop({ homeImagesTop: this.imageContainer.offsetTop })
-        this.props.setHomeImagesBottom({homeImagesBottom: this.imageContainer.offsetTop + this.imageContainer.offsetHeight})
+    //scroll() {
+    //    this.props.setHomeImagesTop({ homeImagesTop: this.props.imageRef.offsetTop })
+    //    this.props.setHomeImagesBottom({homeImagesBottom: this.imageContainer.offsetTop + this.imageContainer.offsetHeight})
+    //}
+
+    componentDidMount() {
+        this.props.setHomeImagesTop({homeImagesTop: this.props.imageRef.offsetTop})
+        this.props.setHomeImagesBottom({homeImagesBottom: this.props.imageRef.offsetTop + this.props.imageRef.offsetHeight})
     }
 
-    componentDidMount(){
-        window.addEventListener('scroll',this.scroll);
-    }
-    componentWillUnmount(){
-        window.removeEventListener('scroll',this.scroll);
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.scroll);
     }
 
     render() {
@@ -44,14 +47,14 @@ class HomeImages extends Component {
     }
 }
 
-const { number, func, node } = PropTypes
+const { number, func } = PropTypes
 HomeImages.propTypes = {
     windowPositionY: number.isRequired,
     bgTop: number.isRequired,
     homeImagesTop: number.isRequired,
     setHomeImagesTop: func.isRequired,
     setHomeImagesBottom: func.isRequired,
-    imageRef: node.isRequired
+    imageRef: func.isRequired
 }
 
 function mapStateToProps({ scroll }) {
