@@ -4,9 +4,9 @@ import { HomeImagesContainer } from 'containers'
 
 
 //remember to use refs you must use a container component, it will not take a functional component.
-function ParallaxContent({ positionY }) {
+function ParallaxContent({ parallaxTop }) {
     const divStyle = {
-        top : `${positionY}px`
+        top : `${parallaxTop}px`
     }
     return (
         <div className={container} style={divStyle}>
@@ -19,7 +19,7 @@ function ParallaxContent({ positionY }) {
 const { number } = PropTypes
 ParallaxContent.propTypes = {
     windowPositionY: number.isRequired,
-    positionY: number.isRequired
+    parallaxTop: number.isRequired
 }
 
 export default ParallaxContent

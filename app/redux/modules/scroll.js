@@ -2,10 +2,10 @@ import { fromJS, toOrderedMap } from 'immutable'
 
 const SET_BACKGROUND_TOP = 'SET_BACKGROUND_TOP'
 const GET_WINDOW_POSITION_Y = 'GET_WINDOW_POSITION_Y'
-const SET_HOME_PARALLAX_CONTENT_POSITION_Y = 'SET_HOME_PARALLAX_CONTENT_POSITION_Y'
+const SET_PARALLAX_TOP = 'SET_PARALLAX_TOP'
 const SET_HOME_IMAGES_TOP = 'SET_HOME_IMAGES_TOP'
 
-export function getWindowPositionY({ fromTop }){
+export function getWindowPositionY({ fromTop }) {
     return {
         type: GET_WINDOW_POSITION_Y,
         fromTop
@@ -20,32 +20,26 @@ export function setBgTop({ bgTop }) {
 }
 
 export function calcBgTop() {
-
-    return function(dispatch,getState) {
-        const bgTop = (0 - (getState().scroll.windowPositionY *.3))
-        dispatch(setBgTop({ bgTop }))
+    return function (dispatch, getState) {
+        const bgTop = (0 - (getState().scroll.get('windowPositionY') * .3))
+        dispatch(setBgTop({bgTop}))
     }
 }
 
-export function setParallaxContentPositionY({ parallaxContentPositionY }) {
+export function setParallaxTop({ parallaxTop }) {
     return {
-        type: SET_HOME_PARALLAX_CONTENT_POSITION_Y,
-        parallaxContentPositionY
+        type: SET_PARALLAX_TOP,
+        parallaxTop
     }
 }
 
-//export function calcBgTop({ fromTop }){
-//        console.log('calcBgTop')
-//        const bgTop = (0 - (fromTop *.3))
-//        setBgTop({ bgTop })
-//}
-
-export function calculateParallaxContentPositionY() {
-    return function (dispatch,getState) {
-        const parallaxContentPositionY = (0 - (getState().scroll.get('windowPositionY') *.5))
-        dispatch(setParallaxContentPositionY({ parallaxContentPositionY }))
+export function calcParallaxTop() {
+    return function (dispatch, getState) {
+        const parallaxTop = (0 - (getState().scroll.get('windowPositionY') * .3))
+        dispatch(setParallaxTop({ parallaxTop }))
     }
 }
+
 
 export function setTopHomeImages({ homeImagesTop }) {
     return {
@@ -57,12 +51,12 @@ export function setTopHomeImages({ homeImagesTop }) {
 const initialState = fromJS({
     windowPositionY: 0,
     bgTop: 0,
-    parallaxContentPositionY: 0,
+    parallaxTop: 0,
     homeImagesTop: 0
 })
 
 export default function scroll(state = initialState, action) {
-    switch(action.type){
+    switch (action.type) {
         case GET_WINDOW_POSITION_Y:
             return state.merge({
                 windowPositionY: action.fromTop
@@ -71,9 +65,9 @@ export default function scroll(state = initialState, action) {
             return state.merge({
                 bgTop: action.bgTop
             })
-        case SET_HOME_PARALLAX_CONTENT_POSITION_Y:
+        case SET_PARALLAX_TOP:
             return state.merge({
-                parallaxContentPositionY: action.parallaxContentPositionY
+                parallaxTop: action.parallaxTop
             })
         case SET_HOME_IMAGES_TOP:
             return state.merge({

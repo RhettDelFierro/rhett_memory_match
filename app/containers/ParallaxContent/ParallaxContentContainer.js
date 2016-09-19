@@ -27,7 +27,7 @@ class ParallaxContentContainer extends Component {
 
     render() {
         return (
-            <ParallaxContent positionY={this.props.parallaxContentPositionY} windowPositionY={this.props.windowPositionY}/>
+            <ParallaxContent parallaxTop={this.props.parallaxTop} windowPositionY={this.props.windowPositionY}/>
         )
     }
 }
@@ -35,7 +35,7 @@ class ParallaxContentContainer extends Component {
 const { number, func } = PropTypes
 ParallaxContentContainer.propTypes = {
     windowPositionY: number.isRequired,
-    parallaxContentPositionY: number.isRequired,
+    parallaxTop: number.isRequired,
     calcParallaxTop: func.isRequired
 }
 
