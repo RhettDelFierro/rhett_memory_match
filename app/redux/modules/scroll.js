@@ -4,6 +4,7 @@ const SET_BACKGROUND_TOP = 'SET_BACKGROUND_TOP'
 const GET_WINDOW_POSITION_Y = 'GET_WINDOW_POSITION_Y'
 const SET_PARALLAX_TOP = 'SET_PARALLAX_TOP'
 const SET_HOME_IMAGES_TOP = 'SET_HOME_IMAGES_TOP'
+const SET_HOME_IMAGES_BOTTOM = 'SET_HOME_IMAGES_BOTTOM'
 
 export function getWindowPositionY({ fromTop }) {
     return {
@@ -48,11 +49,20 @@ export function setHomeImagesTop({ homeImagesTop }) {
     }
 }
 
+export function setHomeImagesBottom({ homeImagesBottom }) {
+    return {
+        type: SET_HOME_IMAGES_BOTTOM,
+        homeImagesBottom
+    }
+}
+
+
 const initialState = fromJS({
     windowPositionY: 0,
     bgTop: 0,
     parallaxTop: 0,
-    homeImagesTop: 0
+    homeImagesTop: 0,
+    homeImagesBottom: 0
 })
 
 export default function scroll(state = initialState, action) {
@@ -72,6 +82,10 @@ export default function scroll(state = initialState, action) {
         case SET_HOME_IMAGES_TOP:
             return state.merge({
                 homeImagesTop: action.homeImagesTop
+            })
+        case SET_HOME_IMAGES_BOTTOM:
+            return state.merge({
+                homeImagesBottom: action.homeImagesBottom
             })
         default:
             return state

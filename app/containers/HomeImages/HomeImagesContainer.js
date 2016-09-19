@@ -14,25 +14,43 @@ class HomeImagesContainer extends Component {
         this.state = {
             showComponent: false
         }
+        this.showHomeImages = this.showHomeImages.bind(this)
     }
 
-    componentWillReceiveProps(newProps) {
-        //the offsetparent will be the top of the browser
-        if (this.props.windowPositionY > this.props.homeImagesTop) {
-            this.setState({
-                showComponent: true
-            })
+    //this code goes away on any upscroll and visible on any downscroll.
+    //showHomeImages(){
+    //    let { showComponent } = this.state
+    //    this.props.windowPositionY > this.prev
+    //        ? !showComponent && this.setState({showComponent:true})
+    //        : showComponent && this.setState({showComponent:false})
+    //
+    //    this.prev = this.props.windowPositionY;
+    //
+    //    if (this.state.showComponent === true) {
+    //        console.log('great!')
+    //    }
+    //}
+
+    showHomeImages() {
+        // && (this.props.windowPositionY < this.props.homeImagesBottom))
+        if (((this.props.windowPositionY > this.props.homeImagesTop)
+            || (this.props.windowPositionY < this.props.homeImagesBottom))
+            && (this.props.windowPositionY < this.props.homeImagesBottom)) {
+            this.setState({showComponent: true})
         } else {
-            this.setState({
-                showComponent: false
-            })
+            this.setState({showComponent: false})
         }
     }
 
+    componentDidMount() {
+        window.addEventListener('scroll', this.showHomeImages);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.showHomeImages);
+    }
+
     render() {
-        const styles = this.state.showComponent ? `${container} animate zoomIn` : `${hideDiv}`
-        //<HomeImages windowPositionY={this.props.windowPositionY}
-        //            showComponent={this.state.showComponent}/>
         return (
             <HomeImages showComponent={this.state.showComponent}/>
         )
@@ -43,14 +61,16 @@ const { number, func } = PropTypes
 HomeImagesContainer.propTypes = {
     windowPositionY: number.isRequired,
     bgTop: number.isRequired,
-    homeImagesTop: number.isRequired
+    homeImagesTop: number.isRequired,
+    homeImagesBottom: number.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
         windowPositionY: scroll.get('windowPositionY'),
         bgTop: scroll.get('bgTop'),
-        homeImagesTop: scroll.get('homeImagesTop')
+        homeImagesTop: scroll.get('homeImagesTop'),
+        homeImagesBottom: scroll.get('homeImagesBottom')
     }
 }
 

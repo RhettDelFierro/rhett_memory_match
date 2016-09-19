@@ -4,22 +4,28 @@
     background-size: cover;
     height: 330px;
     width: 100%;
-    flex-direction: row;
-    justify-content: space-around;
     align-items: stretch;
     top: 1000px;
+    animation: appPictures 1s forwards;
 }
 
-.showDiv {
-    display: flex;
-}
-
-.hideDiv {
-    display: none;
-}
-
-.picture1 {
+.appPicture1 {
     background: url('../../assets/images/Perfect_Pitch_training.png') top center;
     background-size: cover;
     width: 310px;
 }
+
+@keyframes appPictures {
+    0% {
+        opacity: 0;
+        transform: translate(-1000px)
+    }
+
+    100% {
+        opacity: 1;
+        justify-content: space-around;
+        flex-direction: row;
+    }
+
+}
+

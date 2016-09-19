@@ -3,42 +3,62 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
-import { zoomIn, slideInLeft } from 'animate.css'
-import { container, showDiv, hideDiv, picture1 } from './styles.css'
+import { container, showDiv, hideDiv, appPicture1 } from './styles.css'
 
-
-//remember to use refs you must use a container component, it will not take a functional component.
 class HomeImages extends Component {
+    constructor() {
+        super()
+        this.scroll = this.scroll.bind(this)
+    }
+    //const styles = showComponent ? `${container} ${animate} ${slideInLeft}` : `${hideDiv}
 
-    componentDidMount() {
-        console.log(this.imageContainer.style)
+
+    scroll() {
         this.props.setHomeImagesTop({ homeImagesTop: this.imageContainer.offsetTop })
+        this.props.setHomeImagesBottom({homeImagesBottom: this.imageContainer.offsetTop + this.imageContainer.offsetHeight})
+    }
+
+    componentDidMount(){
+        window.addEventListener('scroll',this.scroll);
+    }
+    componentWillUnmount(){
+        window.removeEventListener('scroll',this.scroll);
     }
 
     render() {
-
-        const styles = this.props.showComponent ? `${container} ${slideInLeft}` : `${hideDiv}`
+        //this.props.showComponent
+        //    ? <div ref={(ref) => this.imageContainer = ref} className={container}>
+        //    <div className={appPicture1}></div>
+        //</div>
+        //    : <div></div>
         return (
-            <div className={styles} >
-                <div ref={(ref) => this.imageContainer = ref} className={picture1}></div>
+            <div ref={(ref) => this.imageContainer = ref} className={container}>
+                {this.props.showComponent
+                    ?
+                    <div className={appPicture1}></div>
+                    :
+                    <div></div>
+                }
             </div>
         )
     }
 }
 
-const { number, bool, func } = PropTypes
-
+const { number, func } = PropTypes
 HomeImages.propTypes = {
     windowPositionY: number.isRequired,
-    showComponent: bool.isRequired,
-    setTopHomeImages: func.isRequired,
-    bgTop: number.isRequired
+    bgTop: number.isRequired,
+    homeImagesTop: number.isRequired,
+    setHomeImagesTop: func.isRequired,
+    setHomeImagesBottom: func.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
         windowPositionY: scroll.get('windowPositionY'),
-        bgTop: scroll.get('bgTop')
+        bgTop: scroll.get('bgTop'),
+        homeImagesTop: scroll.get('homeImagesTop'),
+        homeImagesBotton: scroll.get('homeImagesBottom')
     }
 }
 
@@ -46,4 +66,4 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(scrollActionCreators, dispatch)
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(HomeImages)
+export default connect(mapStateToProps, mapDispatchToProps)(HomeImages)
