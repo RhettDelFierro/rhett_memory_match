@@ -12,11 +12,18 @@ export function getWindowPositionY({ fromTop }){
     }
 }
 
-export function setBgTop({ fromTop }) {
-    const bgTop = (0 - (fromTop *.3))
+export function setBgTop({ bgTop }) {
     return {
         type: SET_BACKGROUND_TOP,
         bgTop
+    }
+}
+
+export function calcBgTop() {
+
+    return function(dispatch,getState) {
+        const bgTop = (0 - (getState().scroll.windowPositionY *.3))
+        dispatch(setBgTop({ bgTop }))
     }
 }
 
