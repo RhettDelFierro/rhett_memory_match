@@ -11,7 +11,6 @@ function Home({windowPositionY}) {
         <div className={homeContainer}>
             <Header />
             <HomeBackgroundContainer windowPositionY={windowPositionY}/>
-            <ParallaxContentContainer windowPositionY={windowPositionY}/>
             <div className={content}>
                 <div className={examplea}>Blah haaha!</div>
                 <h1>blah</h1>

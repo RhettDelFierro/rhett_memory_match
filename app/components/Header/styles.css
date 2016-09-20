@@ -10,6 +10,8 @@
     width: 100%;
     z-index: 3;
     background-color: black;
+    background: url('http://cdn.pcwallart.com/images/playing-piano-black-and-white-wallpaper-3.jpg') no-repeat top center;
+    background-size: cover;
 }
 
 .title, .slogan {
