@@ -31,9 +31,9 @@ class AppInfoContainer extends Component {
     //    }
     //}
 
-    componentWillReceiveProps(newProps){
-        this.props.setHomeImagesTop({homeImagesTop: newProps.headerHeight})
-    }
+    //componentWillReceiveProps(newProps){
+    //    this.props.setHomeImagesTop({homeImagesTop: newProps.headerHeight})
+    //}
     //showHomeImages() {
     //    // && (this.props.windowPositionY < this.props.homeImagesBottom))
     //    if (((window.scrollY > this.props.homeImagesTop)
@@ -54,11 +54,31 @@ class AppInfoContainer extends Component {
     //    }
     //}
 
+    //need this method because the child component's render has not atually updated the DOM yet,
+    //the dom element's top was not being calculated correctly.
+    scrollElement() {
+        var self = this;
+        window.requestAnimationFrame(function () {
+            var node = self.imageNode
+            if (node !== undefined) {
+                //and scroll them!
+                self.props.setHomeImagesTop({homeImagesTop: self.imageNode.offsetTop})
+            }
+        });
+    }
+
     componentDidMount() {
         window.addEventListener('scroll', this.showHomeImages);
-        //this.props.setHomeImagesTop({homeImagesTop: this.imageNode.offsetTop})
+        setTimeout(() => this.scrollElement())
+        //setTimeout(this.props.setHomeImagesTop({homeImagesTop: this.imageNode.offsetTop}))
         //this.props.setHomeImagesBottom({homeImagesBottom: this.imageNode.offsetTop + this.imageNode.offsetHeight})
     }
+
+    componentDidUpdate() {
+        this.scrollElement();
+        //this.props.setHomeImagesTop({homeImagesTop: this.imageNode.offsetTop})
+    }
+
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.showHomeImages);

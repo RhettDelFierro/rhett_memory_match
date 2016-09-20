@@ -19,8 +19,6 @@ class AppInfo extends Component {
     //}
 
     componentDidMount() {
-        console.log(this.node)
-        console.log(this.node1.offsetTop)
     }
 
     componentWillUnmount() {
