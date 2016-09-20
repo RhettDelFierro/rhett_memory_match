@@ -4,17 +4,17 @@
     color: #655659;
     font-size: 18px;
     background-color: black;
-    z-index: 10000;
+    z-index: 4;
 }
 
 .navContainer {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     max-width: 1100px;
-    margin: 0px auto;
+    margin: 0 auto;
 }
 
 .navContainer ul {

@@ -1,15 +1,16 @@
 import React from "react"
 import { Link } from "react-router"
 import { HomeBackgroundContainer, ParallaxContentContainer } from 'containers'
-import { container, header, background,example, example2, examplea, content, showImages } from './styles.css'
+import { Header } from 'components'
+import { homeContainer, header, background,example, example2, examplea, content, showImages } from './styles.css'
 import { Parallax, Background } from 'react-parallax'
 
 
 //remember to use refs you must use a container component, it will not take a functional component.
 function Home({windowPositionY}) {
     return (
-        <div className={container}>
-            <div className={header}></div>
+        <div className={homeContainer}>
+            <Header />
             <HomeBackgroundContainer windowPositionY={windowPositionY}/>
             <ParallaxContentContainer windowPositionY={windowPositionY}/>
             <div className={content}>

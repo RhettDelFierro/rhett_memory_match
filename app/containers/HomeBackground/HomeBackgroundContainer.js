@@ -16,18 +16,14 @@ class HomeBackgroundContainer extends Component {
     }
 
     componentDidMount() {
-        console.log('homebackgroundconatiner mounted!')
-        window.addEventListener('scroll',this.parallax);
+        window.addEventListener('scroll', this.parallax);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll',this.parallax);
-
+        window.removeEventListener('scroll', this.parallax);
     }
 
     parallax() {
-        console.log(this.props.windowPositionY)
-        console.log('homebackgroundotnainer scrolling!')
         const bgTop = (0 - (this.props.windowPositionY * .3))
         this.setState({
             bgTop
@@ -49,8 +45,7 @@ HomeBackgroundContainer.propTypes = {
 }
 
 function mapStateToProps({ scroll }) {
-    return {
-    }
+    return {}
 }
 
 function mapDispatchToProps(dispatch) {
