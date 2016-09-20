@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
-import { appInfoContainer, showDiv, hideDiv, appPicture1 } from './styles.css'
+import { Breaker } from 'components'
+import { appInfoContainer, showDiv, hideDiv, appPicture1, train } from './styles.css'
 
 class AppInfo extends Component {
     constructor() {
@@ -29,7 +30,7 @@ class AppInfo extends Component {
             <div ref={this.props.imageRef} className={appInfoContainer}>
                 {this.props.showComponent
                     ?
-                    <div className={appPicture1}></div>
+                    <Breaker />
                     :
                     <div ref={(node) => this.node1 = node}></div>
                 }
