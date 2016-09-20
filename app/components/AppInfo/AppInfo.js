@@ -29,7 +29,7 @@ class AppInfo extends Component {
             <div ref={this.props.imageRef} className={appInfoContainer}>
                 {this.props.showComponent
                     ?
-                    <div ref={(node) => this.node = node} className={appPicture1}></div>
+                    <div className={appPicture1}></div>
                     :
                     <div ref={(node) => this.node1 = node}></div>
                 }

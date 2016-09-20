@@ -9,53 +9,22 @@ import { container, showDiv, hideDiv, picture1 } from './styles.css'
 class AppInfoContainer extends Component {
     constructor() {
         super()
-        //this.parallax = this.parallax.bind(this)
-        //this.displayComponent = this.displayComponent.bind(this)
         this.state = {
             showComponent: false
         }
-        //this.showHomeImages = this.showHomeImages.bind(this)
+        this.showHomeImages = this.showHomeImages.bind(this)
     }
 
-    //this code goes away on any upscroll and visible on any downscroll.
-    //showHomeImages(){
-    //    let { showComponent } = this.state
-    //    this.props.windowPositionY > this.prev
-    //        ? !showComponent && this.setState({showComponent:true})
-    //        : showComponent && this.setState({showComponent:false})
-    //
-    //    this.prev = this.props.windowPositionY;
-    //
-    //    if (this.state.showComponent === true) {
-    //        console.log('great!')
-    //    }
-    //}
+    showHomeImages() {
+        if ((window.pageYOffset > this.props.homeImagesTop/4)
+            && (window.pageYOffset < this.props.homeImagesBottom)) {
+            this.setState({showComponent: true})
+            //this.imageNode.scrollIntoView()
+        } else {
+            this.setState({showComponent: false})
+        }
+    }
 
-    //componentWillReceiveProps(newProps){
-    //    this.props.setHomeImagesTop({homeImagesTop: newProps.headerHeight})
-    //}
-    //showHomeImages() {
-    //    // && (this.props.windowPositionY < this.props.homeImagesBottom))
-    //    if (((window.scrollY > this.props.homeImagesTop)
-    //        || (window.scrollY < this.props.homeImagesBottom))
-    //        && (window.scrollY < this.props.homeImagesBottom)) {
-    //        this.setState({showComponent: true})
-    //        //this.imageNode.scrollIntoView()
-    //    } else {
-    //        this.setState({showComponent: false})
-    //    }
-    //}
-
-    //showHomeImages() {
-    //    if ((window.scrollY > this.imageNode.offsetTop
-    //        || window.scrollY < this.imageNode.offsetTop + this.imageNode.offsetheight)
-    //    && window.scrollY < this.imageNode.) {
-    //
-    //    }
-    //}
-
-    //need this method because the child component's render has not atually updated the DOM yet,
-    //the dom element's top was not being calculated correctly.
     scrollElement() {
         var self = this;
         window.requestAnimationFrame(function () {
@@ -63,6 +32,7 @@ class AppInfoContainer extends Component {
             if (node !== undefined) {
                 //and scroll them!
                 self.props.setHomeImagesTop({homeImagesTop: self.imageNode.offsetTop})
+                self.props.setHomeImagesBottom({homeImagesBottom: self.imageNode.offsetTop + self.imageNode.offsetHeight})
             }
         });
     }
@@ -70,13 +40,10 @@ class AppInfoContainer extends Component {
     componentDidMount() {
         window.addEventListener('scroll', this.showHomeImages);
         setTimeout(() => this.scrollElement())
-        //setTimeout(this.props.setHomeImagesTop({homeImagesTop: this.imageNode.offsetTop}))
-        //this.props.setHomeImagesBottom({homeImagesBottom: this.imageNode.offsetTop + this.imageNode.offsetHeight})
     }
 
     componentDidUpdate() {
         this.scrollElement();
-        //this.props.setHomeImagesTop({homeImagesTop: this.imageNode.offsetTop})
     }
 
 
