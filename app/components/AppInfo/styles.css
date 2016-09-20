@@ -1,13 +1,12 @@
-.container {
+.appInfoContainer {
     display: flex;
-    position: absolute;
+    position: relative;
     height: 5000px;
     width: 100%;
     align-items: stretch;
-    top: 1000px;
     animation: appPictures 1s forwards;
-    z-index: 2;
-    background-color: black;
+    z-index: 5;
+    background-color: #fff;
 }
 
 .appPicture1 {
@@ -15,6 +14,7 @@
     background-size: cover;
     width: 310px;
     height: 240px;
+    z-index: 10;
 }
 
 @keyframes appPictures {
@@ -28,6 +28,5 @@
         justify-content: space-around;
         flex-direction: row;
     }
-
 }
 

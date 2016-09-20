@@ -3,12 +3,11 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
-import { container, showDiv, hideDiv, appPicture1 } from './styles.css'
+import { appInfoContainer, showDiv, hideDiv, appPicture1 } from './styles.css'
 
-class HomeImages extends Component {
+class AppInfo extends Component {
     constructor() {
         super()
-        //this.scroll = this.scroll.bind(this)
     }
 
     //const styles = showComponent ? `${container} ${animate} ${slideInLeft}` : `${hideDiv}
@@ -20,27 +19,21 @@ class HomeImages extends Component {
     //}
 
     componentDidMount() {
-        this.props.setHomeImagesTop({homeImagesTop: this.props.imageRef.offsetTop})
-        this.props.setHomeImagesBottom({homeImagesBottom: this.props.imageRef.offsetTop + this.props.imageRef.offsetHeight})
+        console.log(this.node)
+        console.log(this.node1.offsetTop)
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.scroll);
     }
 
     render() {
-        //this.props.showComponent
-        //    ? <div ref={(ref) => this.imageContainer = ref} className={container}>
-        //    <div className={appPicture1}></div>
-        //</div>
-        //    : <div></div>
         return (
-            <div ref={(ref) => this.props.imageRef} className={container}>
+            <div ref={this.props.imageRef} className={appInfoContainer}>
                 {this.props.showComponent
                     ?
-                    <div className={appPicture1}></div>
+                    <div ref={(node) => this.node = node} className={appPicture1}></div>
                     :
-                    <div></div>
+                    <div ref={(node) => this.node1 = node}></div>
                 }
             </div>
         )
@@ -48,7 +41,7 @@ class HomeImages extends Component {
 }
 
 const { number, func } = PropTypes
-HomeImages.propTypes = {
+AppInfo.propTypes = {
     windowPositionY: number.isRequired,
     bgTop: number.isRequired,
     homeImagesTop: number.isRequired,
@@ -70,4 +63,4 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(scrollActionCreators, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeImages)
+export default connect(mapStateToProps, mapDispatchToProps)(AppInfo)

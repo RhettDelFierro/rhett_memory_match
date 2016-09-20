@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from "react"
-import { container } from './styles.css'
+import { homeBackgroundContainer } from './styles.css'
 
 
 //remember to use refs you must use a container component, it will not take a functional component.
@@ -8,7 +8,7 @@ function HomeBackground({ bgTop }) {
         top: `${bgTop}px`
     }
     return (
-        <div className={container} style={styles}>
+        <div className={homeBackgroundContainer} style={styles}>
         </div>
     )
 }

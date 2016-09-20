@@ -1,12 +1,12 @@
 import React, { PropTypes, Component } from "react"
-import { HomeImages } from "components"
+import { AppInfo } from "components"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
 import { container, showDiv, hideDiv, picture1 } from './styles.css'
 
-class HomeImagesContainer extends Component {
+class AppInfoContainer extends Component {
     constructor() {
         super()
         //this.parallax = this.parallax.bind(this)
@@ -14,7 +14,7 @@ class HomeImagesContainer extends Component {
         this.state = {
             showComponent: false
         }
-        this.showHomeImages = this.showHomeImages.bind(this)
+        //this.showHomeImages = this.showHomeImages.bind(this)
     }
 
     //this code goes away on any upscroll and visible on any downscroll.
@@ -31,17 +31,20 @@ class HomeImagesContainer extends Component {
     //    }
     //}
 
-    showHomeImages() {
-        // && (this.props.windowPositionY < this.props.homeImagesBottom))
-        if (((window.scrollY > this.props.homeImagesTop)
-            || (window.scrollY < this.props.homeImagesBottom))
-            && (window.scrollY < this.props.homeImagesBottom)) {
-            this.setState({showComponent: true})
-            //this.imageNode.scrollIntoView()
-        } else {
-            this.setState({showComponent: false})
-        }
+    componentWillReceiveProps(newProps){
+        this.props.setHomeImagesTop({homeImagesTop: newProps.headerHeight})
     }
+    //showHomeImages() {
+    //    // && (this.props.windowPositionY < this.props.homeImagesBottom))
+    //    if (((window.scrollY > this.props.homeImagesTop)
+    //        || (window.scrollY < this.props.homeImagesBottom))
+    //        && (window.scrollY < this.props.homeImagesBottom)) {
+    //        this.setState({showComponent: true})
+    //        //this.imageNode.scrollIntoView()
+    //    } else {
+    //        this.setState({showComponent: false})
+    //    }
+    //}
 
     //showHomeImages() {
     //    if ((window.scrollY > this.imageNode.offsetTop
@@ -53,10 +56,8 @@ class HomeImagesContainer extends Component {
 
     componentDidMount() {
         window.addEventListener('scroll', this.showHomeImages);
-        //console.log(this.imageNode)
-        //this.props.setHomeImagesTop({homeImagesTop: this.imageNode().offsetTop})
-        //this.props.setHomeImagesBottom({homeImagesBottom: this.imageNode().offsetTop + this.imageNode().offsetHeight})
-
+        //this.props.setHomeImagesTop({homeImagesTop: this.imageNode.offsetTop})
+        //this.props.setHomeImagesBottom({homeImagesBottom: this.imageNode.offsetTop + this.imageNode.offsetHeight})
     }
 
     componentWillUnmount() {
@@ -65,19 +66,20 @@ class HomeImagesContainer extends Component {
 
     render() {
         return (
-            <HomeImages imageRef={(node) => this.imageNode = node} showComponent={this.state.showComponent}/>
+            <AppInfo imageRef={(node) => this.imageNode = node} showComponent={this.state.showComponent}/>
         )
     }
 }
 
 const { number, func } = PropTypes
-HomeImagesContainer.propTypes = {
+AppInfoContainer.propTypes = {
     windowPositionY: number.isRequired,
     bgTop: number.isRequired,
     homeImagesTop: number.isRequired,
     homeImagesBottom: number.isRequired,
     setHomeImagesTop: func.isRequired,
-    setHomeImagesBottom: func.isRequired
+    setHomeImagesBottom: func.isRequired,
+    headerHeight: number.isRequired
 }
 
 function mapStateToProps({ scroll }) {
@@ -85,7 +87,8 @@ function mapStateToProps({ scroll }) {
         windowPositionY: scroll.get('windowPositionY'),
         bgTop: scroll.get('bgTop'),
         homeImagesTop: scroll.get('homeImagesTop'),
-        homeImagesBottom: scroll.get('homeImagesBottom')
+        homeImagesBottom: scroll.get('homeImagesBottom'),
+        headerHeight: scroll.get('headerHeight')
     }
 }
 
@@ -93,4 +96,4 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(scrollActionCreators, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeImagesContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(AppInfoContainer)
