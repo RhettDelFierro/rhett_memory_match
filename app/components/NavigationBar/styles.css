@@ -4,6 +4,7 @@
     color: #655659;
     font-size: 18px;
     background-color: black;
+    border-bottom: solid 1px #fff;
     z-index: 4;
 }
 

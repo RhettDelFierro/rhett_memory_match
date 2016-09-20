@@ -12,14 +12,25 @@
     background-color: black;
 }
 
-.title {
+.title, .slogan {
+    text-align: center;
     color: lightblue;
+}
+
+.title {
     animation: headerH1 2s forwards;
 }
 
 .slogan {
-    color: lightblue;
     animation: headerH2 2s forwards
+}
+
+.enterNote {
+    height:240px;
+    width: 120px;
+    background: url('../../assets/images/enternote.png') top center;
+    background-size: cover;
+    animation: image 3s forwards;
 }
 
 @keyframes headerH1 {
@@ -45,6 +56,18 @@
     100% {
         opacity: 1;
         align-self: center;
+    }
+
+}
+
+@keyframes image {
+    0% {
+        opacity: 0;
+
+    }
+
+    100% {
+        opacity: 1;
     }
 
 }

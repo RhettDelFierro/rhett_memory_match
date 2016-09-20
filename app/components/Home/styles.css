@@ -20,13 +20,13 @@
     /*z-index: 4;*/
 
     /*!*<-------------USED THIS ONE------------>*!*/
-    /*!*background-image: url("http://i.giphy.com/533FbUP4hGQxO.gif"),*!*/
-    /*!*linear-gradient(*!*/
-            /*!*to top,*!*/
-            /*!*rgba(0,0,0,1),*!*/
-            /*!*rgba(0,0,0,0) 30%*!*/
-    /*!*);*!*/
-    /*!*background-size: 100% 100%;*!*/
+    /*background-image: url("http://i.giphy.com/533FbUP4hGQxO.gif"),*/
+    /*linear-gradient(*/
+            /*to top,*/
+            /*rgba(0,0,0,1),*/
+            /*rgba(0,0,0,0) 30%*/
+    /*);*/
+    /*background-size: 100% 100%;*/
 
 /*}*/
 
@@ -43,16 +43,8 @@
     background-color: #a9aeff;
 }
 
-.example2 {
-    margin-top: 2000px;
-    height: 500px;
-    width: 730px;
-    background-color: #a9aeff;
-    margin-bottom: 1000px;
-}
-
 .examplea {
-    margin-top: 5000px;
+    margin-top: 2000px;
     height: 500px;
     width: 730px;
     background-color: #a9aeff;
