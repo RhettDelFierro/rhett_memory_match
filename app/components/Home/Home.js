@@ -1,7 +1,7 @@
 import React, { PropTypes, Component} from "react"
 import { Link } from "react-router"
 import { HomeBackgroundContainer, ParallaxContentContainer, AppInfoContainer,HeaderContainer } from 'containers'
-import { Parallax } from 'components'
+import { Parallax, Header } from 'components'
 import { homeContainer, header, background,example, example2, examplea, content, showImages } from './styles.css'
 
 
@@ -9,7 +9,7 @@ import { homeContainer, header, background,example, example2, examplea, content,
 function Home({ windowPositionY }) {
         return (
             <div className={homeContainer}>
-                <HeaderContainer />
+                <Header />
                 <HomeBackgroundContainer windowPositionY={windowPositionY}/>
                 <AppInfoContainer />
                 <div className={content}>
