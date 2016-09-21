@@ -20,7 +20,8 @@
 
 .breakImage {
     margin: 0 auto;
-    background: url('../../assets/images/breaker-musicnote.png') top center;
+    /*background: url('../../assets/images/breaker-musicnote.png');*/
+    background-position: top center;
     background-size: 100% 100%;
     display: inline-block;
     position: relative;

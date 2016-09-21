@@ -26,11 +26,13 @@ class AppInfo extends Component {
     }
 
     render() {
+        const titleBreaker = 'Train Your Ears'
+        const titleBreakerImage = require('assets/images/breaker-musicnote.png')
         return (
             <div ref={this.props.imageRef} className={appInfoContainer}>
                 {this.props.showComponent
                     ?
-                    <Breaker />
+                    <Breaker title={titleBreaker} image={titleBreakerImage}/>
                     :
                     <div ref={(node) => this.node1 = node}></div>
                 }
