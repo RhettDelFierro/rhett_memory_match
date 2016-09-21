@@ -3,7 +3,7 @@ import { Link } from "react-router"
 import { Nav, Navbar, NavItem } from "react-bootstrap"
 import { LoginFormContainer } from "containers"
 import { ModalContainer } from "containers"
-import { container, navContainer, link } from './styles.css'
+import { container, navContainer, link, hamburgerContainer, hamburger } from './styles.css'
 
 
 function RegisterToggle({UpdateLogin}) {
@@ -14,9 +14,9 @@ function RegisterToggle({UpdateLogin}) {
     )
 }
 
-function NavigationLinks({isAuthed, logout}){
+function NavigationLinks({isAuthed, logout}) {
     return isAuthed === true
-    ? <ul>
+        ? <ul>
         <li><Link to="/" className={link}>{'Home'}</Link></li>
         <li><Link to="/memory_match" className={link}>{'Memory Match'}</Link></li>
         <li><Link to="/perfect_pitch_training" className={link}>{'Perfect Pitch'}</Link></li>
@@ -25,7 +25,12 @@ function NavigationLinks({isAuthed, logout}){
         <li><Link to="/practice" className={link}>{'Practice'}</Link></li>
         <li><span onClick={logout}>{'LogOut'}</span></li>
     </ul>
-        :<ul>
+        : <ul>
+        <li>
+            <div className={hamburgerContainer}>
+                <div className={hamburger}></div>
+            </div>
+        </li>
         <li><Link to='/' className={link}>{'Home'}</Link></li>
         <li><ModalContainer/></li>
     </ul>

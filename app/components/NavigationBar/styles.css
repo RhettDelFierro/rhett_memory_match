@@ -2,9 +2,10 @@
     position: fixed;
     width: 100%;
     color: #655659;
-    font-size: 18px;
-    background-color: black;
-    border-bottom: solid 1px #fff;
+    font-size: 24px;
+    background-color: #fff;
+    border-bottom: solid 1px lightgray;
+    font-family: "Courier New", Courier, monospace;
     z-index: 4;
 }
 
@@ -36,4 +37,73 @@
 
 .link:hover {
     color: #655659;
+}
+
+.hamburgerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 30px;
+}
+
+.hamburger {
+    position: relative;
+    height: 1px;
+    background-color: black;
+    width: 18px;
+}
+
+.hamburger:before {
+    content: "";
+    position: absolute;
+    background-color: green;
+    height: 1px;
+    top: -5px;
+    left: 0;
+    width: 18px;
+}
+
+.hamburger:after {
+    content: "";
+    position: absolute;
+    background-color: blue;
+    height: 1px;
+    top: 5px;
+    left: 0;
+    width: 18px;
+}
+
+.hamburgerContainer:hover .hamburger:before {
+    animation: animateTop 1s forwards;
+}
+
+.hamburgerContainer:hover .hamburger:after {
+    animation: animateBottom 1s forwards;
+}
+
+@keyframes animateTop {
+    0% {
+        transform: translate(0,-4px)
+    }
+
+    50% {
+        transform: translate(0,-7px)
+    }
+
+    100% {
+        transform: translate(0,-6px);
+    }
+}
+
+@keyframes animateBottom {
+   0% {
+        transform: translate(0,4px)
+    }
+    50% {
+        transform: translate(0,7px)
+    }
+    100% {
+        transform: translate(0,6px)
+    }
 }
