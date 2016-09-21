@@ -2,7 +2,7 @@ import React, { PropTypes } from "react"
 import { Link } from "react-router"
 import { Nav, Navbar, NavItem } from "react-bootstrap"
 import { LoginFormContainer } from "containers"
-import { ModalContainer } from "containers"
+import { ModalContainer, NavModalContainer } from "containers"
 import { container, navContainer, link, hamburgerContainer, hamburger } from './styles.css'
 
 
@@ -27,9 +27,7 @@ function NavigationLinks({isAuthed, logout}) {
     </ul>
         : <ul>
         <li>
-            <div className={hamburgerContainer}>
-                <div className={hamburger}></div>
-            </div>
+            <NavModalContainer />
         </li>
         <li><Link to='/' className={link}>{'Home'}</Link></li>
         <li><ModalContainer/></li>

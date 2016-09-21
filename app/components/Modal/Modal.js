@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react'
 import { default as ReactModal } from 'react-modal'
 import {
-    modalHeader, modalBody, pointer,
-    newDuckInput, submitDuckBtn, darkBtn, registerForm, loginForm } from './styles.css'
+    modalHeader, modalBody, pointer, darkBtn, registerForm, loginForm } from './styles.css'
 import { Map } from 'immutable'
 import { LoginForm, RegisterForm } from 'components'
 

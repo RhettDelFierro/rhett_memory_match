@@ -1,0 +1,100 @@
+.modalHeader {
+    background: #fff;
+    padding: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #1877E6;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.modalBody {
+    display: flex;
+    flex-direction: row;
+    /*justify-content: space-around;*/
+    align-items: stretch;
+}
+
+.navModal {
+
+}
+
+.leftPage {
+
+}
+.rightPage {
+
+}
+/*<-----------------------HAMBURGER----------------->*/
+
+.hamburgerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 30px;
+}
+
+.hamburger {
+    position: relative;
+    height: 1px;
+    background-color: black;
+    width: 18px;
+}
+
+.hamburger::before {
+    content: "";
+    position: absolute;
+    background-color: green;
+    height: 1px;
+    top: -5px;
+    left: 0;
+    width: 18px;
+}
+
+.hamburger::after {
+    content: "";
+    position: absolute;
+    background-color: blue;
+    height: 1px;
+    top: 5px;
+    left: 0;
+    width: 18px;
+}
+
+.hamburgerContainer:hover .hamburger::before {
+    animation: animateTop 1s forwards;
+}
+
+.hamburgerContainer:hover .hamburger::after {
+    animation: animateBottom 1s forwards;
+}
+
+@keyframes animateTop {
+    0% {
+        transform: translate(0,-4px)
+    }
+
+    50% {
+        transform: translate(0,-7px)
+    }
+
+    100% {
+        transform: translate(0,-6px);
+    }
+}
+
+@keyframes animateBottom {
+    0% {
+        transform: translate(0,4px)
+    }
+    50% {
+        transform: translate(0,7px)
+    }
+    100% {
+        transform: translate(0,6px)
+    }
+}
