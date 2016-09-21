@@ -14,3 +14,9 @@ export default function Breaker({title,image}) {
         </div>
     )
 }
+
+const { string } = PropTypes
+Breaker.propTypes = {
+    title: string.isRequired,
+    image: string.isRequired
+}

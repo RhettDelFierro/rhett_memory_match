@@ -1,13 +1,12 @@
 .appInfoContainer {
     display: flex;
     position: relative;
-    height: 5000px;
+    height: 1000px;
     width: 100%;
-    align-items: stretch;
     z-index: 5;
     background-color: #fff;
-    justify-content: space-around;
-    flex-direction: row;
+    justify-content: flex-start;
+    flex-direction: column;
 }
 
 .train {
@@ -37,3 +36,15 @@
     }
 }
 
+/*<---------------------InfoSection Container----------------->*/
+
+.wholeInfoContainer {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    /*align-items: center; *when mobile*!*/
+    width: 75%;
+    height: 1000px;
+    z-index: 3;
+}

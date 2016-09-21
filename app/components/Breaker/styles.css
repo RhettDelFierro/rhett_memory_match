@@ -1,5 +1,6 @@
 .breakerContainer {
     order: 1;
+    align-self: flex-start;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -15,7 +16,9 @@
 }
 
 .lineBreak {
-    width: 30%;
+    width: 40%;
+    border: 0;
+    border-bottom: 2px solid black;
 }
 
 .breakImage {

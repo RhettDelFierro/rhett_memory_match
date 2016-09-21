@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
-import { Breaker } from 'components'
-import { appInfoContainer, showDiv, hideDiv, appPicture1, train } from './styles.css'
+import { Breaker, InfoSection } from 'components'
+import { appInfoContainer, showDiv, hideDiv, appPicture1, train, wholeInfoContainer } from './styles.css'
 
 class AppInfo extends Component {
     constructor() {
@@ -28,11 +28,24 @@ class AppInfo extends Component {
     render() {
         const titleBreaker = 'Train Your Ears'
         const titleBreakerImage = require('assets/images/breaker-musicnote.png')
+
+        //mention the study results too.
+        const infoDescription = 'Train Your Ears is an app based on the research done by University of Chicago studying if learning this skill is possible.'
+        const infoImage = require('assets/images/Perfect_Pitch_training.png')
+
+        const infoDescription2 = 'Discover the keys some of your favorite songs were composed in afterward!'
+        const infoImage2 = require('assets/images/getnotes.png')
+
         return (
             <div ref={this.props.imageRef} className={appInfoContainer}>
                 {this.props.showComponent
-                    ?
-                    <Breaker title={titleBreaker} image={titleBreakerImage}/>
+                    ? <div>
+                        <Breaker title={titleBreaker} image={titleBreakerImage}/>
+                        <div className={wholeInfoContainer}>
+                            <InfoSection align="left" image={infoImage} description={infoDescription} />
+                            <InfoSection align="right" image={infoImage2} description={infoDescription2}/>
+                        </div>
+                      </div>
                     :
                     <div ref={(node) => this.node1 = node}></div>
                 }
