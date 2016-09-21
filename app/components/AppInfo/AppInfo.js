@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
 import { Breaker, InfoSection } from 'components'
-import { appInfoContainer, showDiv, hideDiv, appPicture1, train, wholeInfoContainer } from './styles.css'
+import { appInfoContainer, wholeInfoContainer } from './styles.css'
 
 class AppInfo extends Component {
     constructor() {

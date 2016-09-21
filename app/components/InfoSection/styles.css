@@ -71,7 +71,7 @@
 @keyframes infoEnd {
     0% {
         opacity: 0;
-        transform: translate(-2000px,0)
+        transform: translate(2000px,0)
     }
 
     100% {
