@@ -53,7 +53,7 @@ const base = {
             {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
             //the css modules need the source map so your components can have individual style sheets.
             {test: /\.css$/, loader: "style!css?sourceMap&modules&localIdentName=[name]__[local]___[hash:base64:5]"},
-            {test: /\.(png|jpg)$/, loader: 'url?limit=25000000'}, //anything to the right of the '?' in the 'loader' key can also be placed in a 'query' parameter as key:value pairs. That way it'll just be loader: url.
+            {test: /\.(png|jpg|gif)$/, loader: 'url?limit=25000000'}, //anything to the right of the '?' in the 'loader' key can also be placed in a 'query' parameter as key:value pairs. That way it'll just be loader: url.
             {test: /\.mp3$/, loader: 'file?name=[path][name].[ext]'}
             //{ test: /\.png$/, loader: "url-loader?limit=100000"}
             //{test: /\.png$/, loader: 'url-loader?limit=100000'}

@@ -1,0 +1,91 @@
+/*<-------------------MAIN NAVIGATION MODAL CONTAINER AND ANIMATION ----------------->*/
+.navModal {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    height: 45%;
+    width: 30%;
+    background-color: rosybrown;
+    animation: popNavModal 4s forwards 4s;
+    z-index: -1;
+}
+
+@keyframes popNavModal {
+    0% {
+        display: none;
+    }
+    10% {
+
+    }
+    50% {
+        display: flex;
+    }
+    100% {
+    }
+}
+
+/*<-------------------PAGES-------------------->*/
+
+
+/*containers*/
+.leftPage {
+    /*background gradient*/
+    flex: 1;
+    order: 1;
+    width: 50%;
+    background: url('../../assets/images/Powerful_Sheet_Music.png') top center;
+    background-size: 100% 100%;
+    overflow: hidden;
+}
+/*right container is where the magic is.*/
+.rightPage {
+    /*background gradient*/
+    /*perspective here?*/
+    position: relative;
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    order: 2;
+}
+
+.rightPage > .front {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transform: perspective(600px) rotateY(0deg);
+    background: url('../../assets/images/Billie_Jean_Sheet_Music.jpg') top center;
+    background-size: 100% 100%;
+    backface-visibility: hidden;
+    z-index: 1;
+}
+
+.rightPage:hover > .front {
+    animation: frontFlipAnimation 2s forwards;
+}
+
+@keyframes frontFlipAnimation {
+    100% {
+        transform: perspective(600px) rotateY(-180deg)
+    }
+}
+
+.rightPage > .back {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transform: perspective(600px) rotateY(180deg);
+    background: url('../../assets/images/Happy_Sheet_Music.jpg') top center;
+    background-size: 100% 100%;
+    backface-visibility: hidden;
+}
+
+.rightPage:hover > .back {
+    animation: backFlipAnimation 2s forwards;
+}
+
+@keyframes backFlipAnimation {
+    100% {
+        transform: perspective(600px) rotateY(0deg)
+    }
+}
