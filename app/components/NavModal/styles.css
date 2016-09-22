@@ -20,6 +20,11 @@
 
 /*<-----------------------HAMBURGER----------------->*/
 
+/*make this an animation*/
+.clearModal {
+    display: none;
+}
+
 .hamburgerContainer {
     display: flex;
     justify-content: center;
