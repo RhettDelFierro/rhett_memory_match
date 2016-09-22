@@ -11,14 +11,6 @@ class AppInfo extends Component {
         super()
     }
 
-    //const styles = showComponent ? `${container} ${animate} ${slideInLeft}` : `${hideDiv}
-
-
-    //scroll() {
-    //    this.props.setHomeImagesTop({ homeImagesTop: this.props.imageRef.offsetTop })
-    //    this.props.setHomeImagesBottom({homeImagesBottom: this.imageContainer.offsetTop + this.imageContainer.offsetHeight})
-    //}
-
     componentDidMount() {
     }
 

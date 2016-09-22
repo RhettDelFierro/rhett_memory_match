@@ -2,7 +2,7 @@ import React, { PropTypes,Component } from "react"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as userActionCreators from 'redux/modules/users'
-import { closeModal } from 'redux/modules/navModal'
+import { closeNavModal } from 'redux/modules/navModal'
 import { NavPage } from 'components'
 
 class NavPageContainer extends Component {
@@ -32,7 +32,7 @@ function mapStateToProps({users, navModal}) {
 }
 
 function mapDispatchToProps(dispatch){
-    return bindActionCreators({...userActionCreators, closeModal}, dispatch)
+    return bindActionCreators({...userActionCreators, closeNavModal}, dispatch)
 }
 
 

@@ -3,31 +3,31 @@ import { fromJS } from 'immutable'
 const OPEN_NAV_MODAL = 'OPEN_NAV_MODAL'
 const CLOSE_NAV_MODAL = 'CLOSE_NAV_MODAL'
 
-export function openModal () {
+export function openNavModal () {
     return {
         type: OPEN_NAV_MODAL
     }
 }
 
-export function closeModal () {
+export function closeNavModal () {
     return {
         type: CLOSE_NAV_MODAL
     }
 }
 
 const initialState = fromJS({
-    isOpen: false
+    isNavOpen: false
 })
 
 export default function navModal (state = initialState, action) {
     switch (action.type) {
         case OPEN_NAV_MODAL :
             return state.merge({
-                isOpen: true
+                isNavOpen: true
             })
         case CLOSE_NAV_MODAL :
             return state.merge({
-                isOpen: false
+                isNavOpen: false
             })
         default :
             return state

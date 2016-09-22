@@ -4,35 +4,26 @@ import { pointer, darkBtn, hamburgerContainer, hamburger, bgModalContainer, clea
 import { page, odd, even, content, cover, cover_back, pageContainer } from './modalStyles.css'
 import { Map } from 'immutable'
 import { Link } from 'react-router'
+import { NavPage } from 'components'
 
-export default function NavModal({ openModal, closeModal, isOpen }) {
+export default function NavModal({ openNavModal, closeNavModal, isNavOpen }) {
+
+    function ModalClose(props) {
+
+        return closeNavModal()
+    }
 
     return (
-        <div className={hamburgerContainer} onClick={openModal}>
+        <div className={hamburgerContainer} onClick={openNavModal}>
             <div className={hamburger}></div>
-            <ReactModal overlayClassName={bgModalContainer} className={pageContainer} isOpen={isOpen} onRequestClose={closeModal}>
-                <BookModal />
+            <ReactModal overlayClassName={bgModalContainer} className={pageContainer} isOpen={isNavOpen} onRequestClose={closeNavModal}>
+                <Book />
             </ReactModal>
         </div>
     )
 }
 
-//close is a function that will toggle isOpen. Use it to toggle the modal.
-//maybe onclose will take display to none after animation.
-function BackgroundModal(props) {
-    const openModal = props.isOpen ? `${bgModalContainer}` : `${clearModal}`
-    return (
-        <div className={openModal} onClick={props.closeModal}>
-
-        </div>
-    )
-}
-
-function ModalClose(props) {
-
-}
-
-function BookModal(props) {
+function Book(props) {
     //left page (rotateY(-90deg) and right page rotateY(90deg).
     //perspective on parentcontainer.
 
@@ -41,8 +32,6 @@ function BookModal(props) {
 
     return (
             <div className={pageContainer}>
-                <Odd />
-                <Even />
                 <Odd />
                 <Even />
                 <Content />
@@ -67,13 +56,15 @@ function Even() {
 function Content() {
     const oddClass = `${page} ${odd}`
     return (
-        <div className={oddClass} id={content}></div>
+        <div className={oddClass} id={content}>
+            <NavPage />
+        </div>
     )
 }
 
 const { func, bool } = PropTypes
 NavModal.propTypes = {
-    closeModal: func.isRequired,
-    isOpen: bool.isRequired,
-    openModal: func.isRequired
+    closeNavModal: func.isRequired,
+    isNavOpen: bool.isRequired,
+    openNavModal: func.isRequired
 }

@@ -30,7 +30,8 @@
 
 .pageContainer {
     perspective: 1200px;
-    /*fixes-blue and brown border on modal.*/
+
+    /*fixes-blue and brown border when using react-modal.*/
     outline:none!important
 }
 
@@ -117,13 +118,18 @@
 
 /* Unset animation on content page (it shouldn't turn) */
 #content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /*animate to zoom in*/
     animation: none;
 
     /* Some styling */
     padding: 10px 25px;
     overflow-y: auto;
 
-    background: url('../../assets/images/Happy_Sheet_Music.jpg') top center;
+    background: #fff top center;
     background-size: 100% 100%;
 }
 
