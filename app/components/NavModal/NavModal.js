@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { pointer, darkBtn, hamburgerContainer, hamburger, bgModalContainer } from './styles.css'
-import { navModal, leftPage, rightPage, front, back } from './modalStyles.css'
+import { page, odd, even, content, cover, cover_back, closeDiv } from './modalStyles.css'
 import { Map } from 'immutable'
 import { Link } from 'react-router'
 
@@ -29,19 +29,47 @@ function BackgroundModal(props) {
 function BookModal({ isOpen, close }) {
     //left page (rotateY(-90deg) and right page rotateY(90deg).
     //perspective on parentcontainer.
+
+    //const odd = `${page} odd turn`
+    //const even = `${page} even turn`
+
     return (
         isOpen ?
-            <div className={navModal}>
-                    <div className={leftPage}></div>
-                    <RightPage />
+            <div className={closeDiv}>
+                <Odd />
+                <Even />
+                <Odd />
+                <Even />
+                <Content />
             </div>
             : <div></div>
     )
 }
 
+function Odd(){
+    const oddClass = `${page} ${odd}`
+    return (
+        <div className={oddClass} id={cover}></div>
+    )
+}
+
+function Even(){
+    const evenClass = `${page} ${even}`
+    return (
+        <div className={evenClass} id={cover_back}></div>
+    )
+}
+
+function Content(){
+    const oddClass = `${page} ${odd}`
+    return (
+        <div className={oddClass} id={content}></div>
+    )
+}
+
 function RightPage(props){
     return (
-        <div className={rightPage}>
+        <div>
             <div className={front}></div>
             <div className={back}></div>
         </div>

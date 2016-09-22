@@ -9,6 +9,7 @@
     background-color: rosybrown;
     animation: popNavModal 4s forwards 4s;
     z-index: -1;
+    perspective: 1200px;
 }
 
 @keyframes popNavModal {
@@ -27,6 +28,112 @@
 
 /*<-------------------PAGES-------------------->*/
 
+.closeDiv {
+    perspective: 1200px;
+}
+
+.page {
+    display: inline-block;
+    position: fixed;
+    z-index: 1; /* the content page should go behind the cover pages */
+
+    /* Size & Position */
+    left: 50%;
+    width: 360px;
+    margin-left: -180px; /* half of width */
+    top: 50%;
+    height: 500px;
+    margin-top: -250px; /* half of height */
+
+    /* Add some styling, so the pages are opaque */
+    background-color: #eee;
+
+    /* Hide backface of each page/side, so we don't see it when turned */
+    backface-visibility: hidden;
+
+    /* Set up animation */
+    /*transition: transform 1.0s ease;*/
+
+    /* Hide content that overflows the page */
+    overflow: hidden;
+}
+
+.page.odd {
+    /* odd pages flip along left side, and with minus degree rotation */
+    transform-origin: 0% 0%;
+
+    /* Set animation for auto-turning the odd pages */
+    animation: turn-odd 2s ease 3s normal forwards;
+
+    /* Some styling */
+    border-radius: 0px 8px 8px 0px;
+
+    box-shadow: inset 15px 0px 15px -15px rgba(0,0,0, 0.2);
+
+    background: url('../../assets/images/Powerful_Sheet_Music.png') top center;
+    background-size: 100% 100%;
+
+}
+
+.page.even {
+    margin-left: -540px; /* 1,5 * width to position it left of odd pages */
+
+    /* even pages flip along right side, and with positive degree rotation */
+    transform-origin: 100% 0%;
+
+    transform: rotateY(180deg); /* even pages start rotated (closed book) */
+
+
+    /* Set animation for auto-turning the even pages */
+    animation: turn-even 2s ease 3s normal forwards;
+
+
+    /* Some styling */
+    border-radius: 8px 0px 0px 8px;
+
+    box-shadow: inset -15px 0px 15px -15px rgba(0,0,0, 0.3);
+
+    background: url('../../assets/images/Billie_Jean_Sheet_Music.jpg') top center;
+    background-size: 100% 100%;
+}
+
+/* Put cover pages in front of content page */
+#cover {
+    z-index: 3;
+}
+#cover_back {
+    z-index: 2;
+}
+
+/* Unset animation on content page (it shouldn't turn) */
+#content {
+    animation: none;
+
+    /* Some styling */
+    padding: 10px 25px;
+    overflow-y: auto;
+}
+
+/* Setting up the animations */
+@keyframes turn-odd {
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(-180deg);
+    }
+}
+
+@keyframes turn-even {
+    0% {
+        transform: rotateY(180deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
+}
+
+
 
 /*containers*/
 .leftPage {
@@ -38,6 +145,7 @@
     background-size: 100% 100%;
     overflow: hidden;
 }
+
 /*right container is where the magic is.*/
 .rightPage {
     /*background gradient*/
@@ -47,13 +155,13 @@
     width: 100%;
     flex: 1;
     order: 2;
+    overflow: hidden;
 }
 
 .rightPage > .front {
     position: absolute;
     height: 100%;
     width: 100%;
-    transform: perspective(600px) rotateY(0deg);
     background: url('../../assets/images/Billie_Jean_Sheet_Music.jpg') top center;
     background-size: 100% 100%;
     backface-visibility: hidden;
@@ -65,9 +173,12 @@
 }
 
 @keyframes frontFlipAnimation {
+    50% {
+        width: 0;
+    }
     100% {
-        transform: perspective(600px) rotateY(-180deg);
-        transform-origin: 80% ;
+        transform-origin: -100%;
+        transform: perspective(600px) rotateY(-180deg) translate(-100%);
     }
 }
 
@@ -86,8 +197,11 @@
 }
 
 @keyframes backFlipAnimation {
+    0% {
+        transform: rotateY(0deg);
+    }
     100% {
-        transform: perspective(600px) rotateY(0deg);
-        transform-origin: 80%;
+        transform-origin: -100%;
+        transform: perspective(600px) translate(-100%);
     }
 }
