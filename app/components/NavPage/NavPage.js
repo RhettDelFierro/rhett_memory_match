@@ -1,8 +1,7 @@
 import React, {PropTypes} from 'react'
 import { Link } from 'react-router'
 import { ModalContainer } from 'containers'
-import { navPageContainer, link, pointer } from './styles.css'
-
+import { navPageContainer, link, pointer, closeX } from './styles.css'
 
 function NavPage({isAuthed, logout, closeNavModal}) {
     return isAuthed === true
@@ -16,6 +15,7 @@ function NavPage({isAuthed, logout, closeNavModal}) {
                 <li><Link to="/profile" className={link}>{'Profile'}</Link></li>
                 <li><Link to="/practice" className={link}>{'Practice'}</Link></li>
                 <li><span onClick={logout}>{'LogOut'}</span></li>
+                <li className={closeX}><span onClick={closeNavModal} className="glyphicon glyphicon-remove">{'Return'}</span></li>
             </ul>
         </div>
         :
@@ -23,7 +23,7 @@ function NavPage({isAuthed, logout, closeNavModal}) {
             <ul>
                 <li><Link to='/' className={link}>{'Home'}</Link></li>
                 <li><ModalContainer/></li>
-                <li><span onClick={closeNavModal} className="glyphicon glyphicon-remove">{''}</span></li>
+                <li className={closeX}><span onClick={closeNavModal} className="glyphicon glyphicon-remove">{'Return'}</span></li>
             </ul>
         </div>
 }

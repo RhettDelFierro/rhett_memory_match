@@ -55,6 +55,13 @@ const base = {
             {test: /\.css$/, loader: "style!css?sourceMap&modules&localIdentName=[name]__[local]___[hash:base64:5]"},
             {test: /\.(png|jpg|gif)$/, loader: 'url?limit=25000000'}, //anything to the right of the '?' in the 'loader' key can also be placed in a 'query' parameter as key:value pairs. That way it'll just be loader: url.
             {test: /\.mp3$/, loader: 'file?name=[path][name].[ext]'}
+            //{test: /\.scss$/, loaders: ["style", "css", "sass"]},
+            //{test: /\.scss$/, loader: 'style!css?modules&sourceMap&localIdentName=[name]__[local]___[hash:base64:5]!resolve-url!sass?outputStyle=expanded&sourceMap'},
+            //{
+            //    test: /\.scss$/,
+            //    include: path.join(__dirname, 'app', 'scss'),
+            //    loader: "style!css!sass?sourceMap"
+            //}
             //{ test: /\.png$/, loader: "url-loader?limit=100000"}
             //{test: /\.png$/, loader: 'url-loader?limit=100000'}
         ]

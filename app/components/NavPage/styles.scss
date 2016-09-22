@@ -1,0 +1,37 @@
+.navPageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: #655659;
+  font-family: 'Parisienne', cursive;
+  font-size: 24px;
+  background-color: #fff;
+  border-bottom: solid 1px lightgray;
+}
+
+.navPageContainer ul {
+  padding: 0;
+}
+
+.navPageContainer {
+  li {
+    list-style-type: none;
+    padding: 4px 0;
+    cursor: pointer;
+  }
+}
+
+.navPageContainer li span {
+  text-align: center;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #655659;
+}
+

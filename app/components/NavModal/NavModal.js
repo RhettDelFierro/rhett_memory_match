@@ -4,7 +4,7 @@ import { pointer, darkBtn, hamburgerContainer, hamburger, bgModalContainer, clea
 import { page, odd, even, content, cover, cover_back, pageContainer } from './modalStyles.css'
 import { Map } from 'immutable'
 import { Link } from 'react-router'
-import { NavPage } from 'components'
+import { NavPageContainer } from 'containers'
 
 export default function NavModal({ openNavModal, closeNavModal, isNavOpen }) {
 
@@ -57,7 +57,7 @@ function Content() {
     const oddClass = `${page} ${odd}`
     return (
         <div className={oddClass} id={content}>
-            <NavPage />
+            <NavPageContainer />
         </div>
     )
 }

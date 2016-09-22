@@ -19,9 +19,9 @@ class NavPageContainer extends Component {
 
 NavPageContainer.propTypes = {
     logout: PropTypes.func.isRequired,
-    closeModal: PropTypes.func.isRequired,
+    closeNavModal: PropTypes.func.isRequired,
     isAuthed: PropTypes.bool.isRequired,
-    authID: PropTypes.string.isRequired
+    authID: PropTypes.string
 }
 
 function mapStateToProps({users, navModal}) {

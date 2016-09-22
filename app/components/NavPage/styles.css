@@ -15,13 +15,13 @@
     padding: 0;
 }
 
-.navPageContainer li {
+.navPageContainer li{
     list-style-type: none;
     padding: 4px 0;
     cursor: pointer;
 }
 
-.navPageContainer li span {
+.closeX {
     text-align: center;
 }
 
