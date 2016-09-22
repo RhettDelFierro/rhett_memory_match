@@ -74,7 +74,7 @@
     transform-origin: 0% 0%;
 
     /* Set animation for auto-turning the odd pages */
-    animation: turn-odd 2s ease 1s normal forwards;
+    animation: turn-odd 1.5s ease 1s normal forwards;
 
     /* Some styling */
     border-radius: 0px 8px 8px 0px;
@@ -96,7 +96,7 @@
 
 
     /* Set animation for auto-turning the even pages */
-    animation: turn-even 2s ease 1s normal forwards;
+    animation: turn-even 3s ease 1s normal forwards;
 
 
     /* Some styling */
@@ -123,7 +123,7 @@
     align-items: center;
 
     /*animate to zoom in*/
-    animation: none;
+    animation: zoomContent 1s 2s forwards;
 
     /* Some styling */
     padding: 10px 25px;
@@ -141,13 +141,28 @@
     100% {
         transform: rotateY(-180deg);
     }
+
 }
 
 @keyframes turn-even {
     0% {
         transform: rotateY(180deg);
     }
-    100% {
+    50% {
         transform: rotateY(0deg);
+    }
+    100% {
+        transform: translate(-1000px);
+    }
+}
+
+@keyframes zoomContent {
+    0% {
+
+    }
+    100% {
+        z-index: 10;
+        transform: translate(-90px,-125px) scale(1.5,1.5);
+        position: fixed;
     }
 }

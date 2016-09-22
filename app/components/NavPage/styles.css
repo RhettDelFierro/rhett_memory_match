@@ -21,6 +21,10 @@
     cursor: pointer;
 }
 
+li:hover {
+    color: #97ccec
+}
+
 .closeX {
     text-align: center;
 }
