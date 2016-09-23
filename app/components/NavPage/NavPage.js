@@ -7,10 +7,6 @@ import { List } from 'immutable'
 function NavPage({isAuthed, logout, closeNavModal}) {
     const routes = List(['perfect_pitch_training', 'scoreboard', 'profile', 'practice'])
 
-    function animateClose(){
-
-    }
-
     return isAuthed === true
         ?
         <div className={navPageContainer}>
