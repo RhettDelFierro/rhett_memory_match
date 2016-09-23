@@ -34,21 +34,21 @@ NavModal.propTypes = {
 }
 
 function Odd({ isNavOpen }) {
-    const oddClass = isNavOpen ? `${page} ${odd}` : `${closeCover}`
+    const oddClass = isNavOpen ? `${page} ${odd}` : `${page} ${odd}${closeCover}`
     return (
         <div className={oddClass} id={cover}></div>
     )
 }
 
 function Even({ isNavOpen }) {
-    const evenClass = isNavOpen ? `${page} ${even}` : `${closeBack}`
+    const evenClass = isNavOpen ? `${page} ${even}` : `${page} ${even} ${closeBack}`
     return (
         <div className={evenClass} id={cover_back}></div>
     )
 }
 
 function Content({ isNavOpen }) {
-    const oddClass = isNavOpen ? `${page} ${odd}` : `${closeContent}`
+    const oddClass = isNavOpen ? `${page} ${odd}` : `${page} ${odd} ${closeContent}`
     return (
         <div className={oddClass} id={content}>
             <NavPageContainer />

@@ -26,8 +26,8 @@
     transform-origin: 0% 0%;
     width: 50%;
     animation: turn-odd 2s ease 1s normal forwards;
-    border-radius: 0 8px 8px 0px;
-    box-shadow: inset 15px 0px 15px -15px rgba(0, 0, 0, 0.2);
+    border-radius: 0 8px 8px;
+    box-shadow: inset 15px 0 15px -15px rgba(0, 0, 0, 0.2);
     background: url('../../assets/images/cork-wallet.png') repeat top center;
     background-size: 100% 100%;
 
@@ -112,15 +112,52 @@
 }
 
 /*<------------------------CLOSE NAV MODAL ANIMATIONS------------------->*/
-#content .closeContent {
-    /*animation: zoomContentReverse 1s forwards;*/
 
+#content.closeContent {
+
+    /*<---added--->*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 25px;
+    overflow-y: auto;
+    background: #fff top center;
+    background-size: 100% 100%;
+    animation: zoom-content-reverse 1s forwards;
+    transform-origin: 0% 0%;
+    z-index: 10;
 }
 
-.page.even .closeBack {
-    /*composes: even;*/
-    /*z-index: 2*/
-    /*animation: t 2s forwards;*/
+@keyframes zoom-content-reverse {
+    0% {
+        transform: translate(-90px, -125px) scale(1.5, 1.5);
+        position: fixed;
+    }
+    100% {
+        transform: translate(0,0) scale(1, 1);
+    }
+}
+
+.page.even.closeBack {
+    left: -25%;
+    transform-origin: 100% 0%;
+    width: 50%;
+    transform: rotateY(0deg) translate(-1000px);
+    border-radius: 8px 0 0 8px;
+    box-shadow: inset -15px 0 15px -15px rgba(0, 0, 0, 0.3);
+    background: url('../../assets/images/Billie_Jean_Sheet_Music.jpg') top center;
+    background-size: 100% 100%;
+    animation: turn-even-reverse 2s ease normal forwards;
+    z-index: 11;
+}
+
+@keyframes turn-even-reverse {
+    50% {
+        transform: translate(0,0);
+    }
+    100% {
+        transform: rotateY(-180deg);
+    }
 }
 
 .closeCover {
