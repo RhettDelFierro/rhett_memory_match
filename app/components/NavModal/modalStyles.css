@@ -85,7 +85,7 @@
     animation: turn-odd 2s ease 1s normal forwards;
 
     /* Some styling */
-    border-radius: 0px 8px 8px 0px;
+    border-radius: 0 8px 8px 0px;
 
     box-shadow: inset 15px 0px 15px -15px rgba(0,0,0, 0.2);
 
@@ -105,7 +105,7 @@
 
 
     /* Set animation for auto-turning the even pages */
-    animation: turn-even 2s ease 1s normal forwards;
+    animation: turn-even 4s ease 1s normal forwards;
 
 
     /* Some styling */
@@ -131,8 +131,6 @@
     justify-content: center;
     align-items: center;
 
-    /*animate to zoom in*/
-    animation: zoomContent 1s 2s forwards;
 
     /* Some styling */
     padding: 10px 25px;
@@ -140,6 +138,9 @@
 
     background: #fff top center;
     background-size: 100% 100%;
+
+    /*animate to zoom in*/
+    animation: zoomContent 1s 2s forwards;
 }
 
 /* Setting up the animations */
@@ -157,8 +158,13 @@
     0% {
         transform: rotateY(180deg);
     }
-    100% {
+
+    50% {
         transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: translate(-1000px);
     }
 }
 
