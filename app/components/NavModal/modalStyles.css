@@ -128,22 +128,18 @@
     z-index: 10;
 }
 
-@keyframes zoom-content-reverse {
-    0% {
-        transform: translate(-90px, -125px) scale(1.5, 1.5);
-        position: fixed;
-    }
-    100% {
-        transform: translate(0, 0) scale(1, 1);
-    }
-}
-
 .page.even.closeBack {
     /*left: -25%;*/
     transform-origin: 100% 0%;
     transform: rotateY(0deg) translate(-1000px);
     animation: turn-even-reverse 2s ease normal forwards;
     z-index: 11;
+}
+
+.page.odd.closeCover {
+    transform: rotateY(-180deg);
+    transform-origin: 0% 100%;
+    animation: turn-odd-reverse 1s 1s ease normal forwards;
 }
 
 @keyframes turn-even-reverse {
@@ -155,15 +151,36 @@
     }
 }
 
-.page.odd.closeCover {
-    transform: rotateY(-180deg);
-    transform-origin: 0% 100%;
-    animation: turn-odd-reverse 1s 1s ease normal forwards;
+@keyframes zoom-content-reverse {
+    0% {
+        transform: translate(-90px, -125px) scale(1.5, 1.5);
+        position: fixed;
+    }
+    100% {
+        transform: translate(0, 0) scale(1, 1);
+    }
 }
 
 @keyframes turn-odd-reverse {
     100% {
         transform: rotateY(0deg);
         z-index: 1000;
+    }
+}
+
+/*trigger zoom in animation for a smaller screen.*/
+@media screen and (max-width: 740px) {
+    #content.closeContent {
+        animation: zoom-content-responsive-reverse 1s forwards;
+    }
+}
+@keyframes zoom-content-responsive-reverse {
+    0% {
+        z-index: 10;
+        transform: translate(-24%, -18%) scale(1.5, 1.5);
+        position: fixed;
+    }
+    100% {
+        transform: translate(0,0) scale(1,1)
     }
 }
