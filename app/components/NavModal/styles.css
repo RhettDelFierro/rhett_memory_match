@@ -22,10 +22,11 @@
 
 .hamburgerContainer {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     width: 18px;
-    height: 30px;
+    height: 17px;
+    margin: 6px 0;
 }
 
 .hamburger {
@@ -63,9 +64,36 @@
     animation: animateBottom 1s forwards;
 }
 
-@media screen and (min-width: 700px) {
+@media screen and (max-width: 739px) {
+    .hamburgerContainer:hover {
+        animation: animateBlink 0.5s;
+    }
+    .hamburgerContainer:hover .hamburger::before {
+        animation: animateTop 0.5s 0.5s forwards;
+    }
+    .hamburgerContainer:hover .hamburger::after {
+        animation: animateBottom 0.5s 0.5s forwards;
+    }
+}
+
+@media screen and (min-width: 740px) {
     .hamburgerContainer:hover {
         animation: animateBackground 1s 1s forwards;
+    }
+}
+
+@keyframes animateBlink {
+    0%{
+        background-color: lightblue;
+        border-radius: 14%;
+    }
+    75% {
+        background-color: lightblue;
+        border-radius: 14%;
+    }
+    100% {
+        background-color: #fff;
+
     }
 }
 

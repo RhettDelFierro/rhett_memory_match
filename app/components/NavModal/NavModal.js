@@ -11,7 +11,7 @@ export default function NavModal({ openNavModal, closeNavModal, isNavOpen }) {
     //const bgModalToggle = isNavOpen ? `${bgModalContainer}` : `${closeBG}`
     //const pageToggle = isNavOpen ? `${pageContainer}` : `${closePage}`
     return (
-        <div className={hamburgerContainer} onClick={openNavModal}>
+        <div className={hamburgerContainer} onClick={() => setTimeout(openNavModal,500)}>
             <div className={hamburger}></div>
             <ReactModal overlayClassName={bgModalContainer} className={pageContainer} isOpen={isNavOpen}
                         onRequestClose={closeNavModal}
