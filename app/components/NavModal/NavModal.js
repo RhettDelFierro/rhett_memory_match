@@ -15,7 +15,7 @@ export default function NavModal({ openNavModal, closeNavModal, isNavOpen }) {
             <div className={hamburger}></div>
             <ReactModal overlayClassName={bgModalContainer} className={pageContainer} isOpen={isNavOpen}
                         onRequestClose={closeNavModal}
-                        closeTimeoutMS={5000}
+                        closeTimeoutMS={100000}
                         shouldCloseOnOverlayClick={false}>
                 <Odd isNavOpen={isNavOpen}/>
                 <Even isNavOpen={isNavOpen}/>
@@ -34,7 +34,7 @@ NavModal.propTypes = {
 }
 
 function Odd({ isNavOpen }) {
-    const oddClass = isNavOpen ? `${page} ${odd}` : `${page} ${odd}${closeCover}`
+    const oddClass = isNavOpen ? `${page} ${odd}` : `${page} ${odd} ${closeCover}`
     return (
         <div className={oddClass} id={cover}></div>
     )
