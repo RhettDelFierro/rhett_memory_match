@@ -1,33 +1,4 @@
-/*<-------------------MAIN NAVIGATION MODAL CONTAINER AND ANIMATION WAS THE CUSTOM BODY----------------->*/
-.navModal {
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    align-items: stretch;
-    height: 45%;
-    width: 30%;
-    background-color: rosybrown;
-    animation: popNavModal 4s forwards 4s;
-    z-index: -1;
-    perspective: 1200px;
-}
-
-@keyframes popNavModal {
-    0% {
-        display: none;
-    }
-    10% {
-
-    }
-    50% {
-        display: flex;
-    }
-    100% {
-    }
-}
-
 /*<-------------------PAGES-------------------->*/
-
 .pageContainer {
     perspective: 1200px;
     displaY: flex;
@@ -39,14 +10,14 @@
     z-index: 10;
 
     /*fixes-blue and brown border when using react-modal.*/
-    outline:none!important
+    outline: none !important
 }
 
-@media screen and (max-width: 740px) {
-    .pageContainer {
-        width: 200px;
-    }
-}
+/*@media screen and (max-width: 740px) {*/
+/*.pageContainer {*/
+/*width: 200px;*/
+/*}*/
+/*}*/
 
 .page {
     display: inline-block;
@@ -76,11 +47,11 @@
 }
 
 /*@media screen and (max-width: 800px) {*/
-    /*.page {*/
-        /*width: 240px;*/
-        /*margin-left: -120px;*/
-        /*height: 333px;*/
-    /*}*/
+/*.page {*/
+/*width: 240px;*/
+/*margin-left: -120px;*/
+/*height: 333px;*/
+/*}*/
 /*}*/
 
 .page.odd {
@@ -94,7 +65,7 @@
     /* Some styling */
     border-radius: 0 8px 8px 0px;
 
-    box-shadow: inset 15px 0px 15px -15px rgba(0,0,0, 0.2);
+    box-shadow: inset 15px 0px 15px -15px rgba(0, 0, 0, 0.2);
 
     background: url('../../assets/images/cork-wallet.png') repeat top center;
     background-size: 100% 100%;
@@ -110,15 +81,13 @@
 
     transform: rotateY(180deg); /* even pages start rotated (closed book) */
 
-
     /* Set animation for auto-turning the even pages */
     animation: turn-even 4s ease 1s normal forwards;
-
 
     /* Some styling */
     border-radius: 8px 0 0 8px;
 
-    box-shadow: inset -15px 0 15px -15px rgba(0,0,0, 0.3);
+    box-shadow: inset -15px 0 15px -15px rgba(0, 0, 0, 0.3);
 
     background: url('../../assets/images/Billie_Jean_Sheet_Music.jpg') top center;
     background-size: 100% 100%;
@@ -128,6 +97,7 @@
 #cover {
     z-index: 3;
 }
+
 #cover_back {
     z-index: 2;
 }
@@ -138,7 +108,6 @@
     justify-content: center;
     align-items: center;
 
-
     /* Some styling */
     padding: 10px 25px;
     overflow-y: auto;
@@ -148,6 +117,12 @@
 
     /*animate to zoom in*/
     animation: zoomContent 1s 2s forwards;
+}
+
+@media screen and (max-width: 740px) {
+    #content {
+        animation: zoomContentResponsive 1s 2s forwards;
+    }
 }
 
 /* Setting up the animations */
@@ -181,7 +156,18 @@
     }
     100% {
         z-index: 10;
-        transform: translate(-90px,-125px) scale(1.5,1.5);
+        transform: translate(-90px, -125px) scale(1.5, 1.5);
+        position: fixed;
+    }
+}
+
+@keyframes zoomContentResponsive {
+    0% {
+
+    }
+    100% {
+        z-index: 10;
+        transform: translate(-18%, -18%) scale(1.5, 1.5);
         position: fixed;
     }
 }
