@@ -3,31 +3,9 @@ import { Link } from "react-router"
 import { Nav, Navbar, NavItem } from "react-bootstrap"
 import { LoginFormContainer } from "containers"
 import { ModalContainer, NavModalContainer } from "containers"
-import { container, navContainer, link, hamburgerContainer, hamburger } from './styles.css'
-
-
-function RegisterToggle({UpdateLogin}) {
-    return (
-        <Nav pullRight>
-            <RegisterModalContainer />
-        </Nav>
-    )
-}
+import { hideNav, container, navContainer, link, hamburgerContainer, hamburger } from './styles.css'
 
 function NavigationLinks({isAuthed, logout}) {
-    //return isAuthed === true
-    //    ? <ul>
-    //    <li>
-    //        <NavModalContainer />
-    //    </li>
-    //</ul>
-    //    : <ul>
-    //    <li>
-    //        <NavModalContainer />
-    //    </li>
-    //    <li><Link to='/' className={link}>{'Home'}</Link></li>
-    //    <li><ModalContainer/></li>
-    //</ul>
     return (
         <ul>
             <li><NavModalContainer/></li>
@@ -35,7 +13,7 @@ function NavigationLinks({isAuthed, logout}) {
     )
 }
 
-function NavigationBar({isAuthed, authID, user, openModal, logout}) {
+function NavigationBar({isAuthed, authID, user, openModal, logout, isNavOpen}) {
     return (
         <div className={container}>
             <nav className={navContainer}>

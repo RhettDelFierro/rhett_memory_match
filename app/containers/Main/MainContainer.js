@@ -13,21 +13,24 @@ class MainContainer extends Component {
     render() {
         return (
             <div className={container}>
-                <NavigationBar isAuthed={this.props.isAuthed} logout={this.props.logout}/>
+                <NavigationBar isAuthed={this.props.isAuthed} logout={this.props.logout} isNavOpen={this.props.isNavOpen}/>
                 {this.props.children}
             </div>
         )
     }
 }
 
+const { func, bool } = PropTypes
 MainContainer.propTypes = {
-    logout: PropTypes.func.isRequired
+    logout: func.isRequired,
+    isNavOpen: bool.isRequired
 }
 
-function mapStateToProps({users}) {
+function mapStateToProps({users, navModal}) {
     return {
         isAuthed: users.get('isAuthed'),
-        authID: users.get('authID')
+        authID: users.get('authID'),
+        isNavOpen: navModal.get('isNavOpen')
     }
 }
 
@@ -36,4 +39,4 @@ function mapDispatchToProps(dispatch){
 }
 
 
-export default connect(({users}) => ({isAuthed: users.get('isAuthed')}), mapDispatchToProps)(MainContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer)

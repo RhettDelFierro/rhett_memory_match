@@ -12,7 +12,7 @@ const modalStyles = {
         height: 400,
         borderRadius: 5,
         background: '#F8FBFD',
-        padding: 0,
+        padding: 0
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.75)',

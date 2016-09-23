@@ -1,4 +1,4 @@
-/*<-------------------MAIN NAVIGATION MODAL CONTAINER AND ANIMATION ----------------->*/
+/*<-------------------MAIN NAVIGATION MODAL CONTAINER AND ANIMATION WAS THE CUSTOM BODY----------------->*/
 .navModal {
     display: flex;
     justify-content: flex-start;
@@ -36,9 +36,16 @@
     flex-wrap: nowrap;
     height: 75%;
     width: 700px;
+    z-index: 10;
 
     /*fixes-blue and brown border when using react-modal.*/
     outline:none!important
+}
+
+@media screen and (max-width: 740px) {
+    .pageContainer {
+        width: 200px;
+    }
 }
 
 .page {

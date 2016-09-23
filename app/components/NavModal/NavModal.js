@@ -35,11 +35,11 @@ function Book(props) {
     //const even = `${page} even turn`
 
     return (
-            <div className={pageContainer}>
-                <Odd />
-                <Even />
-                <Content />
-            </div>
+        <div className={pageContainer}>
+            <Odd />
+            <Even />
+            <Content />
+        </div>
     )
 }
 

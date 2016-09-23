@@ -6,10 +6,11 @@ import { List } from 'immutable'
 
 function NavPage({isAuthed, logout, closeNavModal}) {
     const routes = List(['perfect_pitch_training', 'scoreboard', 'profile', 'practice'])
-        //<li><Link to="/perfect_pitch_training" className={link}>{'Perfect Pitch Training'}</Link></li>
-        //<li><Link to="/scoreboard" className={link}>{'High Scores'}</Link></li>
-        //<li><Link to="/profile" className={link}>{'Profile'}</Link></li>
-        //<li><Link to="/practice" className={link}>{'Practice'}</Link></li>
+
+    function animateClose(){
+
+    }
+
     return isAuthed === true
         ?
         <div className={navPageContainer}>
