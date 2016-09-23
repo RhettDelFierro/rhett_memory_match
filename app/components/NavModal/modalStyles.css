@@ -30,6 +30,12 @@
 
 .pageContainer {
     perspective: 1200px;
+    displaY: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    height: 75%;
+    width: 700px;
 
     /*fixes-blue and brown border when using react-modal.*/
     outline:none!important
@@ -42,11 +48,12 @@
 
     /* Size & Position */
     /*left: 50%;*/
-    width: 360px;
-    margin-left: -180px; /* half of width */
+    width: 40%;
+    height: 100%;
+    /*margin-left: -180px; !* half of width *!*/
     /*top: 50%;*/
-    height: 500px;
-    margin-top: -250px; /* half of height */
+    /*height: 500px;*/
+    /*margin-top: -250px; !* half of height *!*/
 
     /* Add some styling, so the pages are opaque */
     background-color: #eee;
@@ -61,20 +68,21 @@
     overflow: hidden;
 }
 
-@media screen and (max-width: 800px) {
-    .page {
-        width: 240px;
-        margin-left: -120px;
-        height: 333px;
-    }
-}
+/*@media screen and (max-width: 800px) {*/
+    /*.page {*/
+        /*width: 240px;*/
+        /*margin-left: -120px;*/
+        /*height: 333px;*/
+    /*}*/
+/*}*/
 
 .page.odd {
     /* odd pages flip along left side, and with minus degree rotation */
     transform-origin: 0% 0%;
+    width: 50%;
 
     /* Set animation for auto-turning the odd pages */
-    animation: turn-odd 1.5s ease 1s normal forwards;
+    animation: turn-odd 2s ease 1s normal forwards;
 
     /* Some styling */
     border-radius: 0px 8px 8px 0px;
@@ -87,22 +95,23 @@
 }
 
 .page.even {
-    margin-left: -540px; /* 1,5 * width to position it left of odd pages */
-
+    left: -25%;
+    /*margin-left: -540px; !* 1,5 * width to position it left of odd pages *!*/
     /* even pages flip along right side, and with positive degree rotation */
     transform-origin: 100% 0%;
+    width: 50%;
 
     transform: rotateY(180deg); /* even pages start rotated (closed book) */
 
 
     /* Set animation for auto-turning the even pages */
-    animation: turn-even 3s ease 1s normal forwards;
+    animation: turn-even 2s ease 1s normal forwards;
 
 
     /* Some styling */
-    border-radius: 8px 0px 0px 8px;
+    border-radius: 8px 0 0 8px;
 
-    box-shadow: inset -15px 0px 15px -15px rgba(0,0,0, 0.3);
+    box-shadow: inset -15px 0 15px -15px rgba(0,0,0, 0.3);
 
     background: url('../../assets/images/Billie_Jean_Sheet_Music.jpg') top center;
     background-size: 100% 100%;
@@ -148,11 +157,8 @@
     0% {
         transform: rotateY(180deg);
     }
-    50% {
-        transform: rotateY(0deg);
-    }
     100% {
-        transform: translate(-1000px);
+        transform: rotateY(0deg);
     }
 }
 

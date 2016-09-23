@@ -74,12 +74,12 @@
 
 }
 
-@media screen and (max-width: 700px) {
-    .headerContainer {
-        height: 50vh;
-    }
-    .enterNote {
-        height:120px;
-        width: 60px;
-    }
-}
+/*@media screen and (max-width: 700px) {*/
+    /*.headerContainer {*/
+        /*height: 50vh;*/
+    /*}*/
+    /*.enterNote {*/
+        /*height:120px;*/
+        /*width: 60px;*/
+    /*}*/
+/*}*/
