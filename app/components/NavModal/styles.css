@@ -68,13 +68,19 @@
     animation: animateBottom 1s forwards;
 }
 
+@media screen and (min-width: 700px) {
+    .hamburgerContainer:hover {
+        animation: animateBackground 1s 1s forwards;
+    }
+}
+
 @keyframes animateTop {
     0% {
-        transform: translate(0,-4px)
+        transform: translate(0,-4px);
     }
 
     50% {
-        transform: translate(0,-7px)
+        transform: translate(0,-7px);
     }
 
     100% {
@@ -84,13 +90,34 @@
 
 @keyframes animateBottom {
     0% {
-        transform: translate(0,4px)
+        transform: translate(0,4px);
     }
     50% {
-        transform: translate(0,7px)
+        transform: translate(0,7px);
     }
     100% {
-        transform: translate(0,6px)
+        transform: translate(0,6px);
+    }
+}
+
+@keyframes animateBackground {
+    0% {
+        background: url('../../assets/images/whole_note.png') no-repeat;
+        background-size: 80% 60%;
+        background-position: -50% 110%;
+    }
+    100% {
+        background: url('../../assets/images/whole_note.png') no-repeat;
+        background-size: 80% 60%;
+        background-position: -50% -110%;
+    }
+}
+
+@keyframes animateBackgroundTwo {
+    100% {
+        background: url('../../assets/images/whole_note.png') no-repeat;
+        background-size: 80% 60%;
+        background-position: 50% -110%;
     }
 }
 

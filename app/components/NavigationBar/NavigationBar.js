@@ -15,19 +15,24 @@ function RegisterToggle({UpdateLogin}) {
 }
 
 function NavigationLinks({isAuthed, logout}) {
-    return isAuthed === true
-        ? <ul>
-        <li>
-            <NavModalContainer />
-        </li>
-    </ul>
-        : <ul>
-        <li>
-            <NavModalContainer />
-        </li>
-        <li><Link to='/' className={link}>{'Home'}</Link></li>
-        <li><ModalContainer/></li>
-    </ul>
+    //return isAuthed === true
+    //    ? <ul>
+    //    <li>
+    //        <NavModalContainer />
+    //    </li>
+    //</ul>
+    //    : <ul>
+    //    <li>
+    //        <NavModalContainer />
+    //    </li>
+    //    <li><Link to='/' className={link}>{'Home'}</Link></li>
+    //    <li><ModalContainer/></li>
+    //</ul>
+    return (
+        <ul>
+            <li><NavModalContainer/></li>
+        </ul>
+    )
 }
 
 function NavigationBar({isAuthed, authID, user, openModal, logout}) {
