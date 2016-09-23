@@ -16,7 +16,11 @@ export default function NavModal({ openNavModal, closeNavModal, isNavOpen }) {
     return (
         <div className={hamburgerContainer} onClick={openNavModal}>
             <div className={hamburger}></div>
-            <ReactModal overlayClassName={bgModalContainer} className={pageContainer} isOpen={isNavOpen} onRequestClose={closeNavModal}>
+            <ReactModal overlayClassName={bgModalContainer}
+                        className={pageContainer}
+                        isOpen={isNavOpen}
+                        onRequestClose={closeNavModal}
+                        shouldCloseOnOverlayClick={false}>
                 <Book />
             </ReactModal>
         </div>

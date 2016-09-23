@@ -14,8 +14,8 @@ function NavPage({isAuthed, logout, closeNavModal}) {
         ?
         <div className={navPageContainer}>
             <ul>
-                <li><Link to="/" className={link}>{'Home'}</Link></li>
-                {routes.map((item,i) => <NavElement name={item} key={item}/>)}
+                <li><Link to="/" className={link} onClick={closeNavModal}>{'Home'}</Link></li>
+                {routes.map((item,i) => <NavElement name={item} closeNavModal={closeNavModal} key={i} />)}
                 <li><span onClick={logout}>{'LogOut'}</span></li>
                 <li className={closeX}><span onClick={closeNavModal} className="glyphicon glyphicon-remove">{'Return'}</span></li>
             </ul>
@@ -23,15 +23,15 @@ function NavPage({isAuthed, logout, closeNavModal}) {
         :
         <div className={navPageContainer}>
             <ul>
-                <li><Link to='/' className={link}>{'Home'}</Link></li>
+                <li><Link to='/' className={link} onClick={closeNavModal}>{'Home'}</Link></li>
                 <li><ModalContainer/></li>
                 <li className={closeX}><span onClick={closeNavModal} className="glyphicon glyphicon-remove">{'Return'}</span></li>
             </ul>
         </div>
 }
 
-function NavElement({name}) {
-    const link = `/${name}`
+function NavElement({ name, closeNavModal }) {
+    const route = `/${name}`
     const routeName = name.split('_')
     const title = []
     const name_map = routeName.reduce((prev,item) => {
@@ -40,7 +40,9 @@ function NavElement({name}) {
     const fullTitle = name_map.join(' ')
 
     return (
-        <li><Link to={link} className={link}>{fullTitle}></Link></li>
+        <li>
+            <Link to={route} className={link} onClick={closeNavModal}>{fullTitle}</Link>
+        </li>
     )
 }
 
