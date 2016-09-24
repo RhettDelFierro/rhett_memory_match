@@ -15,7 +15,7 @@ export default function NavModal({ openNavModal, closeNavModal, isNavOpen }) {
             <div className={hamburger}></div>
             <ReactModal overlayClassName={bgModalToggle} className={pageToggle} isOpen={isNavOpen}
                         onRequestClose={closeNavModal}
-                        closeTimeoutMS={100000}
+                        closeTimeoutMS={3000}
                         shouldCloseOnOverlayClick={false}>
                 <Odd isNavOpen={isNavOpen}/>
                 <Even isNavOpen={isNavOpen}/>

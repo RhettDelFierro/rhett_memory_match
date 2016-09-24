@@ -148,11 +148,11 @@
     animation: turn-odd-reverse 1s 1s ease normal forwards;
 }
 
-.pageContainer.pageClose {
-    visibility: hidden;
-    animation: closePage 1s 2s forwards;
-    transform-origin: 50% 50%;
-}
+/*<-------DO NOT NEED THIS FOR NOW------------>*/
+/*.pageContainer.pageClose {*/
+    /*animation: closePage 1s 2s forwards;*/
+    /*transform-origin: 50% 50%;*/
+/*}*/
 
 
 /*trigger zoom in animation for a smaller screen.*/

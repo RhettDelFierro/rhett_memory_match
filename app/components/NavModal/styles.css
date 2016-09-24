@@ -164,7 +164,7 @@
 }
 /*<-----------------CLOSE MODAL BACKGROUND-------------------->*/
 .bgModalContainer.closeBG {position: fixed;
-    animation: closeModal 1s 30s forwards;
+    animation: closeModal 1s 2s forwards;
 }
 
 @keyframes closeModal {
