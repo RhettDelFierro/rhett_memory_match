@@ -1,7 +1,8 @@
 /*<-------------------individual infoContainers------------------>*/
 .infoContainer {
+    flex: 1;
     max-height: 400px;
-    max-width: 70%;
+    max-width: 45%;
     display: flex;
     justify-content: space-between;
     border: 1px solid black;
@@ -18,43 +19,28 @@
     animation: infoEnd 2s forwards;
 }
 
+@media screen and (max-width: 740px) {
+    .infoContainer.infoLeft, .infoContainer.infoRight {
+        align-self: stretch;
+        width: 100%;
+    }
+}
+
 /*<-------------------individual infoImages---------------------->*/
 
 .infoImage {
     height: 240px;
     width: 300px;
     background-position: top center;
-    background-size: 100% 100%;
-}
-
-.imageLeft {
-    order: 2;
-}
-
-.imageRight {
-    order: 1;
+    background-size: cover;
+    padding: 15px;
+    margin: 10px;
 }
 
 /*<------------------individual descriptions--------------------->*/
 
-.infoDescription {
-    /*add width?*/
-    align-self: center;
-    text-align: justify;
-    color: black;
-}
 
-.descriptionLeft {
-    order: 1
-}
 
-.descriptionRight {
-    order: 2;
-}
-
-.h3 {
-    text-align: center;
-}
 
 @keyframes infoStart {
     0% {

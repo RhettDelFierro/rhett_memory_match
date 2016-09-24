@@ -12,11 +12,12 @@
     align-items: center;
 }
 
-.parallaxInner {
-}
-
 .parallaxHeading, .parallaxSub {
     text-align: center;
     color: #fff;
     font-weight: normal;
+}
+
+/*<----------DON'T THINK I NEED THIS INNER-PARALLAX CODE.--------------->*/
+.parallaxInner {
 }
