@@ -5,7 +5,6 @@
     display: flex;
     justify-content: space-between;
     border: 1px solid black;
-    border-radius: 10%;
     background: #fff;
 }
 

@@ -2,7 +2,6 @@
     position: relative;
     background: url('http://www.nasa.gov/images/content/654242main_p1220b3k.jpg') fixed center top;
     background-size: 100% 100%;
-    top: 500px;
     height: 300px;
     width: 100%;
     z-index: 3;

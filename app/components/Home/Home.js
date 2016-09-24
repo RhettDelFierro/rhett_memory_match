@@ -12,18 +12,17 @@ function Home({ windowPositionY }) {
                 <Header />
                 <HomeBackgroundContainer windowPositionY={windowPositionY}/>
                 <AppInfoContainer />
-                <div className={content}>
-                    <div className={examplea}>Blah haaha!</div>
-                    <h1>blah</h1>
-                    <div className={example2}>Blah haha!</div>
-                </div>
                 <Parallax />
                 <div className={content}>
                     <div className={examplea}>Blah haaha!</div>
                     <h1>blah</h1>
                     <div className={example2}>Blah haha!</div>
                 </div>
-
+                <div className={content}>
+                    <div className={examplea}>Blah haaha!</div>
+                    <h1>blah</h1>
+                    <div className={example2}>Blah haha!</div>
+                </div>
             </div>
         )
 }
