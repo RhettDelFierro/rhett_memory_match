@@ -4,7 +4,10 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
-import { container, showDiv, hideDiv, picture1 } from './styles.css'
+
+
+//<----------------REPLACE HomeImageS WITH AppInfo here and in Redux ------------------->
+
 
 class AppInfoContainer extends Component {
     constructor() {
@@ -60,22 +63,16 @@ class AppInfoContainer extends Component {
 
 const { number, func } = PropTypes
 AppInfoContainer.propTypes = {
-    windowPositionY: number.isRequired,
-    bgTop: number.isRequired,
     homeImagesTop: number.isRequired,
     homeImagesBottom: number.isRequired,
     setHomeImagesTop: func.isRequired,
-    setHomeImagesBottom: func.isRequired,
-    headerHeight: number.isRequired
+    setHomeImagesBottom: func.isRequired
 }
 
 function mapStateToProps({ scroll }) {
     return {
-        windowPositionY: scroll.get('windowPositionY'),
-        bgTop: scroll.get('bgTop'),
         homeImagesTop: scroll.get('homeImagesTop'),
-        homeImagesBottom: scroll.get('homeImagesBottom'),
-        headerHeight: scroll.get('headerHeight')
+        homeImagesBottom: scroll.get('homeImagesBottom')
     }
 }
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
-import { Breaker, InfoSection } from 'components'
+import { Breaker } from 'components'
 import { appInfoContainer, wholeInfoContainer, defAP } from './styles.css'
 
 class AppInfo extends Component {
@@ -11,22 +11,9 @@ class AppInfo extends Component {
         super()
     }
 
-    componentDidMount() {
-    }
-
-    componentWillUnmount() {
-    }
-
     render() {
         const titleBreaker = 'Train Your Ears'
         const titleBreakerImage = require('assets/images/breaker-musicnote.png')
-
-        //mention the study results too.
-        const infoDescription = 'Train Your Ears is an app based on the research done by the University of Chicago regarding if the acquisition of Absolute Pitch is possible.'
-        const infoImage = require('assets/images/Perfect_Pitch_training.png')
-
-        const infoDescription2 = 'Discover the keys some of your favorite songs were composed in after your training! Be even more familiar with the songs you grew up with!'
-        const infoImage2 = require('assets/images/getsongnotes.png')
 
         return (
             <div ref={this.props.imageRef} className={appInfoContainer}>
@@ -42,13 +29,9 @@ class AppInfo extends Component {
                                 pitch can learn "pseudo-absolute pitch" and become able to identify notes in a way that superficially resembles
                                 absolute pitch.</p>
                         </div>
-                        <div className={wholeInfoContainer}>
-                            <InfoSection align="left" image={infoImage} description={infoDescription} />
-                            <InfoSection align="right" image={infoImage2} description={infoDescription2}/>
-                        </div>
                       </div>
                     :
-                    <div ref={(node) => this.node1 = node}></div>
+                    <div></div>
                 }
             </div>
         )
@@ -57,8 +40,6 @@ class AppInfo extends Component {
 
 const { number, func } = PropTypes
 AppInfo.propTypes = {
-    windowPositionY: number.isRequired,
-    bgTop: number.isRequired,
     homeImagesTop: number.isRequired,
     setHomeImagesTop: func.isRequired,
     setHomeImagesBottom: func.isRequired,
@@ -67,8 +48,6 @@ AppInfo.propTypes = {
 
 function mapStateToProps({ scroll }) {
     return {
-        windowPositionY: scroll.get('windowPositionY'),
-        bgTop: scroll.get('bgTop'),
         homeImagesTop: scroll.get('homeImagesTop'),
         homeImagesBotton: scroll.get('homeImagesBottom')
     }

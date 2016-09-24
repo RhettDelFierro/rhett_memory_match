@@ -6,6 +6,8 @@ const SET_PARALLAX_TOP = 'SET_PARALLAX_TOP'
 const SET_HOME_IMAGES_TOP = 'SET_HOME_IMAGES_TOP'
 const SET_HOME_IMAGES_BOTTOM = 'SET_HOME_IMAGES_BOTTOM'
 const SET_HEADER_HEIGHT = 'SET_HEADER_HEIGHT'
+const SET_APP_PICTURES_TOP = 'SET_APP_PICTURES_TOP'
+const SET_APP_PICTURES_BOTTOM = 'SET_APP_PICTURES_BOTTOM'
 
 export function getWindowPositionY({ fromTop }) {
     return {
@@ -64,6 +66,20 @@ export function setHeaderHeight({headerHeight}) {
     }
 }
 
+export function setAppPicturesTop({ appPicturesTop }) {
+    return {
+        type: SET_APP_PICTURES_TOP,
+        appPicturesTop
+    }
+}
+
+export function setAppPicturesBottom({ appPicturesBottom }) {
+    return {
+        type: SET_APP_PICTURES_BOTTOM,
+        appPicturesBottom
+    }
+}
+
 
 const initialState = fromJS({
     windowPositionY: 0,
@@ -71,7 +87,9 @@ const initialState = fromJS({
     parallaxTop: 0,
     homeImagesTop: 0,
     homeImagesBottom: 0,
-    headerHeight: 0
+    headerHeight: 0,
+    appPicturesTop: 0,
+    appPicturesBottom: 0
 })
 
 export default function scroll(state = initialState, action) {
@@ -99,6 +117,14 @@ export default function scroll(state = initialState, action) {
         case SET_HOME_IMAGES_BOTTOM:
             return state.merge({
                 homeImagesBottom: action.homeImagesBottom
+            })
+        case SET_APP_PICTURES_TOP:
+            return state.merge({
+                appPicturesTop: action.appPicturesTop
+            })
+        case SET_APP_PICTURES_BOTTOM:
+            return state.merge({
+                appPicturesBottom: action.appPicturesBottom
             })
         default:
             return state

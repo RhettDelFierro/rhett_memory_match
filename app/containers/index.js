@@ -20,3 +20,4 @@ export ParallaxContentContainer from './ParallaxContent/ParallaxContentContainer
 export HeaderContainer from './Header/HeaderContainer'
 export NavModalContainer from './NavModal/NavModalContainer'
 export NavPageContainer from './NavPage/NavPageContainer'
+export AppPicturesContainer from './AppPictures/AppPicturesContainer'
