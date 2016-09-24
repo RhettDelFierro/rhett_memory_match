@@ -15,8 +15,8 @@ class AppPicturesContainer extends Component {
     }
 
     showAppPictures() {
-        if ((window.pageYOffset > this.props.appPicturesTop/4)
-            && (window.pageYOffset < this.props.appPicturesBottom)) {
+        if ((window.pageYOffset > (this.props.appPicturesTop - 500))
+            && (window.pageYOffset < this.props.appPicturesBottom + 500)) {
             this.setState({showComponent: true})
             //this.appPicturesNode.scrollIntoView()
         } else {
@@ -28,7 +28,6 @@ class AppPicturesContainer extends Component {
         window.requestAnimationFrame(() => {
             var node = this.appPicturesNode
             if (node !== undefined) {
-                //and scroll them!
                 this.props.setAppPicturesTop({appPicturesTop: this.appPicturesNode.offsetTop})
                 this.props.setAppPicturesBottom({appPicturesBottom: this.appPicturesNode.offsetTop + this.appPicturesNode.offsetHeight})
             }
@@ -43,7 +42,6 @@ class AppPicturesContainer extends Component {
     componentDidUpdate() {
         this.scrollElement();
     }
-
 
     componentWillUnmount() {
         window.removeEventListener('scroll', this.showAppPictures);
@@ -66,8 +64,8 @@ AppPicturesContainer.propTypes = {
 
 function mapStateToProps({ scroll }) {
     return {
-        AppPicturesTop: scroll.get('appPicturesTop'),
-        AppPicturesBottom: scroll.get('appPicturesBottom')
+        appPicturesTop: scroll.get('appPicturesTop'),
+        appPicturesBottom: scroll.get('appPicturesBottom')
     }
 }
 

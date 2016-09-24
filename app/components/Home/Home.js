@@ -10,7 +10,6 @@ function Home({ windowPositionY }) {
         return (
             <div className={homeContainer}>
                 <Header />
-                <HomeBackgroundContainer windowPositionY={windowPositionY}/>
                 <AppInfoContainer />
                 <Parallax />
                 <AppPicturesContainer />

@@ -9,30 +9,11 @@ import { Map, OrderedMap, List } from 'immutable'
 class HomeContainer extends Component {
     constructor() {
         super()
-        this.scrollPosition = this.scrollPosition.bind(this)
-        this.state = {
-            windowPositionY: 0
-        }
-    }
-
-    componentDidMount() {
-        window.addEventListener('scroll',this.scrollPosition);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll',this.scrollPosition);
-
-    }
-
-    scrollPosition() {
-        this.setState({
-            windowPositionY: window.scrollY
-        })
     }
 
     render() {
         return (
-            <Home windowPositionY={this.state.windowPositionY}/>
+            <Home />
         )
     }
 }

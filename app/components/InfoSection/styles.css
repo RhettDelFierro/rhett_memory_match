@@ -22,7 +22,7 @@
     animation: infoEnd 2s forwards;
 }
 
-h3 {
+.infoSectionContainer h3 {
     order: 2;
   text-align: center;
 }

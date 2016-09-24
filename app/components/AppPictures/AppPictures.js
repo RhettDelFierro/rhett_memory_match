@@ -13,9 +13,7 @@ class AppPictures extends Component {
 
     //<Breaker /> will go here.
     render() {
-        const divStyle = {
-            backgroundImage: 'url(' + 'props.image' + ')'
-        }
+        const divStyle = {backgroundImage: 'url(' + 'props.image' + ')'}
         const breakerTitle = 'Learn'
         const breakerImage= require('assets/images/lightbulb.png')
         const info1 = 'Train'
@@ -40,13 +38,14 @@ class AppPictures extends Component {
     }
 }
 
-const { number, func, string } = PropTypes
+const { number, func, string, bool } = PropTypes
 AppPictures.propTypes = {
     appPicturesTop: number.isRequired,
     image: string,
     setAppPicturesTop: func.isRequired,
     setAppPicturesBottom: func.isRequired,
-    appPicRef: func.isRequired
+    appPicRef: func.isRequired,
+    showComponent: bool.isRequired
 }
 
 function mapStateToProps({ scroll }) {

@@ -11,6 +11,11 @@
     animation: breaker 1s forwards;
 }
 
+.hiddenBreaker {
+    composes: breakerContainer;
+    visibility: hidden;
+}
+
 .h3 {
     text-align: center;
 }
