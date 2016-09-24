@@ -2,16 +2,20 @@ import React, {PropTypes} from 'react'
 import { LineBreak } from 'components'
 import { breakerContainer, lineBreak, breakImage } from './styles.css'
 
-export default function Breaker({title, image}) {
+export default function Breaker({title, image, show}) {
     var divStyle = {
         backgroundImage: 'url(' + image + ')'
     }
 
     return (
-        <div className={breakerContainer}>
-            <h3>{title}</h3>
-            <LineBreak image={image} />
-        </div>
+        show ?
+            <div className={breakerContainer}>
+                <h3>{title}</h3>
+                <LineBreak image={image}/>
+            </div>
+            :
+            <div></div>
+
     )
 }
 

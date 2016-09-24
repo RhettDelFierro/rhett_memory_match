@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import { infoSectionContainer, infoImage, infoTitle, infoLeft, infoRight, } from './styles.css'
 
-export default function InfoSection({title, image, slide}) {
+export default function InfoSection({title, image, slide, show}) {
     //going to change the slide prop.
     const infoClass = slide === 'left' ? `${infoSectionContainer} ${infoLeft}` : `${infoSectionContainer} ${infoRight}`
 
@@ -10,10 +10,13 @@ export default function InfoSection({title, image, slide}) {
     }
 
     return (
+        show ?
         <div className={infoClass}>
             <div className={infoImage} style={divStyle}></div>
             <h3>{title}</h3>
         </div>
+            :
+            <div></div>
     )
 }
 

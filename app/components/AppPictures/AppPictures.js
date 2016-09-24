@@ -15,7 +15,7 @@ class AppPictures extends Component {
     render() {
         const divStyle = {backgroundImage: 'url(' + 'props.image' + ')'}
         const breakerTitle = 'Learn'
-        const breakerImage= require('assets/images/lightbulb.png')
+        const breakerImage = require('assets/images/lightbulb.png')
         const info1 = 'Train'
         const infoImage = require('assets/images/Perfect_Pitch_training.png')
         const info2 = 'Listen'
@@ -23,17 +23,13 @@ class AppPictures extends Component {
 
         return (
             <div ref={this.props.appPicRef} className={appPicContainer}>
-                {this.props.showComponent
-                    ?
-                    <div>
-                        <Breaker title={breakerTitle} image={breakerImage}/>
-                        <InfoSection slide="left" image={infoImage} title={info1}/>
-                        <InfoSection slide="right" image={infoImage2} title={info2}/>
-                    </div>
-                    :
-                    <div></div>
-                }
+                <Breaker show={this.props.showComponent} title={breakerTitle} image={breakerImage}/>
+                <InfoSection show={this.props.showComponent} slide="left" image={infoImage} title={info1}/>
+                <InfoSection show={this.props.showComponent} slide="right" image={infoImage2} title={info2}/>
             </div>
+
+
+
         )
     }
 }

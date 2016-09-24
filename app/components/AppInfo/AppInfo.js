@@ -17,22 +17,24 @@ class AppInfo extends Component {
 
         return (
             <div ref={this.props.imageRef} className={appInfoContainer}>
-                {this.props.showComponent
-                    ? <div>
-                        <Breaker title={titleBreaker} image={titleBreakerImage}/>
-                        <div className={defAP}>
-                            <p>Per wiki: Absolute pitch (AP), widely referred to as perfect pitch,  is a rare auditory phenomenon characterized by the
-                                ability of a person to identify or re-create a given musical note without the benefit of a reference tone.
 
-                                Those with absolute pitch may train their relative pitch, but there are no reported cases of an adult obtaining
-                                 absolute pitch ability through musical training; adults who possess relative pitch but do not already have absolute
-                                pitch can learn "pseudo-absolute pitch" and become able to identify notes in a way that superficially resembles
-                                absolute pitch.</p>
-                        </div>
-                      </div>
-                    :
-                    <div></div>
-                }
+                <Breaker show={this.props.showComponent} title={titleBreaker} image={titleBreakerImage}/>
+
+                <div className={defAP}>
+                    <p>Per wiki: Absolute pitch (AP), widely referred to as perfect pitch, is a rare auditory phenomenon
+                        characterized by the
+                        ability of a person to identify or re-create a given musical note without the benefit of a
+                        reference tone.
+
+                        Those with absolute pitch may train their relative pitch, but there are no reported cases of an
+                        adult obtaining
+                        absolute pitch ability through musical training; adults who possess relative pitch but do not
+                        already have absolute
+                        pitch can learn "pseudo-absolute pitch" and become able to identify notes in a way that
+                        superficially resembles
+                        absolute pitch.</p>
+                </div>
+
             </div>
         )
     }
