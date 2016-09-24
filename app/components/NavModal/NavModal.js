@@ -1,19 +1,19 @@
 import React, { PropTypes, Component } from 'react'
 import { default as ReactModal } from 'react-modal'
-import { pointer, darkBtn, hamburgerContainer, hamburger, bgModalContainer, clearModal } from './styles.css'
-import { page, odd, even, content, cover, cover_back, pageContainer,closeContent, closeBack, closeCover } from './modalStyles.css'
+import { pointer, darkBtn, hamburgerContainer, hamburger, bgModalContainer, clearModal, closeBG } from './styles.css'
+import { page, odd, even, content, cover, cover_back, pageContainer,closeContent, closeBack, closeCover, pageClose } from './modalStyles.css'
 import { Map } from 'immutable'
 import { Link } from 'react-router'
 import { NavPageContainer } from 'containers'
 
 export default function NavModal({ openNavModal, closeNavModal, isNavOpen }) {
 
-    //const bgModalToggle = isNavOpen ? `${bgModalContainer}` : `${closeBG}`
-    //const pageToggle = isNavOpen ? `${pageContainer}` : `${closePage}`
+    const bgModalToggle = isNavOpen ? `${bgModalContainer}` : `${bgModalContainer} ${closeBG}`
+    const pageToggle = isNavOpen ? `${pageContainer}` : `${pageContainer} ${pageClose}`
     return (
         <div className={hamburgerContainer} onClick={() => setTimeout(openNavModal,500)}>
             <div className={hamburger}></div>
-            <ReactModal overlayClassName={bgModalContainer} className={pageContainer} isOpen={isNavOpen}
+            <ReactModal overlayClassName={bgModalToggle} className={pageToggle} isOpen={isNavOpen}
                         onRequestClose={closeNavModal}
                         closeTimeoutMS={100000}
                         shouldCloseOnOverlayClick={false}>

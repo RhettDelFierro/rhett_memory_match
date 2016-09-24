@@ -78,7 +78,7 @@
 
 @media screen and (min-width: 740px) {
     .hamburgerContainer:hover {
-        animation: animateBackground 1s 1s forwards;
+        animation: animateBackground 1s 0.2s forwards;
     }
 }
 
@@ -160,5 +160,15 @@
         transform: scale(10,0);
     }
     100% {
+    }
+}
+/*<-----------------CLOSE MODAL BACKGROUND-------------------->*/
+.bgModalContainer.closeBG {position: fixed;
+    animation: closeModal 1s 30s forwards;
+}
+
+@keyframes closeModal {
+    100% {
+        transform: scale(0,0);
     }
 }
