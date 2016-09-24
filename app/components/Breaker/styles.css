@@ -11,9 +11,8 @@
     animation: breaker 1s forwards;
 }
 
-.hiddenBreaker {
-    composes: breakerContainer;
-    visibility: hidden;
+.hideBreaker {
+    height: 240px;
 }
 
 .h3 {

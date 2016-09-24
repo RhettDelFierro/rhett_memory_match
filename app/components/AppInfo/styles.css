@@ -2,8 +2,8 @@
     flex: 1;
     display: flex;
     position: relative;
-    max-height: 1400px;
-    min-height: 500px;
+    max-height: 500px;
+    min-height: 300px;
     width: 100%;
     z-index: 5;
     background-color: #fff;

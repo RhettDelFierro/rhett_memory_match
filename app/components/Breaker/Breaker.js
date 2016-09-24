@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import { LineBreak } from 'components'
-import { breakerContainer, lineBreak, breakImage } from './styles.css'
+import { breakerContainer, lineBreak, breakImage, hideBreaker } from './styles.css'
 
 export default function Breaker({title, image, show}) {
     var divStyle = {
@@ -14,7 +14,7 @@ export default function Breaker({title, image, show}) {
                 <LineBreak image={image}/>
             </div>
             :
-            <div></div>
+            <div className={hideBreaker}></div>
 
     )
 }

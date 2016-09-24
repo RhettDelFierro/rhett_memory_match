@@ -7,7 +7,7 @@
     /*align-items: center; *when mobile*!*/
     width: 100%;
     min-height: 500px;
-    height: 1000px;
+    max-height: 1000px;
     z-index: 3;
     background: #fff;
 }

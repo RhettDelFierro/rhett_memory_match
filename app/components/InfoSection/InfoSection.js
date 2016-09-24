@@ -8,7 +8,6 @@ export default function InfoSection({title, image, slide, show}) {
     var divStyle = {
         backgroundImage: 'url(' + image + ')'
     }
-
     return (
         show ?
         <div className={infoClass}>
