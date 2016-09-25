@@ -4,6 +4,7 @@ import { error } from './styles.css'
 import { connect } from 'react-redux'
 import * as userActions from 'redux/modules/users'
 import validate from './validate'
+import { spotifyLogin } from 'redux/modules/songs'
 
 //define stateless component to render input and errors:
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
@@ -18,7 +19,7 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 
 let LoginForm = (props) => {
 
-    const { handleSubmit, pristine, reset, submitting, login } = props
+    const { handleSubmit, pristine, reset, submitting, login, spotifyLogin } = props
     return (
         <form onSubmit={handleSubmit(login.bind(this))}>
             <Field name="email" type="email" component={renderField} label="Email"/>
@@ -27,6 +28,8 @@ let LoginForm = (props) => {
                 <button type="submit" disabled={submitting}>Submit</button>
                 {' '}
                 <button type="button" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
+                {' '}
+                <button onClick={spotifyLogin}>Login With Spotify</button>
             </div>
         </form>
     )
@@ -39,7 +42,7 @@ LoginForm = reduxForm({
 
 LoginForm = connect(
     null,
-    userActions
+    {...userActions, spotifyLogin}
 )(LoginForm)
 
 export default LoginForm
