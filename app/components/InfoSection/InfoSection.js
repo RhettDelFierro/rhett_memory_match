@@ -27,7 +27,7 @@ const { string, func } = PropTypes
 InfoSection.propTypes = {
     title: string.isRequired,
     slide: string.isRequired,
-    image: string.isRequired,
+    image: string.isRequired
     //changeRoute: func.isRequired
 }
 

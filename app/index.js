@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { toJS } from 'immutable'
-
 import thunk from 'redux-thunk'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
@@ -11,7 +10,7 @@ import {reducer as formReducer} from 'redux-form'
 
 //react-router
 //import routes from 'config/routes'
-import { routes } from 'config/routes'
+import routes from 'config/routes'
 import { hashHistory, applyRouterMiddleware, useRouterHistory } from 'react-router'
 import { routerReducer, syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
 import createHashHistory from 'history/lib/createHashHistory'
@@ -30,27 +29,23 @@ const store = createStore(
 
 export const history = syncHistoryWithStore(hashHistory, store)
 
-function authCheck (nextState, replace) {
-    if (store.getState().users.isFetching === true) {
+//these arguments are what react-router will give to this function when it sees the onEnter prop.
+function authCheck(nextState, replace) {
+    if (store.getState().users.get('isFetching') === true) {
         return
     }
-
-    const isAuthed = checkIfAuthed(store)
+    const authed = store.getState().users.get('isAuthed')
     const nextPathName = nextState.location.pathname
-    if (nextPathName === '/' || nextPathName === '/auth') {
-        if (isAuthed === true) {
-            replace('/feed')
-        }
-    } else {
-        if (isAuthed !== true) {
-            replace('/auth')
-        }
+
+    if (authed !== true) {
+        replace('/')
     }
+
 }
 
 
 ReactDOM.render(
     <Provider store={store}>
-        {routes(history,render)}
+        {routes(authCheck, history, render)}
     </Provider>,
     document.getElementById('app'))
