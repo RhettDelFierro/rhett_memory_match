@@ -28,9 +28,26 @@ const store = createStore(
     )
 )
 
-
-
 export const history = syncHistoryWithStore(hashHistory, store)
+
+function authCheck (nextState, replace) {
+    if (store.getState().users.isFetching === true) {
+        return
+    }
+
+    const isAuthed = checkIfAuthed(store)
+    const nextPathName = nextState.location.pathname
+    if (nextPathName === '/' || nextPathName === '/auth') {
+        if (isAuthed === true) {
+            replace('/feed')
+        }
+    } else {
+        if (isAuthed !== true) {
+            replace('/auth')
+        }
+    }
+}
+
 
 ReactDOM.render(
     <Provider store={store}>

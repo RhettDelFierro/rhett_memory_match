@@ -58,7 +58,6 @@ export function register({email, username, password}) {
             const data = await registerUser({username, email, password})
             const user_id = data.user.user_id
             const user = data.user
-            console.log("register thunk coming back from userFunctions.registerUser:", user)
             dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
             dispatch(formLogin())
@@ -130,8 +129,14 @@ export default function users(state = initialState, action) {
                 isAuthed: true,
                 authId: action.uid
             })
+        case FETCHING_USER: {
+            return state.merge({
+                isFetching: true
+            })
+        }
         case FETCHING_USER_SUCCESS:
             return state.merge({
+                isFetching: false,
                 [action.user_id]: user(state.get(action.user_id), action)
             })
         case FORM_LOGIN:
@@ -140,12 +145,13 @@ export default function users(state = initialState, action) {
             })
         case SPOTIFY_AUTH:
             return state.merge({
+                isFetching: false,
                 spotifyAuthed: true
             })
         case LOGOUT_USER:
             return state.merge({
                 isAuthed: false,
-                isFecthing: false,
+                isFetching: false,
                 authId: '',
                 spotifyAuthed: false,
                 appLogin: false
