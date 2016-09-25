@@ -35,7 +35,7 @@ function unauthUser() {
     }
 }
 
-function fetchingUser() {
+export function fetchingUser() {
     return {
         type: FETCHING_USER
     }
@@ -75,6 +75,7 @@ export function login({email, password}) {
             dispatch(fetchingUser())
             const data = await loginUser({email, password})
             const user = data.user
+            const username = data.user.username
             const user_id = data.user.user_id
             dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
@@ -99,7 +100,6 @@ const userInitialState = fromJS({
     info: {
         username: '',
         user_id: '',
-        //avatar: '',
         email:''
     }
 })
@@ -108,7 +108,7 @@ function user(state = userInitialState, action) {
     switch(action.type) {
         case FETCHING_USER_SUCCESS:
             return state.merge({
-                info: action.user
+                info: fromJS(action.user)
             })
     }
 }
@@ -119,7 +119,8 @@ const initialState = fromJS({
     error: false,
     authId: '',
     spotifyAuthed: false,
-    appLogin: false
+    appLogin: false,
+    username: ''
 })
 
 export default function users(state = initialState, action) {
@@ -137,6 +138,7 @@ export default function users(state = initialState, action) {
         case FETCHING_USER_SUCCESS:
             return state.merge({
                 isFetching: false,
+                username: action.user.username,
                 [action.user_id]: user(state.get(action.user_id), action)
             })
         case FORM_LOGIN:

@@ -4,12 +4,13 @@ import { ModalContainer } from 'containers'
 import { navPageContainer, link, pointer, closeX } from './styles.css'
 import { List } from 'immutable'
 
-function NavPage({isAuthed, logout, closeNavModal}) {
+function NavPage({isAuthed, logout, closeNavModal, username}) {
     const routes = List(['perfect_pitch_training', 'scoreboard', 'profile', 'practice'])
 
     return isAuthed === true
         ?
         <div className={navPageContainer}>
+            <h1>Welcome {username}!</h1>
             <ul>
                 <li><Link to="/" className={link} onClick={closeNavModal}>{'Home'}</Link></li>
                 {routes.map((item,i) => <NavElement name={item} closeNavModal={closeNavModal} key={i} />)}
@@ -43,11 +44,13 @@ function NavElement({ name, closeNavModal }) {
     )
 }
 
-const { bool, func } = PropTypes
+const { bool, func, string } = PropTypes
 NavPage.proptypes = {
     isAuthed: bool.isRequired,
     logout: bool.isRequired,
-    closeNavModal: func.isRequired
+    closeNavModal: func.isRequired,
+    //authId is something, either string or number.
+    appLogin: bool.isRequired
 }
 
 export default NavPage

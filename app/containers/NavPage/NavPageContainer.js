@@ -17,17 +17,19 @@ class NavPageContainer extends Component {
     }
 }
 
+const { func, bool, string } = PropTypes
 NavPageContainer.propTypes = {
-    logout: PropTypes.func.isRequired,
-    closeNavModal: PropTypes.func.isRequired,
-    isAuthed: PropTypes.bool.isRequired,
-    authID: PropTypes.string
+    logout: func.isRequired,
+    closeNavModal: func.isRequired,
+    isAuthed: bool.isRequired,
+    username: string
 }
 
 function mapStateToProps({users, navModal}) {
     return {
         isAuthed: users.get('isAuthed'),
-        authID: users.get('authID')
+        appLogin: users.get('appLogin'),
+        username: users.get('appLogin') ? users.getIn([users.get('authId'),'info','username']) : users.get('authId')
     }
 }
 
