@@ -118,6 +118,10 @@ export function proceed() {
 
 export function startGame() {
     return async function (dispatch, getState) {
+        if (!getState().users.get('isAuthed')) {
+            dispatch(push('/'))
+            return
+        }
         const notesUsed = await loadNotes(getState().training.get('tracker'))
         const makeNotes = await notesUsed.map((note) => {
             return {
