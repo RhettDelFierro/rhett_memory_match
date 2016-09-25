@@ -29,13 +29,12 @@ class AppInfoContainer extends Component {
     }
 
     scrollElement() {
-        var self = this;
-        window.requestAnimationFrame(function () {
-            var node = self.imageNode
+        window.requestAnimationFrame(() => {
+            var node = this.imageNode
             if (node !== undefined) {
                 //and scroll them!
-                self.props.setHomeImagesTop({homeImagesTop: self.imageNode.offsetTop})
-                self.props.setHomeImagesBottom({homeImagesBottom: self.imageNode.offsetTop + self.imageNode.offsetHeight})
+                this.props.setHomeImagesTop({homeImagesTop: this.imageNode.offsetTop})
+                this.props.setHomeImagesBottom({homeImagesBottom: this.imageNode.offsetTop + this.imageNode.offsetHeight})
             }
         });
     }
@@ -61,7 +60,7 @@ class AppInfoContainer extends Component {
     }
 }
 
-const { number, func } = PropTypes
+const { number, func, bool } = PropTypes
 AppInfoContainer.propTypes = {
     homeImagesTop: number.isRequired,
     homeImagesBottom: number.isRequired,
@@ -73,6 +72,7 @@ function mapStateToProps({ scroll }) {
     return {
         homeImagesTop: scroll.get('homeImagesTop'),
         homeImagesBottom: scroll.get('homeImagesBottom')
+        //appInfoBreaker: scroll.get('appInfoBreaker')
     }
 }
 

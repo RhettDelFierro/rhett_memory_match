@@ -9,16 +9,26 @@ import { appInfoContainer, wholeInfoContainer, defAP } from './styles.css'
 class AppInfo extends Component {
     constructor() {
         super()
+        this.state = {
+            showComponent: false
+        }
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.showComponent !== this.state.showComponent) {
+            this.setState({
+                showComponent: newProps.showComponent
+            })
+        }
     }
 
     render() {
         const titleBreaker = 'Train Your Ears'
-        const titleBreakerImage = require('assets/images/breaker-musicnote.png')
 
         return (
             <div ref={this.props.imageRef} className={appInfoContainer}>
 
-                <Breaker show={this.props.showComponent} title={titleBreaker} image={titleBreakerImage}/>
+                <Breaker title={titleBreaker} show={this.state.showComponent} type='appInfo'/>
 
                 <div className={defAP}>
                     <p>Per wiki: Absolute pitch (AP), widely referred to as perfect pitch, is a rare auditory phenomenon
@@ -40,18 +50,18 @@ class AppInfo extends Component {
     }
 }
 
-const { number, func } = PropTypes
+const { number, func, bool } = PropTypes
 AppInfo.propTypes = {
     homeImagesTop: number.isRequired,
     setHomeImagesTop: func.isRequired,
     setHomeImagesBottom: func.isRequired,
-    imageRef: func.isRequired
+    imageRef: func.isRequired,
 }
 
 function mapStateToProps({ scroll }) {
     return {
         homeImagesTop: scroll.get('homeImagesTop'),
-        homeImagesBotton: scroll.get('homeImagesBottom')
+        homeImagesBotton: scroll.get('homeImagesBottom'),
     }
 }
 

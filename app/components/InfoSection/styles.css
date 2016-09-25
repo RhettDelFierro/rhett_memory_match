@@ -8,10 +8,15 @@
     align-items: stretch;
     background: #FFFFFF;
 }
+.hideInfoSection {
+    height: 1000px;
+}
 
 @media screen and (max-width: 740px) {
     .infoSectionContainer {
-        width: 100%;
+        max-width: 100%;
+        flex: 2;
+        margin-bottom: 10px;
     }
 }
 
@@ -24,12 +29,6 @@
     order: 2;
     animation: infoEnd 2s forwards;
 }
-
-/*@media screen and (max-width: 740px) {*/
-    /*.infoContainer {*/
-        /*flex-direction: column;*/
-    /*}*/
-/*}*/
 
 /*<-------------------individual infoImages---------------------->*/
 
@@ -58,6 +57,10 @@
     order: 3;
     text-align: center;
     width: 100%;
+}
+
+.link {
+    color: black;
 }
 
 

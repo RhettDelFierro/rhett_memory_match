@@ -9,6 +9,17 @@ import { appPicContainer, lineBreak, breakImage } from './styles.css'
 class AppPictures extends Component {
     constructor() {
         super()
+        this.state = {
+            showComponent: false
+        }
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.showComponent !== this.state.showComponent) {
+            this.setState({
+                showComponent: newProps.showComponent
+            })
+        }
     }
 
     //<Breaker /> will go here.
@@ -25,13 +36,10 @@ class AppPictures extends Component {
 
         return (
             <div ref={this.props.appPicRef} className={appPicContainer}>
-                <Breaker show={this.props.showComponent} title={breakerTitle} image={breakerImage}/>
-                <InfoSection show={this.props.showComponent} slide="left" image={infoImage} title={info1} description={description1}/>
-                <InfoSection show={this.props.showComponent} slide="right" image={infoImage2} title={info2} description={description2}/>
+                <Breaker show={this.state.showComponent} title={breakerTitle} type={'appPictures'} />
+                <InfoSection show={this.state.showComponent} slide="left" image={infoImage} title={info1} description={description1}/>
+                <InfoSection show={this.state.showComponent} slide="right" image={infoImage2} title={info2} description={description2}/>
             </div>
-
-
-
         )
     }
 }
