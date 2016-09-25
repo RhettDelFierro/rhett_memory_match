@@ -1,5 +1,4 @@
 .breakerContainer {
-    flex: 1;
     order: 1;
     align-self: flex-start;
     display: flex;
@@ -9,7 +8,13 @@
     width: 100%;
     height: 240px;
     z-index: 3;
-    animation: breaker 1s forwards;
+    animation: breakerFade 1s forwards;
+}
+
+.breakerContainerLeft {
+    composes: breakerContainer;
+    flex: 1;
+    animation: breakerFade 1s forwards;
 }
 
 .hideBreaker {
@@ -46,6 +51,16 @@
     0% {
         opacity: 0;
         transform: translate(0,-1000px)
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes breakerFade {
+    0% {
+        opacity: 0;
     }
 
     100% {
