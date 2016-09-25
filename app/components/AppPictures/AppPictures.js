@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as scrollActionCreators from 'redux/modules/scroll'
 import { Map, OrderedMap, List } from 'immutable'
-import { Breaker, InfoSection } from 'components'
+import { Breaker } from 'components'
 import { appPicContainer, lineBreak, breakImage } from './styles.css'
+import { InfoSectionContainer } from 'containers'
 
 class AppPictures extends Component {
     constructor() {
@@ -37,8 +38,8 @@ class AppPictures extends Component {
         return (
             <div ref={this.props.appPicRef} className={appPicContainer}>
                 <Breaker show={this.state.showComponent} title={breakerTitle} type={'appPictures'} />
-                <InfoSection show={this.state.showComponent} slide="left" image={infoImage} title={info1} description={description1}/>
-                <InfoSection show={this.state.showComponent} slide="right" image={infoImage2} title={info2} description={description2}/>
+                <InfoSectionContainer show={this.state.showComponent} slide="left" image={infoImage} title={info1} description={description1}/>
+                <InfoSectionContainer show={this.state.showComponent} slide="right" image={infoImage2} title={info2} description={description2}/>
             </div>
         )
     }

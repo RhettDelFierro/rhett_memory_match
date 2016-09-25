@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react'
 import { infoSectionContainer, infoImage, infoTitle, infoLeft, infoRight, infoDescription, hideInfoSection } from './styles.css'
 import connect from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { push } from 'react-router-redux'
 
 function InfoSection({ title, image, slide, show, description, changeRoute }) {
     //going to change the slide prop.
@@ -15,7 +14,7 @@ function InfoSection({ title, image, slide, show, description, changeRoute }) {
         show ?
         <div className={infoClass}>
             <div className={infoImage} style={divStyle}></div>
-            <h3>{title}</h3>
+            <h3 onClick={() => changeRoute('/perfect_pitch_training')}>{title}</h3>
             <p className={infoDescription}>{description}</p>
         </div>
             :
@@ -27,7 +26,8 @@ const { string, func } = PropTypes
 InfoSection.propTypes = {
     title: string.isRequired,
     slide: string.isRequired,
-    image: string.isRequired
+    image: string.isRequired,
+    changeRoute: func.isRequired
     //changeRoute: func.isRequired
 }
 
@@ -40,4 +40,5 @@ InfoSection.propTypes = {
 //    )
 //}
 
+//export default connect(null,{changeRoute: (url) => dispatch(push(url))})(InfoSection)
 export default InfoSection
