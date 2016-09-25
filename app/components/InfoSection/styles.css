@@ -1,58 +1,70 @@
 /*<-------------------individual infoContainers------------------>*/
 .infoSectionContainer {
     flex: 1;
-    max-height: 400px;
+    /*height: 1000px;*/
     max-width: 30%;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     align-items: stretch;
-    border: 1px solid black;
-    background: #fff;
+    background: #FFFFFF;
+}
+
+@media screen and (max-width: 740px) {
+    .infoSectionContainer {
+        width: 100%;
+    }
 }
 
 .infoLeft {
-    /*align-self: flex-start;*/
     order: 1;
     animation: infoStart 2s forwards;
 }
 
 .infoRight {
-    /*align-self: flex-end;*/
     order: 2;
     animation: infoEnd 2s forwards;
 }
 
-.infoSectionContainer h3 {
-    order: 2;
-  text-align: center;
-}
-
 /*@media screen and (max-width: 740px) {*/
-    /*.infoContainer.infoLeft, .infoContainer.infoRight {*/
-        /*align-self: stretch;*/
-        /*width: 100%;*/
+    /*.infoContainer {*/
+        /*flex-direction: column;*/
     /*}*/
 /*}*/
 
 /*<-------------------individual infoImages---------------------->*/
 
 .infoImage {
+    flex: 3;
     order: 1;
     height: 50%;
     width: 100%;
     background-position: top center;
-    background-size: cover;
+    background-size: 100% 100%;
+    padding: 10px;
+    flex-basis: auto;
 }
 
 /*<------------------individual descriptions--------------------->*/
 
+.infoDescription {
+    order: 2;
+    width: 100%;
+    font-size: 18px;
+}
 
+/*<-----------------HEADER---------------->*/
+.infoSectionContainer h3 {
+    flex: 1;
+    order: 3;
+    text-align: center;
+    width: 100%;
+}
 
 
 @keyframes infoStart {
     0% {
         opacity: 0;
-        transform: translate(-1000px,0)
+        transform: translate(-1000px, 0)
     }
 
     100% {
@@ -63,7 +75,7 @@
 @keyframes infoEnd {
     0% {
         opacity: 0;
-        transform: translate(2000px,0)
+        transform: translate(2000px, 0)
     }
 
     100% {
