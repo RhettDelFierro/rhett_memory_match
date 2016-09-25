@@ -1,6 +1,6 @@
 import React, { Component,PropTypes } from "react"
 import { Field, reduxForm } from 'redux-form/immutable'
-import { error } from './styles.css'
+import { error, spotifyKey } from './styles.css'
 import { connect } from 'react-redux'
 import * as userActions from 'redux/modules/users'
 import validate from './validate'
@@ -29,7 +29,7 @@ let LoginForm = (props) => {
                 {' '}
                 <button type="button" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
                 {' '}
-                <button onClick={spotifyLogin}>Login With Spotify</button>
+                <button className={spotifyKey} onClick={spotifyLogin}>Login With Spotify</button>
             </div>
         </form>
     )

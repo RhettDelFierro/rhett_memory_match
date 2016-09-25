@@ -28,6 +28,7 @@ const store = createStore(
 )
 
 export const history = syncHistoryWithStore(hashHistory, store)
+history.listen(location => analyticsService.track(location.pathname))
 
 //these arguments are what react-router will give to this function when it sees the onEnter prop.
 function authCheck(nextState, replace) {
@@ -37,7 +38,7 @@ function authCheck(nextState, replace) {
     const authed = store.getState().users.get('isAuthed')
     const nextPathName = nextState.location.pathname
     if (authed !== true) {
-        replace('/')
+        replace('/login')
     }
 
 }
