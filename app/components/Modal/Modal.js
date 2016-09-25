@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { default as ReactModal } from 'react-modal'
-import {
-    modalHeader, modalBody, pointer, darkBtn, registerForm, loginForm } from './styles.css'
+import {modalHeader, modalBody, pointer, darkBtn,
+        registerForm, loginForm } from './styles.css'
 import { Map } from 'immutable'
 import { LoginForm, RegisterForm } from 'components'
 
@@ -33,7 +33,6 @@ export default function Modal(props) {
                 <div className={modalBody}>
                     <div className={loginForm}>
                         <LoginForm />
-                        <button onClick={props.spotifyLogin}>Login With Spotify</button>
                     </div>
                     <div className={registerForm}>
                         <RegisterForm />
@@ -48,6 +47,5 @@ const { func, bool } = PropTypes
 Modal.propTypes = {
     closeModal: func.isRequired,
     isOpen: bool.isRequired,
-    openModal: func.isRequired,
-    spotifyLogin: func.isRequired
+    openModal: func.isRequired
 }

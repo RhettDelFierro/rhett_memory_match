@@ -66,13 +66,13 @@
 
 @media screen and (max-width: 739px) {
     .hamburgerContainer:hover {
-        animation: animateBlink 0.5s;
+        animation: animateBlink 0.2s;
     }
     .hamburgerContainer:hover .hamburger::before {
-        animation: animateTop 0.5s 0.5s forwards;
+        animation: animateTop 0.5s 0.2s forwards;
     }
     .hamburgerContainer:hover .hamburger::after {
-        animation: animateBottom 0.5s 0.5s forwards;
+        animation: animateBottom 0.5s 0.2s forwards;
     }
 }
 
@@ -87,7 +87,7 @@
         background-color: lightblue;
         border-radius: 14%;
     }
-    75% {
+    99% {
         background-color: lightblue;
         border-radius: 14%;
     }
@@ -144,7 +144,7 @@
     left: 0;
     height: 100vh;
     width: 100vw;
-    animation: popBgModal 1s forwards;
+    animation: popBgModal 0.5s forwards;
     background-color: rgba(0,0,0,0.75);
     z-index: 30;
     display: flex;
@@ -164,7 +164,7 @@
 }
 /*<-----------------CLOSE MODAL BACKGROUND-------------------->*/
 .bgModalContainer.closeBG {position: fixed;
-    animation: closeModal 1s 2s forwards;
+    animation: closeModal 0.5s 1s forwards;
 }
 
 @keyframes closeModal {
