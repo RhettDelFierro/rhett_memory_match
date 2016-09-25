@@ -95,6 +95,12 @@ export function completeSession(){
 
 export function proceed() {
     return async function (dispatch, getState) {
+
+        if (!getState().users.get('isAuthed')) {
+            dispatch(push('/login'))
+            return
+        }
+
         const appLogin = getState().users.get('appLogin')
 
         const score = setScores({
@@ -168,6 +174,10 @@ export function playIncorrect() {
 export function guessed() {
     return async function (dispatch, getState) {
         try {
+            if (!getState().users.get('isAuthed')) {
+                dispatch(push('/login'))
+                return
+            }
             const currentTracker = getState().training.get('tracker')
             const randomMaskingNotes = maskingNotes(currentTracker)
             const noiseVolume = getState().volume.get('noiseVolume')
