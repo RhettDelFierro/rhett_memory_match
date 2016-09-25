@@ -98,6 +98,7 @@ export function proceed() {
 
         if (!getState().users.get('isAuthed')) {
             dispatch(push('/login'))
+            dispatch({type: RESET_TRAINING})
             return
         }
 
@@ -126,6 +127,7 @@ export function startGame() {
     return async function (dispatch, getState) {
         if (!getState().users.get('isAuthed')) {
             dispatch(push('/'))
+            dispatch({type: RESET_TRAINING})
             return
         }
         const notesUsed = await loadNotes(getState().training.get('tracker'))
@@ -176,6 +178,7 @@ export function guessed() {
         try {
             if (!getState().users.get('isAuthed')) {
                 dispatch(push('/login'))
+                dispatch({ type: RESET_TRAINING })
                 return
             }
             const currentTracker = getState().training.get('tracker')

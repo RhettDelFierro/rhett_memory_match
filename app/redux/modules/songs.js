@@ -35,7 +35,7 @@ export function spotifyLogin(){
         spotifyAuthAPI({callback: ({id}) =>{
             dispatch(closeModal())
             dispatch(spotifyAuth())
-            if (!getState().users.get('formLogin')) {
+            if (!getState().users.get('appLogin')) {
                 dispatch(authUser(id))
             }
         }})

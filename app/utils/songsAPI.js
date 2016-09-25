@@ -31,7 +31,6 @@ export async function getTrackURI({trackId}) {
 export async function spotifyAuthAPI({callback}) {
     try {
         const response = await axios.get('http://localhost:8000/authLogin', {withCredentials: true})
-        console.log(response)
         login({url: response.data.uri, callback})
     } catch (error) {
         Error('Error in spotifyAuthAPI', error)
@@ -45,12 +44,14 @@ function login({ url,callback }) {
         try {
             if (popup.document.URL.indexOf("http://localhost:8080/oauthfinished") != -1) {
                 window.clearInterval(polltimer)
-                var url = popup.location.search
-                var queryString = url.substring(1);
+                let url = popup.location.search
+                let queryString = url.substring(1);
                 const queryObject = parseQueryString({queryString})
                 popup.opener.sessionStorage.setItem('Spotify_token', queryObject["token"])
                 callback({id: queryObject["id"]})
                 popup.close()
+                //don't need to return a queryObject, it's not being set to anything from login()
+                //maybe just return
                 return queryObject
             }
         } catch (error) {
@@ -65,7 +66,9 @@ var parseQueryString = function ({ queryString }) {
     // Split into key/value pairs
     return queryString.split("&").reduce((prev, c) => {
         const arr = c.split('=')
+        //should be prev[arr[0]] = prev[1]?
         params[arr[0]] = arr[1]
+        //should be return prev?
         return params
     }, params)
 };
