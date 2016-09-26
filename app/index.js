@@ -15,6 +15,7 @@ import { hashHistory, applyRouterMiddleware, useRouterHistory } from 'react-rout
 import { routerReducer, syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
 import createHashHistory from 'history/lib/createHashHistory'
 import { useScroll } from 'react-router-scroll'
+import { setLastRoute } from 'redux/modules/users'
 
 const routermiddle = routerMiddleware(hashHistory)
 const render = applyRouterMiddleware(useScroll())
@@ -42,7 +43,6 @@ function authCheck(nextState, replace) {
     }
 
 }
-
 
 ReactDOM.render(
     <Provider store={store}>

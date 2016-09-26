@@ -2,6 +2,7 @@ import { fromJS } from 'immutable'
 import { registerUser, loginUser, logoutUser } from 'utils/userFunctions'
 import { closeModal } from 'redux/modules/modal'
 import { closeNavModal } from 'redux/modules/navModal'
+import { push } from 'react-router-redux'
 
 const AUTH_USER = 'AUTH_USER'
 const UNAUTH_USER = 'UNAUTH_USER'
@@ -54,7 +55,7 @@ export function fetchingUserSuccess({user_id, user, timestamp, token}) {
 }
 
 export function register({email, username, password}) {
-    return async function (dispatch) {
+    return async function (dispatch,getState) {
         try {
             dispatch(fetchingUser())
             const data = await registerUser({username, email, password})
@@ -63,6 +64,7 @@ export function register({email, username, password}) {
             dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
             dispatch(closeNavModal())
+            dispatch(push(getState().users.get('lastRoute')))
             dispatch(formLogin())
             dispatch(authUser(user_id))
             return user_id
@@ -73,7 +75,7 @@ export function register({email, username, password}) {
 }
 
 export function login({email, password}) {
-    return async function (dispatch) {
+    return async function (dispatch,getState) {
         try {
             dispatch(fetchingUser())
             const data = await loginUser({email, password})
@@ -85,6 +87,7 @@ export function login({email, password}) {
             dispatch(closeNavModal())
             dispatch(formLogin())
             dispatch(authUser(user_id))
+            dispatch(push(getState().users.get('lastRoute')))
             return user_id
         } catch (error) {
             Error('error in loginUser', error)

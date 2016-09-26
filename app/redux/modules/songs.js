@@ -1,7 +1,7 @@
 import { fromJS, toOrderedMap } from 'immutable'
 import { tallyCount } from 'utils/scoresFunctions'
 import { spotifyAuthAPI, getSongsAPI, getTrackURI } from 'utils/songsAPI'
-import { authUser,spotifyAuth, fetchingUser } from 'redux/modules/users'
+import { authUser,spotifyAuth, fetchingUser, setLastRoute } from 'redux/modules/users'
 import { closeModal } from './modal'
 import { openSongModal } from './songModal'
 import { push } from 'react-router-redux'
