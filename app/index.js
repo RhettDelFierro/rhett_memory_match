@@ -37,6 +37,7 @@ function authCheck(nextState, replace) {
     const authed = store.getState().users.get('isAuthed')
     const nextPathName = nextState.location.pathname
     if (authed !== true) {
+        store.users.dispatch(setLastRoute(nextPathName))
         replace('/login')
     }
 

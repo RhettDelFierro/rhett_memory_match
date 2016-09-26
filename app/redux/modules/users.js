@@ -97,6 +97,17 @@ export function logout(){
     }
 }
 
+//putting the last route user visited here if they have to auth/re-auth
+//this will take them back to the route they were previously on.
+//will handle this here until I find out how to do it in
+//react-router/react-router-redux
+export function setLastRoute({ lastRoute }) {
+    return {
+        type: SET_LAST_ROUTE,
+        lastRoute
+    }
+}
+
 const userInitialState = fromJS({
     info: {
         username: '',
@@ -114,16 +125,6 @@ function user(state = userInitialState, action) {
     }
 }
 
-//putting the last route user visited here if they have to auth/re-auth
-//this will take them back to the route they were previously on.
-//will handle this here until I find out how to do it in
-//react-router/react-router-redux
-export function setLastRoute({ lastRoute }) {
-    return {
-        type: SET_LAST_ROUTE,
-        lastRoute
-    }
-}
 
 const initialState = fromJS({
     isAuthed: false,

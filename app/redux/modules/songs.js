@@ -31,6 +31,11 @@ export function fetchingSongsSuccess(songs){
 
 export function spotifyLogin(){
     return async function (dispatch,getState) {
+        //problem here is it will get the route they are on, and if they're on /login, locationBeforeTransitions will be /login.
+        const lastRoute = getState().routing.get('locationBeforeTransitions')
+        if (lastRoute != '/login') {
+            dispatch(setLastRoute({lastRoute}))
+        }
         //do NOT forget to throw in the error callback also.
         dispatch(fetchingUser())
         spotifyAuthAPI({callback: ({id}) => {
@@ -39,7 +44,7 @@ export function spotifyLogin(){
             if (!getState().users.get('appLogin')) {
                 dispatch(authUser(id))
             }
-            dispatch(push(getState().routing.get('locationBeforeTransitions')))
+            dispatch(push(getState().users.get('lastRoute')))
         }})
     }
 }
