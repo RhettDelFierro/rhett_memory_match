@@ -1,6 +1,7 @@
 import { fromJS } from 'immutable'
 import { registerUser, loginUser, logoutUser } from 'utils/userFunctions'
 import { closeModal } from 'redux/modules/modal'
+import { closeNavModal } from 'redux/modules/navModal'
 
 const AUTH_USER = 'AUTH_USER'
 const UNAUTH_USER = 'UNAUTH_USER'
@@ -61,6 +62,7 @@ export function register({email, username, password}) {
             const user = data.user
             dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
+            dispatch(closeNavModal())
             dispatch(formLogin())
             dispatch(authUser(user_id))
             return user_id
@@ -80,6 +82,7 @@ export function login({email, password}) {
             const user_id = data.user.user_id
             dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
+            dispatch(closeNavModal())
             dispatch(formLogin())
             dispatch(authUser(user_id))
             return user_id

@@ -34,7 +34,6 @@ export async function loginUser({email, password}) {
         const response = await axios.post("http://localhost:8000/users/login",
             {data: {email, password}}, {withCredentials: true});
         window.sessionStorage.setItem('token', response.data.data.token)
-        console.log(response)
         return response.data.data
     } catch (error) {
         console.log(error)
@@ -44,7 +43,6 @@ export async function loginUser({email, password}) {
 export async function logoutUser() {
     try {
         const response = await axios.post("http://localhost:8000/users/logout", {data: {value: 'some value'}}, {withCredentials: true});
-        console.log(response)
         return response
     } catch (error) {
         console.log(error)

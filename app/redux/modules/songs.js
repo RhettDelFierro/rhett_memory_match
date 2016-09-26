@@ -5,6 +5,7 @@ import { authUser,spotifyAuth, fetchingUser } from 'redux/modules/users'
 import { closeModal } from './modal'
 import { openSongModal } from './songModal'
 import { push } from 'react-router-redux'
+import { closeNavModal } from 'redux/modules/navModal'
 
 const GET_SONGS = 'GET_SONGS'
 const FETCHING_SONGS = 'FETCHING_SONGS'
@@ -45,6 +46,7 @@ export function spotifyLogin(){
                 dispatch(authUser(id))
             }
             dispatch(push(getState().users.get('lastRoute')))
+            dispatch(closeNavModal())
         }})
     }
 }
