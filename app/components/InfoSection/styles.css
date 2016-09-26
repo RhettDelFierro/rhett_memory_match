@@ -46,17 +46,32 @@
 /*<------------------individual descriptions--------------------->*/
 
 .infoDescription {
+    flex: 1;
     order: 2;
+    height: 25%;
     width: 100%;
+}
+
+.infoDescription > p {
     font-size: 18px;
 }
 
+
 /*<-----------------HEADER---------------->*/
-.infoSectionContainer h3 {
+.infoSectionContainer .toTraining {
     flex: 1;
     order: 3;
+    display: flex;
+    height: 25%;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     width: 100%;
+    background-color: #337AB7;
+}
+
+.infoSectionContainer .toTraining h3 {
+    color: #f9f9f9;
 }
 
 .link {

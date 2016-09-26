@@ -29,7 +29,7 @@ function mapStateToProps({users, navModal}) {
     return {
         isAuthed: users.get('isAuthed'),
         appLogin: users.get('appLogin'),
-        username: users.get('appLogin') ? users.getIn([users.get('authId'),'info','username']) : users.get('authId')
+        username: users.get('appLogin') ? users.get('username') : users.get('authId')
     }
 }
 

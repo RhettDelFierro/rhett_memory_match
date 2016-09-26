@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import { infoSectionContainer, infoImage, infoTitle, infoLeft, infoRight, infoDescription, hideInfoSection } from './styles.css'
+import { infoSectionContainer, infoImage, infoTitle, infoLeft, infoRight, infoDescription, hideInfoSection, toTraining } from './styles.css'
 import connect from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -12,11 +12,13 @@ function InfoSection({ title, image, slide, show, description, changeRoute }) {
     }
     return (
         show ?
-        <div className={infoClass}>
-            <div className={infoImage} style={divStyle}></div>
-            <h3 onClick={() => changeRoute('/perfect_pitch_training')}>{title}</h3>
-            <p className={infoDescription}>{description}</p>
-        </div>
+            <div className={infoClass}>
+                <div className={infoImage} style={divStyle}></div>
+                <div className={infoDescription}><p>{description}</p></div>
+                <div className={toTraining} onClick={() => changeRoute('/perfect_pitch_training')}>
+                    <h3>{title}</h3>
+                </div>
+            </div>
             :
             <div className={hideInfoSection}></div>
     )

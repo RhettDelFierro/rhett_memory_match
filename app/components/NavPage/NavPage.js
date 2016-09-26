@@ -50,7 +50,7 @@ NavPage.proptypes = {
     logout: bool.isRequired,
     closeNavModal: func.isRequired,
     //authId is something, either string or number.
-    appLogin: bool.isRequired
+    username: string
 }
 
 export default NavPage

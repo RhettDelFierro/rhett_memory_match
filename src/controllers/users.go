@@ -80,7 +80,7 @@ func (env *Env) LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//login logic robust enough to be done inline:
-	query := "SELECT passwords.password,users.user_id FROM passwords INNER JOIN users ON passwords.user_id = users.user_id WHERE users.email=?"
+	query := "SELECT passwords.password,users.user_id,username FROM passwords INNER JOIN users ON passwords.user_id = users.user_id WHERE users.email=?"
 	stmt, err := env.Db.PrepareQuery(query)
 	if err != nil {
 		common.DisplayAppError(w, err, "Error in database query", 500)

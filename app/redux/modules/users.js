@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable'
+import { fromJS, Map } from 'immutable'
 import { registerUser, loginUser, logoutUser } from 'utils/userFunctions'
 import { closeModal } from 'redux/modules/modal'
 import { closeNavModal } from 'redux/modules/navModal'
@@ -61,12 +61,14 @@ export function register({email, username, password}) {
             const data = await registerUser({username, email, password})
             const user_id = data.user.user_id
             const user = data.user
+            //I want to clean some of this.
+            //Possibly take care of a lot of it in fetchingUserSuccess()?
             dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
             dispatch(closeNavModal())
-            dispatch(push(getState().users.get('lastRoute')))
             dispatch(formLogin())
             dispatch(authUser(user_id))
+            dispatch(push(getState().users.get('lastRoute')))
             return user_id
         } catch (error) {
             Error('error in registerUser', error)
@@ -82,6 +84,7 @@ export function login({email, password}) {
             const user = data.user
             const username = data.user.username
             const user_id = data.user.user_id
+            //I want to clearn some of this.
             dispatch(fetchingUserSuccess({user_id, user, timestamp: Date.now()}))
             dispatch(closeModal())
             dispatch(closeNavModal())
@@ -126,7 +129,7 @@ function user(state = userInitialState, action) {
     switch(action.type) {
         case FETCHING_USER_SUCCESS:
             return state.merge({
-                info: fromJS(action.user)
+                info: new Map(action.user)
             })
     }
 }
