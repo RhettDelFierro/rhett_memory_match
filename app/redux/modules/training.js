@@ -7,6 +7,7 @@ import { push } from 'react-router-redux'
 import { checkMode, setScores } from 'utils/scoresFunctions'
 import { setScoreAction } from 'redux/modules/scores'
 import { setScoresAPI } from 'utils/userFunctions'
+import { setLastRoute } from 'redux/modules/users'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -97,6 +98,8 @@ export function proceed() {
     return async function (dispatch, getState) {
 
         if (!getState().users.get('isAuthed')) {
+            const lastRoute = getState().routing.get('locationBeforeTransitions')
+            dispatch(setLastRoute({ lastRoute }))
             dispatch(push('/login'))
             dispatch({type: RESET_TRAINING})
             return
@@ -125,7 +128,10 @@ export function proceed() {
 
 export function startGame() {
     return async function (dispatch, getState) {
+        const lastRoute = getState().routing.get('locationBeforeTransitions')
         if (!getState().users.get('isAuthed')) {
+            const lastRoute = getState().routing.get('locationBeforeTransitions')
+            dispatch(setLastRoute({ lastRoute }))
             dispatch(push('/'))
             dispatch({type: RESET_TRAINING})
             return
@@ -177,6 +183,8 @@ export function guessed() {
     return async function (dispatch, getState) {
         try {
             if (!getState().users.get('isAuthed')) {
+                const lastRoute = getState().routing.get('locationBeforeTransitions')
+                dispatch(setLastRoute({ lastRoute }))
                 dispatch(push('/login'))
                 dispatch({ type: RESET_TRAINING })
                 return

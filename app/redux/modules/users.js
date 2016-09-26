@@ -9,6 +9,7 @@ const FETCHING_USER_SUCCESS = 'FETCHING_USER_SUCCESS'
 const LOGOUT_USER = 'LOGOUT_USER'
 const SPOTIFY_AUTH = 'SPOTIFY_AUTH'
 const FORM_LOGIN = 'FORM_LOGIN'
+const SET_LAST_ROUTE = 'SET_LAST_ROUTE'
 
 export function authUser(uid) {
     return {
@@ -113,6 +114,17 @@ function user(state = userInitialState, action) {
     }
 }
 
+//putting the last route user visited here if they have to auth/re-auth
+//this will take them back to the route they were previously on.
+//will handle this here until I find out how to do it in
+//react-router/react-router-redux
+export function setLastRoute({ lastRoute }) {
+    return {
+        type: SET_LAST_ROUTE,
+        lastRoute
+    }
+}
+
 const initialState = fromJS({
     isAuthed: false,
     isFetching: false,
@@ -120,7 +132,8 @@ const initialState = fromJS({
     authId: '',
     spotifyAuthed: false,
     appLogin: false,
-    username: ''
+    username: '',
+    lastRoute: '/'
 })
 
 export default function users(state = initialState, action) {
@@ -149,6 +162,10 @@ export default function users(state = initialState, action) {
             return state.merge({
                 isFetching: false,
                 spotifyAuthed: true
+            })
+        case SET_LAST_ROUTE:
+            return state.merge({
+                lastRoute: action.lastRoute
             })
         case LOGOUT_USER:
             return state.merge({

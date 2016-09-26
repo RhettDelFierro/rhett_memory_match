@@ -4,6 +4,7 @@ import { spotifyAuthAPI, getSongsAPI, getTrackURI } from 'utils/songsAPI'
 import { authUser,spotifyAuth, fetchingUser } from 'redux/modules/users'
 import { closeModal } from './modal'
 import { openSongModal } from './songModal'
+import { push } from 'react-router-redux'
 
 const GET_SONGS = 'GET_SONGS'
 const FETCHING_SONGS = 'FETCHING_SONGS'
@@ -32,12 +33,13 @@ export function spotifyLogin(){
     return async function (dispatch,getState) {
         //do NOT forget to throw in the error callback also.
         dispatch(fetchingUser())
-        spotifyAuthAPI({callback: ({id}) =>{
+        spotifyAuthAPI({callback: ({id}) => {
             dispatch(closeModal())
             dispatch(spotifyAuth())
             if (!getState().users.get('appLogin')) {
                 dispatch(authUser(id))
             }
+            dispatch(push(getState().routing.get('locationBeforeTransitions')))
         }})
     }
 }
