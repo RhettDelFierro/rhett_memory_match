@@ -9,7 +9,7 @@ import { setScoreAction } from 'redux/modules/scores'
 import { setScoresAPI } from 'utils/userFunctions'
 import { setLastRoute } from 'redux/modules/users'
 import { reset } from 'redux-form'
-import { resetSongs } from 'redux/modules/training'
+import { resetSongs } from 'redux/modules/songs'
 
 const CHECK_CORRECT = 'CHECK_CORRECT'
 const GET_NOTES_MISSED = 'GET_NOTES_MISSED'
@@ -123,6 +123,7 @@ export function proceed() {
         //set the following dispatches from data instead of what you have.
         dispatch(setScoreAction({mode: score.gameMode, round: score.round, score: score.score}))
         dispatch(reset('notes'))
+        dispatch(resetSongs())
         dispatch({type: PROCEED})
     }
 }
