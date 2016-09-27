@@ -50,7 +50,7 @@ export default function volume (state = initialState, action) {
         case CHANGE_MASKING_NOTES_VOLUME:
             return state.merge({maskingNotesVolume: action.value})
         case SET_VOLUME: {
-            return state.marge({
+            return state.merge({
                 targetNoteVolume: action.targetNoteVolume,
                 noiseVolume: action.noiseVolume,
                 maskingNotesVolume: action.maskingNotesVolume

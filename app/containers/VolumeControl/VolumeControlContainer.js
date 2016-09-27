@@ -10,22 +10,19 @@ class VolumeControlContainer extends Component {
         super()
     }
 
-
     render() {
-        //<VolumeControl onUpdate={(event) => this.handleUpdateTargetNoteVolume(event)}/>
-        //<VolumeControl onUpdate={(event) => this.handleUpdateNoiseVolume(event)}/>
-        //<VolumeControl onUpdate={(event) => this.handleUpdateMaskingNotesVolume(event)}/>
         return (
-                <VolumeControl volumeRef={ref = this.volumeNode = ref}/>
+                <VolumeControl {...this.props}/>
         )
     }
 }
 
 function mapStateToProps({volume, training}) {
     return {
+        onCheck: training.get('onCheck'),
         targetNoteVolume: volume.get('targetNoteVolume'),
         noiseVolume: volume.get('noiseVolume'),
-        maskingNotesVolume: volume.get('maskingNotesVolume'),
+        maskingNotesVolume: volume.get('maskingNotesVolume')
     }
 }
 

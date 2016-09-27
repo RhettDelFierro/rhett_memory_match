@@ -1,22 +1,46 @@
 import React, { PropTypes, Component } from 'react'
-import { connect } from 'react-redux'
-import bindActionCreators from 'redux'
-import * as volumeActioncreators from 'redux/modules/volume'
 import { container, targetNote, noiseVolume, maskingNotes } from './styles.css'
 
 class VolumeControl extends Component {
     constructor() {
         super()
+        this.handleUpdate = this.handleUpdate.bind(this)
+        this.changeVolume = this.changeVolume.bind(this)
+        //render the range inputs with values from the redux store on load.
         this.state = {
-            targetNote: this.props.targetNoteVolume,
-            noise: this.props.noiseVolume,
-            maskingNotes: this.props.maskingNotesVolume
-
+            targetNoteVolume: "4.5",
+            noiseVolume: "4.5",
+            maskingNotesVolume: "4.5"
         }
     }
-    
+
+    componentDidMount() {
+        this.setState({
+            targetNoteVolume: this.props.targetNoteVolume,
+            noiseVolume: this.props.noiseVolume,
+            maskingNotesVolume: this.props.maskingNotesVolume
+        })
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            targetNoteVolume: newProps.targetNoteVolume,
+            noiseVolume: newProps.noiseVolume,
+            maskingNotesVolume: newProps.maskingNotesVolume
+        })
+    }
+
+    //set volume in Redux store
     handleUpdate() {
         this.props.setVolume({
+            targetNoteVolume: this.state.targetNoteVolume,
+            noiseVolume: this.state.noiseVolume,
+            maskingNotesVolume: this.state.maskingNotesVolume
+        })
+    }
+
+    changeVolume() {
+        this.setState({
             targetNoteVolume: this.targetNoteNode.value,
             noiseVolume: this.noiseVolumeNode.value,
             maskingNotesVolume: this.maskingNotesNode.value
@@ -24,22 +48,19 @@ class VolumeControl extends Component {
     }
 
     render() {
-        //set volume in redux store
-        //when the component mounts we want to render the volume again with the right position.
-
         return (
             <div>
                 <input className={targetNote} ref={ref => this.targetNoteNode = ref} type="range" min="0" max="9"
-                       step="0.01" value={this.props.targetNote} disabled={this.props.onCheck}
-                       onMouseUp={() => this.handleUpdate} onTouchEnd={() => this.handleUpdate}/>
+                       step="0.01" value={this.state.targetNoteVolume} disabled={this.props.onCheck}
+                       onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate} onChange={this.changeVolume}/>
 
                 <input className={noiseVolume} ref={ref => this.noiseVolumeNode = ref} type="range" min="0" max="9"
-                       step="0.01" value={this.props.noise} disabled={this.props.onCheck}
-                       onMouseUp={() => this.handleUpdate} onTouchEnd={() => this.handleUpdate}/>
+                       step="0.01" value={this.state.noiseVolume} disabled={this.props.onCheck}
+                       onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate} onChange={this.changeVolume}/>
 
                 <input className={maskingNotes} ref={ref => this.maskingNotesNode = ref} type="range" min="0" max="9"
-                       step="0.01" value={this.props.maskingNotes} disabled={this.props.onCheck}
-                       onMouseUp={() => this.handleUpdate} onTouchEnd={() => this.handleUpdate}/>
+                       step="0.01" value={this.state.maskingNotesVolume} disabled={this.props.onCheck}
+                       onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate} onChange={this.changeVolume}/>
             </div>
         )
     }
@@ -49,20 +70,22 @@ class VolumeControl extends Component {
 //    return <input type="range" min="0" max="9" step="0.01" disabled={this.props.onCheck} onChange={this.props.handleUpdate}/>
 //}
 
-const { func, bool } = PropTypes
+const { func, bool, string } = PropTypes
 VolumeControl.proptTypes = {
     onUpdate: func.isRequired,
     onCheck: bool.isRequired,
-    volumeRef: func.isRequired
+    targetNotVolume: string.isRequired,
+    noiseVolume: string.isRequired,
+    maskingNotesVolume: string.isRequired
 }
 
-function mapStateToProps({training, volume}, props) {
-    return {
-        onCheck: training.get('onCheck')
-        targetNote:
-        noise: this.props.noiseVolume,
-        maskingNotes: this.props.maskingNotesVolume
-    }
-}
+//function mapStateToProps({training, volume}, props) {
+//    return {
+//        onCheck: training.get('onCheck'),
+//        targetNoteVolume: volume.get('targetNoteVolume'),
+//        noiseVolume: volume.get('noiseVolume'),
+//        maskingNotesVolume: volume.get('maskingNotesVolume')
+//    }
+//}
 
-export default connect(mapStateToProps)(VolumeControl)
+export default VolumeControl
