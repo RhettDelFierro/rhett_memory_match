@@ -13,6 +13,7 @@ const FETCHING_SONGS_SUCCESS = 'FETCHING_SONGS_SUCCESS'
 const SELECT_TRACK = 'SELECT_TRACK'
 const PLAY_TRACK = 'PLAY_TRACK'
 const SET_TRACK_URI = 'SET_TRACK_URI'
+const RESET_SONGS = 'RESET_SONGS'
 
 export function getSongs({notesMissed}) {
     return async function (dispatch) {
@@ -70,6 +71,12 @@ export function playTrack(){
     }
 }
 
+export function resetSongs() {
+    return {
+        type: RESET_SONGS
+    }
+}
+
 const initialState = fromJS({
     fetchingSongs: true,
     notesSelected: {},
@@ -101,6 +108,8 @@ export default function songs(state = initialState, action) {
                 selectedTrackURI: action.trackURI,
                 selectedTrackPreview: action.previewURL
             })
+        case RESET_SONGS:
+            return initialState
         default:
             return state
     }
