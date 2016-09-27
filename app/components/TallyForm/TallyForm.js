@@ -5,7 +5,7 @@ import { List, OrderedMap } from 'immutable'
 import { Field, FieldArray, reduxForm } from 'redux-form/immutable'
 import * as userActionCreators from 'redux/modules/users'
 import * as songActionCreators from 'redux/modules/songs'
-import { error, container, noteNames, spotify, select } from './styles.css'
+import { error, container, formContainer, noteNames, spotify, select } from './styles.css'
 
 //define stateless component to render input and errors:
 const renderField = ({ input, label, type, id}) => (
@@ -17,10 +17,11 @@ const renderField = ({ input, label, type, id}) => (
 const renderNotes = ({ fields, notesCount, meta: { error } }) => (
     <ul>
         {notesCount.entrySeq().map(([note, count]) => {
-            const labelString = `${note} (missed ${count} times)`
+            const labelString = `${note} - missed ${count} time(s)`
             return (
                 <li className={noteNames} key={`notesMissed.${note}`}>
-                    <Field name={`notesMissed.${note}`} id={`notesMissed.${note}`} component={renderField} type="checkbox" label={labelString}/>
+                    <Field name={`notesMissed.${note}`} id={`notesMissed.${note}`} component={renderField}
+                           type="checkbox" label={labelString}/>
                 </li>
             )
         })}
@@ -33,11 +34,13 @@ let TallyForm = (props) => {
 
     return (
         <form className={container} onSubmit={handleSubmit(getSongs.bind(this))}>
-
-            <FieldArray name="notesMissed" component={renderNotes} notesCount={notesMissed}/>
+            <p>Select from the keys below and discover which songs use them!</p>
+            <div className={formContainer}>
+                <FieldArray name="notesMissed" component={renderNotes} notesCount={notesMissed}/>
+            </div>
             <div className={select}>
                 {spotifyAuthed === true
-                    ? <button type="submit" disabled={submitting}>Submit</button>
+                    ? <button type="submit" disabled={submitting}>Find Some Music!</button>
                     : <button type="button" className={spotify} onClick={spotifyLogin}>Sign In Spotify</button>}
                 {' '}
                 <button type="button" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
@@ -69,9 +72,4 @@ TallyForm = reduxForm({
     form: 'notes'
 })(TallyForm)
 
-//TallyForm = connect(
-//    mapStateToProps,
-//    {...userActionCreators, ...songActionCreators}
-//)(TallyForm)
-
-export default connect(mapStateToProps,mapDispatchToProps)(TallyForm)
+export default connect(mapStateToProps, mapDispatchToProps)(TallyForm)

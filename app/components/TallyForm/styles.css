@@ -2,9 +2,20 @@
     display: flex;
     flex: 1 1 100%;
     width: 100%;
+    background-color: rgba(255,255,255,1);
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+}
+
+.formContainer {
+    border: 1px solid springgreen;
+    padding: 50px;
+    border-radius: 10px;
+}
+
+.container > p {
+    align-self: flex-start;
 }
 
 .noteNames {
@@ -12,8 +23,16 @@
 }
 
 .select {
-
+    align-self: flex-start;
+    margin-bottom: 5px;
+    margin-left: 10px;
 }
+
+.select > button {
+    padding: 10px;
+    border-radius: 10px;
+}
+
 .spotify {
     background-color: #1ED760;
 }

@@ -25,6 +25,7 @@
     .scoreModeContainer {
         height: 100%;
         width: 100%;
+        border: none;
     }
     .info {
         width: 100%;
