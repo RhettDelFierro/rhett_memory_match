@@ -22,12 +22,11 @@ class VolumeControlContainer extends Component {
     }
 
     render() {
+        //<VolumeControl onUpdate={(event) => this.handleUpdateTargetNoteVolume(event)}/>
+        //<VolumeControl onUpdate={(event) => this.handleUpdateNoiseVolume(event)}/>
+        //<VolumeControl onUpdate={(event) => this.handleUpdateMaskingNotesVolume(event)}/>
         return (
-            <div>
-                <VolumeControl onUpdate={(event) => this.handleUpdateTargetNoteVolume(event)}/>
-                <VolumeControl onUpdate={(event) => this.handleUpdateNoiseVolume(event)}/>
-                <VolumeControl onUpdate={(event) => this.handleUpdateMaskingNotesVolume(event)}/>
-            </div>
+                <VolumeControl volumeRef={ref = this.volumeNode = ref}/>
         )
     }
 }
