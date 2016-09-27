@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from "react"
 import * as songActionCreators from 'redux/modules/songs'
 import { Map, OrderedMap, List } from 'immutable'
-import { songContainer, noteGroup, selected, playBtn } from './styles.css'
+import { songContainer, noteGroup, selected, playBtn, songName, artist } from './styles.css'
 import { SongModalContainer, SpotifyWidgetContainer } from 'containers'
 
 export default function SongList(props) {
@@ -14,6 +14,7 @@ export default function SongList(props) {
                             {value.map((track) => {
                                 return <Songs trackInfo={track} {...props}/>
                             })}
+                            <br/>
                         </ul>
                     )
                 })}
@@ -33,7 +34,8 @@ function Songs(props) {
     const liStyle = selectedTrackId === id ? selected : ''
     //<span className={playBtn} onClick={() => props.onPlayTrack()}>Play</span>
     return (
-        <li className={liStyle} key={id} onClick={() => onSelectTrack(id)}>{name} - {artists}
+        <li className={liStyle} key={id} onClick={() => onSelectTrack(id)}>
+            <span className={songName}>{name}</span> - <span className={artist}>{artists}</span>
             <span className={playBtn} onClick={() => onPlayTrack()}>{'Play Song!'}</span>
         </li>
     )

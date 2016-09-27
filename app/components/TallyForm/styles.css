@@ -1,7 +1,19 @@
 .container {
-    flex-grow: 2;
+    display: flex;
+    flex: 1 1 100%;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }
 
+.noteNames {
+    list-style-type: none;
+}
+
+.select {
+
+}
 .spotify {
     background-color: #1ED760;
 }

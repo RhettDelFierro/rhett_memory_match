@@ -5,7 +5,7 @@ import { List, OrderedMap } from 'immutable'
 import { Field, FieldArray, reduxForm } from 'redux-form/immutable'
 import * as userActionCreators from 'redux/modules/users'
 import * as songActionCreators from 'redux/modules/songs'
-import { error, container, spotify } from './styles.css'
+import { error, container, noteNames, spotify, select } from './styles.css'
 
 //define stateless component to render input and errors:
 const renderField = ({ input, label, type, id}) => (
@@ -22,7 +22,7 @@ const renderNotes = ({ fields, notesCount, meta: { error } }) => (
         {notesCount.entrySeq().map(([note, count]) => {
             const labelString = `${note} (missed ${count} times)`
             return (
-                <li key={`notesMissed.${note}`}>
+                <li className={noteNames} key={`notesMissed.${note}`}>
                     <Field name={`notesMissed.${note}`} id={`notesMissed.${note}`} component={renderField} type="checkbox" label={labelString}/>
                 </li>
             )
@@ -38,7 +38,7 @@ let TallyForm = (props) => {
         <form className={container} onSubmit={handleSubmit(getSongs.bind(this))}>
 
             <FieldArray name="notesMissed" component={renderNotes} notesCount={notesMissed}/>
-            <div>
+            <div className={select}>
                 {spotifyAuthed === true
                     ? <button type="submit" disabled={submitting}>Submit</button>
                     : <button type="button" className={spotify} onClick={spotifyLogin}>Sign In Spotify</button>}

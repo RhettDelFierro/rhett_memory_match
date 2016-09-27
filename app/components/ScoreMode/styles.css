@@ -1,7 +1,7 @@
 .scoreModeContainer {
     border: 1px solid mediumspringgreen;
-    width: 300px;
-    height: 50%;
+    width: 500px;
+    height: 75%;
     display: flex;
     flex-direction: column;
 }
@@ -11,28 +11,6 @@
     height: 20%;
 }
 
-@media screen and (max-width: 740px) {
-    .info {
-        width: 100%;
-        height: 150px;
-    }
-}
-
-@media screen and (max-width: 740px) {
-    .scoreModeContainer {
-        height: 100%;
-        width: 100%;
-    }
-}
-
-/*.content {*/
-    /*margin-bottom: 0;*/
-    /*overflow-y: scroll;*/
-/*}*/
-
-.error {
-    color: red;
-}
 
 .proceed {
     padding: 4px 0 0 4px;
@@ -44,9 +22,24 @@
 }
 
 @media screen and (max-width: 740px) {
+    .scoreModeContainer {
+        height: 100%;
+        width: 100%;
+    }
+    .info {
+        width: 100%;
+        height: 150px;
+    }
+}
+
+@media screen and (max-width: 740px) {
     .proceed {
         height: 150px;
         padding: 4px 0 0 16px;
         width: 100%;
     }
+}
+
+.error {
+    color: red;
 }
