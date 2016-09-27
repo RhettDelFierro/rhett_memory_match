@@ -6,7 +6,7 @@ import * as trainingActionCreators from 'redux/modules/training'
 import { scoreModeContainer, info, proceed, error, content } from './styles.css'
 import { Map } from 'immutable'
 import { TallyForm } from 'components'
-import { SongListContainer } from 'containers'
+import { SongListContainer, SpotifyWidgetContainer } from 'containers'
 
 
 export default function ScoreMode(props) {
@@ -21,6 +21,7 @@ export default function ScoreMode(props) {
                     ? <SongListContainer />
                     : <TallyForm />
                 }
+            <SpotifyWidgetContainer />
             <div className={proceed} onClick={props.proceed}>PROCEED</div>
         </div>
     )

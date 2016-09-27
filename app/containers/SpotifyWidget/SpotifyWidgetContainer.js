@@ -28,7 +28,8 @@ import * as songActionCreators from 'redux/modules/songs'
 
 function mapStateToProps({songs}) {
     return {
-        selectedTrackURI: songs.get('selectedTrackURI')
+        selectedTrackURI: songs.get('selectedTrackURI'),
+        fetchingSongs: songs.get('fetchingSongs')
     }
 }
 

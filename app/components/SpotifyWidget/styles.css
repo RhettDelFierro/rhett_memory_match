@@ -1,3 +1,8 @@
-.spotify {
+.show {
+    display: block;
     margin-bottom: 0;
+}
+
+.hide {
+    display: none;
 }
