@@ -10,10 +10,7 @@ import { error, container, noteNames, spotify, select } from './styles.css'
 //define stateless component to render input and errors:
 const renderField = ({ input, label, type, id}) => (
     <div>
-        <label>{label}</label>
-        <div>
-            <input {...input} type={type} placeholder={id}/>
-        </div>
+        <input {...input} type={type} placeholder={id}/>{' '}<label>{label}</label>
     </div>
 )
 
