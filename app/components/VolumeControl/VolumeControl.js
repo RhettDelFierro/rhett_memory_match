@@ -21,11 +21,11 @@ class VolumeControl extends Component {
                 <input className={targetNote} ref={ref => this.targetNoteNode = ref} type="range" min="0" max="9"
                        step="0.01" disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
 
-                <input className={noiseVolume} ref={ref => this.noiseVolumeNode = ref} type="range" min="0" max="9" step="0.01"
-                       disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
+                <input className={noiseVolume} ref={ref => this.noiseVolumeNode = ref} type="range" min="0" max="9"
+                       step="0.01" disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
 
-                <input className={maskingNotes} ref={ref => this.maskingNotesNode = ref} type="range" min="0" max="9" step="0.01"
-                       disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
+                <input className={maskingNotes} ref={ref => this.maskingNotesNode = ref} type="range" min="0" max="9"
+                       step="0.01" disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
             </div>
         )
     }

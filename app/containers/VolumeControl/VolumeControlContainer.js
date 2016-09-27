@@ -8,6 +8,25 @@ import * as trainingActionCreators from 'redux/modules/training'
 class VolumeControlContainer extends Component {
     constructor() {
         super()
+        this.state = {
+            targetNote: 4.5,
+            noise: 4.5,
+            maskingNotes: 4.5
+        }
+    }
+
+    handleUpdate(event) {
+        if (event.target.mouseup || event.target.touchend) {
+            this.setState({
+                targetNote:
+                noise:
+                maskingNotes:
+                    })
+        }
+    }
+
+    componentDidMount() {
+        this.volumeNode.addEventListener()
     }
 
     handleUpdateTargetNoteVolume(event) {
