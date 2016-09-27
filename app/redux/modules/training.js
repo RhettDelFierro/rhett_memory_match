@@ -98,8 +98,6 @@ export function proceed() {
     return async function (dispatch, getState) {
 
         if (!getState().users.get('isAuthed')) {
-            const lastRoute = getState().routing.get('locationBeforeTransitions')
-            dispatch(setLastRoute({ lastRoute }))
             dispatch(push('/login'))
             dispatch({type: RESET_TRAINING})
             return
@@ -128,11 +126,8 @@ export function proceed() {
 
 export function startGame() {
     return async function (dispatch, getState) {
-        const lastRoute = getState().routing.get('locationBeforeTransitions')
         if (!getState().users.get('isAuthed')) {
-            const lastRoute = getState().routing.get('locationBeforeTransitions')
-            dispatch(setLastRoute({ lastRoute }))
-            dispatch(push('/'))
+            dispatch(push('/login'))
             dispatch({type: RESET_TRAINING})
             return
         }
@@ -183,8 +178,6 @@ export function guessed() {
     return async function (dispatch, getState) {
         try {
             if (!getState().users.get('isAuthed')) {
-                const lastRoute = getState().routing.get('locationBeforeTransitions')
-                dispatch(setLastRoute({ lastRoute }))
                 dispatch(push('/login'))
                 dispatch({ type: RESET_TRAINING })
                 return

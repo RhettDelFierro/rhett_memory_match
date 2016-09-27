@@ -2,7 +2,7 @@ import { fromJS, Map } from 'immutable'
 import { registerUser, loginUser, logoutUser } from 'utils/userFunctions'
 import { closeModal } from 'redux/modules/modal'
 import { closeNavModal } from 'redux/modules/navModal'
-import { push } from 'react-router-redux'
+import { push, goBack } from 'react-router-redux'
 
 const AUTH_USER = 'AUTH_USER'
 const UNAUTH_USER = 'UNAUTH_USER'
@@ -68,7 +68,7 @@ export function register({email, username, password}) {
             dispatch(closeNavModal())
             dispatch(formLogin())
             dispatch(authUser(user_id))
-            dispatch(push(getState().users.get('lastRoute')))
+            dispatch(push(goBack()))
             return user_id
         } catch (error) {
             Error('error in registerUser', error)
@@ -90,7 +90,7 @@ export function login({email, password}) {
             dispatch(closeNavModal())
             dispatch(formLogin())
             dispatch(authUser(user_id))
-            dispatch(push(getState().users.get('lastRoute')))
+            dispatch(push(push(goBack())))
             return user_id
         } catch (error) {
             Error('error in loginUser', error)

@@ -4,7 +4,7 @@ import { spotifyAuthAPI, getSongsAPI, getTrackURI } from 'utils/songsAPI'
 import { authUser,spotifyAuth, fetchingUser, setLastRoute } from 'redux/modules/users'
 import { closeModal } from './modal'
 import { openSongModal } from './songModal'
-import { push } from 'react-router-redux'
+import { push, goBack } from 'react-router-redux'
 import { closeNavModal } from 'redux/modules/navModal'
 
 const GET_SONGS = 'GET_SONGS'
@@ -31,12 +31,13 @@ export function fetchingSongsSuccess(songs){
 }
 
 export function spotifyLogin(){
+
     return async function (dispatch,getState) {
         //problem here is it will get the route they are on, and if they're on /login, locationBeforeTransitions will be /login.
-        const lastRoute = getState().routing.get('locationBeforeTransitions')
-        if (lastRoute != '/login') {
-            dispatch(setLastRoute({lastRoute}))
-        }
+        //const lastRoute = getState().routing.getIn(['locationBeforeTransitions','pathname'])
+        //if (lastRoute != '/login') {
+        //    dispatch(setLastRoute({lastRoute}))
+        //}
         //do NOT forget to throw in the error callback also.
         dispatch(fetchingUser())
         spotifyAuthAPI({callback: ({id}) => {
@@ -45,7 +46,7 @@ export function spotifyLogin(){
             if (!getState().users.get('appLogin')) {
                 dispatch(authUser(id))
             }
-            dispatch(push(getState().users.get('lastRoute')))
+            dispatch(goBack())
             dispatch(closeNavModal())
         }})
     }

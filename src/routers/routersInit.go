@@ -4,7 +4,6 @@ import (
 "github.com/gorilla/mux"
 "github.com/RhettDelFierro/rhett_memory_match/src/controllers"
 "github.com/RhettDelFierro/rhett_memory_match/src/common"
-
 )
 
 func Router(env *controllers.Env) *mux.Router {
