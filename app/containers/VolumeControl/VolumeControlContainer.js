@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { VolumeControl } from 'components'
 import * as volumeActionCreators from 'redux/modules/volume'
+import * as trainingActionCreators from 'redux/modules/training'
 
 class VolumeControlContainer extends Component {
     constructor() {
@@ -31,11 +32,11 @@ class VolumeControlContainer extends Component {
     }
 }
 
-function mapStateToProps({volume}) {
+function mapStateToProps({volume, training}) {
     return {
         targetNoteVolume: volume.get('targetNoteVolume'),
         noiseVolume: volume.get('noiseVolume'),
-        maskingNotesVolume: volume.get('maskingNotesVolume')
+        maskingNotesVolume: volume.get('maskingNotesVolume'),
     }
 }
 

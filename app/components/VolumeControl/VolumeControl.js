@@ -8,12 +8,26 @@ class VolumeControl extends Component {
     }
 
     render() {
+        //set volume in redux store
+        //when the component mounts we want to render the volume again with the right position.
 
+        return (
+            <div ref={this.props.volumeRef}>
+                <input ref={ref => this.targetNoteNode = ref} type="range" min="0" max="9"
+                       step="0.01" disabled={props.onCheck} onChange={props.onUpdate}/>
+
+                <input ref={ref => this.noiseVolumeNode = ref} type="range" min="0" max="9" step="0.01"
+                       disabled={props.onCheck} onChange={props.onUpdate}/>
+
+                <input ref={ref => this.maskingNotesNode = ref} type="range" min="0" max="9" step="0.01"
+                       disabled={props.onCheck} onChange={props.onUpdate}/>
+            </div>
+        )
     }
 }
 
-//function VolumeControl(props) {
-//    return <input type="range" min="0" max="9" step="0.01" disabled={props.onCheck} onChange={props.onUpdate} />
+//function Volume(props) {
+//    return <input type="range" min="0" max="9" step="0.01" disabled={props.onCheck} onChange={props.onUpdate}/>
 //}
 
 const { func, bool } = PropTypes
