@@ -1,5 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
+import bindActionCreators from 'redux'
+import * as volumeActioncreators from 'redux/modules/volume'
 import { container, targetNote, noiseVolume, maskingNotes } from './styles.css'
 
 class VolumeControl extends Component {
@@ -29,15 +31,15 @@ class VolumeControl extends Component {
             <div>
                 <input className={targetNote} ref={ref => this.targetNoteNode = ref} type="range" min="0" max="9"
                        step="0.01" value={this.props.targetNote} disabled={this.props.onCheck}
-                       onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate}/>
+                       onMouseUp={() => this.handleUpdate} onTouchEnd={() => this.handleUpdate}/>
 
                 <input className={noiseVolume} ref={ref => this.noiseVolumeNode = ref} type="range" min="0" max="9"
                        step="0.01" value={this.props.noise} disabled={this.props.onCheck}
-                       onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate}/>
+                       onMouseUp={() => this.handleUpdate} onTouchEnd={() => this.handleUpdate}/>
 
                 <input className={maskingNotes} ref={ref => this.maskingNotesNode = ref} type="range" min="0" max="9"
                        step="0.01" value={this.props.maskingNotes} disabled={this.props.onCheck}
-                       onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate}/>
+                       onMouseUp={() => this.handleUpdate} onTouchEnd={() => this.handleUpdate}/>
             </div>
         )
     }
@@ -54,9 +56,12 @@ VolumeControl.proptTypes = {
     volumeRef: func.isRequired
 }
 
-function mapStateToProps({training}) {
+function mapStateToProps({training, volume}, props) {
     return {
         onCheck: training.get('onCheck')
+        targetNote:
+        noise: this.props.noiseVolume,
+        maskingNotes: this.props.maskingNotesVolume
     }
 }
 
