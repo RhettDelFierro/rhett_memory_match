@@ -68,7 +68,7 @@ export function register({email, username, password}) {
             dispatch(closeNavModal())
             dispatch(formLogin())
             dispatch(authUser(user_id))
-            dispatch(push(goBack()))
+            dispatch(push(goBack() || '/'))
             return user_id
         } catch (error) {
             Error('error in registerUser', error)
@@ -90,7 +90,7 @@ export function login({email, password}) {
             dispatch(closeNavModal())
             dispatch(formLogin())
             dispatch(authUser(user_id))
-            dispatch(push(push(goBack())))
+            dispatch(push(push(goBack() || '/')))
             return user_id
         } catch (error) {
             Error('error in loginUser', error)

@@ -7,18 +7,16 @@ import { SongModalContainer, SpotifyWidgetContainer } from 'containers'
 export default function SongList(props) {
 
     return (
-        <div>
-            <div className={songContainer}>
+        <div className={songContainer}>
                 {props.notesSelected.map((value, key) => {
                     return (
-                        <ul key={key} className={noteGroup}>{key}
+                        <ul key={key} className={noteGroup}>Songs in the key of {key}
                             {value.map((track) => {
                                 return <Songs trackInfo={track} {...props}/>
                             })}
                         </ul>
                     )
                 })}
-            </div>
             <SpotifyWidgetContainer />
         </div>
     )

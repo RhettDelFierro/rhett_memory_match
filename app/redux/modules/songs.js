@@ -47,7 +47,7 @@ export function spotifyLogin(){
             if (!getState().users.get('appLogin')) {
                 dispatch(authUser(id))
             }
-            dispatch(goBack())
+            dispatch(goBack() || '/login')
             dispatch(closeNavModal())
         }})
     }

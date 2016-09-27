@@ -1,8 +1,9 @@
 .songContainer {
-    overflow-y: auto;
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
     background-color: #d9edf7;
-    max-height: 60%;
-    flex-grow: 2;
+    overflow-y: scroll;
 }
 
 .noteGroup {
