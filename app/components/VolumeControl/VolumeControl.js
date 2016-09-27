@@ -1,10 +1,15 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
-import { container } from './styles.css'
+import { container, targetNote, noiseVolume, maskingNotes } from './styles.css'
 
 class VolumeControl extends Component {
     constructor() {
         super()
+        this.state = {
+            targetNote: 4.5,
+            noiseVolume: 4.5,
+            maskingNotes: 4.5
+        }
     }
 
     render() {
@@ -13,21 +18,21 @@ class VolumeControl extends Component {
 
         return (
             <div ref={this.props.volumeRef}>
-                <input ref={ref => this.targetNoteNode = ref} type="range" min="0" max="9"
-                       step="0.01" disabled={props.onCheck} onChange={props.onUpdate}/>
+                <input className={targetNote} ref={ref => this.targetNoteNode = ref} type="range" min="0" max="9"
+                       step="0.01" disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
 
-                <input ref={ref => this.noiseVolumeNode = ref} type="range" min="0" max="9" step="0.01"
-                       disabled={props.onCheck} onChange={props.onUpdate}/>
+                <input className={noiseVolume} ref={ref => this.noiseVolumeNode = ref} type="range" min="0" max="9" step="0.01"
+                       disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
 
-                <input ref={ref => this.maskingNotesNode = ref} type="range" min="0" max="9" step="0.01"
-                       disabled={props.onCheck} onChange={props.onUpdate}/>
+                <input className={maskingNotes} ref={ref => this.maskingNotesNode = ref} type="range" min="0" max="9" step="0.01"
+                       disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
             </div>
         )
     }
 }
 
 //function Volume(props) {
-//    return <input type="range" min="0" max="9" step="0.01" disabled={props.onCheck} onChange={props.onUpdate}/>
+//    return <input type="range" min="0" max="9" step="0.01" disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
 //}
 
 const { func, bool } = PropTypes
