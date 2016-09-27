@@ -1,11 +1,17 @@
 .container {
     border: 1px solid mediumspringgreen;
     width: 300px;
-    min-height: 300px;
-    max-height: 500px;
+    height: 50%;
     display: flex;
     flex-direction: column;
     align-items: stretch;
+}
+
+@media screen and (max-width: 740px) {
+    .container {
+        height: 100%;
+        width: 100%;
+    }
 }
 
 .error {
