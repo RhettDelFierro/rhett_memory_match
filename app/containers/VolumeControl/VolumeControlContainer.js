@@ -8,6 +8,7 @@ import * as trainingActionCreators from 'redux/modules/training'
 class VolumeControlContainer extends Component {
     constructor() {
         super()
+        this.handleUpdate = this.handleUpdate.bind(this)
         this.state = {
             targetNote: 4.5,
             noise: 4.5,
@@ -16,17 +17,17 @@ class VolumeControlContainer extends Component {
     }
 
     handleUpdate(event) {
-        if (event.target.mouseup || event.target.touchend) {
-            this.setState({
-                targetNote:
-                noise:
-                maskingNotes:
-                    })
-        }
+
     }
 
     componentDidMount() {
-        this.volumeNode.addEventListener()
+        this.volumeNode.addEventListener('mouseup touchend', this.handleUpdate)
+
+        //don't forget to also get the values from the redux Store. This is where refs can come into play.
+    }
+
+    componentWillUnmount() {
+        this.volumeNode.removeEventListener('mouseup touchend', this.handleUpdate)
     }
 
     handleUpdateTargetNoteVolume(event) {

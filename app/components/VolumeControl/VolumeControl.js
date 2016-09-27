@@ -5,11 +5,6 @@ import { container, targetNote, noiseVolume, maskingNotes } from './styles.css'
 class VolumeControl extends Component {
     constructor() {
         super()
-        this.state = {
-            targetNote: 4.5,
-            noiseVolume: 4.5,
-            maskingNotes: 4.5
-        }
     }
 
     render() {
@@ -19,13 +14,16 @@ class VolumeControl extends Component {
         return (
             <div ref={this.props.volumeRef}>
                 <input className={targetNote} ref={ref => this.targetNoteNode = ref} type="range" min="0" max="9"
-                       step="0.01" disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
+                       step="0.01" value={this.props.targetNote} disabled={this.props.onCheck}
+                       onMouseUp={this.props.onUpdate} onTouchEnd={this.props.onUpdate}/>
 
                 <input className={noiseVolume} ref={ref => this.noiseVolumeNode = ref} type="range" min="0" max="9"
-                       step="0.01" disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
+                       step="0.01" value={this.props.noise} disabled={this.props.onCheck}
+                       onMouseUp={this.props.onUpdate} onTouchEnd={this.props.onUpdate}/>
 
                 <input className={maskingNotes} ref={ref => this.maskingNotesNode = ref} type="range" min="0" max="9"
-                       step="0.01" disabled={this.props.onCheck} onChange={this.props.onUpdate}/>
+                       step="0.01" value={this.props.maskingNotes} disabled={this.props.onCheck}
+                       onMouseUp={this.props.onUpdate} onTouchEnd={this.props.onUpdate}/>
             </div>
         )
     }
