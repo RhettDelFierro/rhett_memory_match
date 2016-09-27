@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from "react"
 import * as songActionCreators from 'redux/modules/songs'
 import { Map, OrderedMap, List } from 'immutable'
 import { songContainer, noteGroup, selected, playBtn, songName, artist } from './styles.css'
-import { SongModalContainer, SpotifyWidgetContainer } from 'containers'
+import { SongModalContainer } from 'containers'
 
 export default function SongList(props) {
 
@@ -18,7 +18,6 @@ export default function SongList(props) {
                         </ul>
                     )
                 })}
-            <SpotifyWidgetContainer />
         </div>
     )
 }

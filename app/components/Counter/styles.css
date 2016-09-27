@@ -3,3 +3,10 @@
     width: 300px;
     height: 100px;
 }
+
+@media screen and (max-width: 740px) {
+    .container {
+        border-top: none;
+        width: 100%;
+    }
+}

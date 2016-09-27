@@ -16,6 +16,12 @@
              hard-light, soft-light, exclusion, saturation, luminosity*/
 }
 
+@media screen and (max-width: 740px) {
+    .container {
+        justify-content: space-between;
+    }
+}
+
 .start {
     background-blend-mode: multiply;
 }
