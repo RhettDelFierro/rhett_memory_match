@@ -50,6 +50,8 @@ func SpotifyAuthorization(w http.ResponseWriter, r *http.Request) {
 
 	session.Values["state_key"] = state
 	session.Save(r, w)
+	//Note that in production code, we should check for errors when calling session.Save(r, w),
+	//and either display an error message or otherwise handle it.
 
 	if j, err := json.Marshal(AuthURI{Uri: url}); err != nil {
 		fmt.Println("error in controllers.SpotifyAuthorization json.Marshal")
@@ -92,6 +94,9 @@ func(env *Env) SpotifyCallback(w http.ResponseWriter, r *http.Request) {
 		MaxAge:     -1,
 	}
 	session.Save(r, w)
+	//Note that in production code, we should check for errors when calling session.Save(r, w),
+	// and either display an error message or otherwise handle it.
+
 
 	encryptToken := common.EncryptToken{
 		Key: RandomString(16),
