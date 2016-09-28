@@ -24,6 +24,11 @@
     /*#9ed2ff*/
 }
 
+.songContainer > ul > li:hover {
+    background-color: #03A9F4;
+    color: #d9edf7;
+}
+
 .playBtn {
     display: none;
     background-color: #1ED760;
