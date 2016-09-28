@@ -1,0 +1,22 @@
+.volumeContainer {
+    display: flex;
+    background-color: #3A3A3A
+}
+
+.volumeContainer > input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    border: 1px solid black;
+
+}
+
+/*style thumb*/
+.volumeContainer > input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+
+}
+
+/*style track*/
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+}

@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react'
-import { container, targetNote, noiseVolume, maskingNotes } from './styles.css'
+import { volumeContainer, targetNote, noiseVolume, maskingNotes } from './styles.css'
 
 class VolumeControl extends Component {
     constructor() {
@@ -49,7 +49,7 @@ class VolumeControl extends Component {
 
     render() {
         return (
-            <div>
+            <div className={volumeContainer}>
                 <input className={targetNote} ref={ref => this.targetNoteNode = ref} type="range" min="0" max="9"
                        step="0.01" value={this.state.targetNoteVolume} disabled={this.props.onCheck}
                        onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate} onChange={this.changeVolume}/>
@@ -66,10 +66,6 @@ class VolumeControl extends Component {
     }
 }
 
-//function Volume(props) {
-//    return <input type="range" min="0" max="9" step="0.01" disabled={this.props.onCheck} onChange={this.props.handleUpdate}/>
-//}
-
 const { func, bool, string } = PropTypes
 VolumeControl.proptTypes = {
     onUpdate: func.isRequired,
@@ -78,14 +74,5 @@ VolumeControl.proptTypes = {
     noiseVolume: string.isRequired,
     maskingNotesVolume: string.isRequired
 }
-
-//function mapStateToProps({training, volume}, props) {
-//    return {
-//        onCheck: training.get('onCheck'),
-//        targetNoteVolume: volume.get('targetNoteVolume'),
-//        noiseVolume: volume.get('noiseVolume'),
-//        maskingNotesVolume: volume.get('maskingNotesVolume')
-//    }
-//}
 
 export default VolumeControl
