@@ -1,11 +1,12 @@
-.container {
+.counterContainer {
     border: 1px solid mediumspringgreen;
     width: 300px;
     height: 100px;
+    order: 1;
 }
 
 @media screen and (max-width: 740px) {
-    .container {
+    .counterContainer {
         border-top: none;
         width: 100%;
     }

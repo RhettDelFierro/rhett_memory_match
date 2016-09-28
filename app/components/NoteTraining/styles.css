@@ -9,7 +9,8 @@
     top: 40px;
     background-repeat: no-repeat;
     background-image: url('../../assets/images/coachella.jpg');
-    background-size: cover;
+    background-position: top center;
+    background-size: 100% 100%;
     background-color: darkgray;
     background-blend-mode: normal;
     /*values to use: normal(nothing happens), multiply, screen, overlay, darken, lighten, color-dodge, color-burn,

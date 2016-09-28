@@ -10,11 +10,11 @@
     border: 1px solid black;
     flex-wrap: nowrap;
     flex-direction: row;
-    /*justify-content: center; going to just hard code the widths.*/
     height: 300px;
     position: relative;
     width: 409px;
     align-self: center;
+    order: 2;
 
     animation-name: fadeIn;
     animation-duration: 1s;
@@ -22,12 +22,15 @@
     animation-direction: normal;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
-    /*animation-delay: 0;*/
+}
+
+@media screen and (max-width: 740px) {
+    .container {
+        order: 3;
+    }
 }
 
 @keyframes fadeIn {
-    /*from { width: 0; height: 0; }*/
-    /*to   { width: 420px; height: 300px; }*/
     0% {
         opacity: 0
     }
@@ -81,7 +84,6 @@
     background-color: black;
     height: 225px;
     margin: 0 -4%;
-    /*position: absolute;*/
     z-index: 1;
     display: flex;
     color: white;
@@ -100,28 +102,10 @@ p {
 }
 
 @keyframes riseBefore {
-    /*from { width: 0; height: 0; }*/
-    /*to   { width: 420px; height: 300px; }*/
     0% {
         opacity: 1;
         top: -17px
     }
-
-    /*10% {*/
-        /*border-color: blue transparent transparent blue;*/
-    /*}*/
-
-    /*25% {*/
-        /*border-color: purple transparent transparent purple;*/
-    /*}*/
-
-    /*50% {*/
-        /*border-color: red transparent transparent red;*/
-    /*}*/
-
-    /*75% {*/
-        /*border-color: yellow transparent transparent yellow;*/
-    /*}*/
 
     100% {
         opacity: 0;
@@ -130,28 +114,10 @@ p {
 }
 
 @keyframes riseAfter {
-    /*from { width: 0; height: 0; }*/
-    /*to   { width: 420px; height: 300px; }*/
     0% {
         opacity: 1;
         top: -10px
     }
-
-    /*10% {*/
-        /*background-color: blue;*/
-    /*}*/
-
-    /*25% {*/
-        /*background-color: purple;*/
-    /*}*/
-
-    /*50% {*/
-        /*background-color: red;*/
-    /*}*/
-
-    /*75% {*/
-        /*background-color: yellow;*/
-    /*}*/
 
     100% {
         opacity: 0;

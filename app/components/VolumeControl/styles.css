@@ -1,17 +1,23 @@
 .volumeContainer {
-    background-color: #3A3A3A;
     transform: rotateZ(-90deg);
+    order: 3
 }
 
-.volumeContainer > div > input[type=range] {
+@media screen and (max-width: 740px) {
+    .volumeContainer {
+        transform: rotateZ(0deg);
+        order: 2;
+    }
+}
+
+
+.volumeContainer > input[type=range] {
     -webkit-appearance: none;
     width: 100%;
+    background-color: #3A3A3A;
     border: 1px solid black;
+    padding: 10px;
 
-}
-
-.inputWrapper {
-    padding: 30px 10px;
 }
 
 /*style thumb*/
@@ -29,7 +35,6 @@
 .volumeContainer > input[type=range]::-webkit-slider-thumb::after {
 
  }
-
 
 /*style track*/
 input[type=range]::-webkit-slider-runnable-track {

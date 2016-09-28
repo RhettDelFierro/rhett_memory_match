@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react'
-import { container } from './styles.css'
+import { counterContainer } from './styles.css'
 
 export default function Counter(props) {
     return (
-        <div className={container} onClick={props.startGame}>
+        <div className={counterContainer} onClick={props.startGame}>
             {!props.start ? <p>{'Click to begin'}</p>
                 : <div>
                 <p>Counter: <span>{props.attempts}/{props.mode === 'posttest' ? '48 attempts' : '60 attempts'}</span></p>

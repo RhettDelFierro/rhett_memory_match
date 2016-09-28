@@ -50,22 +50,16 @@ class VolumeControl extends Component {
     render() {
         return (
             <div className={volumeContainer}>
-                <div className={inputWrapper}>
                     <input className={targetNote} ref={ref => this.targetNoteNode = ref} type="range" min="0" max="9"
                            step="0.01" value={this.state.targetNoteVolume} disabled={this.props.onCheck}
                            onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate} onChange={this.changeVolume}/>
-                </div>
-                <div className={inputWrapper}>
                     <input className={noiseVolume} ref={ref => this.noiseVolumeNode = ref} type="range" min="0" max="9"
                            step="0.01" value={this.state.noiseVolume} disabled={this.props.onCheck}
                            onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate} onChange={this.changeVolume}/>
-                </div>
-                <div className={inputWrapper}>
                     <input className={maskingNotes} ref={ref => this.maskingNotesNode = ref} type="range" min="0"
                            max="9"
                            step="0.01" value={this.state.maskingNotesVolume} disabled={this.props.onCheck}
                            onMouseUp={this.handleUpdate} onTouchEnd={this.handleUpdate} onChange={this.changeVolume}/>
-                </div>
             </div>
         )
     }
