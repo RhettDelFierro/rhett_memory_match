@@ -23,7 +23,7 @@
   "homepage": "https://github.com/RhettDelFierro/rhett_memory_match#readme",
   "dependencies": {
     "animate.css": "^3.5.2",
-    "axios": "^0.13.1",
+    "axios": "^0.19.0",
     "css-loader": "^0.23.1",
     "firebase": "^3.0.5",
     "immutable": "^3.8.1",
